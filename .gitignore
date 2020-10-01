@@ -1,0 +1,53 @@
+.vscode
+build/
+*.class
+
+
+# Logs #
+.log
+
+# OS files #
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+#Editor Files#
+*~
+*.swp
+
+#IntelliJ#
+out
+.idea
+*.ipr
+*.iws
+*.iml
+atlassian-ide-plugin.xml
+
+#Eclipse#
+#.classpath
+#.project
+#.settings
+.metadata
+
+# NetBeans specific files/directories
+.nbattrs
+
+# Compressed Files #
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
