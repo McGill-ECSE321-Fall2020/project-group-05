@@ -51,3 +51,5 @@ atlassian-ide-plugin.xml
 *.exe
 *.o
 *.so
+
+.gradle
