@@ -1,5 +1,0 @@
-{
-    "buildpacks": [{
-        "url": "https://github.com/techgaun/heroku-buildpack-subdir-to-root.git"
-    }]
-}
