@@ -6,37 +6,15 @@
  * User Manual available at https://docs.gradle.org/6.6.1/userguide/java_library_plugin.html
  */
 
-
-// Umple Plugin --->
-
-
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
     id 'org.springframework.boot' version '2.3.3.RELEASE' // Spring-Boot
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'// Spring-Boot
     id 'java'// Spring-Boot
-    // id "umple.gradle.plugin" version "0.2.0"
 }
-// apply plugin: 'umple.gradle.plugin'
-// apply plugin: 'de.undercouch.download'
 
-// import de.undercouch.gradle.tasks.download.Download
-
-// // downloads the umple jar only if the online version is newer
-// task downloadUmpleJar(type: de.undercouch.gradle.tasks.download.Download) {
-//     onlyIfNewer true
-//     overwrite true
-//     src 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar'
-//     dest 'libs/umple-latest.jar'
-
-// }
-
-// generateSource.dependsOn('downloadUmpleJar')
-// End Umple Plugin
-
-
-
+sourceCompatibility = '1.8'
 group = 'com.ecse.321.visart'
 version = '0.0.1-SNAPSHOT'
 
@@ -63,13 +41,11 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web' // Spring-boot
     testImplementation('org.springframework.boot:spring-boot-starter-test') { // Spring-boot
-            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
     implementation 'org.hibernate:hibernate-core:5.4.22.Final'
 }
-
-sourceCompatibility = '1.8'
 
 test {
     useJUnitPlatform()
@@ -85,23 +61,17 @@ ext {
     umpleFilePath = 'src/main/resources/visart.ump'
 }
 
-// task printProps {
-//     doLast {
-//         println umpleFilePath
-//     }
-// }
-
 task compileUmple(dependsOn:jar) {
     dependsOn 'build'
     javaexec { 
         main="-jar";
         args = [
-                "libs/umple.jar",
-                umpleFilePath,
-                "-g",
-                umpleLanguage,
-                "--path",
-                umpleOutputPath
-            ]
+            "libs/umple.jar",
+            umpleFilePath,
+            "-g",
+            umpleLanguage,
+            "--path",
+            umpleOutputPath
+        ]
     } 
 }
