@@ -81,27 +81,27 @@ springBoot {
 
 ext {
     umpleLanguage = 'Java'
-    umpleOutputPath = 'src/main/java'
+    umpleOutputPath = '../java'
     umpleFilePath = 'src/main/resources/visart.ump'
 }
 
-task printProps {
-    doLast {
-        println umpleFilePath
-    }
-}
+// task printProps {
+//     doLast {
+//         println umpleFilePath
+//     }
+// }
 
 task compileUmple(dependsOn:jar) {
-  javaexec { 
-    main="-jar";
-    args = [
-            "libs/umple.jar",
-            umpleFilePath,
-            "-g",
-            umpleLanguage,
-            "--path",
-            umpleOutputPath,
-            "-c"
-           ]
-  } 
+    dependsOn 'build'
+    javaexec { 
+        main="-jar";
+        args = [
+                "libs/umple.jar",
+                umpleFilePath,
+                "-g",
+                umpleLanguage,
+                "--path",
+                umpleOutputPath
+            ]
+    } 
 }

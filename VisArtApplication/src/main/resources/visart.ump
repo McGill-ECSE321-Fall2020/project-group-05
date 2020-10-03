@@ -1,8 +1,9 @@
 namespace com.ecse321.visart.model;
 
+
 class Gallery {
   1 gallery <@>- 0..* User;
-  1 gallery <@>- 0..* artListings;
+  1 gallery <@>- 0..* ArtListing artListings;
   // Can there be multiple galleries? We'll need location objects then
   String name;
 }
@@ -38,16 +39,10 @@ class Artist {
   1 artist -- 0..* ArtListing postedListings;
 }
 
-
-enum PostVisibility {
-  Public, Private, Unlisted, Draft
-}
-
-enum TagType {
-  Topic, Category, Genre, Material, Other
-}
-
 class ArtListing {
+  enum PostVisibility {
+    Public, Private, Unlisted, Draft
+  }
   1 artListing <@>- 0..* ArtPiece pieces;
   1 listing <@>- 0..* Tag tags;
   PostVisibility visibility;
@@ -55,26 +50,30 @@ class ArtListing {
 }
 
 class Tag {
+  enum TagType {
+    Topic, Category, Genre, Material, Other
+  }
   TagType type;
   String keyword;
 }
 
-enum PieceLocation {
-  AtGallery, Offsite
-}
-
 class ArtPiece {
+  enum PieceLocation {
+    AtGallery, Offsite
+  }
   PieceLocation basicLocation;
   String addressLocation;
 }
 
 class Ticket {
+  depend com.ecse321.visart.model.ArtPiece.PieceLocation; 
   1 ticket <@>- 1 ArtOrder order;
   Boolean isPaymentConfirmed; // Artist confirms the payment received
   Double paymentAmount;
 }
 
 class ArtOrder {
+  depend com.ecse321.visart.model.ArtPiece.PieceLocation; 
   1 artOrder <@>- 1 ArtPiece artPiece;
   Boolean isDelivered;
   PieceLocation targetLocation;
