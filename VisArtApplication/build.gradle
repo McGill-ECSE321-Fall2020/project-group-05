@@ -62,7 +62,7 @@ ext {
 }
 
 task compileUmple(dependsOn:jar) {
-    dependsOn 'build'
+    // dependsOn 'build'
     javaexec { 
         main="-jar";
         args = [
