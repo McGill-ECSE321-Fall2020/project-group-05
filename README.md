@@ -12,7 +12,7 @@ I am a U2 Software Engineering Major. I've been programming for several years no
 ### Yuta Youness Bellali
 I am a U2 enrolled in the Software Engineering program. I only began coding last year when I started university so I am still discovering new things and learning everyday. My mother is Japanese and my father is from Morocco. I enjoy outdoor activities and road trips with my friends. Although I am not the strongest in this group, I am motivated to do my best in this project and to be a better programmer! 
 ### Riad El Mahmoudy
-[Insert Bio]
+I am a U2 Software Engineering student at McGill University. My experience with coding has been on and off since 2014 but i was able to pick up lots of programming knowledge in the last two years. I'm specifically interested in web-development as I'm currently working as a front-end developer for a start-up. For this reason, I'd like to get the most out of this project and give it my all. Other than programming, I do graphic design and painting as a hobby.
 ### Mahin Anwar
 [Insert Bio]
 
