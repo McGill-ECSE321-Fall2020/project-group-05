@@ -61,17 +61,24 @@ ext {
     umpleFilePath = 'src/main/resources/visart.ump'
 }
 
-task compileUmple(dependsOn:jar) {
+tasks.register("compileUmple") {
+    group = 'Build'
+    description = 'Compiles and generates the umple code'
     // dependsOn 'build'
-    javaexec { 
-        main="-jar";
-        args = [
-            "libs/umple.jar",
-            umpleFilePath,
-            "-g",
-            umpleLanguage,
-            "--path",
-            umpleOutputPath
-        ]
-    } 
+    doLast {
+        javaexec {
+            main="-jar";
+            args = [
+                "libs/umple.jar",
+                umpleFilePath,
+                "-g",
+                umpleLanguage,
+                "--path",
+                umpleOutputPath
+            ]
+        }
+    }
 }
+// task compileUmple() {
+    
+// }
