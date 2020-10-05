@@ -3,7 +3,7 @@
 
 package com.ecse321.visart.model;
 
-// line 52 "../../../../../resources/visart.ump"
+// line 55 "../../../../../resources/visart.ump"
 public class Tag
 {
 

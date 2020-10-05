@@ -4,7 +4,7 @@
 package com.ecse321.visart.model;
 import java.util.*;
 
-// line 37 "../../../../../resources/visart.ump"
+// line 40 "../../../../../resources/visart.ump"
 public class Artist
 {
 

@@ -2,6 +2,8 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.*;
 
 // line 25 "../../../../../resources/visart.ump"
@@ -9,8 +11,17 @@ public class Manager extends UserRole
 {
 
   //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+  private static Map<String, Manager> managersByDbId = new HashMap<String, Manager>();
+
+  //------------------------
   // MEMBER VARIABLES
   //------------------------
+
+  //Manager Attributes
+  private String dbId;
 
   //Manager Associations
   private List<ArtListing> promotedListings;
@@ -19,15 +30,53 @@ public class Manager extends UserRole
   // CONSTRUCTOR
   //------------------------
 
-  public Manager(User aUser)
+  public Manager(User aUser, String aDbId)
   {
     super(aUser);
+    if (!setDbId(aDbId))
+    {
+      throw new RuntimeException("Cannot create due to duplicate dbId. See http://manual.umple.org?RE003ViolationofUniqueness.html");
+    }
     promotedListings = new ArrayList<ArtListing>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setDbId(String aDbId)
+  {
+    boolean wasSet = false;
+    String anOldDbId = getDbId();
+    if (anOldDbId != null && anOldDbId.equals(aDbId)) {
+      return true;
+    }
+    if (hasWithDbId(aDbId)) {
+      return wasSet;
+    }
+    dbId = aDbId;
+    wasSet = true;
+    if (anOldDbId != null) {
+      managersByDbId.remove(anOldDbId);
+    }
+    managersByDbId.put(aDbId, this);
+    return wasSet;
+  }
+
+  public String getDbId()
+  {
+    return dbId;
+  }
+  /* Code from template attribute_GetUnique */
+  public static Manager getWithDbId(String aDbId)
+  {
+    return managersByDbId.get(aDbId);
+  }
+  /* Code from template attribute_HasUnique */
+  public static boolean hasWithDbId(String aDbId)
+  {
+    return getWithDbId(aDbId) != null;
+  }
   /* Code from template association_GetMany */
   public ArtListing getPromotedListing(int index)
   {
@@ -133,6 +182,7 @@ public class Manager extends UserRole
 
   public void delete()
   {
+    managersByDbId.remove(getDbId());
     for(int i=promotedListings.size(); i > 0; i--)
     {
       ArtListing aPromotedListing = promotedListings.get(i - 1);
@@ -141,4 +191,10 @@ public class Manager extends UserRole
     super.delete();
   }
 
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "dbId" + ":" + getDbId()+ "]";
+  }
 }

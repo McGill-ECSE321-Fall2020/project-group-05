@@ -115,9 +115,9 @@ public class Gallery
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public User addUser(String aEmailAddress, String aUsername, String aPassword, String aIdCode, String aDisplayname, UserRole aRole)
+  public User addUser(String aEmailAddress, String aUsername, String aPassword, String aIdCode, String aDisplayname)
   {
-    return new User(aEmailAddress, aUsername, aPassword, aIdCode, aDisplayname, aRole, this);
+    return new User(aEmailAddress, aUsername, aPassword, aIdCode, aDisplayname, this);
   }
 
   public boolean addUser(User aUser)

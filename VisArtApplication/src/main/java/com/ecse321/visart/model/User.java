@@ -35,42 +35,14 @@ public class User
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aEmailAddress, String aUsername, String aPassword, String aIdCode, String aDisplayname, UserRole aRole, Gallery aGallery)
-  {
-    emailAddress = aEmailAddress;
-    password = aPassword;
-    if (!setUsername(aUsername))
-    {
-      throw new RuntimeException("Cannot create due to duplicate username. See http://manual.umple.org?RE003ViolationofUniqueness.html");
-    }
-    if (!setIdCode(aIdCode))
-    {
-      throw new RuntimeException("Cannot create due to duplicate idCode. See http://manual.umple.org?RE003ViolationofUniqueness.html");
-    }
-    if (!setDisplayname(aDisplayname))
-    {
-      throw new RuntimeException("Cannot create due to duplicate displayname. See http://manual.umple.org?RE003ViolationofUniqueness.html");
-    }
-    if (aRole == null || aRole.getUser() != null)
-    {
-      throw new RuntimeException("Unable to create User due to aRole. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    role = aRole;
-    boolean didAddGallery = setGallery(aGallery);
-    if (!didAddGallery)
-    {
-      throw new RuntimeException("Unable to create user due to gallery. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-  }
-
   public User(String aEmailAddress, String aUsername, String aPassword, String aIdCode, String aDisplayname, Gallery aGallery)
   {
     emailAddress = aEmailAddress;
+    password = aPassword;
     if (!setUsername(aUsername))
     {
       throw new RuntimeException("Cannot create due to duplicate username. See http://manual.umple.org?RE003ViolationofUniqueness.html");
     }
-    password = aPassword;
     if (!setIdCode(aIdCode))
     {
       throw new RuntimeException("Cannot create due to duplicate idCode. See http://manual.umple.org?RE003ViolationofUniqueness.html");
@@ -79,7 +51,6 @@ public class User
     {
       throw new RuntimeException("Cannot create due to duplicate displayname. See http://manual.umple.org?RE003ViolationofUniqueness.html");
     }
-    role = new UserRole(this);
     boolean didAddGallery = setGallery(aGallery);
     if (!didAddGallery)
     {
@@ -223,10 +194,43 @@ public class User
   {
     return role;
   }
+
+  public boolean hasRole()
+  {
+    boolean has = role != null;
+    return has;
+  }
   /* Code from template association_GetOne */
   public Gallery getGallery()
   {
     return gallery;
+  }
+  /* Code from template association_SetOptionalOneToOne */
+  public boolean setRole(UserRole aNewRole)
+  {
+    boolean wasSet = false;
+    if (role != null && !role.equals(aNewRole) && equals(role.getUser()))
+    {
+      //Unable to setRole, as existing role would become an orphan
+      return wasSet;
+    }
+
+    role = aNewRole;
+    User anOldUser = aNewRole != null ? aNewRole.getUser() : null;
+
+    if (!this.equals(anOldUser))
+    {
+      if (anOldUser != null)
+      {
+        anOldUser.role = null;
+      }
+      if (role != null)
+      {
+        role.setUser(this);
+      }
+    }
+    wasSet = true;
+    return wasSet;
   }
   /* Code from template association_SetOneToMany */
   public boolean setGallery(Gallery aGallery)

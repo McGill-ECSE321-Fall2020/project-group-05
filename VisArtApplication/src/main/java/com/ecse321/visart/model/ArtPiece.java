@@ -3,7 +3,7 @@
 
 package com.ecse321.visart.model;
 
-// line 60 "../../../../../resources/visart.ump"
+// line 63 "../../../../../resources/visart.ump"
 public class ArtPiece
 {
 

@@ -4,7 +4,7 @@
 package com.ecse321.visart.model;
 import java.util.*;
 
-// line 30 "../../../../../resources/visart.ump"
+// line 33 "../../../../../resources/visart.ump"
 public class Customer extends UserRole
 {
 

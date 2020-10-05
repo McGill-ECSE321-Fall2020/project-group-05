@@ -4,7 +4,7 @@
 package com.ecse321.visart.model;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
-// line 68 "../../../../../resources/visart.ump"
+// line 71 "../../../../../resources/visart.ump"
 public class Ticket
 {
 

@@ -4,7 +4,7 @@
 package com.ecse321.visart.model;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
-// line 75 "../../../../../resources/visart.ump"
+// line 78 "../../../../../resources/visart.ump"
 public class ArtOrder
 {
 

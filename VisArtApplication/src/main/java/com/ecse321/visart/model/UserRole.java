@@ -2,7 +2,6 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
-import java.util.*;
 
 // line 21 "../../../../../resources/visart.ump"
 public class UserRole
@@ -21,16 +20,11 @@ public class UserRole
 
   public UserRole(User aUser)
   {
-    if (aUser == null || aUser.getRole() != null)
+    boolean didAddUser = setUser(aUser);
+    if (!didAddUser)
     {
-      throw new RuntimeException("Unable to create UserRole due to aUser. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create role due to user. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    user = aUser;
-  }
-
-  public UserRole(String aEmailAddressForUser, String aUsernameForUser, String aPasswordForUser, String aIdCodeForUser, String aDisplaynameForUser, Gallery aGalleryForUser)
-  {
-    user = new User(aEmailAddressForUser, aUsernameForUser, aPasswordForUser, aIdCodeForUser, aDisplaynameForUser, this, aGalleryForUser);
   }
 
   //------------------------
@@ -41,6 +35,34 @@ public class UserRole
   {
     return user;
   }
+  /* Code from template association_SetOneToOptionalOne */
+  public boolean setUser(User aNewUser)
+  {
+    boolean wasSet = false;
+    if (aNewUser == null)
+    {
+      //Unable to setUser to null, as role must always be associated to a user
+      return wasSet;
+    }
+    
+    UserRole existingRole = aNewUser.getRole();
+    if (existingRole != null && !equals(existingRole))
+    {
+      //Unable to setUser, the current user already has a role, which would be orphaned if it were re-assigned
+      return wasSet;
+    }
+    
+    User anOldUser = user;
+    user = aNewUser;
+    user.setRole(this);
+
+    if (anOldUser != null)
+    {
+      anOldUser.setRole(null);
+    }
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
@@ -48,7 +70,7 @@ public class UserRole
     user = null;
     if (existingUser != null)
     {
-      existingUser.delete();
+      existingUser.setRole(null);
     }
   }
 
