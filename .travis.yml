@@ -1,3 +1,3 @@
 lanugage: java
 script:
-- gradle build
+- ./gradlew build
