@@ -2,12 +2,17 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
-// line 78 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="orders")
+// line 210 "../../../../../resources/visart.ump"
 public class ArtOrder
 {
-
+  public ArtOrder() {
+    
+  }
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -19,19 +24,18 @@ public class ArtOrder
   private String deliveryTracker;
 
   //ArtOrder Associations
-  private ArtPiece artPiece;
-  private Ticket ticket;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, ArtPiece aArtPiece, Ticket aTicket)
+  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece, Ticket aTicket)
   {
     isDelivered = aIsDelivered;
     targetLocation = aTargetLocation;
     targetAddress = aTargetAddress;
     deliveryTracker = aDeliveryTracker;
+    idCode = aIdCode;
     if (aArtPiece == null || aArtPiece.getArtOrder() != null)
     {
       throw new RuntimeException("Unable to create ArtOrder due to aArtPiece. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -44,14 +48,15 @@ public class ArtOrder
     ticket = aTicket;
   }
 
-  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, PieceLocation aBasicLocationForArtPiece, String aAddressLocationForArtPiece, ArtListing aArtListingForArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, Customer aCustomerForTicket, Artist aArtistForTicket)
+  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, PieceLocation aBasicLocationForArtPiece, String aAddressLocationForArtPiece, String aIdCodeForArtPiece, ArtListing aArtListingForArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket)
   {
     isDelivered = aIsDelivered;
     targetLocation = aTargetLocation;
     targetAddress = aTargetAddress;
     deliveryTracker = aDeliveryTracker;
-    artPiece = new ArtPiece(aBasicLocationForArtPiece, aAddressLocationForArtPiece, aArtListingForArtPiece, this);
-    ticket = new Ticket(aIsPaymentConfirmedForTicket, aPaymentAmountForTicket, this, aCustomerForTicket, aArtistForTicket);
+    idCode = aIdCode;
+    artPiece = new ArtPiece(aBasicLocationForArtPiece, aAddressLocationForArtPiece, aIdCodeForArtPiece, aArtListingForArtPiece, this);
+    ticket = new Ticket(aIsPaymentConfirmedForTicket, aPaymentAmountForTicket, aIdCodeForTicket, this, aCustomerForTicket, aArtistForTicket);
   }
 
   //------------------------
@@ -90,11 +95,20 @@ public class ArtOrder
     return wasSet;
   }
 
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean getIsDelivered()
   {
     return isDelivered;
   }
 
+  @Enumerated(EnumType.ORDINAL)
   public PieceLocation getTargetLocation()
   {
     return targetLocation;
@@ -109,7 +123,20 @@ public class ArtOrder
   {
     return deliveryTracker;
   }
+
+  
+   @OneToOne
+   private ArtPiece artPiece;
+   @OneToOne
+   private Ticket ticket;
+   @Id
+   private String idCode;
+  public String getIdCode()
+  {
+    return idCode;
+  }
   /* Code from template attribute_IsBoolean */
+  @Transient
   public boolean isIsDelivered()
   {
     return isDelivered;
@@ -147,7 +174,8 @@ public class ArtOrder
     return super.toString() + "["+
             "isDelivered" + ":" + getIsDelivered()+ "," +
             "targetAddress" + ":" + getTargetAddress()+ "," +
-            "deliveryTracker" + ":" + getDeliveryTracker()+ "]" + System.getProperties().getProperty("line.separator") +
+            "deliveryTracker" + ":" + getDeliveryTracker()+ "," +
+            "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "targetLocation" + "=" + (getTargetLocation() != null ? !getTargetLocation().equals(this)  ? getTargetLocation().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "artPiece = "+(getArtPiece()!=null?Integer.toHexString(System.identityHashCode(getArtPiece())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "ticket = "+(getTicket()!=null?Integer.toHexString(System.identityHashCode(getTicket())):"null");

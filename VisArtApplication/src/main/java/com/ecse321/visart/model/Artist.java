@@ -2,27 +2,32 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 import java.util.*;
 
-// line 40 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="artists")
+// line 88 "../../../../../resources/visart.ump"
 public class Artist
 {
-
+  public Artist() {
+    
+  }
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
+  //Artist Attributes
+
   //Artist Associations
-  private List<Ticket> soldTickets;
-  private List<ArtListing> postedListings;
-  private Customer customer;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Artist(Customer aCustomer)
+  public Artist(String aIdCode, Customer aCustomer)
   {
+    idCode = aIdCode;
     soldTickets = new ArrayList<Ticket>();
     postedListings = new ArrayList<ArtListing>();
     boolean didAddCustomer = setCustomer(aCustomer);
@@ -35,6 +40,28 @@ public class Artist
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
+
+  
+   @OneToMany
+   private List<Ticket> soldTickets;
+   @OneToMany
+   private List<ArtListing> postedListings;
+   @OneToOne
+   private Customer customer;
+   @Id
+   private String idCode;
+  public String getIdCode()
+  {
+    return idCode;
+  }
   /* Code from template association_GetMany */
   public Ticket getSoldTicket(int index)
   {
@@ -106,9 +133,9 @@ public class Artist
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Ticket addSoldTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, ArtOrder aOrder, Customer aCustomer)
+  public Ticket addSoldTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode, ArtOrder aOrder, Customer aCustomer)
   {
-    return new Ticket(aIsPaymentConfirmed, aPaymentAmount, aOrder, aCustomer, this);
+    return new Ticket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer, this);
   }
 
   public boolean addSoldTicket(Ticket aSoldTicket)
@@ -178,9 +205,9 @@ public class Artist
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, Gallery aGallery, Manager aManager, Customer aFavoritedCustomer)
+  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Manager aManager, Customer aFavoritedCustomer)
   {
-    return new ArtListing(aVisibility, aGallery, aManager, aFavoritedCustomer, this);
+    return new ArtListing(aVisibility, aIdCode, aManager, aFavoritedCustomer, this);
   }
 
   public boolean addPostedListing(ArtListing aPostedListing)
@@ -293,4 +320,11 @@ public class Artist
     }
   }
 
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null");
+  }
 }

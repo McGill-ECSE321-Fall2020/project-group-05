@@ -2,11 +2,16 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 
-// line 63 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="artpieces")
+// line 165 "../../../../../resources/visart.ump"
 public class ArtPiece
 {
-
+  public ArtPiece() {
+    
+  }
   //------------------------
   // ENUMERATIONS
   //------------------------
@@ -22,17 +27,16 @@ public class ArtPiece
   private String addressLocation;
 
   //ArtPiece Associations
-  private ArtListing artListing;
-  private ArtOrder artOrder;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ArtPiece(PieceLocation aBasicLocation, String aAddressLocation, ArtListing aArtListing, ArtOrder aArtOrder)
+  public ArtPiece(PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtListing aArtListing, ArtOrder aArtOrder)
   {
     basicLocation = aBasicLocation;
     addressLocation = aAddressLocation;
+    idCode = aIdCode;
     boolean didAddArtListing = setArtListing(aArtListing);
     if (!didAddArtListing)
     {
@@ -45,16 +49,17 @@ public class ArtPiece
     artOrder = aArtOrder;
   }
 
-  public ArtPiece(PieceLocation aBasicLocation, String aAddressLocation, ArtListing aArtListing, boolean aIsDeliveredForArtOrder, PieceLocation aTargetLocationForArtOrder, String aTargetAddressForArtOrder, String aDeliveryTrackerForArtOrder, Ticket aTicketForArtOrder)
+  public ArtPiece(PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtListing aArtListing, boolean aIsDeliveredForArtOrder, PieceLocation aTargetLocationForArtOrder, String aTargetAddressForArtOrder, String aDeliveryTrackerForArtOrder, String aIdCodeForArtOrder, Ticket aTicketForArtOrder)
   {
     basicLocation = aBasicLocation;
     addressLocation = aAddressLocation;
+    idCode = aIdCode;
     boolean didAddArtListing = setArtListing(aArtListing);
     if (!didAddArtListing)
     {
       throw new RuntimeException("Unable to create piece due to artListing. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    artOrder = new ArtOrder(aIsDeliveredForArtOrder, aTargetLocationForArtOrder, aTargetAddressForArtOrder, aDeliveryTrackerForArtOrder, this, aTicketForArtOrder);
+    artOrder = new ArtOrder(aIsDeliveredForArtOrder, aTargetLocationForArtOrder, aTargetAddressForArtOrder, aDeliveryTrackerForArtOrder, aIdCodeForArtOrder, this, aTicketForArtOrder);
   }
 
   //------------------------
@@ -77,6 +82,15 @@ public class ArtPiece
     return wasSet;
   }
 
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
+
+  @Enumerated(EnumType.ORDINAL)
   public PieceLocation getBasicLocation()
   {
     return basicLocation;
@@ -85,6 +99,18 @@ public class ArtPiece
   public String getAddressLocation()
   {
     return addressLocation;
+  }
+
+  
+   @ManyToOne
+   private ArtListing artListing;
+   @OneToOne
+   private ArtOrder artOrder;
+   @Id
+   private String idCode;
+  public String getIdCode()
+  {
+    return idCode;
   }
   /* Code from template association_GetOne */
   public ArtListing getArtListing()
@@ -136,7 +162,8 @@ public class ArtPiece
   public String toString()
   {
     return super.toString() + "["+
-            "addressLocation" + ":" + getAddressLocation()+ "]" + System.getProperties().getProperty("line.separator") +
+            "addressLocation" + ":" + getAddressLocation()+ "," +
+            "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "basicLocation" + "=" + (getBasicLocation() != null ? !getBasicLocation().equals(this)  ? getBasicLocation().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "artListing = "+(getArtListing()!=null?Integer.toHexString(System.identityHashCode(getArtListing())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "artOrder = "+(getArtOrder()!=null?Integer.toHexString(System.identityHashCode(getArtOrder())):"null");
