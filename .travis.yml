@@ -1,0 +1,3 @@
+lanugage: java
+script:
+- ./gradlew build
