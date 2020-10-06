@@ -41,8 +41,6 @@ public class Manager extends UserRole
   
    @OneToMany
    private List<ArtListing> promotedListings;
-   @Id
-   private String idCode;
   public List<ArtListing> getPromotedListings()
   {
     List<ArtListing> newPromotedListings = Collections.unmodifiableList(promotedListings);

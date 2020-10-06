@@ -54,8 +54,6 @@ class Manager {
   //%%AnnotateStart
   //%%@OneToMany
   //%%private List<ArtListing> promotedListings;
-  //%%@Id
-  //%%private String idCode;
   //%%AnnotateEnd
   1 manager -- 0..* ArtListing  promotedListings;
 }
@@ -74,10 +72,8 @@ class Customer {
   //%%private List<Ticket> boughtTickets;
   //%%@OneToMany
   //%%private List<ArtListing> favoriteListings;
-  //%%@Id
-  //%%private String idCode;
   //%%AnnotateEnd
-  
+
   1 customer <@>- 0..1 Artist artist;
   1 customer -- 0..* Ticket boughtTickets;
   1 favoritedCustomer -- 0..* ArtListing favoriteListings;
