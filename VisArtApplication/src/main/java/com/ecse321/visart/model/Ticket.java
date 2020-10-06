@@ -10,7 +10,9 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 // line 188 "../../../../../resources/visart.ump"
 public class Ticket
 {
-
+  public Ticket() {
+    
+  }
   //------------------------
   // MEMBER VARIABLES
   //------------------------

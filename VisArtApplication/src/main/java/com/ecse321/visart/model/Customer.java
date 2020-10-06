@@ -18,6 +18,9 @@ public class Customer extends UserRole
   private List<Ticket> boughtTickets;
   @OneToMany
   private List<ArtListing> favoriteListings;
+  public Customer() {
+    
+  }
   //------------------------
   // MEMBER VARIABLES
   //------------------------

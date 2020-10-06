@@ -9,7 +9,9 @@ import javax.persistence.*;
 // line 144 "../../../../../resources/visart.ump"
 public class Tag
 {
-
+  public Tag() {
+    
+  }
   //------------------------
   // ENUMERATIONS
   //------------------------

@@ -11,6 +11,9 @@ import java.util.*;
 // line 50 "../../../../../resources/visart.ump"
 public class Manager extends UserRole
 {
+  public Manager() {
+    
+  }
 
   //------------------------
   // MEMBER VARIABLES

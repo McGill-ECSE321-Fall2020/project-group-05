@@ -10,7 +10,9 @@ import java.util.*;
 // line 88 "../../../../../resources/visart.ump"
 public class Artist
 {
-
+  public Artist() {
+    
+  }
   //------------------------
   // MEMBER VARIABLES
   //------------------------

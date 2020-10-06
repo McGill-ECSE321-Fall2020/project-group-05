@@ -26,6 +26,10 @@ public class User
   // CONSTRUCTOR
   //------------------------
 
+  public User() {
+    
+  }
+  
   public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword)
   {
     idCode = aIdCode;

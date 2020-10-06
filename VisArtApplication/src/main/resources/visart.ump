@@ -27,6 +27,7 @@ class User {
   String username;
   String password;
 
+  public User() {}
 }
 
 @Entity
@@ -42,6 +43,8 @@ class UserRole {
   //%%private String idCode;
   //%%AnnotateEnd
   String idCode;
+
+  public UserRole() {}
 }
 
 @Entity
@@ -56,6 +59,8 @@ class Manager {
   //%%private List<ArtListing> promotedListings;
   //%%AnnotateEnd
   1 manager -- 0..* ArtListing  promotedListings;
+
+  public Manager() {}
 }
 
 @Entity
@@ -77,6 +82,8 @@ class Customer {
   1 customer <@>- 0..1 Artist artist;
   1 customer -- 0..* Ticket boughtTickets;
   1 favoritedCustomer -- 0..* ArtListing favoriteListings;
+
+  public Customer() {}
 }
 
 @Entity
@@ -98,6 +105,8 @@ class Artist {
   //%%private String idCode;
   //%%AnnotateEnd
   String idCode;
+
+  public Artist() {}
 }
 
 @Entity
@@ -133,6 +142,8 @@ class ArtListing {
   //%%private String idCode;
   //%%AnnotateEnd
   String idCode;
+
+  public ArtListing() {}
 }
 
 @Entity
@@ -154,6 +165,8 @@ class Tag {
   //%%private String idCode;
   //%%AnnotateEnd
   String idCode;
+
+  public Tag() {}
 }
 
 @Entity
@@ -177,6 +190,8 @@ class ArtPiece {
   //%%private String idCode;
   //%%AnnotateEnd
   String idCode;
+
+  public ArtPiece() {}
 }
 
 @Entity
@@ -199,6 +214,8 @@ class Ticket {
   //%%private String idCode;
   //%%AnnotateEnd
   String idCode;
+
+  public Ticket() {}
 }
 
 @Entity
@@ -223,4 +240,6 @@ class ArtOrder {
   //%%private String idCode;
   //%%AnnotateEnd
   String idCode;
+
+  public ArtOrder() {}
 }

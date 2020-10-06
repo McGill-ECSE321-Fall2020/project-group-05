@@ -9,7 +9,9 @@ import javax.persistence.*;
 // line 165 "../../../../../resources/visart.ump"
 public class ArtPiece
 {
-
+  public ArtPiece() {
+    
+  }
   //------------------------
   // ENUMERATIONS
   //------------------------

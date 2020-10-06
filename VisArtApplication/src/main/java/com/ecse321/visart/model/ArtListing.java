@@ -10,7 +10,9 @@ import java.util.*;
 // line 109 "../../../../../resources/visart.ump"
 public class ArtListing
 {
-
+  public ArtListing() {
+    
+  }
   //------------------------
   // ENUMERATIONS
   //------------------------

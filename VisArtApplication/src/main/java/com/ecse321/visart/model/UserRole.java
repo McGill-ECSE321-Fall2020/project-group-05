@@ -23,6 +23,10 @@ public class UserRole
   // CONSTRUCTOR
   //------------------------
 
+  public UserRole() {
+    
+  }
+  
   public UserRole(String aIdCode, User aUser)
   {
     idCode = aIdCode;

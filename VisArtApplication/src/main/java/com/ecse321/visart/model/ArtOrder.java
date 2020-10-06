@@ -10,7 +10,9 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 // line 210 "../../../../../resources/visart.ump"
 public class ArtOrder
 {
-
+  public ArtOrder() {
+    
+  }
   //------------------------
   // MEMBER VARIABLES
   //------------------------
