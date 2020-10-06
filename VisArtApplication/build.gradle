@@ -51,6 +51,7 @@ test {
 
 springBoot {
     mainClassName = 'com.ecse321.visart.DemoApplication'
+
 }
 
 ext {
