@@ -7,12 +7,10 @@ import java.util.*;
 
 @Entity
   @Table(name="artists")
-// line 88 "../../../../../resources/visart.ump"
+// line 91 "../../../../../resources/visart.ump"
 public class Artist
 {
-  public Artist() {
-    
-  }
+
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -50,14 +48,14 @@ public class Artist
   }
 
   
-   @OneToMany
-   private List<Ticket> soldTickets;
-   @OneToMany
-   private List<ArtListing> postedListings;
-   @OneToOne
-   private Customer customer;
-   @Id
-   private String idCode;
+  @OneToMany
+  private List<Ticket> soldTickets;
+  @OneToMany
+  private List<ArtListing> postedListings;
+  @OneToOne
+  private Customer customer;
+  @Id
+  private String idCode;
   public String getIdCode()
   {
     return idCode;
@@ -205,9 +203,9 @@ public class Artist
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Manager aManager, Customer aFavoritedCustomer)
+  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Manager aManager)
   {
-    return new ArtListing(aVisibility, aIdCode, aManager, aFavoritedCustomer, this);
+    return new ArtListing(aVisibility, aIdCode, aManager, this);
   }
 
   public boolean addPostedListing(ArtListing aPostedListing)
@@ -318,6 +316,11 @@ public class Artist
     {
       existingCustomer.setArtist(null);
     }
+  }
+
+  // line 109 "../../../../../resources/visart.ump"
+   public  Artist(){
+    
   }
 
 

@@ -19,6 +19,7 @@ public class ManagerRepository {
 	public Manager createManager(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
 		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword);
 		Manager manager = new Manager(aIdCode, usr);
+		entityManager.persist(usr);
 		entityManager.persist(manager);
 		return manager;
 	}

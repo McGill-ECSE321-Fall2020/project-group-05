@@ -7,12 +7,10 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 @Entity
   @Table(name="orders")
-// line 210 "../../../../../resources/visart.ump"
+// line 223 "../../../../../resources/visart.ump"
 public class ArtOrder
 {
-  public ArtOrder() {
-    
-  }
+
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -36,11 +34,11 @@ public class ArtOrder
     targetAddress = aTargetAddress;
     deliveryTracker = aDeliveryTracker;
     idCode = aIdCode;
-    if (aArtPiece == null || aArtPiece.getArtOrder() != null)
+    boolean didAddArtPiece = setArtPiece(aArtPiece);
+    if (!didAddArtPiece)
     {
-      throw new RuntimeException("Unable to create ArtOrder due to aArtPiece. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create artOrder due to artPiece. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    artPiece = aArtPiece;
     if (aTicket == null || aTicket.getOrder() != null)
     {
       throw new RuntimeException("Unable to create ArtOrder due to aTicket. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -48,14 +46,18 @@ public class ArtOrder
     ticket = aTicket;
   }
 
-  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, PieceLocation aBasicLocationForArtPiece, String aAddressLocationForArtPiece, String aIdCodeForArtPiece, ArtListing aArtListingForArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket)
+  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket)
   {
     isDelivered = aIsDelivered;
     targetLocation = aTargetLocation;
     targetAddress = aTargetAddress;
     deliveryTracker = aDeliveryTracker;
     idCode = aIdCode;
-    artPiece = new ArtPiece(aBasicLocationForArtPiece, aAddressLocationForArtPiece, aIdCodeForArtPiece, aArtListingForArtPiece, this);
+    boolean didAddArtPiece = setArtPiece(aArtPiece);
+    if (!didAddArtPiece)
+    {
+      throw new RuntimeException("Unable to create artOrder due to artPiece. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
     ticket = new Ticket(aIsPaymentConfirmedForTicket, aPaymentAmountForTicket, aIdCodeForTicket, this, aCustomerForTicket, aArtistForTicket);
   }
 
@@ -125,12 +127,12 @@ public class ArtOrder
   }
 
   
-   @OneToOne
-   private ArtPiece artPiece;
-   @OneToOne
-   private Ticket ticket;
-   @Id
-   private String idCode;
+  @OneToOne
+  private ArtPiece artPiece;
+  @OneToOne
+  private Ticket ticket;
+  @Id
+  private String idCode;
   public String getIdCode()
   {
     return idCode;
@@ -151,6 +153,34 @@ public class ArtOrder
   {
     return ticket;
   }
+  /* Code from template association_SetOneToOptionalOne */
+  public boolean setArtPiece(ArtPiece aNewArtPiece)
+  {
+    boolean wasSet = false;
+    if (aNewArtPiece == null)
+    {
+      //Unable to setArtPiece to null, as artOrder must always be associated to a artPiece
+      return wasSet;
+    }
+    
+    ArtOrder existingArtOrder = aNewArtPiece.getArtOrder();
+    if (existingArtOrder != null && !equals(existingArtOrder))
+    {
+      //Unable to setArtPiece, the current artPiece already has a artOrder, which would be orphaned if it were re-assigned
+      return wasSet;
+    }
+    
+    ArtPiece anOldArtPiece = artPiece;
+    artPiece = aNewArtPiece;
+    artPiece.setArtOrder(this);
+
+    if (anOldArtPiece != null)
+    {
+      anOldArtPiece.setArtOrder(null);
+    }
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
@@ -158,7 +188,7 @@ public class ArtOrder
     artPiece = null;
     if (existingArtPiece != null)
     {
-      existingArtPiece.delete();
+      existingArtPiece.setArtOrder(null);
     }
     Ticket existingTicket = ticket;
     ticket = null;
@@ -166,6 +196,11 @@ public class ArtOrder
     {
       existingTicket.delete();
     }
+  }
+
+  // line 244 "../../../../../resources/visart.ump"
+   public  ArtOrder(){
+    
   }
 
 

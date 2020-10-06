@@ -8,19 +8,16 @@ import java.util.*;
 @Entity
   @Table(name="customers")
   @DiscriminatorValue("1")
-// line 66 "../../../../../resources/visart.ump"
+// line 69 "../../../../../resources/visart.ump"
 public class Customer extends UserRole
 {
-
   @OneToOne
   private Artist artist;
   @OneToMany
   private List<Ticket> boughtTickets;
-  @OneToMany
+  @ManyToMany
   private List<ArtListing> favoriteListings;
-  public Customer() {
-    
-  }
+
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -216,38 +213,48 @@ public class Customer extends UserRole
   {
     return 0;
   }
-  /* Code from template association_AddManyToOne */
-  public ArtListing addFavoriteListing(ArtListing.PostVisibility aVisibility, String aIdCode, Manager aManager, Artist aArtist)
-  {
-    return new ArtListing(aVisibility, aIdCode, aManager, this, aArtist);
-  }
-
+  /* Code from template association_AddManyToManyMethod */
   public boolean addFavoriteListing(ArtListing aFavoriteListing)
   {
     boolean wasAdded = false;
     if (favoriteListings.contains(aFavoriteListing)) { return false; }
-    Customer existingFavoritedCustomer = aFavoriteListing.getFavoritedCustomer();
-    boolean isNewFavoritedCustomer = existingFavoritedCustomer != null && !this.equals(existingFavoritedCustomer);
-    if (isNewFavoritedCustomer)
+    favoriteListings.add(aFavoriteListing);
+    if (aFavoriteListing.indexOfFavoritedCustomer(this) != -1)
     {
-      aFavoriteListing.setFavoritedCustomer(this);
+      wasAdded = true;
     }
     else
     {
-      favoriteListings.add(aFavoriteListing);
+      wasAdded = aFavoriteListing.addFavoritedCustomer(this);
+      if (!wasAdded)
+      {
+        favoriteListings.remove(aFavoriteListing);
+      }
     }
-    wasAdded = true;
     return wasAdded;
   }
-
+  /* Code from template association_RemoveMany */
   public boolean removeFavoriteListing(ArtListing aFavoriteListing)
   {
     boolean wasRemoved = false;
-    //Unable to remove aFavoriteListing, as it must always have a favoritedCustomer
-    if (!this.equals(aFavoriteListing.getFavoritedCustomer()))
+    if (!favoriteListings.contains(aFavoriteListing))
     {
-      favoriteListings.remove(aFavoriteListing);
+      return wasRemoved;
+    }
+
+    int oldIndex = favoriteListings.indexOf(aFavoriteListing);
+    favoriteListings.remove(oldIndex);
+    if (aFavoriteListing.indexOfFavoritedCustomer(this) == -1)
+    {
       wasRemoved = true;
+    }
+    else
+    {
+      wasRemoved = aFavoriteListing.removeFavoritedCustomer(this);
+      if (!wasRemoved)
+      {
+        favoriteListings.add(oldIndex,aFavoriteListing);
+      }
     }
     return wasRemoved;
   }
@@ -298,12 +305,18 @@ public class Customer extends UserRole
       Ticket aBoughtTicket = boughtTickets.get(i - 1);
       aBoughtTicket.delete();
     }
-    for(int i=favoriteListings.size(); i > 0; i--)
+    ArrayList<ArtListing> copyOfFavoriteListings = new ArrayList<ArtListing>(favoriteListings);
+    favoriteListings.clear();
+    for(ArtListing aFavoriteListing : copyOfFavoriteListings)
     {
-      ArtListing aFavoriteListing = favoriteListings.get(i - 1);
-      aFavoriteListing.delete();
+      aFavoriteListing.removeFavoritedCustomer(this);
     }
     super.delete();
+  }
+
+  // line 86 "../../../../../resources/visart.ump"
+   public  Customer(){
+    
   }
 
 }

@@ -26,10 +26,6 @@ public class User
   // CONSTRUCTOR
   //------------------------
 
-  public User() {
-    
-  }
-  
   public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword)
   {
     idCode = aIdCode;
@@ -84,12 +80,12 @@ public class User
   }
 
   
-   @OneToOne
-   private UserRole role;
-   @Transient
-   private Gallery gallery;
-   @Id
-   private String idCode;
+  @OneToOne
+  private UserRole role;
+  @Transient
+  private Gallery gallery;
+  @Id
+  private String idCode;
   public String getIdCode()
   {
     return idCode;
@@ -195,6 +191,11 @@ public class User
       this.gallery = null;
       placeholderGallery.removeUser(this);
     }
+  }
+
+  // line 30 "../../../../../resources/visart.ump"
+   public  User(){
+    
   }
 
 

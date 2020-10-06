@@ -24,15 +24,8 @@ public class ArtPieceRepository {
 	}
 	
 	@Transactional
-	public ArtPiece createArtPiece(PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtListing aArtListing, ArtOrder aArtOrder) {
-		ArtPiece apiece = new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, aArtListing, aArtOrder);
-		entityManager.persist(apiece);
-		return apiece;
-	}
-	
-	@Transactional
-	public ArtPiece createArtPiece(PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtListing aArtListing, boolean aIsDeliveredForArtOrder, PieceLocation aTargetLocationForArtOrder, String aTargetAddressForArtOrder, String aDeliveryTrackerForArtOrder, String aIdCodeForArtOrder, Ticket aTicketForArtOrder) {
-		ArtPiece apiece = new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, aArtListing, aIsDeliveredForArtOrder, aTargetLocationForArtOrder, aTargetAddressForArtOrder, aDeliveryTrackerForArtOrder, aIdCodeForArtOrder, aTicketForArtOrder);
+	public ArtPiece createArtPiece(PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtListing aArtListing) {
+		ArtPiece apiece = new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, aArtListing);
 		entityManager.persist(apiece);
 		return apiece;
 	}

@@ -8,12 +8,9 @@ import java.util.*;
 @Entity
   @Table(name="managers")
   @DiscriminatorValue("0")
-// line 50 "../../../../../resources/visart.ump"
+// line 53 "../../../../../resources/visart.ump"
 public class Manager extends UserRole
 {
-  public Manager() {
-    
-  }
 
   //------------------------
   // MEMBER VARIABLES
@@ -42,8 +39,8 @@ public class Manager extends UserRole
   }
 
   
-   @OneToMany
-   private List<ArtListing> promotedListings;
+  @OneToMany
+  private List<ArtListing> promotedListings;
   public List<ArtListing> getPromotedListings()
   {
     List<ArtListing> newPromotedListings = Collections.unmodifiableList(promotedListings);
@@ -73,9 +70,9 @@ public class Manager extends UserRole
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtListing addPromotedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Customer aFavoritedCustomer, Artist aArtist)
+  public ArtListing addPromotedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Artist aArtist)
   {
-    return new ArtListing(aVisibility, aIdCode, this, aFavoritedCustomer, aArtist);
+    return new ArtListing(aVisibility, aIdCode, this, aArtist);
   }
 
   public boolean addPromotedListing(ArtListing aPromotedListing)
@@ -148,6 +145,11 @@ public class Manager extends UserRole
       aPromotedListing.delete();
     }
     super.delete();
+  }
+
+  // line 63 "../../../../../resources/visart.ump"
+   public  Manager(){
+    
   }
 
 }

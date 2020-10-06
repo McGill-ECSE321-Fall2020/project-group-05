@@ -20,10 +20,11 @@ class VisArtTest {
 
   @Test
   void test() {
-    Manager e = mr.createManager("123", "daniel.bucci@ggmaol.com", "db", "db", "pog");
+    Long l = System.currentTimeMillis();
+    Manager e = mr.createManager(""+l, "daniel.bucci@ggmaol.com", "db", "db", "pog");
     assertNotNull(e);
     System.out.println(e);
-    Manager e1 = mr.getManager("123");
+    Manager e1 = mr.getManager(""+l);
     assertNotNull(e1);
     System.out.println(e1);
   }

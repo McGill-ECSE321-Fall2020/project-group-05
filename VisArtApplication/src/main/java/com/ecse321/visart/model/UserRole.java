@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
   @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
   @DiscriminatorColumn(name="user_type",discriminatorType=DiscriminatorType.INTEGER)
-// line 35 "../../../../../resources/visart.ump"
+// line 36 "../../../../../resources/visart.ump"
 public class UserRole
 {
 
@@ -23,10 +23,6 @@ public class UserRole
   // CONSTRUCTOR
   //------------------------
 
-  public UserRole() {
-    
-  }
-  
   public UserRole(String aIdCode, User aUser)
   {
     idCode = aIdCode;
@@ -50,10 +46,10 @@ public class UserRole
   }
 
   
-   @OneToOne
-   private User user;
-   @Id
-   private String idCode;
+  @OneToOne
+  private User user;
+  @Id
+  private String idCode;
   public String getIdCode()
   {
     return idCode;
@@ -100,6 +96,11 @@ public class UserRole
     {
       existingUser.setRole(null);
     }
+  }
+
+  // line 47 "../../../../../resources/visart.ump"
+   public  UserRole(){
+    
   }
 
 

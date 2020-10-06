@@ -7,12 +7,10 @@ import java.util.*;
 
 @Entity
   @Table(name="artlistings")
-// line 109 "../../../../../resources/visart.ump"
+// line 114 "../../../../../resources/visart.ump"
 public class ArtListing
 {
-  public ArtListing() {
-    
-  }
+
   //------------------------
   // ENUMERATIONS
   //------------------------
@@ -32,7 +30,7 @@ public class ArtListing
   // CONSTRUCTOR
   //------------------------
 
-  public ArtListing(PostVisibility aVisibility, String aIdCode, Manager aManager, Customer aFavoritedCustomer, Artist aArtist)
+  public ArtListing(PostVisibility aVisibility, String aIdCode, Manager aManager, Artist aArtist)
   {
     visibility = aVisibility;
     dimensions = new ArrayList<Float>();
@@ -44,11 +42,7 @@ public class ArtListing
     {
       throw new RuntimeException("Unable to create promotedListing due to manager. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    boolean didAddFavoritedCustomer = setFavoritedCustomer(aFavoritedCustomer);
-    if (!didAddFavoritedCustomer)
-    {
-      throw new RuntimeException("Unable to create favoriteListing due to favoritedCustomer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    favoritedCustomer = new ArrayList<Customer>();
     boolean didAddArtist = setArtist(aArtist);
     if (!didAddArtist)
     {
@@ -127,20 +121,20 @@ public class ArtListing
   }
 
   
-   @OneToMany
-   private List<ArtPiece> pieces;
-   @OneToMany
-   private List<Tag> tags;
-   @ManyToOne
-   private Manager manager;
-   @ManyToOne
-   private Customer favoritedCustomer;
-   @ManyToOne
-   private Artist artist;
-   @ElementCollection
-   private List<Float> dimensions;
-   @Id
-   private String idCode;
+  @OneToMany
+  private List<ArtPiece> pieces;
+  @OneToMany
+  private List<Tag> tags;
+  @ManyToOne
+  private Manager manager;
+  @ManyToMany
+  private List<Customer> favoritedCustomer;
+  @ManyToOne
+  private Artist artist;
+  @ElementCollection
+  private List<Float> dimensions;
+  @Id
+  private String idCode;
   public String getIdCode()
   {
     return idCode;
@@ -210,10 +204,35 @@ public class ArtListing
   {
     return manager;
   }
-  /* Code from template association_GetOne */
-  public Customer getFavoritedCustomer()
+  /* Code from template association_GetMany */
+  public Customer getFavoritedCustomer(int index)
   {
-    return favoritedCustomer;
+    Customer aFavoritedCustomer = favoritedCustomer.get(index);
+    return aFavoritedCustomer;
+  }
+
+  public List<Customer> getFavoritedCustomer()
+  {
+    List<Customer> newFavoritedCustomer = Collections.unmodifiableList(favoritedCustomer);
+    return newFavoritedCustomer;
+  }
+
+  public int numberOfFavoritedCustomer()
+  {
+    int number = favoritedCustomer.size();
+    return number;
+  }
+
+  public boolean hasFavoritedCustomer()
+  {
+    boolean has = favoritedCustomer.size() > 0;
+    return has;
+  }
+
+  public int indexOfFavoritedCustomer(Customer aFavoritedCustomer)
+  {
+    int index = favoritedCustomer.indexOf(aFavoritedCustomer);
+    return index;
   }
   /* Code from template association_GetOne */
   public Artist getArtist()
@@ -226,9 +245,9 @@ public class ArtListing
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtPiece addPiece(ArtPiece.PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtOrder aArtOrder)
+  public ArtPiece addPiece(ArtPiece.PieceLocation aBasicLocation, String aAddressLocation, String aIdCode)
   {
-    return new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, this, aArtOrder);
+    return new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, this);
   }
 
   public boolean addPiece(ArtPiece aPiece)
@@ -383,24 +402,87 @@ public class ArtListing
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setFavoritedCustomer(Customer aFavoritedCustomer)
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfFavoritedCustomer()
   {
-    boolean wasSet = false;
-    if (aFavoritedCustomer == null)
+    return 0;
+  }
+  /* Code from template association_AddManyToManyMethod */
+  public boolean addFavoritedCustomer(Customer aFavoritedCustomer)
+  {
+    boolean wasAdded = false;
+    if (favoritedCustomer.contains(aFavoritedCustomer)) { return false; }
+    favoritedCustomer.add(aFavoritedCustomer);
+    if (aFavoritedCustomer.indexOfFavoriteListing(this) != -1)
     {
-      return wasSet;
+      wasAdded = true;
+    }
+    else
+    {
+      wasAdded = aFavoritedCustomer.addFavoriteListing(this);
+      if (!wasAdded)
+      {
+        favoritedCustomer.remove(aFavoritedCustomer);
+      }
+    }
+    return wasAdded;
+  }
+  /* Code from template association_RemoveMany */
+  public boolean removeFavoritedCustomer(Customer aFavoritedCustomer)
+  {
+    boolean wasRemoved = false;
+    if (!favoritedCustomer.contains(aFavoritedCustomer))
+    {
+      return wasRemoved;
     }
 
-    Customer existingFavoritedCustomer = favoritedCustomer;
-    favoritedCustomer = aFavoritedCustomer;
-    if (existingFavoritedCustomer != null && !existingFavoritedCustomer.equals(aFavoritedCustomer))
+    int oldIndex = favoritedCustomer.indexOf(aFavoritedCustomer);
+    favoritedCustomer.remove(oldIndex);
+    if (aFavoritedCustomer.indexOfFavoriteListing(this) == -1)
     {
-      existingFavoritedCustomer.removeFavoriteListing(this);
+      wasRemoved = true;
     }
-    favoritedCustomer.addFavoriteListing(this);
-    wasSet = true;
-    return wasSet;
+    else
+    {
+      wasRemoved = aFavoritedCustomer.removeFavoriteListing(this);
+      if (!wasRemoved)
+      {
+        favoritedCustomer.add(oldIndex,aFavoritedCustomer);
+      }
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addFavoritedCustomerAt(Customer aFavoritedCustomer, int index)
+  {  
+    boolean wasAdded = false;
+    if(addFavoritedCustomer(aFavoritedCustomer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfFavoritedCustomer()) { index = numberOfFavoritedCustomer() - 1; }
+      favoritedCustomer.remove(aFavoritedCustomer);
+      favoritedCustomer.add(index, aFavoritedCustomer);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveFavoritedCustomerAt(Customer aFavoritedCustomer, int index)
+  {
+    boolean wasAdded = false;
+    if(favoritedCustomer.contains(aFavoritedCustomer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfFavoritedCustomer()) { index = numberOfFavoritedCustomer() - 1; }
+      favoritedCustomer.remove(aFavoritedCustomer);
+      favoritedCustomer.add(index, aFavoritedCustomer);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addFavoritedCustomerAt(aFavoritedCustomer, index);
+    }
+    return wasAdded;
   }
   /* Code from template association_SetOneToMany */
   public boolean setArtist(Artist aArtist)
@@ -444,11 +526,11 @@ public class ArtListing
     {
       placeholderManager.removePromotedListing(this);
     }
-    Customer placeholderFavoritedCustomer = favoritedCustomer;
-    this.favoritedCustomer = null;
-    if(placeholderFavoritedCustomer != null)
+    ArrayList<Customer> copyOfFavoritedCustomer = new ArrayList<Customer>(favoritedCustomer);
+    favoritedCustomer.clear();
+    for(Customer aFavoritedCustomer : copyOfFavoritedCustomer)
     {
-      placeholderFavoritedCustomer.removeFavoriteListing(this);
+      aFavoritedCustomer.removeFavoriteListing(this);
     }
     Artist placeholderArtist = artist;
     this.artist = null;
@@ -458,6 +540,11 @@ public class ArtListing
     }
   }
 
+  // line 146 "../../../../../resources/visart.ump"
+   public  ArtListing(){
+    
+  }
+
 
   public String toString()
   {
@@ -465,7 +552,6 @@ public class ArtListing
             "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "visibility" + "=" + (getVisibility() != null ? !getVisibility().equals(this)  ? getVisibility().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "manager = "+(getManager()!=null?Integer.toHexString(System.identityHashCode(getManager())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "favoritedCustomer = "+(getFavoritedCustomer()!=null?Integer.toHexString(System.identityHashCode(getFavoritedCustomer())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "artist = "+(getArtist()!=null?Integer.toHexString(System.identityHashCode(getArtist())):"null");
   }
 }

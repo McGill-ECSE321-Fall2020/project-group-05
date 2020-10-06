@@ -75,13 +75,13 @@ class Customer {
   //%%private Artist artist;
   //%%@OneToMany
   //%%private List<Ticket> boughtTickets;
-  //%%@OneToMany
+  //%%@ManyToMany
   //%%private List<ArtListing> favoriteListings;
   //%%AnnotateEnd
 
   1 customer <@>- 0..1 Artist artist;
   1 customer -- 0..* Ticket boughtTickets;
-  1 favoritedCustomer -- 0..* ArtListing favoriteListings;
+  0..* favoritedCustomer -- 0..* ArtListing favoriteListings;
 
   public Customer() {}
 }
@@ -132,7 +132,7 @@ class ArtListing {
   //%%private List<Tag> tags;
   //%%@ManyToOne
   //%%private Manager manager;
-  //%%@ManyToOne
+  //%%@ManyToMany
   //%%private Customer favoritedCustomer;
   //%%@ManyToOne
   //%%private Artist artist;
@@ -199,7 +199,7 @@ class ArtPiece {
 class Ticket {
   depend javax.persistence.*;
   depend com.ecse321.visart.model.ArtPiece.PieceLocation; 
-  1 ticket <@>- 1 ArtOrder order;
+  1 ticket -- 1 ArtOrder order;
   Boolean isPaymentConfirmed; // Artist confirms the payment received
   Double paymentAmount;
 
@@ -223,7 +223,7 @@ class Ticket {
 class ArtOrder {
   depend javax.persistence.*;
   depend com.ecse321.visart.model.ArtPiece.PieceLocation; 
-  1 artOrder <@>- 1 ArtPiece artPiece;
+  0..1 artOrder -<@> 1 ArtPiece artPiece;
   Boolean isDelivered;
 
   @Enumerated(EnumType.ORDINAL)

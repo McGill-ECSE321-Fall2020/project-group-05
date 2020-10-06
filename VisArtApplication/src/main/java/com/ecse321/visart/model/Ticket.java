@@ -7,12 +7,10 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 @Entity
   @Table(name="tickets")
-// line 188 "../../../../../resources/visart.ump"
+// line 199 "../../../../../resources/visart.ump"
 public class Ticket
 {
-  public Ticket() {
-    
-  }
+
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -20,6 +18,7 @@ public class Ticket
   //Ticket Attributes
   private boolean isPaymentConfirmed;
   private double paymentAmount;
+
   //Ticket Associations
 
   //------------------------
@@ -108,14 +107,14 @@ public class Ticket
   }
 
   
-   @OneToOne
-   private ArtOrder order;
-   @ManyToOne
-   private Customer customer;
-   @ManyToOne
-   private Artist artist;
-   @Id
-   private String idCode;
+  @OneToOne
+  private ArtOrder order;
+  @ManyToOne
+  private Customer customer;
+  @ManyToOne
+  private Artist artist;
+  @Id
+  private String idCode;
   public String getIdCode()
   {
     return idCode;
@@ -200,6 +199,11 @@ public class Ticket
     {
       placeholderArtist.removeSoldTicket(this);
     }
+  }
+
+  // line 218 "../../../../../resources/visart.ump"
+   public  Ticket(){
+    
   }
 
 

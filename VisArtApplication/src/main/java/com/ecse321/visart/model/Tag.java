@@ -6,12 +6,10 @@ import javax.persistence.*;
 
 @Entity
   @Table(name="tags")
-// line 144 "../../../../../resources/visart.ump"
+// line 151 "../../../../../resources/visart.ump"
 public class Tag
 {
-  public Tag() {
-    
-  }
+
   //------------------------
   // ENUMERATIONS
   //------------------------
@@ -84,10 +82,10 @@ public class Tag
   }
 
   
-   @Transient
-   private ArtListing listing;
-   @Id
-   private String idCode;
+  @Transient
+  private ArtListing listing;
+  @Id
+  private String idCode;
   public String getIdCode()
   {
     return idCode;
@@ -125,6 +123,11 @@ public class Tag
     {
       placeholderListing.removeTag(this);
     }
+  }
+
+  // line 169 "../../../../../resources/visart.ump"
+   public  Tag(){
+    
   }
 
 

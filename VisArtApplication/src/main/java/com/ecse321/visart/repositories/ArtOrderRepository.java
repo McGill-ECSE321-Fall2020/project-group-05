@@ -33,9 +33,9 @@ public class ArtOrderRepository {
 	}
 	
 	@Transactional
-	public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, PieceLocation aBasicLocationForArtPiece, String aAddressLocationForArtPiece, String aIdCodeForArtPiece, ArtListing aArtListingForArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket) {
+	public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket) {
 		
-		ArtOrder ao = new ArtOrder(aIsDelivered, aTargetLocation, aTargetAddress, aDeliveryTracker, aIdCode, aBasicLocationForArtPiece, aAddressLocationForArtPiece, aIdCodeForArtPiece, aArtListingForArtPiece, aIsPaymentConfirmedForTicket, aPaymentAmountForTicket, aIdCodeForTicket, aCustomerForTicket, aArtistForTicket);
+		ArtOrder ao = new ArtOrder(aIsDelivered, aTargetLocation, aTargetAddress, aDeliveryTracker, aIdCode, aArtPiece, aIsPaymentConfirmedForTicket, aPaymentAmountForTicket, aIdCodeForTicket, aCustomerForTicket, aArtistForTicket);
 		entityManager.persist(ao);
 		return ao;
 	}
