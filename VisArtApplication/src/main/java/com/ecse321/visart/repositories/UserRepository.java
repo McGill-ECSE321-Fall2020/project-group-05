@@ -16,14 +16,10 @@ public class UserRepository {
 	EntityManager entityManager;
 	
 	@Transactional
-	public User createUser(String emailAddress, String username, String password, String idCode, String displayName, String galleryName) {
-		Gallery gallery = new Gallery(galleryName);
-		User usr = new User(emailAddress, username, password, idCode, displayName, gallery);
-		
-		
-		
-		return usr;
-		
+	public User getUser(String idCode) {
+		return entityManager.find(User.class, idCode);
 	}
+	
+	
 	
 }
