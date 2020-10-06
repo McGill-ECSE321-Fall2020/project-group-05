@@ -17,10 +17,10 @@ class EventTest {
 
   @Test
   void test() {
-    Event e = eRepo.createEvent("01", "Ryan");
+    Event e = eRepo.createEvent("02", "Ryan");
     assertNotNull(e);
     System.out.println(e);
-    Event e1 = eRepo.findEvent("01");
+    Event e1 = eRepo.findEvent("02");
     assertNotNull(e1);
     System.out.println(e1);
   }
