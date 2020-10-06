@@ -10,6 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.repositories.ManagerRepository;
+import com.ecse321.visart.repositories.UserRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -17,14 +18,16 @@ class VisArtTest {
 
   @Autowired
   private ManagerRepository mr;
+  private UserRepository ur;
 
   @Test
   void test() {
-    Long l = System.currentTimeMillis();
-    Manager e = mr.createManager(""+l, "daniel.bucci@ggmaol.com", "db", "db", "pog");
+
+    Manager e = mr.createManager("123", "daniel.bucci@ggmaol.com", "db", "db", "pog");
+    
     assertNotNull(e);
     System.out.println(e);
-    Manager e1 = mr.getManager(""+l);
+    Manager e1 = mr.getManager("123");
     assertNotNull(e1);
     System.out.println(e1);
   }
