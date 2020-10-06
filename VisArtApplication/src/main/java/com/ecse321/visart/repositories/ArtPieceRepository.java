@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtPiece;
+import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Ticket;
@@ -19,7 +20,7 @@ public class ArtPieceRepository {
 	
 	@Transactional
 	public ArtPiece getArtPiece(String idCode) {
-		return entityManager.find(User.class, idCode);
+		return entityManager.find(ArtPiece.class, idCode);
 	}
 	
 	@Transactional
