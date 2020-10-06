@@ -4,7 +4,7 @@
 package com.ecse321.visart.model;
 import java.util.*;
 
-// line 4 "../../../../../resources/visart.ump"
+// line 3 "../../../../../resources/visart.ump"
 public class Gallery
 {
 
@@ -17,7 +17,6 @@ public class Gallery
 
   //Gallery Associations
   private List<User> users;
-  private List<ArtListing> artListings;
 
   //------------------------
   // CONSTRUCTOR
@@ -27,7 +26,6 @@ public class Gallery
   {
     name = aName;
     users = new ArrayList<User>();
-    artListings = new ArrayList<ArtListing>();
   }
 
   //------------------------
@@ -42,9 +40,6 @@ public class Gallery
     return wasSet;
   }
 
-  /**
-   * Can there be multiple galleries? We'll need location objects then
-   */
   public String getName()
   {
     return name;
@@ -79,56 +74,25 @@ public class Gallery
     int index = users.indexOf(aUser);
     return index;
   }
-  /* Code from template association_GetMany */
-  public ArtListing getArtListing(int index)
-  {
-    ArtListing aArtListing = artListings.get(index);
-    return aArtListing;
-  }
-
-  public List<ArtListing> getArtListings()
-  {
-    List<ArtListing> newArtListings = Collections.unmodifiableList(artListings);
-    return newArtListings;
-  }
-
-  public int numberOfArtListings()
-  {
-    int number = artListings.size();
-    return number;
-  }
-
-  public boolean hasArtListings()
-  {
-    boolean has = artListings.size() > 0;
-    return has;
-  }
-
-  public int indexOfArtListing(ArtListing aArtListing)
-  {
-    int index = artListings.indexOf(aArtListing);
-    return index;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfUsers()
   {
     return 0;
   }
-  /* Code from template association_AddManyToOne */
-  public User addUser(String aEmailAddress, String aUsername, String aPassword, String aIdCode, String aDisplayname, UserRole aRole)
-  {
-    return new User(aEmailAddress, aUsername, aPassword, aIdCode, aDisplayname, aRole, this);
-  }
-
+  /* Code from template association_AddManyToOptionalOne */
   public boolean addUser(User aUser)
   {
     boolean wasAdded = false;
     if (users.contains(aUser)) { return false; }
     Gallery existingGallery = aUser.getGallery();
-    boolean isNewGallery = existingGallery != null && !this.equals(existingGallery);
-    if (isNewGallery)
+    if (existingGallery == null)
     {
       aUser.setGallery(this);
+    }
+    else if (!this.equals(existingGallery))
+    {
+      existingGallery.removeUser(aUser);
+      addUser(aUser);
     }
     else
     {
@@ -141,10 +105,10 @@ public class Gallery
   public boolean removeUser(User aUser)
   {
     boolean wasRemoved = false;
-    //Unable to remove aUser, as it must always have a gallery
-    if (!this.equals(aUser.getGallery()))
+    if (users.contains(aUser))
     {
       users.remove(aUser);
+      aUser.setGallery(null);
       wasRemoved = true;
     }
     return wasRemoved;
@@ -181,78 +145,6 @@ public class Gallery
     }
     return wasAdded;
   }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfArtListings()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToOne */
-  public ArtListing addArtListing(ArtListing.PostVisibility aVisibility, Manager aManager, Customer aFavoritedCustomer, Artist aArtist)
-  {
-    return new ArtListing(aVisibility, this, aManager, aFavoritedCustomer, aArtist);
-  }
-
-  public boolean addArtListing(ArtListing aArtListing)
-  {
-    boolean wasAdded = false;
-    if (artListings.contains(aArtListing)) { return false; }
-    Gallery existingGallery = aArtListing.getGallery();
-    boolean isNewGallery = existingGallery != null && !this.equals(existingGallery);
-    if (isNewGallery)
-    {
-      aArtListing.setGallery(this);
-    }
-    else
-    {
-      artListings.add(aArtListing);
-    }
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeArtListing(ArtListing aArtListing)
-  {
-    boolean wasRemoved = false;
-    //Unable to remove aArtListing, as it must always have a gallery
-    if (!this.equals(aArtListing.getGallery()))
-    {
-      artListings.remove(aArtListing);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addArtListingAt(ArtListing aArtListing, int index)
-  {  
-    boolean wasAdded = false;
-    if(addArtListing(aArtListing))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfArtListings()) { index = numberOfArtListings() - 1; }
-      artListings.remove(aArtListing);
-      artListings.add(index, aArtListing);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveArtListingAt(ArtListing aArtListing, int index)
-  {
-    boolean wasAdded = false;
-    if(artListings.contains(aArtListing))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfArtListings()) { index = numberOfArtListings() - 1; }
-      artListings.remove(aArtListing);
-      artListings.add(index, aArtListing);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addArtListingAt(aArtListing, index);
-    }
-    return wasAdded;
-  }
 
   public void delete()
   {
@@ -261,13 +153,6 @@ public class Gallery
       User aUser = users.get(users.size() - 1);
       aUser.delete();
       users.remove(aUser);
-    }
-    
-    while (artListings.size() > 0)
-    {
-      ArtListing aArtListing = artListings.get(artListings.size() - 1);
-      aArtListing.delete();
-      artListings.remove(aArtListing);
     }
     
   }

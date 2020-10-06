@@ -2,8 +2,11 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 
-// line 52 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="tags")
+// line 151 "../../../../../resources/visart.ump"
 public class Tag
 {
 
@@ -22,16 +25,16 @@ public class Tag
   private String keyword;
 
   //Tag Associations
-  private ArtListing listing;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Tag(TagType aType, String aKeyword, ArtListing aListing)
+  public Tag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing)
   {
     type = aType;
     keyword = aKeyword;
+    idCode = aIdCode;
     boolean didAddListing = setListing(aListing);
     if (!didAddListing)
     {
@@ -59,6 +62,15 @@ public class Tag
     return wasSet;
   }
 
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
+
+  @Enumerated(EnumType.ORDINAL)
   public TagType getType()
   {
     return type;
@@ -67,6 +79,16 @@ public class Tag
   public String getKeyword()
   {
     return keyword;
+  }
+
+  
+  @Transient
+  private ArtListing listing;
+  @Id
+  private String idCode;
+  public String getIdCode()
+  {
+    return idCode;
   }
   /* Code from template association_GetOne */
   public ArtListing getListing()
@@ -103,11 +125,17 @@ public class Tag
     }
   }
 
+  // line 169 "../../../../../resources/visart.ump"
+   public  Tag(){
+    
+  }
+
 
   public String toString()
   {
     return super.toString() + "["+
-            "keyword" + ":" + getKeyword()+ "]" + System.getProperties().getProperty("line.separator") +
+            "keyword" + ":" + getKeyword()+ "," +
+            "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "type" + "=" + (getType() != null ? !getType().equals(this)  ? getType().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "listing = "+(getListing()!=null?Integer.toHexString(System.identityHashCode(getListing())):"null");
   }

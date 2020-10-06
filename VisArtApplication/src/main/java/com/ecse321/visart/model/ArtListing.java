@@ -2,9 +2,12 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 import java.util.*;
 
-// line 42 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="artlistings")
+// line 114 "../../../../../resources/visart.ump"
 public class ArtListing
 {
 
@@ -20,41 +23,26 @@ public class ArtListing
 
   //ArtListing Attributes
   private PostVisibility visibility;
-  private List<Float> dimensions;
 
   //ArtListing Associations
-  private List<ArtPiece> pieces;
-  private List<Tag> tags;
-  private Gallery gallery;
-  private Manager manager;
-  private Customer favoritedCustomer;
-  private Artist artist;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ArtListing(PostVisibility aVisibility, Gallery aGallery, Manager aManager, Customer aFavoritedCustomer, Artist aArtist)
+  public ArtListing(PostVisibility aVisibility, String aIdCode, Manager aManager, Artist aArtist)
   {
     visibility = aVisibility;
     dimensions = new ArrayList<Float>();
+    idCode = aIdCode;
     pieces = new ArrayList<ArtPiece>();
     tags = new ArrayList<Tag>();
-    boolean didAddGallery = setGallery(aGallery);
-    if (!didAddGallery)
-    {
-      throw new RuntimeException("Unable to create artListing due to gallery. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
     boolean didAddManager = setManager(aManager);
     if (!didAddManager)
     {
       throw new RuntimeException("Unable to create promotedListing due to manager. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    boolean didAddFavoritedCustomer = setFavoritedCustomer(aFavoritedCustomer);
-    if (!didAddFavoritedCustomer)
-    {
-      throw new RuntimeException("Unable to create favoriteListing due to favoritedCustomer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    favoritedCustomer = new ArrayList<Customer>();
     boolean didAddArtist = setArtist(aArtist);
     if (!didAddArtist)
     {
@@ -88,6 +76,15 @@ public class ArtListing
     return wasRemoved;
   }
 
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
+
+  @Enumerated(EnumType.ORDINAL)
   public PostVisibility getVisibility()
   {
     return visibility;
@@ -121,6 +118,26 @@ public class ArtListing
   {
     int index = dimensions.indexOf(aDimension);
     return index;
+  }
+
+  
+  @OneToMany
+  private List<ArtPiece> pieces;
+  @OneToMany
+  private List<Tag> tags;
+  @ManyToOne
+  private Manager manager;
+  @ManyToMany
+  private List<Customer> favoritedCustomer;
+  @ManyToOne
+  private Artist artist;
+  @ElementCollection
+  private List<Float> dimensions;
+  @Id
+  private String idCode;
+  public String getIdCode()
+  {
+    return idCode;
   }
   /* Code from template association_GetMany */
   public ArtPiece getPiece(int index)
@@ -183,19 +200,39 @@ public class ArtListing
     return index;
   }
   /* Code from template association_GetOne */
-  public Gallery getGallery()
-  {
-    return gallery;
-  }
-  /* Code from template association_GetOne */
   public Manager getManager()
   {
     return manager;
   }
-  /* Code from template association_GetOne */
-  public Customer getFavoritedCustomer()
+  /* Code from template association_GetMany */
+  public Customer getFavoritedCustomer(int index)
   {
-    return favoritedCustomer;
+    Customer aFavoritedCustomer = favoritedCustomer.get(index);
+    return aFavoritedCustomer;
+  }
+
+  public List<Customer> getFavoritedCustomer()
+  {
+    List<Customer> newFavoritedCustomer = Collections.unmodifiableList(favoritedCustomer);
+    return newFavoritedCustomer;
+  }
+
+  public int numberOfFavoritedCustomer()
+  {
+    int number = favoritedCustomer.size();
+    return number;
+  }
+
+  public boolean hasFavoritedCustomer()
+  {
+    boolean has = favoritedCustomer.size() > 0;
+    return has;
+  }
+
+  public int indexOfFavoritedCustomer(Customer aFavoritedCustomer)
+  {
+    int index = favoritedCustomer.indexOf(aFavoritedCustomer);
+    return index;
   }
   /* Code from template association_GetOne */
   public Artist getArtist()
@@ -208,9 +245,9 @@ public class ArtListing
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtPiece addPiece(ArtPiece.PieceLocation aBasicLocation, String aAddressLocation, ArtOrder aArtOrder)
+  public ArtPiece addPiece(ArtPiece.PieceLocation aBasicLocation, String aAddressLocation, String aIdCode)
   {
-    return new ArtPiece(aBasicLocation, aAddressLocation, this, aArtOrder);
+    return new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, this);
   }
 
   public boolean addPiece(ArtPiece aPiece)
@@ -280,9 +317,9 @@ public class ArtListing
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Tag addTag(Tag.TagType aType, String aKeyword)
+  public Tag addTag(Tag.TagType aType, String aKeyword, String aIdCode)
   {
-    return new Tag(aType, aKeyword, this);
+    return new Tag(aType, aKeyword, aIdCode, this);
   }
 
   public boolean addTag(Tag aTag)
@@ -347,25 +384,6 @@ public class ArtListing
     return wasAdded;
   }
   /* Code from template association_SetOneToMany */
-  public boolean setGallery(Gallery aGallery)
-  {
-    boolean wasSet = false;
-    if (aGallery == null)
-    {
-      return wasSet;
-    }
-
-    Gallery existingGallery = gallery;
-    gallery = aGallery;
-    if (existingGallery != null && !existingGallery.equals(aGallery))
-    {
-      existingGallery.removeArtListing(this);
-    }
-    gallery.addArtListing(this);
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_SetOneToMany */
   public boolean setManager(Manager aManager)
   {
     boolean wasSet = false;
@@ -384,24 +402,87 @@ public class ArtListing
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setFavoritedCustomer(Customer aFavoritedCustomer)
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfFavoritedCustomer()
   {
-    boolean wasSet = false;
-    if (aFavoritedCustomer == null)
+    return 0;
+  }
+  /* Code from template association_AddManyToManyMethod */
+  public boolean addFavoritedCustomer(Customer aFavoritedCustomer)
+  {
+    boolean wasAdded = false;
+    if (favoritedCustomer.contains(aFavoritedCustomer)) { return false; }
+    favoritedCustomer.add(aFavoritedCustomer);
+    if (aFavoritedCustomer.indexOfFavoriteListing(this) != -1)
     {
-      return wasSet;
+      wasAdded = true;
+    }
+    else
+    {
+      wasAdded = aFavoritedCustomer.addFavoriteListing(this);
+      if (!wasAdded)
+      {
+        favoritedCustomer.remove(aFavoritedCustomer);
+      }
+    }
+    return wasAdded;
+  }
+  /* Code from template association_RemoveMany */
+  public boolean removeFavoritedCustomer(Customer aFavoritedCustomer)
+  {
+    boolean wasRemoved = false;
+    if (!favoritedCustomer.contains(aFavoritedCustomer))
+    {
+      return wasRemoved;
     }
 
-    Customer existingFavoritedCustomer = favoritedCustomer;
-    favoritedCustomer = aFavoritedCustomer;
-    if (existingFavoritedCustomer != null && !existingFavoritedCustomer.equals(aFavoritedCustomer))
+    int oldIndex = favoritedCustomer.indexOf(aFavoritedCustomer);
+    favoritedCustomer.remove(oldIndex);
+    if (aFavoritedCustomer.indexOfFavoriteListing(this) == -1)
     {
-      existingFavoritedCustomer.removeFavoriteListing(this);
+      wasRemoved = true;
     }
-    favoritedCustomer.addFavoriteListing(this);
-    wasSet = true;
-    return wasSet;
+    else
+    {
+      wasRemoved = aFavoritedCustomer.removeFavoriteListing(this);
+      if (!wasRemoved)
+      {
+        favoritedCustomer.add(oldIndex,aFavoritedCustomer);
+      }
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addFavoritedCustomerAt(Customer aFavoritedCustomer, int index)
+  {  
+    boolean wasAdded = false;
+    if(addFavoritedCustomer(aFavoritedCustomer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfFavoritedCustomer()) { index = numberOfFavoritedCustomer() - 1; }
+      favoritedCustomer.remove(aFavoritedCustomer);
+      favoritedCustomer.add(index, aFavoritedCustomer);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveFavoritedCustomerAt(Customer aFavoritedCustomer, int index)
+  {
+    boolean wasAdded = false;
+    if(favoritedCustomer.contains(aFavoritedCustomer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfFavoritedCustomer()) { index = numberOfFavoritedCustomer() - 1; }
+      favoritedCustomer.remove(aFavoritedCustomer);
+      favoritedCustomer.add(index, aFavoritedCustomer);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addFavoritedCustomerAt(aFavoritedCustomer, index);
+    }
+    return wasAdded;
   }
   /* Code from template association_SetOneToMany */
   public boolean setArtist(Artist aArtist)
@@ -439,23 +520,17 @@ public class ArtListing
       tags.remove(aTag);
     }
     
-    Gallery placeholderGallery = gallery;
-    this.gallery = null;
-    if(placeholderGallery != null)
-    {
-      placeholderGallery.removeArtListing(this);
-    }
     Manager placeholderManager = manager;
     this.manager = null;
     if(placeholderManager != null)
     {
       placeholderManager.removePromotedListing(this);
     }
-    Customer placeholderFavoritedCustomer = favoritedCustomer;
-    this.favoritedCustomer = null;
-    if(placeholderFavoritedCustomer != null)
+    ArrayList<Customer> copyOfFavoritedCustomer = new ArrayList<Customer>(favoritedCustomer);
+    favoritedCustomer.clear();
+    for(Customer aFavoritedCustomer : copyOfFavoritedCustomer)
     {
-      placeholderFavoritedCustomer.removeFavoriteListing(this);
+      aFavoritedCustomer.removeFavoriteListing(this);
     }
     Artist placeholderArtist = artist;
     this.artist = null;
@@ -465,14 +540,18 @@ public class ArtListing
     }
   }
 
+  // line 146 "../../../../../resources/visart.ump"
+   public  ArtListing(){
+    
+  }
+
 
   public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+    return super.toString() + "["+
+            "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "visibility" + "=" + (getVisibility() != null ? !getVisibility().equals(this)  ? getVisibility().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "gallery = "+(getGallery()!=null?Integer.toHexString(System.identityHashCode(getGallery())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "manager = "+(getManager()!=null?Integer.toHexString(System.identityHashCode(getManager())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "favoritedCustomer = "+(getFavoritedCustomer()!=null?Integer.toHexString(System.identityHashCode(getFavoritedCustomer())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "artist = "+(getArtist()!=null?Integer.toHexString(System.identityHashCode(getArtist())):"null");
   }
 }

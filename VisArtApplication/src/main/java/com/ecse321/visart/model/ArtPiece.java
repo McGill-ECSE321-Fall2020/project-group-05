@@ -2,8 +2,11 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 
-// line 60 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="artpieces")
+// line 174 "../../../../../resources/visart.ump"
 public class ArtPiece
 {
 
@@ -22,39 +25,21 @@ public class ArtPiece
   private String addressLocation;
 
   //ArtPiece Associations
-  private ArtListing artListing;
-  private ArtOrder artOrder;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ArtPiece(PieceLocation aBasicLocation, String aAddressLocation, ArtListing aArtListing, ArtOrder aArtOrder)
+  public ArtPiece(PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtListing aArtListing)
   {
     basicLocation = aBasicLocation;
     addressLocation = aAddressLocation;
+    idCode = aIdCode;
     boolean didAddArtListing = setArtListing(aArtListing);
     if (!didAddArtListing)
     {
       throw new RuntimeException("Unable to create piece due to artListing. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    if (aArtOrder == null || aArtOrder.getArtPiece() != null)
-    {
-      throw new RuntimeException("Unable to create ArtPiece due to aArtOrder. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    artOrder = aArtOrder;
-  }
-
-  public ArtPiece(PieceLocation aBasicLocation, String aAddressLocation, ArtListing aArtListing, boolean aIsDeliveredForArtOrder, PieceLocation aTargetLocationForArtOrder, String aTargetAddressForArtOrder, String aDeliveryTrackerForArtOrder, Ticket aTicketForArtOrder)
-  {
-    basicLocation = aBasicLocation;
-    addressLocation = aAddressLocation;
-    boolean didAddArtListing = setArtListing(aArtListing);
-    if (!didAddArtListing)
-    {
-      throw new RuntimeException("Unable to create piece due to artListing. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    artOrder = new ArtOrder(aIsDeliveredForArtOrder, aTargetLocationForArtOrder, aTargetAddressForArtOrder, aDeliveryTrackerForArtOrder, this, aTicketForArtOrder);
   }
 
   //------------------------
@@ -77,6 +62,15 @@ public class ArtPiece
     return wasSet;
   }
 
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
+
+  @Enumerated(EnumType.ORDINAL)
   public PieceLocation getBasicLocation()
   {
     return basicLocation;
@@ -85,6 +79,18 @@ public class ArtPiece
   public String getAddressLocation()
   {
     return addressLocation;
+  }
+
+  
+  @ManyToOne
+  private ArtListing artListing;
+  @OneToOne
+  private ArtOrder artOrder;
+  @Id
+  private String idCode;
+  public String getIdCode()
+  {
+    return idCode;
   }
   /* Code from template association_GetOne */
   public ArtListing getArtListing()
@@ -95,6 +101,12 @@ public class ArtPiece
   public ArtOrder getArtOrder()
   {
     return artOrder;
+  }
+
+  public boolean hasArtOrder()
+  {
+    boolean has = artOrder != null;
+    return has;
   }
   /* Code from template association_SetOneToMany */
   public boolean setArtListing(ArtListing aArtListing)
@@ -115,6 +127,33 @@ public class ArtPiece
     wasSet = true;
     return wasSet;
   }
+  /* Code from template association_SetOptionalOneToOne */
+  public boolean setArtOrder(ArtOrder aNewArtOrder)
+  {
+    boolean wasSet = false;
+    if (artOrder != null && !artOrder.equals(aNewArtOrder) && equals(artOrder.getArtPiece()))
+    {
+      //Unable to setArtOrder, as existing artOrder would become an orphan
+      return wasSet;
+    }
+
+    artOrder = aNewArtOrder;
+    ArtPiece anOldArtPiece = aNewArtOrder != null ? aNewArtOrder.getArtPiece() : null;
+
+    if (!this.equals(anOldArtPiece))
+    {
+      if (anOldArtPiece != null)
+      {
+        anOldArtPiece.artOrder = null;
+      }
+      if (artOrder != null)
+      {
+        artOrder.setArtPiece(this);
+      }
+    }
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
@@ -129,14 +168,21 @@ public class ArtPiece
     if (existingArtOrder != null)
     {
       existingArtOrder.delete();
+      existingArtOrder.setArtPiece(null);
     }
+  }
+
+  // line 194 "../../../../../resources/visart.ump"
+   public  ArtPiece(){
+    
   }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "addressLocation" + ":" + getAddressLocation()+ "]" + System.getProperties().getProperty("line.separator") +
+            "addressLocation" + ":" + getAddressLocation()+ "," +
+            "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "basicLocation" + "=" + (getBasicLocation() != null ? !getBasicLocation().equals(this)  ? getBasicLocation().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "artListing = "+(getArtListing()!=null?Integer.toHexString(System.identityHashCode(getArtListing())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "artOrder = "+(getArtOrder()!=null?Integer.toHexString(System.identityHashCode(getArtOrder())):"null");

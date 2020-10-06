@@ -2,9 +2,13 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 import java.util.*;
 
-// line 25 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="managers")
+  @DiscriminatorValue("0")
+// line 53 "../../../../../resources/visart.ump"
 public class Manager extends UserRole
 {
 
@@ -13,15 +17,14 @@ public class Manager extends UserRole
   //------------------------
 
   //Manager Associations
-  private List<ArtListing> promotedListings;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Manager(User aUser)
+  public Manager(String aIdCode, User aUser)
   {
-    super(aUser);
+    super(aIdCode, aUser);
     promotedListings = new ArrayList<ArtListing>();
   }
 
@@ -35,6 +38,9 @@ public class Manager extends UserRole
     return aPromotedListing;
   }
 
+  
+  @OneToMany
+  private List<ArtListing> promotedListings;
   public List<ArtListing> getPromotedListings()
   {
     List<ArtListing> newPromotedListings = Collections.unmodifiableList(promotedListings);
@@ -64,9 +70,9 @@ public class Manager extends UserRole
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtListing addPromotedListing(ArtListing.PostVisibility aVisibility, Gallery aGallery, Customer aFavoritedCustomer, Artist aArtist)
+  public ArtListing addPromotedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Artist aArtist)
   {
-    return new ArtListing(aVisibility, aGallery, this, aFavoritedCustomer, aArtist);
+    return new ArtListing(aVisibility, aIdCode, this, aArtist);
   }
 
   public boolean addPromotedListing(ArtListing aPromotedListing)
@@ -139,6 +145,11 @@ public class Manager extends UserRole
       aPromotedListing.delete();
     }
     super.delete();
+  }
+
+  // line 63 "../../../../../resources/visart.ump"
+   public  Manager(){
+    
   }
 
 }

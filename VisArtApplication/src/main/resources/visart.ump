@@ -1,82 +1,245 @@
 namespace com.ecse321.visart.model;
 
-
 class Gallery {
-  1 gallery <@>- 0..* User;
-  1 gallery <@>- 0..* ArtListing artListings;
-  // Can there be multiple galleries? We'll need location objects then
+  0..1 gallery <@>- 0..* User;
   String name;
 }
 
+@Entity
+@Table(name="users")
 class User {
-  1 user -- 1 UserRole role;
+  depend javax.persistence.*;
+
+  //%%AnnotateStart
+  //%%@OneToOne 
+  //%%private UserRole role; 
+  //%%@Transient
+  //%%private Gallery gallery;
+  //%%@Id
+  //%%private String idCode;
+  //%%AnnotateEnd
+  String idCode;
+
+  1 user -- 0..1 UserRole role;
   
   String emailAddress;
-  unique String username;
+  String displayname;
+  String username;
   String password;
-  unique String idCode;
-  unique String displayname;
+
+  public User() {}
 }
 
+@Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="user_type",discriminatorType=DiscriminatorType.INTEGER)
 class UserRole {
-  
+  depend javax.persistence.*;
+
+  //%%AnnotateStart
+  //%%@OneToOne
+  //%%private User user;
+  //%%@Id
+  //%%private String idCode;
+  //%%AnnotateEnd
+  String idCode;
+
+  public UserRole() {}
 }
 
+@Entity
+@Table(name="managers")
+@DiscriminatorValue("0")
 class Manager {
+  depend javax.persistence.*;
   isA UserRole;
+
+  //%%AnnotateStart
+  //%%@OneToMany
+  //%%private List<ArtListing> promotedListings;
+  //%%AnnotateEnd
   1 manager -- 0..* ArtListing  promotedListings;
+
+  public Manager() {}
 }
 
+@Entity
+@Table(name="customers")
+@DiscriminatorValue("1")
 class Customer {
+  depend javax.persistence.*;
   isA UserRole;
+  
+  //%%AnnotateStart
+  //%%@OneToOne
+  //%%private Artist artist;
+  //%%@OneToMany
+  //%%private List<Ticket> boughtTickets;
+  //%%@ManyToMany
+  //%%private List<ArtListing> favoriteListings;
+  //%%AnnotateEnd
+
   1 customer <@>- 0..1 Artist artist;
   1 customer -- 0..* Ticket boughtTickets;
-  1 favoritedCustomer -- 0..* ArtListing favoriteListings;
+  0..* favoritedCustomer -- 0..* ArtListing favoriteListings;
+
+  public Customer() {}
 }
 
+@Entity
+@Table(name="artists")
 class Artist {
+  depend javax.persistence.*;
+
   1 artist -- 0..* Ticket soldTickets;
   1 artist -- 0..* ArtListing postedListings;
+
+  //%%AnnotateStart
+  //%%@OneToMany
+  //%%private List<Ticket> soldTickets;
+  //%%@OneToMany
+  //%%private List<ArtListing> postedListings;
+  //%%@OneToOne
+  //%%private Customer customer;
+  //%%@Id
+  //%%private String idCode;
+  //%%AnnotateEnd
+  String idCode;
+
+  public Artist() {}
 }
 
+@Entity
+@Table(name="artlistings")
 class ArtListing {
+  depend javax.persistence.*;
   enum PostVisibility {
     Public, Private, Unlisted, Draft
   }
+
   1 artListing <@>- 0..* ArtPiece pieces;
   1 listing <@>- 0..* Tag tags;
+
+  @Enumerated(EnumType.ORDINAL)
   PostVisibility visibility;
+
   Float[]  dimensions;
+
+  //%%AnnotateStart
+  //%%@OneToMany
+  //%%private List<ArtPiece> pieces;
+  //%%@OneToMany
+  //%%private List<Tag> tags;
+  //%%@ManyToOne
+  //%%private Manager manager;
+  //%%@ManyToMany
+  //%%private Customer favoritedCustomer;
+  //%%@ManyToOne
+  //%%private Artist artist;
+  //%%@ElementCollection
+  //%%private List<Float> dimensions;
+  //%%@Id
+  //%%private String idCode;
+  //%%AnnotateEnd
+  String idCode;
+
+  public ArtListing() {}
 }
 
+@Entity
+@Table(name="tags")
 class Tag {
+  depend javax.persistence.*;
   enum TagType {
     Topic, Category, Genre, Material, Other
   }
+
+  @Enumerated(EnumType.ORDINAL)
   TagType type;
   String keyword;
+
+  //%%AnnotateStart
+  //%%@Transient
+  //%%private ArtListing listing;
+  //%%@Id
+  //%%private String idCode;
+  //%%AnnotateEnd
+  String idCode;
+
+  public Tag() {}
 }
 
+@Entity
+@Table(name="artpieces")
 class ArtPiece {
+  depend javax.persistence.*;
   enum PieceLocation {
     AtGallery, Offsite
   }
+
+  @Enumerated(EnumType.ORDINAL)
   PieceLocation basicLocation;
   String addressLocation;
+
+  //%%AnnotateStart
+  //%%@ManyToOne
+  //%%private ArtListing artListing;
+  //%%@OneToOne
+  //%%private ArtOrder artOrder;
+  //%%@Id
+  //%%private String idCode;
+  //%%AnnotateEnd
+  String idCode;
+
+  public ArtPiece() {}
 }
 
+@Entity
+@Table(name="tickets")
 class Ticket {
+  depend javax.persistence.*;
   depend com.ecse321.visart.model.ArtPiece.PieceLocation; 
-  1 ticket <@>- 1 ArtOrder order;
+  1 ticket -- 1 ArtOrder order;
   Boolean isPaymentConfirmed; // Artist confirms the payment received
   Double paymentAmount;
+
+  //%%AnnotateStart
+  //%%@OneToOne
+  //%%private ArtOrder order;
+  //%%@ManyToOne
+  //%%private Customer customer;
+  //%%@ManyToOne
+  //%%private Artist artist;
+  //%%@Id
+  //%%private String idCode;
+  //%%AnnotateEnd
+  String idCode;
+
+  public Ticket() {}
 }
 
+@Entity
+@Table(name="orders")
 class ArtOrder {
+  depend javax.persistence.*;
   depend com.ecse321.visart.model.ArtPiece.PieceLocation; 
-  1 artOrder <@>- 1 ArtPiece artPiece;
+  0..1 artOrder -<@> 1 ArtPiece artPiece;
   Boolean isDelivered;
+
+  @Enumerated(EnumType.ORDINAL)
   PieceLocation targetLocation;
   String targetAddress;
   String deliveryTracker;
+
+  //%%AnnotateStart
+  //%%@OneToOne
+  //%%private ArtPiece artPiece;
+  //%%@OneToOne
+  //%%private Ticket ticket;
+  //%%@Id
+  //%%private String idCode;
+  //%%AnnotateEnd
+  String idCode;
+
+  public ArtOrder() {}
 }
