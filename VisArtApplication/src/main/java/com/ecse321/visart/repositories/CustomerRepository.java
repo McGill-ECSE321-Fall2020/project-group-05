@@ -6,28 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ecse321.visart.model.Manager;
+import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.User;
 
 @Repository
-public class ManagerRepository {
+public class CustomerRepository {
 	
 	@Autowired
 	EntityManager entityManager;
 	
 	@Transactional
-	public Manager createManager(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
+	public Customer createCustomer(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
 		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword);
-		Manager manager = new Manager(aIdCode, usr);
-		entityManager.persist(manager);
-		return manager;
+		Customer customer = new Customer(aIdCode, usr);
+		entityManager.persist(customer);
+		return customer;
 	}
 	
-	@Transactional 
-	public Manager getManager(String aIdCode) {
-		return entityManager.find(Manager.class, aIdCode);
+	@Transactional
+	public Customer getCustomer(String aIdCode) {
+		return entityManager.find(Customer.class, aIdCode);
 	}
-	
-	
 
 }
