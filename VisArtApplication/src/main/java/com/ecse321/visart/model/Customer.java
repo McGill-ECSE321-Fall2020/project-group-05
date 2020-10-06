@@ -2,28 +2,37 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 import java.util.*;
 
-// line 33 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="customers")
+  @DiscriminatorValue("1")
+// line 66 "../../../../../resources/visart.ump"
 public class Customer extends UserRole
 {
 
+  @OneToOne
+  private Artist artist;
+  @OneToMany
+  private List<Ticket> boughtTickets;
+  @OneToMany
+  private List<ArtListing> favoriteListings;
+  @Id
+  private String idCode;
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Customer Associations
-  private Artist artist;
-  private List<Ticket> boughtTickets;
-  private List<ArtListing> favoriteListings;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(User aUser)
+  public Customer(String aIdCode, User aUser)
   {
-    super(aUser);
+    super(aIdCode, aUser);
     boughtTickets = new ArrayList<Ticket>();
     favoriteListings = new ArrayList<ArtListing>();
   }
@@ -135,9 +144,9 @@ public class Customer extends UserRole
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Ticket addBoughtTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, ArtOrder aOrder, Artist aArtist)
+  public Ticket addBoughtTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode, ArtOrder aOrder, Artist aArtist)
   {
-    return new Ticket(aIsPaymentConfirmed, aPaymentAmount, aOrder, this, aArtist);
+    return new Ticket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, this, aArtist);
   }
 
   public boolean addBoughtTicket(Ticket aBoughtTicket)
@@ -207,9 +216,9 @@ public class Customer extends UserRole
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtListing addFavoriteListing(ArtListing.PostVisibility aVisibility, Gallery aGallery, Manager aManager, Artist aArtist)
+  public ArtListing addFavoriteListing(ArtListing.PostVisibility aVisibility, String aIdCode, Manager aManager, Artist aArtist)
   {
-    return new ArtListing(aVisibility, aGallery, aManager, this, aArtist);
+    return new ArtListing(aVisibility, aIdCode, aManager, this, aArtist);
   }
 
   public boolean addFavoriteListing(ArtListing aFavoriteListing)

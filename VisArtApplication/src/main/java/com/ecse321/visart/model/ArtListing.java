@@ -2,9 +2,12 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 import java.util.*;
 
-// line 45 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="artlistings")
+// line 109 "../../../../../resources/visart.ump"
 public class ArtListing
 {
 
@@ -20,31 +23,20 @@ public class ArtListing
 
   //ArtListing Attributes
   private PostVisibility visibility;
-  private List<Float> dimensions;
 
   //ArtListing Associations
-  private List<ArtPiece> pieces;
-  private List<Tag> tags;
-  private Gallery gallery;
-  private Manager manager;
-  private Customer favoritedCustomer;
-  private Artist artist;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ArtListing(PostVisibility aVisibility, Gallery aGallery, Manager aManager, Customer aFavoritedCustomer, Artist aArtist)
+  public ArtListing(PostVisibility aVisibility, String aIdCode, Manager aManager, Customer aFavoritedCustomer, Artist aArtist)
   {
     visibility = aVisibility;
     dimensions = new ArrayList<Float>();
+    idCode = aIdCode;
     pieces = new ArrayList<ArtPiece>();
     tags = new ArrayList<Tag>();
-    boolean didAddGallery = setGallery(aGallery);
-    if (!didAddGallery)
-    {
-      throw new RuntimeException("Unable to create artListing due to gallery. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
     boolean didAddManager = setManager(aManager);
     if (!didAddManager)
     {
@@ -88,6 +80,15 @@ public class ArtListing
     return wasRemoved;
   }
 
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
+
+  @Enumerated(EnumType.ORDINAL)
   public PostVisibility getVisibility()
   {
     return visibility;
@@ -121,6 +122,26 @@ public class ArtListing
   {
     int index = dimensions.indexOf(aDimension);
     return index;
+  }
+
+  
+   @OneToMany
+   private List<ArtPiece> pieces;
+   @OneToMany
+   private List<Tag> tags;
+   @ManyToOne
+   private Manager manager;
+   @ManyToOne
+   private Customer favoritedCustomer;
+   @ManyToOne
+   private Artist artist;
+   @ElementCollection
+   private List<Float> dimensions;
+   @Id
+   private String idCode;
+  public String getIdCode()
+  {
+    return idCode;
   }
   /* Code from template association_GetMany */
   public ArtPiece getPiece(int index)
@@ -183,11 +204,6 @@ public class ArtListing
     return index;
   }
   /* Code from template association_GetOne */
-  public Gallery getGallery()
-  {
-    return gallery;
-  }
-  /* Code from template association_GetOne */
   public Manager getManager()
   {
     return manager;
@@ -208,9 +224,9 @@ public class ArtListing
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtPiece addPiece(ArtPiece.PieceLocation aBasicLocation, String aAddressLocation, ArtOrder aArtOrder)
+  public ArtPiece addPiece(ArtPiece.PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtOrder aArtOrder)
   {
-    return new ArtPiece(aBasicLocation, aAddressLocation, this, aArtOrder);
+    return new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, this, aArtOrder);
   }
 
   public boolean addPiece(ArtPiece aPiece)
@@ -280,9 +296,9 @@ public class ArtListing
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Tag addTag(Tag.TagType aType, String aKeyword)
+  public Tag addTag(Tag.TagType aType, String aKeyword, String aIdCode)
   {
-    return new Tag(aType, aKeyword, this);
+    return new Tag(aType, aKeyword, aIdCode, this);
   }
 
   public boolean addTag(Tag aTag)
@@ -345,25 +361,6 @@ public class ArtListing
       wasAdded = addTagAt(aTag, index);
     }
     return wasAdded;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setGallery(Gallery aGallery)
-  {
-    boolean wasSet = false;
-    if (aGallery == null)
-    {
-      return wasSet;
-    }
-
-    Gallery existingGallery = gallery;
-    gallery = aGallery;
-    if (existingGallery != null && !existingGallery.equals(aGallery))
-    {
-      existingGallery.removeArtListing(this);
-    }
-    gallery.addArtListing(this);
-    wasSet = true;
-    return wasSet;
   }
   /* Code from template association_SetOneToMany */
   public boolean setManager(Manager aManager)
@@ -439,12 +436,6 @@ public class ArtListing
       tags.remove(aTag);
     }
     
-    Gallery placeholderGallery = gallery;
-    this.gallery = null;
-    if(placeholderGallery != null)
-    {
-      placeholderGallery.removeArtListing(this);
-    }
     Manager placeholderManager = manager;
     this.manager = null;
     if(placeholderManager != null)
@@ -468,9 +459,9 @@ public class ArtListing
 
   public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+    return super.toString() + "["+
+            "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "visibility" + "=" + (getVisibility() != null ? !getVisibility().equals(this)  ? getVisibility().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "gallery = "+(getGallery()!=null?Integer.toHexString(System.identityHashCode(getGallery())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "manager = "+(getManager()!=null?Integer.toHexString(System.identityHashCode(getManager())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "favoritedCustomer = "+(getFavoritedCustomer()!=null?Integer.toHexString(System.identityHashCode(getFavoritedCustomer())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "artist = "+(getArtist()!=null?Integer.toHexString(System.identityHashCode(getArtist())):"null");

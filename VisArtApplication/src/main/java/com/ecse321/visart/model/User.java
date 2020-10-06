@@ -2,19 +2,13 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
-import java.util.*;
+import javax.persistence.*;
 
-// line 11 "../../../../../resources/visart.ump"
+@Entity
+  @Table(name="users")
+// line 10 "../../../../../resources/visart.ump"
 public class User
 {
-
-  //------------------------
-  // STATIC VARIABLES
-  //------------------------
-
-  private static Map<String, User> usersByUsername = new HashMap<String, User>();
-  private static Map<String, User> usersByIdCode = new HashMap<String, User>();
-  private static Map<String, User> usersByDisplayname = new HashMap<String, User>();
 
   //------------------------
   // MEMBER VARIABLES
@@ -22,45 +16,36 @@ public class User
 
   //User Attributes
   private String emailAddress;
+  private String displayname;
   private String username;
   private String password;
-  private String idCode;
-  private String displayname;
 
   //User Associations
-  private UserRole role;
-  private Gallery gallery;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aEmailAddress, String aUsername, String aPassword, String aIdCode, String aDisplayname, Gallery aGallery)
+  public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword)
   {
+    idCode = aIdCode;
     emailAddress = aEmailAddress;
+    displayname = aDisplayname;
+    username = aUsername;
     password = aPassword;
-    if (!setUsername(aUsername))
-    {
-      throw new RuntimeException("Cannot create due to duplicate username. See http://manual.umple.org?RE003ViolationofUniqueness.html");
-    }
-    if (!setIdCode(aIdCode))
-    {
-      throw new RuntimeException("Cannot create due to duplicate idCode. See http://manual.umple.org?RE003ViolationofUniqueness.html");
-    }
-    if (!setDisplayname(aDisplayname))
-    {
-      throw new RuntimeException("Cannot create due to duplicate displayname. See http://manual.umple.org?RE003ViolationofUniqueness.html");
-    }
-    boolean didAddGallery = setGallery(aGallery);
-    if (!didAddGallery)
-    {
-      throw new RuntimeException("Unable to create user due to gallery. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setEmailAddress(String aEmailAddress)
   {
@@ -70,22 +55,19 @@ public class User
     return wasSet;
   }
 
+  public boolean setDisplayname(String aDisplayname)
+  {
+    boolean wasSet = false;
+    displayname = aDisplayname;
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean setUsername(String aUsername)
   {
     boolean wasSet = false;
-    String anOldUsername = getUsername();
-    if (anOldUsername != null && anOldUsername.equals(aUsername)) {
-      return true;
-    }
-    if (hasWithUsername(aUsername)) {
-      return wasSet;
-    }
     username = aUsername;
     wasSet = true;
-    if (anOldUsername != null) {
-      usersByUsername.remove(anOldUsername);
-    }
-    usersByUsername.put(aUsername, this);
     return wasSet;
   }
 
@@ -97,42 +79,16 @@ public class User
     return wasSet;
   }
 
-  public boolean setIdCode(String aIdCode)
+  
+   @OneToOne
+   private UserRole role;
+   @Transient
+   private Gallery gallery;
+   @Id
+   private String idCode;
+  public String getIdCode()
   {
-    boolean wasSet = false;
-    String anOldIdCode = getIdCode();
-    if (anOldIdCode != null && anOldIdCode.equals(aIdCode)) {
-      return true;
-    }
-    if (hasWithIdCode(aIdCode)) {
-      return wasSet;
-    }
-    idCode = aIdCode;
-    wasSet = true;
-    if (anOldIdCode != null) {
-      usersByIdCode.remove(anOldIdCode);
-    }
-    usersByIdCode.put(aIdCode, this);
-    return wasSet;
-  }
-
-  public boolean setDisplayname(String aDisplayname)
-  {
-    boolean wasSet = false;
-    String anOldDisplayname = getDisplayname();
-    if (anOldDisplayname != null && anOldDisplayname.equals(aDisplayname)) {
-      return true;
-    }
-    if (hasWithDisplayname(aDisplayname)) {
-      return wasSet;
-    }
-    displayname = aDisplayname;
-    wasSet = true;
-    if (anOldDisplayname != null) {
-      usersByDisplayname.remove(anOldDisplayname);
-    }
-    usersByDisplayname.put(aDisplayname, this);
-    return wasSet;
+    return idCode;
   }
 
   public String getEmailAddress()
@@ -140,54 +96,19 @@ public class User
     return emailAddress;
   }
 
+  public String getDisplayname()
+  {
+    return displayname;
+  }
+
   public String getUsername()
   {
     return username;
-  }
-  /* Code from template attribute_GetUnique */
-  public static User getWithUsername(String aUsername)
-  {
-    return usersByUsername.get(aUsername);
-  }
-  /* Code from template attribute_HasUnique */
-  public static boolean hasWithUsername(String aUsername)
-  {
-    return getWithUsername(aUsername) != null;
   }
 
   public String getPassword()
   {
     return password;
-  }
-
-  public String getIdCode()
-  {
-    return idCode;
-  }
-  /* Code from template attribute_GetUnique */
-  public static User getWithIdCode(String aIdCode)
-  {
-    return usersByIdCode.get(aIdCode);
-  }
-  /* Code from template attribute_HasUnique */
-  public static boolean hasWithIdCode(String aIdCode)
-  {
-    return getWithIdCode(aIdCode) != null;
-  }
-
-  public String getDisplayname()
-  {
-    return displayname;
-  }
-  /* Code from template attribute_GetUnique */
-  public static User getWithDisplayname(String aDisplayname)
-  {
-    return usersByDisplayname.get(aDisplayname);
-  }
-  /* Code from template attribute_HasUnique */
-  public static boolean hasWithDisplayname(String aDisplayname)
-  {
-    return getWithDisplayname(aDisplayname) != null;
   }
   /* Code from template association_GetOne */
   public UserRole getRole()
@@ -204,6 +125,12 @@ public class User
   public Gallery getGallery()
   {
     return gallery;
+  }
+
+  public boolean hasGallery()
+  {
+    boolean has = gallery != null;
+    return has;
   }
   /* Code from template association_SetOptionalOneToOne */
   public boolean setRole(UserRole aNewRole)
@@ -232,41 +159,36 @@ public class User
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMany */
+  /* Code from template association_SetOptionalOneToMany */
   public boolean setGallery(Gallery aGallery)
   {
     boolean wasSet = false;
-    if (aGallery == null)
-    {
-      return wasSet;
-    }
-
     Gallery existingGallery = gallery;
     gallery = aGallery;
     if (existingGallery != null && !existingGallery.equals(aGallery))
     {
       existingGallery.removeUser(this);
     }
-    gallery.addUser(this);
+    if (aGallery != null)
+    {
+      aGallery.addUser(this);
+    }
     wasSet = true;
     return wasSet;
   }
 
   public void delete()
   {
-    usersByUsername.remove(getUsername());
-    usersByIdCode.remove(getIdCode());
-    usersByDisplayname.remove(getDisplayname());
     UserRole existingRole = role;
     role = null;
     if (existingRole != null)
     {
       existingRole.delete();
     }
-    Gallery placeholderGallery = gallery;
-    this.gallery = null;
-    if(placeholderGallery != null)
+    if (gallery != null)
     {
+      Gallery placeholderGallery = gallery;
+      this.gallery = null;
       placeholderGallery.removeUser(this);
     }
   }
@@ -275,11 +197,11 @@ public class User
   public String toString()
   {
     return super.toString() + "["+
-            "emailAddress" + ":" + getEmailAddress()+ "," +
-            "username" + ":" + getUsername()+ "," +
-            "password" + ":" + getPassword()+ "," +
             "idCode" + ":" + getIdCode()+ "," +
-            "displayname" + ":" + getDisplayname()+ "]" + System.getProperties().getProperty("line.separator") +
+            "emailAddress" + ":" + getEmailAddress()+ "," +
+            "displayname" + ":" + getDisplayname()+ "," +
+            "username" + ":" + getUsername()+ "," +
+            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "role = "+(getRole()!=null?Integer.toHexString(System.identityHashCode(getRole())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "gallery = "+(getGallery()!=null?Integer.toHexString(System.identityHashCode(getGallery())):"null");
   }

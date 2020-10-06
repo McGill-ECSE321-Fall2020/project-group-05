@@ -2,8 +2,12 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package com.ecse321.visart.model;
+import javax.persistence.*;
 
-// line 21 "../../../../../resources/visart.ump"
+@Entity
+  @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+  @DiscriminatorColumn(name="user_type",discriminatorType=DiscriminatorType.INTEGER)
+// line 35 "../../../../../resources/visart.ump"
 public class UserRole
 {
 
@@ -11,15 +15,17 @@ public class UserRole
   // MEMBER VARIABLES
   //------------------------
 
+  //UserRole Attributes
+
   //UserRole Associations
-  private User user;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public UserRole(User aUser)
+  public UserRole(String aIdCode, User aUser)
   {
+    idCode = aIdCode;
     boolean didAddUser = setUser(aUser);
     if (!didAddUser)
     {
@@ -30,6 +36,24 @@ public class UserRole
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setIdCode(String aIdCode)
+  {
+    boolean wasSet = false;
+    idCode = aIdCode;
+    wasSet = true;
+    return wasSet;
+  }
+
+  
+   @OneToOne
+   private User user;
+   @Id
+   private String idCode;
+  public String getIdCode()
+  {
+    return idCode;
+  }
   /* Code from template association_GetOne */
   public User getUser()
   {
@@ -74,4 +98,11 @@ public class UserRole
     }
   }
 
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "user = "+(getUser()!=null?Integer.toHexString(System.identityHashCode(getUser())):"null");
+  }
 }
