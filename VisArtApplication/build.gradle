@@ -41,6 +41,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web' // Spring-boot
     testImplementation('org.springframework.boot:spring-boot-starter-test') { // Spring-boot
+
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
@@ -53,6 +54,7 @@ test {
 
 springBoot {
     mainClassName = 'com.ecse321.visart.DemoApplication'
+
 }
 
 ext {
