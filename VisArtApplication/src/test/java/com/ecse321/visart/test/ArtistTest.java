@@ -18,7 +18,6 @@ public class ArtistTest {
 	Long l = System.currentTimeMillis();
 	
 	//Attributes
-	String aIdCode = "TC";
 	String aEmailAddress = "timcook@gmail.com";
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
