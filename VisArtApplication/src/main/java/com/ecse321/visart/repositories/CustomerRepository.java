@@ -18,8 +18,8 @@ public class CustomerRepository {
 	EntityManager entityManager;
 	
 	@Transactional
-	public Customer createCustomer(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, UserRole usrRole, Gallery gal) {
-		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword, usrRole, gal);
+	public Customer createCustomer(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
+		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword);
 		Customer customer = new Customer(aIdCode, usr);
 		entityManager.persist(customer);
 		return customer;

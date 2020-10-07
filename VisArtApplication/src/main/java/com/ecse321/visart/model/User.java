@@ -14,7 +14,7 @@ public class User
   // MEMBER VARIABLES
   //------------------------
 
-
+  //User Attributes
   private String emailAddress;
   private String displayname;
   private String username;
@@ -26,38 +26,13 @@ public class User
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, UserRole aRole, Gallery aGallery)
+  public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword)
   {
     idCode = aIdCode;
     emailAddress = aEmailAddress;
     displayname = aDisplayname;
     username = aUsername;
     password = aPassword;
-    if (aRole == null || aRole.getUser() != null)
-    {
-      throw new RuntimeException("Unable to create User due to aRole. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    role = aRole;
-    boolean didAddGallery = setGallery(aGallery);
-    if (!didAddGallery)
-    {
-      throw new RuntimeException("Unable to create user due to gallery. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-  }
-
-  public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, String aIdCodeForRole, Gallery aGallery)
-  {
-    idCode = aIdCode;
-    emailAddress = aEmailAddress;
-    displayname = aDisplayname;
-    username = aUsername;
-    password = aPassword;
-    role = new UserRole(aIdCodeForRole, this);
-    boolean didAddGallery = setGallery(aGallery);
-    if (!didAddGallery)
-    {
-      throw new RuntimeException("Unable to create user due to gallery. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
   }
 
   //------------------------
@@ -104,14 +79,14 @@ public class User
     return wasSet;
   }
 
-
+  
    @OneToOne
    private UserRole role;
    @Transient
    private Gallery gallery;
    @Id
    private String idCode;
-   
+ 
   public String getIdCode()
   {
     return idCode;
@@ -141,27 +116,64 @@ public class User
   {
     return role;
   }
+
+  public boolean hasRole()
+  {
+    boolean has = role != null;
+    return has;
+  }
   /* Code from template association_GetOne */
   public Gallery getGallery()
   {
     return gallery;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setGallery(Gallery aGallery)
+
+  public boolean hasGallery()
+  {
+    boolean has = gallery != null;
+    return has;
+  }
+  /* Code from template association_SetOptionalOneToOne */
+  public boolean setRole(UserRole aNewRole)
   {
     boolean wasSet = false;
-    if (aGallery == null)
+    if (role != null && !role.equals(aNewRole) && equals(role.getUser()))
     {
+      //Unable to setRole, as existing role would become an orphan
       return wasSet;
     }
 
+    role = aNewRole;
+    User anOldUser = aNewRole != null ? aNewRole.getUser() : null;
+
+    if (!this.equals(anOldUser))
+    {
+      if (anOldUser != null)
+      {
+        anOldUser.role = null;
+      }
+      if (role != null)
+      {
+        role.setUser(this);
+      }
+    }
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template association_SetOptionalOneToMany */
+  public boolean setGallery(Gallery aGallery)
+  {
+    boolean wasSet = false;
     Gallery existingGallery = gallery;
     gallery = aGallery;
     if (existingGallery != null && !existingGallery.equals(aGallery))
     {
       existingGallery.removeUser(this);
     }
-    gallery.addUser(this);
+    if (aGallery != null)
+    {
+      aGallery.addUser(this);
+    }
     wasSet = true;
     return wasSet;
   }
@@ -174,10 +186,10 @@ public class User
     {
       existingRole.delete();
     }
-    Gallery placeholderGallery = gallery;
-    this.gallery = null;
-    if(placeholderGallery != null)
+    if (gallery != null)
     {
+      Gallery placeholderGallery = gallery;
+      this.gallery = null;
       placeholderGallery.removeUser(this);
     }
   }

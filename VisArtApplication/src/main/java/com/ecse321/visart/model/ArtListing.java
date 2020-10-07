@@ -25,7 +25,6 @@ public class ArtListing
   private PostVisibility visibility;
 
 
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -120,7 +119,7 @@ public class ArtListing
     return index;
   }
 
-
+  
    @OneToMany
    private List<ArtPiece> pieces;
    @OneToMany
@@ -135,7 +134,7 @@ public class ArtListing
    private List<Float> dimensions;
    @Id
    private String idCode;
-   
+ 
   public String getIdCode()
   {
     return idCode;

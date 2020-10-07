@@ -16,6 +16,7 @@ public class Artist
   //------------------------
 
 
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -44,7 +45,7 @@ public class Artist
     return wasSet;
   }
 
-
+  
    @OneToMany
    private List<Ticket> soldTickets;
    @OneToMany
@@ -53,7 +54,7 @@ public class Artist
    private Customer customer;
    @Id
    private String idCode;
-   
+ 
   public String getIdCode()
   {
     return idCode;

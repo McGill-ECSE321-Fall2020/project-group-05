@@ -80,14 +80,14 @@ public class ArtPiece
     return addressLocation;
   }
 
-
+  
    @ManyToOne
    private ArtListing artListing;
    @OneToOne
    private ArtOrder artOrder;
    @Id
    private String idCode;
-   
+ 
   public String getIdCode()
   {
     return idCode;

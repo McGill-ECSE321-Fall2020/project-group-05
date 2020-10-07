@@ -80,12 +80,12 @@ public class Tag
     return keyword;
   }
 
-
+  
    @Transient
    private ArtListing listing;
    @Id
    private String idCode;
-   
+ 
   public String getIdCode()
   {
     return idCode;

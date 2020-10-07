@@ -16,6 +16,7 @@ public class UserRole
   //------------------------
 
 
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -23,17 +24,11 @@ public class UserRole
   public UserRole(String aIdCode, User aUser)
   {
     idCode = aIdCode;
-    if (aUser == null || aUser.getRole() != null)
+    boolean didAddUser = setUser(aUser);
+    if (!didAddUser)
     {
-      throw new RuntimeException("Unable to create UserRole due to aUser. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create role due to user. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    user = aUser;
-  }
-
-  public UserRole(String aIdCode, String aIdCodeForUser, String aEmailAddressForUser, String aDisplaynameForUser, String aUsernameForUser, String aPasswordForUser, Gallery aGalleryForUser)
-  {
-    idCode = aIdCode;
-    user = new User(aIdCodeForUser, aEmailAddressForUser, aDisplaynameForUser, aUsernameForUser, aPasswordForUser, this, aGalleryForUser);
   }
 
   //------------------------
@@ -48,12 +43,12 @@ public class UserRole
     return wasSet;
   }
 
-
+  
    @OneToOne
    private User user;
    @Id
    private String idCode;
-   
+ 
   public String getIdCode()
   {
     return idCode;
@@ -63,6 +58,34 @@ public class UserRole
   {
     return user;
   }
+  /* Code from template association_SetOneToOptionalOne */
+  public boolean setUser(User aNewUser)
+  {
+    boolean wasSet = false;
+    if (aNewUser == null)
+    {
+      //Unable to setUser to null, as role must always be associated to a user
+      return wasSet;
+    }
+    
+    UserRole existingRole = aNewUser.getRole();
+    if (existingRole != null && !equals(existingRole))
+    {
+      //Unable to setUser, the current user already has a role, which would be orphaned if it were re-assigned
+      return wasSet;
+    }
+    
+    User anOldUser = user;
+    user = aNewUser;
+    user.setRole(this);
+
+    if (anOldUser != null)
+    {
+      anOldUser.setRole(null);
+    }
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
@@ -70,7 +93,7 @@ public class UserRole
     user = null;
     if (existingUser != null)
     {
-      existingUser.delete();
+      existingUser.setRole(null);
     }
   }
 
