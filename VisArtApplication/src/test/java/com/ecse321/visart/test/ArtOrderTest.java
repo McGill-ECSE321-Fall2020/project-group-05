@@ -16,8 +16,6 @@ import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.Ticket;
-import com.ecse321.visart.model.User;
-import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.repositories.ArtPieceRepository;
 import com.ecse321.visart.repositories.CustomerRepository;
@@ -34,35 +32,25 @@ public class ArtOrderTest {
 	
 	@Autowired
 	private ArtOrderRepository aoRepo;
+	private ArtPieceRepository apRepo;
+	private CustomerRepository cRepo;
+	private TicketRepository tRepo;
+	private ArtListingRepository alRepo;
+	private ManagerRepository mRepo;
+	private ArtistRepository aRepo;
 	
 	//ID GENERATOR
 	Long l = System.currentTimeMillis();
-	
-	//Attributes
-	String aEmailAddress = "timcook@gmail.com";
-	String aDisplayname = "Tim Cook";
-	String  aUsername = "timcook56";
-	String aPassword = "apple123";
-	
-	//Attributes user 2
-	String aEmailAddress2 = "timcook1@gmail.com";
-	String aDisplayname2 = "Tim Cook1";
-	String  aUsername2 = "timcook567";
-	String aPassword2 = "apple1234";
 
-	//Creating instances
-	User aUser = new User(""+l+1,aEmailAddress, aDisplayname, aUsername, aPassword);
-	User aUser2 = new User(""+l+10,aEmailAddress2, aDisplayname2, aUsername2, aPassword2);
-	Manager manager = new Manager("" + l, aUser); 
-	Customer customer = new Customer(""+l+2,aUser2);
-	Artist artist = new Artist(""+l+3, customer);
-	ArtListing artListing = new ArtListing(ArtListing.PostVisibility.Public, ""+l+5,manager, artist);
-	ArtPiece artPiece = new ArtPiece(PieceLocation.AtGallery, "113MAYWOOD", ""+l+4,artListing);
-	ArtPiece artPiece2 = new ArtPiece(PieceLocation.AtGallery, "114MAYWOOD", ""+l+11,artListing);
-	//ArtOrder artOrder = new ArtOrder(true, PieceLocation.AtGallery, "567Sugar", "DJ21I",""+l+7,artPiece,true,500,""+l+8, customer, artist);
-	Ticket ticket = new Ticket(true, 300, ""+l+6,null,customer,artist);
-	//Ticket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode, boolean aIsDeliveredForOrder, PieceLocation aTargetLocationForOrder, String aTargetAddressForOrder, String aDeliveryTrackerForOrder, String aIdCodeForOrder, ArtPiece aArtPieceForOrder, Customer aCustomer, Artist aArtist)
 	
+	
+	//Create manager, artist, artListing, artPiece, customer and ticket instance
+	Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
+	Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+	ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
+	ArtPiece artPiece = apRepo.createArtPiece(PieceLocation.Offsite, "346STLOUIS", ""+l+3, artListing);
+	Customer customer = cRepo.createCustomer(""+l+4, "KPP@GMAIL.COM", "KYARY", "KPP123", "japan56");
+	Ticket ticket = tRepo.createTicket(true, 600, ""+l+5, false, PieceLocation.Offsite, "123THORNCREST", "WOW12", ""+l+6, artPiece, customer, artist);
 	
 	//Attributes for artOrder1
 	String address = "123 STLOUIS";
@@ -95,7 +83,7 @@ public class ArtOrderTest {
 	void testEntry2() {
 		
 		//Create
-		ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2, ""+l+9, artPiece2, ticket);
+		ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2, ""+l+9, artPiece, ticket);
 		
 		//Test if Art Order was created
 		assertNotNull(artOrder2);
@@ -106,7 +94,7 @@ public class ArtOrderTest {
 		System.out.println("============================");
 	
 	}
-
+	
 	
 	
 	@Test
@@ -128,7 +116,7 @@ public class ArtOrderTest {
 		
 		
 	}
-/**	
+	
 	@Test
 	void testGet2( ) {
 		//Find artOrder2
@@ -148,7 +136,7 @@ public class ArtOrderTest {
 		
 	}
 	
-**/	
+	
 	
 	
 }

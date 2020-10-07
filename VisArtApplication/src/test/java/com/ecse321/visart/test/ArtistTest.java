@@ -15,19 +15,24 @@ import com.ecse321.visart.repositories.ArtistRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ArtistTest {
+
+	@Autowired
+	private ArtistRepository aRepo;
+	
+	//ID GENERATOR
 	Long l = System.currentTimeMillis();
 	
 	//Attributes
+	
 	String aEmailAddress = "timcook@gmail.com";
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
 	String aPassword = "apple123";
 
-	@Autowired
-	private ArtistRepository aRepo;
-
 	@Test
 	void testEntry() {
+		
+		
 		
 		
 		//Create
@@ -49,13 +54,8 @@ public class ArtistTest {
 		Artist testArtist2 = aRepo.getArtist(""+l);
 		assertNotNull(testArtist2);
 		assertEquals(aEmailAddress, testArtist2.getCustomer().getUser().getEmailAddress());
-		assertEquals(aDisplayname, testArtist2.getCustomer().getUser().getDisplayname());
-		assertEquals(aUsername, testArtist2.getCustomer().getUser().getUsername());
-		assertEquals(aPassword, testArtist2.getCustomer().getUser().getPassword());
-		
-		
 		System.out.println("============================");
-		System.out.println(testArtist2.getCustomer().getUser().getUsername());
+		System.out.println(testArtist2);
 		System.out.println("============================");
 	}
 
