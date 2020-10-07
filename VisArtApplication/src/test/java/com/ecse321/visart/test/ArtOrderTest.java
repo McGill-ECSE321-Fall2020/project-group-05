@@ -43,16 +43,25 @@ public class ArtOrderTest {
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
 	String aPassword = "apple123";
+	
+	//Attributes user 2
+	String aEmailAddress2 = "timcook1@gmail.com";
+	String aDisplayname2 = "Tim Cook1";
+	String  aUsername2 = "timcook567";
+	String aPassword2 = "apple1234";
 
 	//Creating instances
 	User aUser = new User(""+l+1,aEmailAddress, aDisplayname, aUsername, aPassword);
+	User aUser2 = new User(""+l+10,aEmailAddress2, aDisplayname2, aUsername2, aPassword2);
 	Manager manager = new Manager("" + l, aUser); 
-	Customer customer = new Customer(""+l+2,aUser);
+	Customer customer = new Customer(""+l+2,aUser2);
 	Artist artist = new Artist(""+l+3, customer);
 	ArtListing artListing = new ArtListing(ArtListing.PostVisibility.Public, ""+l+5,manager, artist);
-	ArtPiece artPiece = new ArtPiece(PieceLocation.AtGallery, "112MAYWOOD", ""+l+4,artListing);
-	ArtOrder artOrder = new ArtOrder(true, PieceLocation.AtGallery, "567Sugar", "DJ21I",""+l+7,artPiece,true,500,""+l+8, customer, artist);
-	Ticket ticket = new Ticket(true, 300, ""+l+6,artOrder,customer,artist);
+	ArtPiece artPiece = new ArtPiece(PieceLocation.AtGallery, "113MAYWOOD", ""+l+4,artListing);
+	ArtPiece artPiece2 = new ArtPiece(PieceLocation.AtGallery, "114MAYWOOD", ""+l+11,artListing);
+	//ArtOrder artOrder = new ArtOrder(true, PieceLocation.AtGallery, "567Sugar", "DJ21I",""+l+7,artPiece,true,500,""+l+8, customer, artist);
+	Ticket ticket = new Ticket(true, 300, ""+l+6,null,customer,artist);
+	//Ticket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode, boolean aIsDeliveredForOrder, PieceLocation aTargetLocationForOrder, String aTargetAddressForOrder, String aDeliveryTrackerForOrder, String aIdCodeForOrder, ArtPiece aArtPieceForOrder, Customer aCustomer, Artist aArtist)
 	
 	
 	//Attributes for artOrder1
@@ -86,7 +95,7 @@ public class ArtOrderTest {
 	void testEntry2() {
 		
 		//Create
-		ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2, ""+l+9, artPiece, ticket);
+		ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2, ""+l+9, artPiece2, ticket);
 		
 		//Test if Art Order was created
 		assertNotNull(artOrder2);
@@ -97,7 +106,7 @@ public class ArtOrderTest {
 		System.out.println("============================");
 	
 	}
-	
+
 	
 	
 	@Test
@@ -119,7 +128,7 @@ public class ArtOrderTest {
 		
 		
 	}
-	
+/**	
 	@Test
 	void testGet2( ) {
 		//Find artOrder2
@@ -139,7 +148,7 @@ public class ArtOrderTest {
 		
 	}
 	
-	
+**/	
 	
 	
 }

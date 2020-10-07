@@ -43,11 +43,15 @@ public class ArtPieceTest {
 	String aPassword = "apple123";
 
 	//Creating instances
+
 	User aUser = new User(""+l+1,aEmailAddress, aDisplayname, aUsername, aPassword);
 	User aUser2 = new User(""+l+4,aEmailAddress, aDisplayname, aUsername, aPassword);
 
 	Manager manager = new Manager("" + l, aUser2); 
 	Customer customer = new Customer(""+l+2,aUser);
+
+	
+
 	Artist artist = new Artist(""+l+3, customer);
 	ArtListing artListing = new ArtListing(ArtListing.PostVisibility.Public, ""+l+5,manager, artist);
 	

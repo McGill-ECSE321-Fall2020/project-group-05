@@ -33,15 +33,25 @@ public class ArtListingTest {
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
 	String aPassword = "apple123";
+	
+	//Attributes user 2
+	String aEmailAddress2 = "timcook1@gmail.com";
+	String aDisplayname2 = "Tim Cook1";
+	String  aUsername2 = "timcook567";
+	String aPassword2 = "apple1234";
+	
 
 	// Create manager and artist instance 
 	User aUser = new User(""+l+1,aEmailAddress, aDisplayname, aUsername, aPassword);
+	User aUser2 = new User(""+l+5,aEmailAddress2, aDisplayname2, aUsername2, aPassword2);
+	
 	Manager manager = new Manager("" + l, aUser); 
-	Customer customer = new Customer(""+l+2,aUser);
+	Customer customer = new Customer(""+l+2,aUser2);
 	Artist artist = new Artist(""+l+3, customer);
 
 	@Test
 	void testEntry() {
+		
 
 		//Create
 		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "" +l+4, manager,artist);
