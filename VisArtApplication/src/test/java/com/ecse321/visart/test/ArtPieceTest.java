@@ -37,21 +37,26 @@ public class ArtPieceTest {
 	@Autowired
 	private ArtPieceRepository apRepo;
 	
+	//attributes
 	String aEmailAddress = "timcook@gmail.com";
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
 	String aPassword = "apple123";
-
-	//Creating instances
-	User aUser1 = new User(""+l+1,aEmailAddress, aDisplayname, aUsername, aPassword);
-	User aUser2 = new User(""+l+1,aEmailAddress, aDisplayname, aUsername, aPassword);
-	Manager manager = new Manager("" + l, aUser1); 
-	Customer customer = new Customer(""+l+2,aUser2);
-	Artist artist = new Artist(""+l+3, customer);
-	ArtListing artListing = new ArtListing(ArtListing.PostVisibility.Public, ""+l+5,manager, artist);
+	
+	//Repository
+	private ArtListingRepository alRepo;
+	private ManagerRepository mRepo;
+	private ArtistRepository aRepo;
+	
+	
+	Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
+	Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+	ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
+	
 	
 	//attributes
 	String address = "124 Maywood";
+	
 	
 	
 	
@@ -59,7 +64,7 @@ public class ArtPieceTest {
 	void createEntry(){
 		
 		//Create
-		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, ""+l, artListing);
+		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, ""+l+3, artListing);
 		
 		//Test if ArtPiece was created
 		assertNotNull(artPieceTest);
@@ -76,7 +81,7 @@ public class ArtPieceTest {
 		
 		
 		//Find artPieceTest
-		ArtPiece artPieceTest2  = apRepo.getArtPiece(""+l);
+		ArtPiece artPieceTest2  = apRepo.getArtPiece(""+l+3);
 		
 		//Test if ArtPiece was retrieved
 		assertNotNull(artPieceTest2);
