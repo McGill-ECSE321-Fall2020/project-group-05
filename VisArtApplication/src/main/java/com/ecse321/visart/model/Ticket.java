@@ -19,7 +19,6 @@ public class Ticket
   private boolean isPaymentConfirmed;
   private double paymentAmount;
 
-  //Ticket Associations
 
   //------------------------
   // CONSTRUCTOR
@@ -106,15 +105,16 @@ public class Ticket
     return paymentAmount;
   }
 
-  
-  @OneToOne
-  private ArtOrder order;
-  @ManyToOne
-  private Customer customer;
-  @ManyToOne
-  private Artist artist;
-  @Id
-  private String idCode;
+
+   @OneToOne
+   private ArtOrder order;
+   @ManyToOne
+   private Customer customer;
+   @ManyToOne
+   private Artist artist;
+   @Id
+   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

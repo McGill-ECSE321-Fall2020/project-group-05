@@ -24,7 +24,7 @@ public class ArtListing
   //ArtListing Attributes
   private PostVisibility visibility;
 
-  //ArtListing Associations
+
 
   //------------------------
   // CONSTRUCTOR
@@ -120,21 +120,22 @@ public class ArtListing
     return index;
   }
 
-  
-  @OneToMany
-  private List<ArtPiece> pieces;
-  @OneToMany
-  private List<Tag> tags;
-  @ManyToOne
-  private Manager manager;
-  @ManyToMany
-  private List<Customer> favoritedCustomer;
-  @ManyToOne
-  private Artist artist;
-  @ElementCollection
-  private List<Float> dimensions;
-  @Id
-  private String idCode;
+
+   @OneToMany
+   private List<ArtPiece> pieces;
+   @OneToMany
+   private List<Tag> tags;
+   @ManyToOne
+   private Manager manager;
+   @ManyToMany
+   private List<Customer> favoritedCustomer;
+   @ManyToOne
+   private Artist artist;
+   @ElementCollection
+   private List<Float> dimensions;
+   @Id
+   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

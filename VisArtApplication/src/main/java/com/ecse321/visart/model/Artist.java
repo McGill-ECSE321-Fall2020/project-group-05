@@ -15,9 +15,6 @@ public class Artist
   // MEMBER VARIABLES
   //------------------------
 
-  //Artist Attributes
-
-  //Artist Associations
 
   //------------------------
   // CONSTRUCTOR
@@ -47,15 +44,16 @@ public class Artist
     return wasSet;
   }
 
-  
-  @OneToMany
-  private List<Ticket> soldTickets;
-  @OneToMany
-  private List<ArtListing> postedListings;
-  @OneToOne
-  private Customer customer;
-  @Id
-  private String idCode;
+
+   @OneToMany
+   private List<Ticket> soldTickets;
+   @OneToMany
+   private List<ArtListing> postedListings;
+   @OneToOne
+   private Customer customer;
+   @Id
+   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

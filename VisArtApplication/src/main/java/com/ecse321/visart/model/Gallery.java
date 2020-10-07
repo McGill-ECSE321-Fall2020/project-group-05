@@ -79,20 +79,21 @@ public class Gallery
   {
     return 0;
   }
-  /* Code from template association_AddManyToOptionalOne */
+  /* Code from template association_AddManyToOne */
+  public User addUser(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, UserRole aRole)
+  {
+    return new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword, aRole, this);
+  }
+
   public boolean addUser(User aUser)
   {
     boolean wasAdded = false;
     if (users.contains(aUser)) { return false; }
     Gallery existingGallery = aUser.getGallery();
-    if (existingGallery == null)
+    boolean isNewGallery = existingGallery != null && !this.equals(existingGallery);
+    if (isNewGallery)
     {
       aUser.setGallery(this);
-    }
-    else if (!this.equals(existingGallery))
-    {
-      existingGallery.removeUser(aUser);
-      addUser(aUser);
     }
     else
     {
@@ -105,10 +106,10 @@ public class Gallery
   public boolean removeUser(User aUser)
   {
     boolean wasRemoved = false;
-    if (users.contains(aUser))
+    //Unable to remove aUser, as it must always have a gallery
+    if (!this.equals(aUser.getGallery()))
     {
       users.remove(aUser);
-      aUser.setGallery(null);
       wasRemoved = true;
     }
     return wasRemoved;
