@@ -20,8 +20,7 @@ public class ArtOrder
   private PieceLocation targetLocation;
   private String targetAddress;
   private String deliveryTracker;
-
-  //ArtOrder Associations
+ 
 
   //------------------------
   // CONSTRUCTOR
@@ -126,13 +125,14 @@ public class ArtOrder
     return deliveryTracker;
   }
 
-  
-  @OneToOne
-  private ArtPiece artPiece;
-  @OneToOne
-  private Ticket ticket;
-  @Id
-  private String idCode;
+
+   @OneToOne
+   private ArtPiece artPiece;
+   @OneToOne
+   private Ticket ticket;
+   @Id
+   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

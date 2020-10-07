@@ -23,13 +23,9 @@ class VisArtTest {
   @Test
   void test() {
 
-    Manager e = mr.createManager("123", "daniel.bucci@ggmaol.com", "db", "db", "pog");
+    ArtistTest tst;
     
-    assertNotNull(e);
-    System.out.println(e);
-    Manager e1 = mr.getManager("123");
-    assertNotNull(e1);
-    System.out.println(e1);
+	  
   }
 
 }

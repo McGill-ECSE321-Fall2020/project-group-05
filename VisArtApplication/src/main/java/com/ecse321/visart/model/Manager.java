@@ -16,7 +16,7 @@ public class Manager extends UserRole
   // MEMBER VARIABLES
   //------------------------
 
-  //Manager Associations
+  
 
   //------------------------
   // CONSTRUCTOR
@@ -38,9 +38,10 @@ public class Manager extends UserRole
     return aPromotedListing;
   }
 
-  
-  @OneToMany
-  private List<ArtListing> promotedListings;
+
+   @OneToMany
+   private List<ArtListing> promotedListings;
+   
   public List<ArtListing> getPromotedListings()
   {
     List<ArtListing> newPromotedListings = Collections.unmodifiableList(promotedListings);

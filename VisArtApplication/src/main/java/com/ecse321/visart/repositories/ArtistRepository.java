@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Gallery;
 import com.ecse321.visart.model.User;
+import com.ecse321.visart.model.UserRole;
 
 @Repository
 public class ArtistRepository {
@@ -17,8 +19,8 @@ public class ArtistRepository {
 	EntityManager entityManager;
 	
 	@Transactional
-	public Artist createArtist(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
-		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword);
+	public Artist createArtist(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, Gallery gal, UserRole usrRole) {
+		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword, usrRole, gal);
 		Customer customer = new Customer(aIdCode, usr);
 		Artist artist = new Artist(aIdCode, customer);
 		entityManager.persist(artist);

@@ -11,18 +11,15 @@ import java.util.*;
 // line 69 "../../../../../resources/visart.ump"
 public class Customer extends UserRole
 {
-  @OneToOne
-  private Artist artist;
-  @OneToMany
-  private List<Ticket> boughtTickets;
-  @ManyToMany
-  private List<ArtListing> favoriteListings;
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Customer Associations
+  private Artist artist;
+  private List<Ticket> boughtTickets;
+  private List<ArtListing> favoriteListings;
 
   //------------------------
   // CONSTRUCTOR

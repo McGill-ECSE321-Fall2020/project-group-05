@@ -24,7 +24,6 @@ public class ArtPiece
   private PieceLocation basicLocation;
   private String addressLocation;
 
-  //ArtPiece Associations
 
   //------------------------
   // CONSTRUCTOR
@@ -81,13 +80,14 @@ public class ArtPiece
     return addressLocation;
   }
 
-  
-  @ManyToOne
-  private ArtListing artListing;
-  @OneToOne
-  private ArtOrder artOrder;
-  @Id
-  private String idCode;
+
+   @ManyToOne
+   private ArtListing artListing;
+   @OneToOne
+   private ArtOrder artOrder;
+   @Id
+   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

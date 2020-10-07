@@ -1,7 +1,7 @@
 namespace com.ecse321.visart.model;
 
 class Gallery {
-  0..1 gallery <@>- 0..* User;
+  1 gallery <@>- 0..* User;
   String name;
 }
 
@@ -20,7 +20,7 @@ class User {
   //%%AnnotateEnd
   String idCode;
 
-  1 user -- 0..1 UserRole role;
+  1 user -- 1 UserRole role;
   
   String emailAddress;
   String displayname;
@@ -133,7 +133,7 @@ class ArtListing {
   //%%@ManyToOne
   //%%private Manager manager;
   //%%@ManyToMany
-  //%%private Customer favoritedCustomer;
+  //%%private List<Customer> favoritedCustomer;
   //%%@ManyToOne
   //%%private Artist artist;
   //%%@ElementCollection

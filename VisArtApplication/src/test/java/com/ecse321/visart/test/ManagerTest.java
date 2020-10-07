@@ -27,7 +27,7 @@ public class ManagerTest {
 		 Long l = System.currentTimeMillis();
 		 
 		 //Attributes 
-		 String email = "riad.elmahmoudy@mail.mcgill.ca";
+		 String email = "blah";
 		 String displayName = "Riad";
 		 String username = "riadelm";
 		 String password = "aNicePassword";
