@@ -29,6 +29,19 @@ public class ArtistRepository {
 		return artist;
 	}
 	
+	/**
+	 * 
+	 * @param aIdCode
+	 * @param aCustomer a persisted Customer object
+	 * @return
+	 */
+	@Transactional
+	public Artist createArtist(String aIdCode, Customer aCustomer) {
+	  Artist artist = new Artist(aIdCode, aCustomer);
+	  entityManager.persist(artist);
+	  return artist;
+	}
+	
 	@Transactional
 	public Artist getArtist(String aIdCode) {
 		return entityManager.find(Artist.class, aIdCode);

@@ -9,29 +9,31 @@ import javax.persistence.Table;
 @Table(name = "events")
 public class Event {
   @Id
-  @Column(name="DBID")
+  @Column(name = "DBID")
   private String dbId;
-  
-  @Column(name="NAME")
+
+  @Column(name = "NAME")
   private String name;
-  
+
   public String getDbId() {
     return dbId;
   }
+
   public void setDbId(String dbId) {
     this.dbId = dbId;
   }
+
   public String getName() {
     return name;
   }
+
   public void setName(String name) {
     this.name = name;
   }
-  
+
   @Override
   public String toString() {
     return dbId + ": " + name;
   }
-  
-  
+
 }

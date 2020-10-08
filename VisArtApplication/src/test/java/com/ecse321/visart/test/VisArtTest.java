@@ -24,8 +24,7 @@ class VisArtTest {
   void test() {
 
     ArtistTest tst;
-    
-	  
+
   }
 
 }

@@ -18,13 +18,13 @@ class EventTest {
   @Test
   void test() {
     Long l = System.currentTimeMillis();
-    Event e = eRepo.createEvent(""+l, "Ryan");
+    Event e = eRepo.createEvent("" + l, "Ryan");
     assertNotNull(e);
     System.out.println(e);
-    Event e1 = eRepo.findEvent(""+l);
+    Event e1 = eRepo.findEvent("" + l);
     assertNotNull(e1);
     System.out.println(e1);
   }
-  //git test
+  // git test
 
 }

@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class EventRepository {
-  
+
   @Autowired
   EntityManager entityManager;
-  
+
   @Transactional
   public Event createEvent(String dbId, String name) {
     Event e = new Event();
@@ -20,7 +20,7 @@ public class EventRepository {
     entityManager.persist(e);
     return e;
   }
-  
+
   @Transactional
   public Event findEvent(String dbId) {
     return entityManager.find(Event.class, dbId);
