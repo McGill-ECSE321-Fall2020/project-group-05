@@ -34,35 +34,39 @@ public class ArtPieceTest {
 	//ID generator
 	Long l = System.currentTimeMillis();
 	
-	@Autowired
-	private ArtPieceRepository apRepo;
+	
 	
 	//attributes
 	String aEmailAddress = "timcook@gmail.com";
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
 	String aPassword = "apple123";
-
 	
-	//Repository
+	@Autowired
+	private ArtPieceRepository apRepo;
+	
+	@Autowired
 	private ArtListingRepository alRepo;
+	
+	@Autowired
 	private ManagerRepository mRepo;
+	
+	@Autowired
 	private ArtistRepository aRepo;
 	
+	
 
 	
-	Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
-	Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
-	ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
-
 	//attributes
 	String address = "124 Maywood";
-	
-	
-	
+
 	
 	@Test
 	void createEntry(){
+		
+		Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
+		Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+		ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
 		
 		//Create
 		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, ""+l+3, artListing);
@@ -74,11 +78,9 @@ public class ArtPieceTest {
 		System.out.println("============================");
 		System.out.println(artPieceTest);
 		System.out.println("============================");
-	}
-	
-	
-	@Test
-	void testGet() {
+
+		
+/////////TEST GET
 		
 		
 		//Find artPieceTest

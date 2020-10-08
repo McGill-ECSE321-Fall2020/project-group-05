@@ -2,6 +2,7 @@ package com.ecse321.visart.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,26 +33,28 @@ public class ArtOrderTest {
 	
 	@Autowired
 	private ArtOrderRepository aoRepo;
+	
+	@Autowired
 	private ArtPieceRepository apRepo;
+	
+	@Autowired
 	private CustomerRepository cRepo;
+	
+	@Autowired
 	private TicketRepository tRepo;
+	
+	@Autowired
 	private ArtListingRepository alRepo;
+	
+	@Autowired
 	private ManagerRepository mRepo;
+	
+	@Autowired
 	private ArtistRepository aRepo;
 	
 	//ID GENERATOR
 	Long l = System.currentTimeMillis();
 
-	
-	
-	//Create manager, artist, artListing, artPiece, customer and ticket instance
-	Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
-	Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
-	ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
-	ArtPiece artPiece = apRepo.createArtPiece(PieceLocation.Offsite, "346STLOUIS", ""+l+3, artListing);
-	Customer customer = cRepo.createCustomer(""+l+4, "KPP@GMAIL.COM", "KYARY", "KPP123", "japan56");
-	Ticket ticket = tRepo.createTicket(true, 600, ""+l+5, false, PieceLocation.Offsite, "123THORNCREST", "WOW12", ""+l+6, artPiece, customer, artist);
-	
 	//Attributes for artOrder1
 	String address = "123 STLOUIS";
 	String tracker = "AZA123";
@@ -60,11 +63,26 @@ public class ArtOrderTest {
 	String address2 = "125 ALSTON";
 	String tracker2 = "AZA124";
 	
+	//@Before
+	//void init(){
+	
+	
+	
+	
+	//}
+	
 	
 	@Test
 	void testEntry1(){
 		
-		//Create
+	Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
+	Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+	ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
+	ArtPiece artPiece = apRepo.createArtPiece(PieceLocation.Offsite, "346STLOUIS", ""+l+3, artListing);
+	Customer customer = cRepo.createCustomer(""+l+4, "KPP@GMAIL.COM", "KYARY", "KPP123", "japan56");
+	Ticket ticket = tRepo.createTicket(true, 600, ""+l+5, false, PieceLocation.Offsite, "123THORNCREST", "WOW12", ""+l+6, artPiece, customer, artist);
+		
+	//Create
 		ArtOrder artOrder1 = aoRepo.createArtOrder(true, ArtPiece.PieceLocation.AtGallery, address, tracker, ""+l+7, artPiece, true, 200, ""+l+8, customer, artist);
 		
 		//Test if Art Order was created
@@ -75,12 +93,9 @@ public class ArtOrderTest {
 		System.out.println(artOrder1);
 		System.out.println("============================");
 			
-		
-
-	}
 	
-	@Test
-	void testEntry2() {
+
+	/////////TEST ENTRY2
 		
 		//Create
 		ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2, ""+l+9, artPiece, ticket);
@@ -93,12 +108,8 @@ public class ArtOrderTest {
 		System.out.println(artOrder2);
 		System.out.println("============================");
 	
-	}
 	
-	
-	
-	@Test
-	void testGet1( ) {
+//////////TEST GET 1
 		
 		//Find artOrder1
 		ArtOrder artOrder3 = aoRepo.getArtOrder(""+l+7);
@@ -114,11 +125,8 @@ public class ArtOrderTest {
 		System.out.println("============================");
 		
 		
+///////////TEST GET 2
 		
-	}
-	
-	@Test
-	void testGet2( ) {
 		//Find artOrder2
 		ArtOrder artOrder4 = aoRepo.getArtOrder(""+l+9);
 		
@@ -134,17 +142,13 @@ public class ArtOrderTest {
 		
 		
 		
+
 	}
-	
-	
-	
-	
-}
 
 	
 	
 	
-	
+}
 	
 	
 	
