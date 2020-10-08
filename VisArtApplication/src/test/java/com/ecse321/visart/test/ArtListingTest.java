@@ -68,7 +68,7 @@ public class ArtListingTest {
 		init();
 
 		//Create
-		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "tt"+l+29, manager,artist);
+		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "tt"+l+29, artist);
 
 		// Test if artListing was created
 		assertNotNull(artListingTest);

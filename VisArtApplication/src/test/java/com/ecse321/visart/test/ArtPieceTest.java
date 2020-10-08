@@ -44,7 +44,6 @@ public class ArtPieceTest {
 	String aPassword = "apple123";
 	String address = "124 Maywood";
 	
-	Manager manager;
 	Artist artist;
 	ArtListing artListing;
 	
@@ -53,10 +52,7 @@ public class ArtPieceTest {
 	
 	@Autowired
 	private ArtListingRepository alRepo;
-	
-	@Autowired
-	private ManagerRepository mRepo;
-	
+
 	@Autowired
 	private ArtistRepository aRepo;
 	
@@ -64,9 +60,9 @@ public class ArtPieceTest {
 	@Before
 	void init() {
 		
-		manager = mRepo.createManager("ki"+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
+		
 		artist = aRepo.createArtist("kl"+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
-		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
+		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, artist);
 		
 		
 	}
