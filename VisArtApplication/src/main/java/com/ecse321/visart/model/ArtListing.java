@@ -24,23 +24,17 @@ public class ArtListing
   //ArtListing Attributes
   private PostVisibility visibility;
 
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ArtListing(PostVisibility aVisibility, String aIdCode, Manager aManager, Artist aArtist)
+  public ArtListing(PostVisibility aVisibility, String aIdCode, Artist aArtist)
   {
     visibility = aVisibility;
     dimensions = new ArrayList<Float>();
     idCode = aIdCode;
     pieces = new ArrayList<ArtPiece>();
     tags = new ArrayList<Tag>();
-    boolean didAddManager = setManager(aManager);
-    if (!didAddManager)
-    {
-      throw new RuntimeException("Unable to create promotedListing due to manager. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
     favoritedCustomer = new ArrayList<Customer>();
     boolean didAddArtist = setArtist(aArtist);
     if (!didAddArtist)
@@ -120,21 +114,21 @@ public class ArtListing
   }
 
   
-   @OneToMany
-   private List<ArtPiece> pieces;
-   @OneToMany
-   private List<Tag> tags;
-   @ManyToOne
-   private Manager manager;
-   @ManyToMany
-   private List<Customer> favoritedCustomer;
-   @ManyToOne
-   private Artist artist;
-   @ElementCollection
-   private List<Float> dimensions;
-   @Id
-   private String idCode;
- 
+  @OneToMany
+  private List<ArtPiece> pieces;
+  @OneToMany
+  private List<Tag> tags;
+  @ManyToOne
+  private Manager manager;
+  @ManyToMany
+  private List<Customer> favoritedCustomer;
+  @ManyToOne
+  private Artist artist;
+  @ElementCollection
+  private List<Float> dimensions;
+  @Id
+  private String idCode;
+
   public String getIdCode()
   {
     return idCode;
@@ -203,6 +197,12 @@ public class ArtListing
   public Manager getManager()
   {
     return manager;
+  }
+
+  public boolean hasManager()
+  {
+    boolean has = manager != null;
+    return has;
   }
   /* Code from template association_GetMany */
   public Customer getFavoritedCustomer(int index)
@@ -383,22 +383,20 @@ public class ArtListing
     }
     return wasAdded;
   }
-  /* Code from template association_SetOneToMany */
+  /* Code from template association_SetOptionalOneToMany */
   public boolean setManager(Manager aManager)
   {
     boolean wasSet = false;
-    if (aManager == null)
-    {
-      return wasSet;
-    }
-
     Manager existingManager = manager;
     manager = aManager;
     if (existingManager != null && !existingManager.equals(aManager))
     {
       existingManager.removePromotedListing(this);
     }
-    manager.addPromotedListing(this);
+    if (aManager != null)
+    {
+      aManager.addPromotedListing(this);
+    }
     wasSet = true;
     return wasSet;
   }
@@ -520,10 +518,10 @@ public class ArtListing
       tags.remove(aTag);
     }
     
-    Manager placeholderManager = manager;
-    this.manager = null;
-    if(placeholderManager != null)
+    if (manager != null)
     {
+      Manager placeholderManager = manager;
+      this.manager = null;
       placeholderManager.removePromotedListing(this);
     }
     ArrayList<Customer> copyOfFavoritedCustomer = new ArrayList<Customer>(favoritedCustomer);

@@ -81,11 +81,11 @@ public class Tag
   }
 
   
-   @Transient
-   private ArtListing listing;
-   @Id
-   private String idCode;
- 
+  @Transient
+  private ArtListing listing;
+  @Id
+  private String idCode;
+
   public String getIdCode()
   {
     return idCode;

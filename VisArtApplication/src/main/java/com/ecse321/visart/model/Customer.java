@@ -15,14 +15,13 @@ public class Customer extends UserRole
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-	  @OneToOne
-	  private Artist artist;
-	  @OneToMany
-	  private List<Ticket> boughtTickets;
-	  @ManyToMany
-	  private List<ArtListing> favoriteListings;
-	  
 
+  @OneToOne
+  private Artist artist;
+  @OneToMany
+  private List<Ticket> boughtTickets;
+  @ManyToMany
+  private List<ArtListing> favoriteListings;
 
   //------------------------
   // CONSTRUCTOR

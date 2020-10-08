@@ -22,9 +22,9 @@ public class ArtListingRepository {
 	EntityManager entityManager;
 	
 	@Transactional
-	public ArtListing createArtListing(PostVisibility aVisibility, String aIdCode, Manager aManager, Artist aArtist) {
+	public ArtListing createArtListing(PostVisibility aVisibility, String aIdCode, Artist aArtist) {
 		
-		ArtListing al = new ArtListing(aVisibility, aIdCode, aManager, aArtist);
+		ArtListing al = new ArtListing(aVisibility, aIdCode, aArtist);
 		entityManager.persist(al);
 		return al;
 	}

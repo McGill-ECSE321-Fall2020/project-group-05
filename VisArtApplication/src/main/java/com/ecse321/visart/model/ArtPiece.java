@@ -81,13 +81,13 @@ public class ArtPiece
   }
 
   
-   @ManyToOne
-   private ArtListing artListing;
-   @OneToOne
-   private ArtOrder artOrder;
-   @Id
-   private String idCode;
- 
+  @ManyToOne
+  private ArtListing artListing;
+  @OneToOne
+  private ArtOrder artOrder;
+  @Id
+  private String idCode;
+
   public String getIdCode()
   {
     return idCode;
@@ -172,9 +172,9 @@ public class ArtPiece
     }
   }
 
-  // line 194 "../../../../../resources/visart.ump"
+  // line 195 "../../../../../resources/visart.ump"
    public  ArtPiece(){
-    
+    String note;
   }
 
 

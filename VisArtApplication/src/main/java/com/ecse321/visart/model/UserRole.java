@@ -16,7 +16,6 @@ public class UserRole
   //------------------------
 
 
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -44,11 +43,11 @@ public class UserRole
   }
 
   
-   @OneToOne
-   private User user;
-   @Id
-   private String idCode;
- 
+  @OneToOne
+  private User user;
+  @Id
+  private String idCode;
+
   public String getIdCode()
   {
     return idCode;

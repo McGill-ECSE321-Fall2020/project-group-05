@@ -58,7 +58,7 @@ class Manager {
   //%%@OneToMany
   //%%private List<ArtListing> promotedListings;
   //%%AnnotateEnd
-  1 manager -- 0..* ArtListing  promotedListings;
+  0..1 manager -- 0..* ArtListing  promotedListings;
 
   public Manager() {}
 }
@@ -191,7 +191,9 @@ class ArtPiece {
   //%%AnnotateEnd
   String idCode;
 
-  public ArtPiece() {}
+  public ArtPiece() {
+   String note;
+  }
 }
 
 @Entity
@@ -199,7 +201,7 @@ class ArtPiece {
 class Ticket {
   depend javax.persistence.*;
   depend com.ecse321.visart.model.ArtPiece.PieceLocation; 
-  1 ticket -- 1 ArtOrder order;
+  0..1 ticket -- 1 ArtOrder order;
   Boolean isPaymentConfirmed; // Artist confirms the payment received
   Double paymentAmount;
 

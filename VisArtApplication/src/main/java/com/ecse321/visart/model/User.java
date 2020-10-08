@@ -80,13 +80,13 @@ public class User
   }
 
   
-   @OneToOne
-   private UserRole role;
-   @Transient
-   private Gallery gallery;
-   @Id
-   private String idCode;
- 
+  @OneToOne
+  private UserRole role;
+  @Transient
+  private Gallery gallery;
+  @Id
+  private String idCode;
+
   public String getIdCode()
   {
     return idCode;

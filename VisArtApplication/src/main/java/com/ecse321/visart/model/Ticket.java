@@ -7,7 +7,7 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 @Entity
   @Table(name="tickets")
-// line 199 "../../../../../resources/visart.ump"
+// line 201 "../../../../../resources/visart.ump"
 public class Ticket
 {
 
@@ -18,7 +18,8 @@ public class Ticket
   //Ticket Attributes
   private boolean isPaymentConfirmed;
   private double paymentAmount;
- 
+
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -28,29 +29,11 @@ public class Ticket
     isPaymentConfirmed = aIsPaymentConfirmed;
     paymentAmount = aPaymentAmount;
     idCode = aIdCode;
-    if (aOrder == null || aOrder.getTicket() != null)
+    boolean didAddOrder = setOrder(aOrder);
+    if (!didAddOrder)
     {
-      throw new RuntimeException("Unable to create Ticket due to aOrder. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create ticket due to order. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    order = aOrder;
-    boolean didAddCustomer = setCustomer(aCustomer);
-    if (!didAddCustomer)
-    {
-      throw new RuntimeException("Unable to create boughtTicket due to customer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    boolean didAddArtist = setArtist(aArtist);
-    if (!didAddArtist)
-    {
-      throw new RuntimeException("Unable to create soldTicket due to artist. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-  }
-
-  public Ticket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode, boolean aIsDeliveredForOrder, PieceLocation aTargetLocationForOrder, String aTargetAddressForOrder, String aDeliveryTrackerForOrder, String aIdCodeForOrder, ArtPiece aArtPieceForOrder, Customer aCustomer, Artist aArtist)
-  {
-    isPaymentConfirmed = aIsPaymentConfirmed;
-    paymentAmount = aPaymentAmount;
-    idCode = aIdCode;
-    order = new ArtOrder(aIsDeliveredForOrder, aTargetLocationForOrder, aTargetAddressForOrder, aDeliveryTrackerForOrder, aIdCodeForOrder, aArtPieceForOrder, this);
     boolean didAddCustomer = setCustomer(aCustomer);
     if (!didAddCustomer)
     {
@@ -105,15 +88,15 @@ public class Ticket
   }
 
   
-   @OneToOne
-   private ArtOrder order;
-   @ManyToOne
-   private Customer customer;
-   @ManyToOne
-   private Artist artist;
-   @Id
-   private String idCode;
- 
+  @OneToOne
+  private ArtOrder order;
+  @ManyToOne
+  private Customer customer;
+  @ManyToOne
+  private Artist artist;
+  @Id
+  private String idCode;
+
   public String getIdCode()
   {
     return idCode;
@@ -138,6 +121,34 @@ public class Ticket
   public Artist getArtist()
   {
     return artist;
+  }
+  /* Code from template association_SetOneToOptionalOne */
+  public boolean setOrder(ArtOrder aNewOrder)
+  {
+    boolean wasSet = false;
+    if (aNewOrder == null)
+    {
+      //Unable to setOrder to null, as ticket must always be associated to a order
+      return wasSet;
+    }
+    
+    Ticket existingTicket = aNewOrder.getTicket();
+    if (existingTicket != null && !equals(existingTicket))
+    {
+      //Unable to setOrder, the current order already has a ticket, which would be orphaned if it were re-assigned
+      return wasSet;
+    }
+    
+    ArtOrder anOldOrder = order;
+    order = aNewOrder;
+    order.setTicket(this);
+
+    if (anOldOrder != null)
+    {
+      anOldOrder.setTicket(null);
+    }
+    wasSet = true;
+    return wasSet;
   }
   /* Code from template association_SetOneToMany */
   public boolean setCustomer(Customer aCustomer)
@@ -184,7 +195,7 @@ public class Ticket
     order = null;
     if (existingOrder != null)
     {
-      existingOrder.delete();
+      existingOrder.setTicket(null);
     }
     Customer placeholderCustomer = customer;
     this.customer = null;
@@ -200,7 +211,7 @@ public class Ticket
     }
   }
 
-  // line 218 "../../../../../resources/visart.ump"
+  // line 220 "../../../../../resources/visart.ump"
    public  Ticket(){
     
   }

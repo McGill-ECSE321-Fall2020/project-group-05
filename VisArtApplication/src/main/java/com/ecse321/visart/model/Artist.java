@@ -11,6 +11,11 @@ import java.util.*;
 public class Artist
 {
 
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+
 
   //------------------------
   // CONSTRUCTOR
@@ -41,15 +46,15 @@ public class Artist
   }
 
   
-   @OneToMany
-   private List<Ticket> soldTickets;
-   @OneToMany
-   private List<ArtListing> postedListings;
-   @OneToOne
-   private Customer customer;
-   @Id
-   private String idCode;
- 
+  @OneToMany
+  private List<Ticket> soldTickets;
+  @OneToMany
+  private List<ArtListing> postedListings;
+  @OneToOne
+  private Customer customer;
+  @Id
+  private String idCode;
+
   public String getIdCode()
   {
     return idCode;
@@ -197,9 +202,9 @@ public class Artist
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Manager aManager)
+  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aIdCode)
   {
-    return new ArtListing(aVisibility, aIdCode, aManager, this);
+    return new ArtListing(aVisibility, aIdCode, this);
   }
 
   public boolean addPostedListing(ArtListing aPostedListing)
