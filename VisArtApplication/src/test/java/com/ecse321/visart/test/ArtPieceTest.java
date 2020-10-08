@@ -1,6 +1,7 @@
 package com.ecse321.visart.test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class ArtPieceTest {
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
 	String aPassword = "apple123";
+	String address = "124 Maywood";
+	
+	Manager manager;
+	Artist artist;
+	ArtListing artListing;
 	
 	@Autowired
 	private ArtPieceRepository apRepo;
@@ -55,21 +61,24 @@ public class ArtPieceTest {
 	private ArtistRepository aRepo;
 	
 	
-
-	
-	//attributes
-	String address = "124 Maywood";
+	@Before
+	void init() {
+		
+		manager = mRepo.createManager("ki"+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
+		artist = aRepo.createArtist("kl"+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
+		
+		
+	}
 
 	
 	@Test
 	void createEntry(){
 		
-		Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
-		Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
-		ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
+		init();
 		
 		//Create
-		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, ""+l+3, artListing);
+		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, "kk"+l+3, artListing);
 		
 		//Test if ArtPiece was created
 		assertNotNull(artPieceTest);
@@ -84,12 +93,12 @@ public class ArtPieceTest {
 		
 		
 		//Find artPieceTest
-		ArtPiece artPieceTest2  = apRepo.getArtPiece(""+l+3);
+		ArtPiece artPieceTest2  = apRepo.getArtPiece("kk"+l+3);
 		
 		//Test if ArtPiece was retrieved
 		assertNotNull(artPieceTest2);
 		assertEquals(address, artPieceTest2.getAddressLocation());
-		assertEquals(artListing, artPieceTest2.getArtListing());
+		assertEquals(artListing.getIdCode(), artPieceTest2.getArtListing().getIdCode());
 		
 		System.out.println("============================");
 		System.out.println(artPieceTest2);

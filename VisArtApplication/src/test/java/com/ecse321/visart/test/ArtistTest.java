@@ -2,6 +2,7 @@ package com.ecse321.visart.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,43 +16,44 @@ import com.ecse321.visart.repositories.ArtistRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ArtistTest {
-
-	@Autowired
-	private ArtistRepository aRepo;
 	
-	//ID GENERATOR
+	
+	@Autowired
+		private ArtistRepository aRepo;
+	String aEmailAddress;
+	String aDisplayname;
+	String  aUsername;
+	String aPassword;
 	Long l = System.currentTimeMillis();
 	
-	//Attributes
-	
-	String aEmailAddress = "timcook1999@gmail.com";
-	String aDisplayname = "Tim Cook";
-	String  aUsername = "timcook56";
-	String aPassword = "apple123";
-
-	@Test
-	void testEntry() {
+	@Before
+	void init() {
 		
 		
+		aEmailAddress = "timcook@gmail.com";
+		aDisplayname = "Tim Cook";
+		aUsername = "timcook56";
+		aPassword = "apple123";
 		
-		
-		//Create
-		Artist testArtist = aRepo.createArtist(""+l, aEmailAddress, aDisplayname, aUsername, aPassword);
-		
-		//Test if Artist was created
-		assertNotNull(testArtist);
-		
-		//Print Artist
-		System.out.println("============================");
-		System.out.println(testArtist);
-		System.out.println("============================");
 	}
 
 	
 	@Test
-	void testGet() {
+	void testEntry() {
+	
+		init();
+		//Create
+		Artist testArtist = aRepo.createArtist(l+"test", aEmailAddress, aDisplayname, aUsername, aPassword);
 		
-		Artist testArtist2 = aRepo.getArtist(""+l);
+		//Test if Artist was created
+		assertNotNull(testArtist);
+		//Print Artist
+		System.out.println("============================");
+		System.out.println(testArtist);
+		System.out.println("============================");
+	
+		
+		Artist testArtist2 = aRepo.getArtist(l+"test");
 		assertNotNull(testArtist2);
 		assertEquals(aEmailAddress, testArtist2.getCustomer().getUser().getEmailAddress());
 		System.out.println("============================");

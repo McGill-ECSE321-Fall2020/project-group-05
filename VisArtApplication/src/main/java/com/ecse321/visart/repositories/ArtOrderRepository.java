@@ -36,6 +36,7 @@ public class ArtOrderRepository {
 	public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket) {
 		
 		ArtOrder ao = new ArtOrder(aIsDelivered, aTargetLocation, aTargetAddress, aDeliveryTracker, aIdCode, aArtPiece, aIsPaymentConfirmedForTicket, aPaymentAmountForTicket, aIdCodeForTicket, aCustomerForTicket, aArtistForTicket);
+		entityManager.persist(ao.getTicket());
 		entityManager.persist(ao);
 		return ao;
 	}

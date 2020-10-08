@@ -33,6 +33,7 @@ public class TicketRepository {
 	public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode, boolean aIsDeliveredForOrder, PieceLocation aTargetLocationForOrder, String aTargetAddressForOrder, String aDeliveryTrackerForOrder, String aIdCodeForOrder, ArtPiece aArtPieceForOrder, Customer aCustomer, Artist aArtist) {
 		Ticket tic = new Ticket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aIsDeliveredForOrder, aTargetLocationForOrder, aTargetAddressForOrder, aDeliveryTrackerForOrder, aIdCodeForOrder, aArtPieceForOrder, aCustomer, aArtist);
 		entityManager.persist(tic);
+		entityManager.persist(tic.getOrder());
 		return tic;
 	}
 	
