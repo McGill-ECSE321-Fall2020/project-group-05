@@ -79,32 +79,11 @@ public class ManagerRepository {
 		return manager;
 	}
 	
-	@Transactional
-	public Manager editManager(String aIdCode, Manager editedManager) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setUsername(editedManager.getUser().getUsername());
-		manager.getUser().setDisplayname(editedManager.getUser().getDisplayname());
-		manager.getUser().setEmailAddress(editedManager.getUser().getEmailAddress());
-		manager.getUser().setPassword(editedManager.getUser().getPassword());
-		manager.getUser().setRole(editedManager.getUser().getRole());
-		manager.getUser().setGallery(editedManager.getUser().getGallery());
-	
-		entityManager.getTransaction().commit();
-		
-		return manager;
-	}
 	
 	@Transactional 
 	public void deleteManager(String aIdCode) {
 		Manager manager = entityManager.find(Manager.class, aIdCode);
 		entityManager.remove(manager);
 	}
-	
-	
-	
-	
-	
 
 }
