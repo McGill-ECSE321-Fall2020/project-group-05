@@ -49,12 +49,12 @@ public class ArtPieceTest {
 	private ManagerRepository mRepo;
 	private ArtistRepository aRepo;
 	
+
 	
 	Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
 	Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
 	ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
 
-	
 	//attributes
 	String address = "124 Maywood";
 	

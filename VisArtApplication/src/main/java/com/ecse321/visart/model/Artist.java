@@ -11,11 +11,6 @@ import java.util.*;
 public class Artist
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-
 
   //------------------------
   // CONSTRUCTOR
