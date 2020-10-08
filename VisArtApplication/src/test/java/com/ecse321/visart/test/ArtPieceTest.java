@@ -42,19 +42,12 @@ public class ArtPieceTest {
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
 	String aPassword = "apple123";
-<<<<<<< HEAD
 	
 	//Repository
 	private ArtListingRepository alRepo;
 	private ManagerRepository mRepo;
 	private ArtistRepository aRepo;
 	
-	
-	Manager manager = mRepo.createManager(""+l, "timcook@gmail.com", "Tim Cook", "timcook56", "apple123");
-	Artist artist = aRepo.createArtist(""+l+1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
-	ArtListing artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, ""+l+2, manager,artist);
-	
-=======
 
 	//Creating instances
 
@@ -68,7 +61,7 @@ public class ArtPieceTest {
 
 	Artist artist = new Artist(""+l+3, customer);
 	ArtListing artListing = new ArtListing(ArtListing.PostVisibility.Public, ""+l+5,manager, artist);
->>>>>>> fb86ae96f4011f823175e26ec17e48e2ed04dc31
+
 	
 	//attributes
 	String address = "124 Maywood";
