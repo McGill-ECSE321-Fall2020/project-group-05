@@ -23,6 +23,8 @@ public class ArtistRepository {
 		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword);
 		Customer customer = new Customer(aIdCode, usr);
 		Artist artist = new Artist(aIdCode, customer);
+		entityManager.persist(usr);
+		entityManager.persist(customer);
 		entityManager.persist(artist);
 		return artist;
 	}
