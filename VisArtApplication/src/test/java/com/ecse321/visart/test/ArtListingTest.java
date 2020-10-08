@@ -10,11 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.repositories.ArtListingRepository;
-import com.ecse321.visart.repositories.ManagerRepository;
 import com.ecse321.visart.repositories.ArtistRepository;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
@@ -29,33 +27,15 @@ public class ArtListingTest {
   private ArtListingRepository aListRepo;
 
   @Autowired
-  private ManagerRepository managerRepo;
-
-  @Autowired
   private ArtistRepository artRepo;
-  Manager manager;
   Artist artist;
   Customer customer;
 
   @Before
   void init() {
 
-    String aEmailAddress = "timcook@gmail.com";
-    String aDisplayname = "Tim Cook";
-    String aUsername = "timcook56";
-    String aPassword = "apple123";
-
-    // Attributes user 2
-    String aEmailAddress2 = "timcook1@gmail.com";
-    String aDisplayname2 = "Tim Cook1";
-    String aUsername2 = "timcook567";
-    String aPassword2 = "apple1234";
-
-    // Create manager and artist instance
-    manager = managerRepo.createManager("test" + l + 56, "timcook@gmail.com", "Tim Cook",
-        "timcook56", "apple123");
-    artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56",
-        "apple1234");
+  
+    artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
 
   }
 
@@ -65,8 +45,7 @@ public class ArtListingTest {
     init();
 
     // Create
-    ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public,
-        "tt" + l + 29, artist);
+    ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "tt" + l + 29, artist);
 
     // Test if artListing was created
     assertNotNull(artListingTest);
@@ -83,10 +62,9 @@ public class ArtListingTest {
 
     // Test if Art Listing was retrieved
     assertNotNull(artListingTest2);
-    assertEquals(artist.getCustomer().getUser().getUsername(),
-        artListingTest2.getArtist().getCustomer().getUser().getUsername());
-    assertEquals(manager.getUser().getUsername(),
-        artListingTest2.getManager().getUser().getUsername());
+    assertEquals(artist.getCustomer().getUser().getEmailAddress(), artListingTest2.getArtist().getCustomer().getUser().getEmailAddress());
+    assertEquals(artist.getCustomer().getUser().getUsername(), artListingTest2.getArtist().getCustomer().getUser().getUsername());
+  
 
     System.out.println("============================");
     System.out.println(artListingTest2);
