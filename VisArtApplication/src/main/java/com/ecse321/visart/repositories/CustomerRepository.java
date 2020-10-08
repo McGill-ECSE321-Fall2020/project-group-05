@@ -21,6 +21,7 @@ public class CustomerRepository {
 	public Customer createCustomer(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
 		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword);
 		Customer customer = new Customer(aIdCode, usr);
+		entityManager.persist(usr);
 		entityManager.persist(customer);
 		return customer;
 	}
