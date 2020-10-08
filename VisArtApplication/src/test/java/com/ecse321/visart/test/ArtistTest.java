@@ -24,7 +24,7 @@ public class ArtistTest {
 	
 	//Attributes
 	
-	String aEmailAddress = "timcook@gmail.com";
+	String aEmailAddress = "timcook1999@gmail.com";
 	String aDisplayname = "Tim Cook";
 	String  aUsername = "timcook56";
 	String aPassword = "apple123";
