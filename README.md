@@ -28,7 +28,7 @@ I am a U2 Software Engineering student at McGill University. My experience with 
 |  Name |Deliverable 1 |  Deliverable 2 | Deliverable 3   |Deliverable 4   | Deliverable 5
 |---|---|---|---|---|---|
 | Nikola Milekic        | 20 hours: Domain Model, Repository classes, Documentation, Database setup |   |   |   |
-| Daniel Bucci          |   |   |   |   |
+| Daniel Bucci          | 25 hours: Domain Model, Repository Classes, JPA Annotations, Documentation, Unit Tests, Project Report  |   |   |   |
 | Ryan Au               |   |   |   |   |
 | Yuta Youness Bellali  |   |   |   |   |
 |  Riad El Mahmoudy     |   |   |   |   |
