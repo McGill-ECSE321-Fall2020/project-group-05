@@ -1,6 +1,5 @@
 /** 
- *@author Nikola Milekic 
- *@author Daniel Bucci
+
  */
 
 package com.ecse321.visart.repositories;
@@ -19,8 +18,10 @@ import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Ticket;
 
 /**
+ * CRUD Repository operations for a Ticket.
  * 
- * @author anwar
+ * @author Nikola Milekic
+ * @author Daniel Bucci
  *
  */
 @Repository
@@ -30,17 +31,15 @@ public class TicketRepository {
   EntityManager entityManager;
 
   /**
-   * createTicket
+   * createTicket method creates a Ticket instance for an ArtOrder.
    * 
-   * This method creates a ticket instance for an art order
-   * 
-   * @param  aIsPaymentConfirmed boolean
-   * @param  aPaymentAmount      price of the art listing
-   * @param  aIdCode             database Id for the art order
-   * @param  aOrder              Order number
-   * @param  aCustomer           Name of the Customer buying the artwork
-   * @param  aArtist             Name of the Artist selling the artwork
-   * @return
+   * @param  aIsPaymentConfirmed whether payment is paid or not
+   * @param  aPaymentAmount      price of the art piece
+   * @param  aIdCode             database primary key for the Ticket
+   * @param  aOrder              the ArtOrder to attach to
+   * @param  aCustomer           the Customer instance buying the artwork
+   * @param  aArtist             the Artist instance selling the artwork
+   * @return                     a persisted Ticket instance from database
    */
   @Transactional
   public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
@@ -52,12 +51,11 @@ public class TicketRepository {
   }
 
   /**
-   * getTicket
+   * getTicket method retrieves a Ticket instance for an ArtOrder from the
+   * database, given its primary key.
    * 
-   * This method retrieves a ticket instance for an art order from the database
-   * 
-   * @param  aIdCode database Id for the art order
-   * @return         retrieves ticket information
+   * @param  aIdCode database primary key for the art order
+   * @return         Ticket instance from database
    */
   @Transactional
   public Ticket getTicket(String aIdCode) {
@@ -65,16 +63,27 @@ public class TicketRepository {
   }
 
   /**
-   * deleteTicket
+   * Overloaded deleteTicket method deletes the given ticket instance from the
+   * database.
    * 
-   * This method deletes a ticket instance of an art order from the database
-   * 
-   * @param  t
-   * @return
+   * @param  t the Ticket instance to remove from database
+   * @return   true if successful delete
    */
   @Transactional
   public boolean deleteTicket(Ticket t) {
-    Ticket entity = entityManager.find(Ticket.class, t.getIdCode());
+    return deleteTicket(t.getIdCode());
+  }
+
+  /**
+   * deleteTicket method deletes the Ticket instance by its primary key from the
+   * database.
+   * 
+   * @param  id the primary key of the Ticket to delete
+   * @return    true if successful delete
+   */
+  @Transactional
+  public boolean deleteTicket(String id) {
+    Ticket entity = entityManager.find(Ticket.class, id);
     if (entityManager.contains(entity)) {
       entityManager.remove(entityManager.merge(entity));
     } else {

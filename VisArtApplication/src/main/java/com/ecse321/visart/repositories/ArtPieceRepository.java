@@ -1,6 +1,5 @@
 /** 
- *@author Nikola Milekic 
- *@author Daniel Bucci
+
  */
 
 package com.ecse321.visart.repositories;
@@ -19,60 +18,93 @@ import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Ticket;
 import com.ecse321.visart.model.User;
 
+/**
+ * CRUD Repository operations for an ArtPiece.
+ * 
+ * @author Nikola Milekic
+ * @author Daniel Bucci
+ *
+ */
 @Repository
 public class ArtPieceRepository {
 
-	@Autowired
-	EntityManager entityManager;
-	ArtOrderRepository aoRepository;
-	/**
-	 * 
-	 * @param idCode
-	 * @return
-	 */
-	@Transactional
-	public ArtPiece getArtPiece(String idCode) {
-		return entityManager.find(ArtPiece.class, idCode);
-	}
-	/**
-	 * 
-	 * @param aBasicLocation
-	 * @param aAddressLocation
-	 * @param aIdCode
-	 * @param aArtListing
-	 * @return
-	 */
-	@Transactional
-	public ArtPiece createArtPiece(PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtListing aArtListing) {
-		ArtPiece apiece = new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, aArtListing);
-		entityManager.persist(apiece);
-		return apiece;
-	}
-	/**
-	 * 
-	 * @param ap
-	 */
-	@Transactional
-	public void updateArtPiece(ArtPiece ap) {
-		entityManager.merge(ap);
-	}
-	/**
-	 * 
-	 * @param ap
-	 * @return
-	 */
-	@Transactional
-	public boolean deleteArtPiece(ArtPiece ap) {
-		ArtPiece ape = entityManager.find(ArtPiece.class, ap.getIdCode());
-		if (entityManager.contains(ape)) {
-			entityManager.remove(entityManager.merge(ape));
-		} else {
-			entityManager.remove(ape);
-		}
-		if (ap.getArtOrder()!=null) {
-			aoRepository.deleteArtOrder(ap.getArtOrder());
-		}
-		return !entityManager.contains(ape);
-	}
-	
+  @Autowired
+  EntityManager entityManager;
+  ArtOrderRepository aoRepository;
+
+  /**
+   * getArtPiece retrieves a persisted instance of ArtPiece, based on the primary
+   * key from the database.
+   * 
+   * @param  idCode the primary key of the ArtPiece
+   * @return        a persisted ArtPiece instance loaded from database
+   */
+  @Transactional
+  public ArtPiece getArtPiece(String idCode) {
+    return entityManager.find(ArtPiece.class, idCode);
+  }
+
+  /**
+   * createArtPiece method creates an ArtPiece object, given an ArtListing to
+   * attach to and basic information.
+   * 
+   * @param  aBasicLocation   the simple location, whether at gallery or elsewhere
+   * @param  aAddressLocation the address of piece, if elsewhere
+   * @param  aIdCode          the primary key of the new ArtPiece instance
+   * @param  aArtListing      the persisted ArtListing instance to attach to
+   * @return                  a persisted ArtPiece instance loaded into the
+   *                          database
+   */
+  @Transactional
+  public ArtPiece createArtPiece(PieceLocation aBasicLocation, String aAddressLocation,
+      String aIdCode, ArtListing aArtListing) {
+    ArtPiece apiece = new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, aArtListing);
+    entityManager.persist(apiece);
+    return apiece;
+  }
+
+  /**
+   * updateArtPiece method updates an ArtPiece instance's properties in the
+   * database.
+   * 
+   * @param ap the ArtPiece whose changes will be written to the database
+   */
+  @Transactional
+  public void updateArtPiece(ArtPiece ap) {
+    entityManager.merge(ap);
+  }
+
+  /**
+   * Overloaded deleteArtPiece method that removes the given ArtPiece instance
+   * from the database. Also deletes its associated ArtOrder.
+   * 
+   * @param  ap the ArtPiece to be removed from the database
+   * @return    true if successful delete
+   */
+  @Transactional
+  public boolean deleteArtPiece(ArtPiece ap) {
+    return deleteArtPiece(ap.getIdCode());
+  }
+
+  /**
+   * deleteArtPiece method removes the ArtPiece data at the given primary key.
+   * Also deletes its associated ArtOrder.
+   * 
+   * @param  id the primary key of the ArtPiece to be removed from database
+   * @return    true if successful delete
+   */
+  @Transactional
+  public boolean deleteArtPiece(String id) {
+    ArtPiece ape = entityManager.find(ArtPiece.class, id);
+    if (entityManager.contains(ape)) {
+      entityManager.remove(entityManager.merge(ape));
+    } else {
+      entityManager.remove(ape);
+    }
+    if (ape.getArtOrder() != null) {
+      aoRepository.deleteArtOrder(ape.getArtOrder());
+    }
+    return !entityManager.contains(ape);
+  }
+
 }

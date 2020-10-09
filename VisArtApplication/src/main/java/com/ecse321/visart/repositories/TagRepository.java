@@ -1,6 +1,5 @@
 /** 
- *@author Nikola Milekic 
- *@author Daniel Bucci
+
  */
 
 package com.ecse321.visart.repositories;
@@ -16,8 +15,10 @@ import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Tag.TagType;
 
 /**
+ * CRUD Repository operations for a Tag
  * 
- * @author anwar
+ * @author Nikola Milekic
+ * @author Daniel Bucci
  *
  */
 
@@ -28,16 +29,15 @@ public class TagRepository {
   EntityManager entityManager;
 
   /**
-   * createTag
-   * 
-   * This method creates a tag instance for an art listing that is persisted in
-   * the database
+   * createTag method creates a Tag instance for an ArtListing that is persisted
+   * in
+   * the database.
    * 
    * @param  aType    Type of tag for a listing
-   * @param  aKeyword keywords associated
-   * @param  aIdCode  database Id for this tag
-   * @param  aListing specific art listing
-   * @return          persisted tag instance
+   * @param  aKeyword keyword of the tag
+   * @param  aIdCode  database primary key for this tag
+   * @param  aListing ArtListing to attach to
+   * @return          persisted Tag instance
    */
   @Transactional
   public Tag createTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
@@ -47,12 +47,10 @@ public class TagRepository {
   }
 
   /**
-   * getTag
+   * getTag method retrieves a Tag instance for an ArtListing from the database.
    * 
-   * This method retrieves a tag instance for an art listing from the database
-   * 
-   * @param  aIdCode database Id for this tag
-   * @return         retrieves tag information
+   * @param  aIdCode database primary key for Tag
+   * @return         persisted Tag instance from database
    */
   @Transactional
   public Tag getTag(String aIdCode) {
@@ -60,11 +58,10 @@ public class TagRepository {
   }
 
   /**
-   * updateTag
+   * updateTag method updates a Tag instance's properties in the
+   * database.
    * 
-   * This method updates tag information for a specific listing
-   * 
-   * @param t 
+   * @param t the altered Tag instance whose changes write to database
    */
   @Transactional
   public void updateTag(Tag t) {
@@ -72,16 +69,26 @@ public class TagRepository {
   }
 
   /**
-   * deleteTag
+   * Overloaded deleteTag method deletes the given Tag instance from the database.
    * 
-   * This method deletes a tag instance for an art listing from the database
-   * 
-   * @param  t
-   * @return
+   * @param  t the Tag to delete from database
+   * @return   true if successful delete
    */
   @Transactional
   public boolean deleteTag(Tag t) {
-    Tag entity = entityManager.find(Tag.class, t.getIdCode());
+    return deleteTag(t.getIdCode());
+  }
+
+  /**
+   * deleteTag method removes the Tag instance from the database, given its
+   * primary key.
+   * 
+   * @param  id the primary key of the Tag to delete
+   * @return    true if successful delete
+   */
+  @Transactional
+  public boolean deleteTag(String id) {
+    Tag entity = entityManager.find(Tag.class, id);
     if (entityManager.contains(entity)) {
       entityManager.remove(entityManager.merge(entity));
     } else {

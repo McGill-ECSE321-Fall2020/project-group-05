@@ -1,6 +1,5 @@
 /** 
- *@author Nikola Milekic 
- *@author Daniel Bucci
+
  */
 
 package com.ecse321.visart.repositories;
@@ -20,8 +19,10 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.Ticket;
 
 /**
+ * CRUD Repository operations for an ArtOrder
  * 
- * @author anwar
+ * @author Nikola Milekic
+ * @author Daniel Bucci
  *
  */
 @Repository
@@ -32,9 +33,8 @@ public class ArtOrderRepository {
   TicketRepository tRepository;
 
   /**
-   * createOrder
-   * 
-   * This method creates an ArtOrder instance that is persisted in the database
+   * createOrder method creates an ArtOrder instance that is persisted in the
+   * database
    * 
    * @param  aIsDelivered     status of delivered ArtPiece
    * @param  aTargetLocation  whether the ArtPiece is at gallery, or elsewhere
@@ -42,7 +42,7 @@ public class ArtOrderRepository {
    * @param  aDeliveryTracker a link to external delivery tacker site
    * @param  aIdCode          database Id for this art order
    * @param  aArtPiece        ArtPiece to track by this order
-   * @return                  persisted art order instance
+   * @return                  a persisted art order instance
    */
   @Transactional
   public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation,
@@ -55,9 +55,7 @@ public class ArtOrderRepository {
   }
 
   /**
-   * getArtOrder
-   * 
-   * This method retrieves an order instance from the database
+   * getArtOrder method retrieves a persisted ArtOrder instance from the database.
    * 
    * @param  aIdCode database Id for a specific order
    * @return
@@ -68,11 +66,10 @@ public class ArtOrderRepository {
   }
 
   /**
-   * updateArtOrder
+   * updateArtOrder method updates an ArtOrder instance's properties in the
+   * database.
    * 
-   * This method updates an order when there are changes
-   * 
-   * @param ao specific art order
+   * @param ao the ArtOrder instance to write to the database
    */
   @Transactional
   public void updateArtOrder(ArtOrder ao) {
@@ -80,22 +77,36 @@ public class ArtOrderRepository {
   }
 
   /**
-   * This method removes an art order stance from the database
+   * Overloaded deleteArtOrder method removes the specified ArtOrder instance from
+   * the database.
    * 
-   * @param  ao specific art order
-   * @return
+   * @param  ao the ArtOrder instance to remove
+   * @return    true if successful removal
    */
   @Transactional
   public boolean deleteArtOrder(ArtOrder ao) {
-    ArtOrder entity = entityManager.find(ArtOrder.class, ao.getIdCode());
+    return deleteArtOrder(ao.getIdCode());
+  }
+
+  /**
+   * deleteArtOrder method deletes the ArtOrder instance from the database, given
+   * its primary key.
+   * 
+   * @param  id the primary key of the ArtOrder to remove
+   * @return    true if successful delete
+   */
+  @Transactional
+  public boolean deleteArtOrder(String id) {
+
+    ArtOrder entity = entityManager.find(ArtOrder.class, id);
     if (entityManager.contains(entity)) {
       entityManager.remove(entityManager.merge(entity));
     } else {
       entityManager.remove(entity);
     }
-    if (ao.getTicket() != null) {
-      tRepository.deleteTicket(ao.getTicket());
+    if (entity.getTicket() != null) {
+      tRepository.deleteTicket(entity.getTicket());
     }
-    return (!entityManager.contains(entity) && !entityManager.contains(ao.getTicket()));
+    return (!entityManager.contains(entity) && !entityManager.contains(entity.getTicket()));
   }
 }

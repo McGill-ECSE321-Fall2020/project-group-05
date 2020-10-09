@@ -1,8 +1,3 @@
-/** 
- *@author Nikola Milekic 
- *@author Daniel Bucci
- */
-
 package com.ecse321.visart.repositories;
 
 import javax.persistence.EntityManager;
@@ -18,9 +13,10 @@ import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.ArtPiece;
 
 /**
- * Repository class for an Art Listing
+ * CRUD Repository operations for an ArtListing
  * 
- * @author anwar
+ * @author Nikola Milekic
+ * @author Daniel Bucci
  *
  */
 @Repository
@@ -32,33 +28,30 @@ public class ArtListingRepository {
   TagRepository tRepository;
 
   /**
-   * createArtListing
-   * 
-   * This method creates an ArtListing instance that is persisted in the database
+   * createArtListing method creates an ArtListing instance that is persisted in
+   * the database
    * 
    * @param  aVisibility  If the art listing is visible in the system
    * @param  aDescription short description of the art listing
-   * @param  aTitle       Title of the art listing
+   * @param  aTitle       title of the art listing
    * @param  aIdCode      database Id for this listing
-   * @param  aArtist      Artist information
+   * @param  aArtist      Artist instance this belongs to
    * @return              a persisted instance of ArtListing
    */
   @Transactional
   public ArtListing createArtListing(PostVisibility aVisibility, String aDescription, String aTitle,
       String aIdCode, Artist aArtist) {
-
     ArtListing al = new ArtListing(aVisibility, aDescription, aTitle, aIdCode, aArtist);
     entityManager.persist(al);
     return al;
   }
 
   /**
-   * getArtListing
+   * getArtListing method retrieves an instance of ArtListing from the database,
+   * based on a primary key.
    * 
-   * This method retrieves an instance of ArtListing from the database
-   * 
-   * @param  aIdCode database ID for this art listing
-   * @return         an instance specific art listing
+   * @param  aIdCode the database primary key for the ArtListing
+   * @return         a persisted of ArtListing from the database
    */
   @Transactional
   public ArtListing getArtListing(String aIdCode) {
@@ -66,11 +59,11 @@ public class ArtListingRepository {
   }
 
   /**
-   * updateArtListing
+   * updateArtListing method updates an ArtListing instance's properties in the
+   * database. Changes made specific to the attributes of this ArtListing and does
+   * not cascade to collections.
    * 
-   * This method updates an art listing if there's any changes to make
-   * 
-   * @param al specific art listing
+   * @param al the ArtListing to write to the database
    */
   @Transactional
   public void updateArtListing(ArtListing al) {
@@ -78,16 +71,16 @@ public class ArtListingRepository {
   }
 
   /**
-   * deleteArtListing
+   * deleteArtListing method removes a specified ArtListing by its primary key
+   * from the database. This also deletes the associated Tags and ArtPieces that
+   * referenced in this ArtListing.
    * 
-   * This method removes a specific art listing instance from the database
-   * 
-   * @param  al specific art listing
-   * @return
+   * @param  id the primary key of the entry to remove
+   * @return    true if successful
    */
   @Transactional
-  public boolean deleteArtListing(ArtListing al) {
-    ArtListing entity = entityManager.find(ArtListing.class, al.getIdCode());
+  public boolean deleteArtListing(String id) {
+    ArtListing entity = entityManager.find(ArtListing.class, id);
     if (entityManager.contains(entity)) {
       entityManager.remove(entityManager.merge(entity));
     } else {
@@ -100,5 +93,17 @@ public class ArtListingRepository {
       apRepository.deleteArtPiece(t);
     }
     return !entityManager.contains(entity);
+  }
+
+  /**
+   * Overloaded deleteArtListing method, that removes the specified ArtListing
+   * instance from the database, by its idCode.
+   * 
+   * @param  al the ArtListing to remove from the database
+   * @return    true if successful delete
+   */
+  @Transactional
+  public boolean deleteArtListing(ArtListing al) {
+    return deleteArtListing(al.getIdCode());
   }
 }

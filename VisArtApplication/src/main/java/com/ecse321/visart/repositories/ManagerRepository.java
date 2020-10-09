@@ -1,8 +1,3 @@
-/** 
- *@author Nikola Milekic 
- *@author Daniel Bucci
- */
-
 package com.ecse321.visart.repositories;
 
 import javax.persistence.EntityManager;
@@ -19,7 +14,8 @@ import com.ecse321.visart.model.UserRole;
 
 /**
  * 
- * @author anwar
+ * @author Nikola Milekic
+ * @author Daniel Bucci
  *
  */
 @Repository
@@ -29,16 +25,17 @@ public class ManagerRepository {
   EntityManager entityManager;
 
   /**
-   * This method creates a Manager in the database with the given parameters
+   * createManager method creates a Manager in the database with the given
+   * parameters
    * 
-   * @param  aIdCode databse
-   * @param  aEmailAddress
-   * @param  aDisplayname
-   * @param  aUsername
-   * @param  aPassword
-   * @param  aProfilePicLink
-   * @param  aProfileDescription
-   * @return a newly created Manager
+   * @param  aIdCode             primary key of Manager in database
+   * @param  aEmailAddress       email address for manager
+   * @param  aDisplayname        display name of manager
+   * @param  aUsername           username of manager
+   * @param  aPassword           password of manager
+   * @param  aProfilePicLink     profile picture link
+   * @param  aProfileDescription profile description for manager
+   * @return                     a new persisted Manager instance
    */
   @Transactional
   public Manager createManager(String aIdCode, String aEmailAddress, String aDisplayname,
@@ -52,10 +49,10 @@ public class ManagerRepository {
   }
 
   /**
-   * Retrieves Manager information from the database
+   * getManager method retrieves Manager instance from the database.
    * 
-   * @param  aIdCode
-   * @return the manager information
+   * @param  aIdCode the primary key of the Manager instance
+   * @return         the Manager instance from the database
    */
   @Transactional
   public Manager getManager(String aIdCode) {
@@ -63,9 +60,10 @@ public class ManagerRepository {
   }
 
   /**
-   * updates manager information if there are changes
+   * updateManager method updates an Manager instance's properties in the
+   * database. Also updates the underlying User's properties.
    * 
-   * @param manager
+   * @param manager the changed Manager which will be written to database
    */
   @Transactional
   public void updateManager(Manager manager) {
@@ -74,15 +72,28 @@ public class ManagerRepository {
   }
 
   /**
-   * deletes manager profile from the database
+   * Overloaded deleteManager method that deletes the given Manager instance from
+   * the database. Also deletes the underlying User instance.
    * 
-   * @param  manager
-   * @return a boolean
+   * @param  manager the Manager instance to delete
+   * @return         true if successful delete
    */
   @Transactional
   public boolean deleteManager(Manager manager) {
-    Manager entity = entityManager.find(Manager.class, manager.getIdCode());
-    User usr = entityManager.find(User.class, manager.getIdCode());
+    return deleteManager(manager.getIdCode());
+  }
+
+  /**
+   * deleteManager method removes the Manager instance in the database, given the
+   * corresponding primary key. Also removes the underlying User instance.
+   * 
+   * @param  id primary key of the Manager instance to remove
+   * @return    true if successful delete
+   */
+  @Transactional
+  public boolean deleteManager(String id) {
+    Manager entity = entityManager.find(Manager.class, id);
+    User usr = entityManager.find(User.class, entity.getUser().getIdCode());
     if (entityManager.contains(entity)) {
       entityManager.remove(entityManager.merge(entity));
       entityManager.remove(entityManager.merge(usr));
