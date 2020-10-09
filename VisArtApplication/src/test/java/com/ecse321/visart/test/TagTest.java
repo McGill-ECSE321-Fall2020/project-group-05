@@ -103,4 +103,10 @@ public class TagTest {
     System.out.println("=================FIND===============");
 
   }
+  @Test
+  @Order(4)
+  void testDelete1() {
+    tagRepo.deleteTag(testTag2);
+    assertEquals(null, tagRepo.getTag(id));
+  }
 }
