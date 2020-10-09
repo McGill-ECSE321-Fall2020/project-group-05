@@ -59,7 +59,7 @@ public class UserTest {
 		// Create
 		User testUser = userRepo.createUser("" + l, email, displayName, username, password, profilePic, profileDesc);
 
-		// TEST if Manager was created
+		// TEST if User was created
 		assertNotNull(testUser);
 
 		// Print Manager
