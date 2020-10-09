@@ -19,8 +19,8 @@ public class ManagerRepository {
 	EntityManager entityManager;
 	
 	@Transactional
-	public Manager createManager(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
-		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword);
+	public Manager createManager(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription ) {
+		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword, aProfilePicLink, aProfileDescription );
 		Manager manager = new Manager(aIdCode, usr);
 		entityManager.persist(usr);
 		entityManager.persist(manager);

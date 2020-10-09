@@ -24,9 +24,9 @@ public class ArtListingRepository {
 	TagRepository tRepository;
 	
 	@Transactional
-	public ArtListing createArtListing(PostVisibility aVisibility, String aIdCode, Artist aArtist) {
+	public ArtListing createArtListing(PostVisibility aVisibility, String aDescription, String aTitle, String aIdCode, Artist aArtist) {
 		
-		ArtListing al = new ArtListing(aVisibility, aIdCode, aArtist);
+		ArtListing al = new ArtListing(aVisibility, aDescription, aTitle, aIdCode, aArtist);
 		entityManager.persist(al);
 		return al;
 	}

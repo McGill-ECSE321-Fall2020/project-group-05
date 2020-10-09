@@ -19,8 +19,8 @@ public class CustomerRepository {
 	ArtistRepository aRepository;
 	
 	@Transactional
-	public Customer createCustomer(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
-		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword);
+	public Customer createCustomer(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
+		User usr = new User(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword, aProfilePicLink, aProfileDescription);
 		Customer customer = new Customer(aIdCode, usr);
 		entityManager.persist(usr);
 		entityManager.persist(customer);

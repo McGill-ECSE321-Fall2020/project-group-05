@@ -25,6 +25,8 @@ public class ArtistTest {
 	String aDisplayname;
 	String aUsername;
 	String aPassword;
+	String ProfilePicLink;
+	String aProfileDescription;
 	static private Artist testArtist2;
 
 	// Pseudo-random ID for tested entities
@@ -37,6 +39,8 @@ public class ArtistTest {
 		aDisplayname = "Tim Cook";
 		aUsername = "timcook56";
 		aPassword = "apple123";
+		ProfilePicLink = "www.apple.com";
+		aProfileDescription = "I love cakes";
 	}
 
 	@Test
@@ -44,7 +48,7 @@ public class ArtistTest {
 	void testCreate() {
 
 		// Create
-		Artist testArtist = aRepo.createArtist(l + "test" + 2, aEmailAddress, aDisplayname, aUsername, aPassword);
+		Artist testArtist = aRepo.createArtist(l + "test" + 2, aEmailAddress, aDisplayname, aUsername, aPassword, ProfilePicLink, aProfileDescription);
 
 		// Test if Artist was created
 		assertNotNull(testArtist);
@@ -65,6 +69,7 @@ public class ArtistTest {
 		// Test if got Artist corresponds to entry
 		assertNotNull(testArtist2);
 		assertEquals(aEmailAddress, testArtist2.getCustomer().getUser().getEmailAddress());
+		assertEquals(aUsername, testArtist2.getCustomer().getUser().getUsername());
 
 		System.out.println("=================FIND===============");
 		System.out.println(testArtist2);
