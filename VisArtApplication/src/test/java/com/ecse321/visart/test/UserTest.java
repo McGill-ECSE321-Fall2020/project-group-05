@@ -35,7 +35,7 @@ public class UserTest {
 	  
 	private static String profileDesc;
 
-	static private User testManager2;
+	static private User User2;
 	
 
 	// Pseudo-random ID for tested entities
@@ -67,16 +67,16 @@ public class UserTest {
 		System.out.println(testUser);
 		System.out.println("=================CREATE===============");
 	}
-/*
+
 	@Test
 	@Order(3)
 	void testGet1() {
 		// Find manager
-		testManager2 = managerRepo.getManager("" + l);
+		User2 = userRepo.getUser("" + l);
 
 		// TEST if Manager was retrieved
-		assertNotNull(testManager2);
-		assertEquals(email, testManager2.getUser().getEmailAddress());
+		assertNotNull(User2);
+		assertEquals(email, User2.getUser().getEmailAddress());
 		assertEquals(displayName, testManager2.getUser().getDisplayname());
 		assertEquals(username, testManager2.getUser().getUsername());
 		assertEquals(password, testManager2.getUser().getPassword());
