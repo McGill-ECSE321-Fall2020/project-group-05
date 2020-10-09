@@ -58,8 +58,8 @@ public class ArtOrderTest {
   @Order(1)
   void init() {
     artist = aRepo.createArtist("test" + l + 1, "steve@gmail.com", "Steve Jobs", "steve56",
-        "apple1234");
-    artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, "t" + l + 2, artist);
+        "apple1234", "www.ipod.com", "iphones");
+    artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public,"rainbows", "myartworks", "t" + l + 2, artist);
 
     artPiece2 = apRepo.createArtPiece(PieceLocation.Offsite, "346STLOUIS", "ttt" + l + 3,
         artListing);

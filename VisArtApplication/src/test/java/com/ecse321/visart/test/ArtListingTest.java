@@ -31,6 +31,8 @@ public class ArtListingTest {
 
 	public static Artist artist;
 	public static Customer customer;
+	String description = "desctest";
+	String title = "titletest";
 	static private ArtListing artListingTest2;
 	// Pseudo-random ID for tested entities
 	static Long l = System.currentTimeMillis();
@@ -38,7 +40,7 @@ public class ArtListingTest {
 	@Test
 	@Order(1)
 	void init() {
-		artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+		artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234", "www.hello.com", "testing");
 	}
 
 	@Test
@@ -46,7 +48,7 @@ public class ArtListingTest {
 	void testCreate1() {
 
 		// Create
-		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "tt" + l, artist);
+		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public,description, title, "tt" + l, artist);
 
 		// Test if artListing was created
 		assertNotNull(artListingTest);
