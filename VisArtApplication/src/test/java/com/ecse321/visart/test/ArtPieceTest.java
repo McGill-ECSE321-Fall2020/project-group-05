@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.Before;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +29,7 @@ import com.ecse321.visart.repositories.ArtistRepository;
 import com.ecse321.visart.repositories.ArtOrderRepository;
 import com.ecse321.visart.repositories.TicketRepository;
 import com.ecse321.visart.repositories.ArtListingRepository;
-
+@TestMethodOrder(OrderAnnotation.class)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ArtPieceTest {
@@ -83,6 +85,8 @@ public class ArtPieceTest {
 	@Test
 	@Order(2)
 	void testGet() {
+		
+		init();
 
 		// Find artPieceTest
 		ArtPiece artPieceTest2 = apRepo.getArtPiece("kk" + l + 3);

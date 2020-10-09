@@ -3,8 +3,10 @@ package com.ecse321.visart.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Before;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.repositories.ArtistRepository;
-
+@TestMethodOrder(OrderAnnotation.class) 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ArtistTest {
@@ -42,7 +44,7 @@ public class ArtistTest {
     init();
     
     // Create
-    Artist testArtist = aRepo.createArtist(l + "test", aEmailAddress, aDisplayname, aUsername,
+    Artist testArtist = aRepo.createArtist("12334556", aEmailAddress, aDisplayname, aUsername,
         aPassword);
 
     // Test if Artist was created
@@ -57,9 +59,11 @@ public class ArtistTest {
   @Test
   @Order(2)
   void testGet() {
+	  
+	  init();
 	 
 	 //Getting
-    Artist testArtist2 = aRepo.getArtist(l + "test");
+    Artist testArtist2 = aRepo.getArtist("12334556");
     
     //Test if got Artist corresponds to entry
     assertNotNull(testArtist2);
