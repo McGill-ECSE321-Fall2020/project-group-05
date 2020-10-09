@@ -31,9 +31,10 @@ public class CustomerTest {
   private static String profilePic;
   
   private static String profileDesc;
+
+  static Customer testCustomer2;
   
   // Pseudo-random ID for tested entities
-  Customer testCustomer2;
   static Long l = System.currentTimeMillis();
 
   @Test

@@ -56,7 +56,7 @@ public class TicketTest {
   private ArtOrderRepository artorderRepo;
 
   // Attributes
-  Ticket testTicket2;
+  static Ticket testTicket2;
   String email;
   String displayName;
   String username;
@@ -103,12 +103,15 @@ public class TicketTest {
     title = "fake monalisa";
 
     aCustomer = customerRepo.createCustomer(id + "1", email + "customer", displayName + "customer",
-        username + "customer", password + "customer",profilePic+"customer", profileDesc+"customer");
+        username + "customer", password + "customer", profilePic + "customer",
+        profileDesc + "customer");
     anArtist = artistRepo.createArtist(id + "2", email + "artist", displayName + "artist",
-        username + "artist", password + "artist",profilePic+"artist", profileDesc+"artist");
+        username + "artist", password + "artist", profilePic + "artist", profileDesc + "artist");
     aManager = managerRepo.createManager(id + "3", email + "manager", displayName + "manager",
-        username + "manager", password + "manager",profilePic+"manager", profileDesc+"manager");
-    aListing = artlistingRepo.createArtListing(ArtListing.PostVisibility.Public, listingDesc, title, id + "4",
+        username + "manager", password + "manager", profilePic + "manager",
+        profileDesc + "manager");
+    aListing = artlistingRepo.createArtListing(ArtListing.PostVisibility.Public, listingDesc, title,
+        id + "4",
         anArtist);
     anArtPiece = artpieceRepo.createArtPiece(ArtPiece.PieceLocation.AtGallery, "UniversityStreet",
         id + 5, aListing);
@@ -151,12 +154,11 @@ public class TicketTest {
 
   }
 
-	
-@Test
-@Order(4)
-void testDelete1() {
- ticketRepo.deleteTicket(testTicket2);
-  assertEquals(null, ticketRepo.getTicket(id));
-}
+  @Test
+  @Order(4)
+  void testDelete1() {
+    ticketRepo.deleteTicket(testTicket2);
+    assertEquals(null, ticketRepo.getTicket(id));
+  }
 
 }
