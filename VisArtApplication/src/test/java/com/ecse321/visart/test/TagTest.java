@@ -3,6 +3,7 @@ package com.ecse321.visart.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,33 +16,58 @@ import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.User;
+import com.ecse321.visart.repositories.ArtListingRepository;
+import com.ecse321.visart.repositories.ArtistRepository;
+import com.ecse321.visart.repositories.CustomerRepository;
 import com.ecse321.visart.repositories.TagRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TagTest {
-
-  @Autowired
-  private TagRepository tagRepo;
-
-  @Test
-  void tagCreateTest() {
-
     // ID generator
     Long l = System.currentTimeMillis();
 
-    // Attributes
-    String keyword = "Acrylic";
-    String id = "" + l;
-    String email = "riad.elmahmoudy@mail.mcgill.ca";
-    String displayName = "Riad";
-    String username = "riadelm";
-    String password = "aNicePassword";
-    User aUser = new User(id + 4, email, displayName, username, password);
-    Customer aCustomer = new Customer(id + 3, aUser);
-    Manager aManager = new Manager(id + 2, aUser);
-    Artist anArtist = new Artist(id + 1, aCustomer);
-    ArtListing aListing = new ArtListing(ArtListing.PostVisibility.Public, id, aManager, anArtist);
+  @Autowired
+  private TagRepository tagRepo;
+  
+  @Autowired
+  private CustomerRepository customerRepo;
+  
+  @Autowired
+  private ArtistRepository artistRepo;
+  
+  @Autowired
+  private ArtListingRepository listingRepo;
+  String keyword ;
+  String id ;
+  String email ;
+  String displayName ;
+  String username ;
+  String password;
+  Customer aCustomer;
+  Artist aArtist;
+  ArtListing aListing;
+  
+  
+  @Before
+  void init() {
+	
+	    // Attributes
+	  	keyword = "Acrylic";
+	    id = "test" + l;
+	    email = "riad.elmahmoudy@mail.mcgill.ca";
+	    displayName = "Riad";
+	    username = "riadelm";
+	    password = "aNicePassword";
+	    aCustomer = customerRepo.createCustomer(id+2, email, displayName, username, password);
+	    aArtist = artistRepo.createArtist(id+5, aCustomer);
+	    aListing = listingRepo.createArtListing(ArtListing.PostVisibility.Public, id+4, aArtist);
+	    
+  }
+
+  @Test
+  void tagCreateTest() {
+init();
 
     // Create
     Tag testTag = tagRepo.createTag(Tag.TagType.Material, keyword, id, aListing);
@@ -55,7 +81,7 @@ public class TagTest {
     System.out.println("=================CREATE===============");
 
     // Find Tag
-    Tag testTag2 = tagRepo.getTag("" + l);
+    Tag testTag2 = tagRepo.getTag(id);
 
     // TEST if Tag was retrieved
     assertNotNull(testTag2);
