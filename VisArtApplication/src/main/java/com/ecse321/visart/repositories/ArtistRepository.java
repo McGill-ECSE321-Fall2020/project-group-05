@@ -46,8 +46,14 @@ public class ArtistRepository {
 	}
 	
 	@Transactional
-	public void deleteArtist(Artist artist) {
-		entityManager.remove(artist);
+	public boolean deleteArtist(Artist artist) {
+		Artist entity = entityManager.find(Artist.class, artist.getIdCode());
+		if(entityManager.contains(entity)) {
+			entityManager.remove(entityManager.merge(entity));
+		} else {
+			entityManager.remove(entity);
+		}
+		return !entityManager.contains(entity);
 	}
 
 }

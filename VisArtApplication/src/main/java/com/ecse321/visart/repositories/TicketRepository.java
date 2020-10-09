@@ -35,8 +35,14 @@ public class TicketRepository {
 	}
 	
 	@Transactional
-	public void deleteTicket(Ticket t) {
-		entityManager.remove(t);
+	public boolean deleteTicket(Ticket t) {
+		Ticket entity = entityManager.find(Ticket.class, t.getIdCode());
+		if(entityManager.contains(entity)) {
+			entityManager.remove(entityManager.merge(entity));
+		} else {
+			entityManager.remove(entity);
+		}
+		return !entityManager.contains(entity);
 	}
 	
 }

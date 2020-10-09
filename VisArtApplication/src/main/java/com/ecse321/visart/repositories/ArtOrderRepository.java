@@ -44,10 +44,16 @@ public class ArtOrderRepository {
 	}
 	
 	@Transactional
-	public void deleteArtOrder(ArtOrder ao) {
-		entityManager.remove(ao);
-		if(ao.getTicket()!=null) {
-			tRepository.deleteTicket(ao.getTicket());;
+	public boolean deleteArtOrder(ArtOrder ao) {
+		ArtOrder entity = entityManager.find(ArtOrder.class, ao.getIdCode());
+		if(entityManager.contains(entity)) {
+			entityManager.remove(entityManager.merge(entity));
+		} else {
+			entityManager.remove(entity);
 		}
+		if(ao.getTicket()!=null) {
+			tRepository.deleteTicket(ao.getTicket());
+		}
+		return (!entityManager.contains(entity) && !entityManager.contains(ao.getTicket()));
 	}
 }

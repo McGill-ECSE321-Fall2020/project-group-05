@@ -39,12 +39,20 @@ public class CustomerRepository {
 	}
 	
 	@Transactional
-	public void deleteCustomer(Customer customer) {
-		entityManager.remove(customer);
-		entityManager.remove(customer.getUser());
+	public boolean deleteCustomer(Customer customer) {
+		Customer entity = entityManager.find(Customer.class, customer.getIdCode());
+		User usr = entityManager.find(User.class, customer.getIdCode());
+		if (entityManager.contains(entity)) {
+			entityManager.remove(entityManager.merge(entity));
+			entityManager.remove(entityManager.merge(usr));
+		} else {
+			entityManager.remove(entity);
+			entityManager.remove(usr);
+		}
 		if (customer.getArtist()!=null) {
 			aRepository.deleteArtist(customer.getArtist());
 		}
+		return (!entityManager.contains(entity) && !entityManager.contains(customer.getArtist()) && !entityManager.contains(usr));
 		
 	}
 

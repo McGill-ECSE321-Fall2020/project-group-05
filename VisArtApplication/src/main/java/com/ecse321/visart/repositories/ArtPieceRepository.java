@@ -7,10 +7,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtPiece;
+import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Ticket;
+import com.ecse321.visart.model.User;
 
 @Repository
 public class ArtPieceRepository {
@@ -37,11 +39,17 @@ public class ArtPieceRepository {
 	}
 	
 	@Transactional
-	public void deleteArtPiece(ArtPiece ap) {
-		entityManager.remove(ap);
+	public boolean deleteArtPiece(ArtPiece ap) {
+		ArtPiece ape = entityManager.find(ArtPiece.class, ap.getIdCode());
+		if (entityManager.contains(ape)) {
+			entityManager.remove(entityManager.merge(ape));
+		} else {
+			entityManager.remove(ape);
+		}
 		if (ap.getArtOrder()!=null) {
 			aoRepository.deleteArtOrder(ap.getArtOrder());
 		}
+		return !entityManager.contains(ape);
 	}
 	
 }

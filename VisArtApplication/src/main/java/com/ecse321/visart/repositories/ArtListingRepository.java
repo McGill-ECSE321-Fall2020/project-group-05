@@ -42,14 +42,20 @@ public class ArtListingRepository {
 	}
 	
 	@Transactional
-	public void deleteArtListing(ArtListing al) {
-		entityManager.remove(al);
+	public boolean deleteArtListing(ArtListing al) {
+		ArtListing entity = entityManager.find(ArtListing.class, al.getIdCode());
+		if(entityManager.contains(entity)) {
+			entityManager.remove(entityManager.merge(entity));
+		} else {
+			entityManager.remove(entity);
+		}
 		for (Tag t : al.getTags()) {
 			tRepository.deleteTag(t);
 		}
 		for (ArtPiece t : al.getPieces()) {
 			apRepository.deleteArtPiece(t);
 		}
+		return !entityManager.contains(entity);
 	}
 	
 }

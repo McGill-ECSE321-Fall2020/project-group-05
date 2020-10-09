@@ -35,6 +35,7 @@ public class ManagerRepository {
 	@Transactional
 	public void updateManager(Manager manager) {
 		entityManager.merge(manager);
+		entityManager.merge(manager.getUser());
 	}
 	
 	@Transactional 
@@ -49,7 +50,7 @@ public class ManagerRepository {
 			entityManager.remove(usr);
 		}
 		
-		return !entityManager.contains(entity);
+		return !entityManager.contains(entity) && !entityManager.contains(usr);
 	}
 
 }

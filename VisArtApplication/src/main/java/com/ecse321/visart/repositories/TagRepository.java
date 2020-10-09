@@ -38,8 +38,15 @@ public class TagRepository {
 	}
 	
 	@Transactional
-	public void deleteTag(Tag t) {
-		entityManager.remove(t);
+	public boolean deleteTag(Tag t) {
+		Tag entity = entityManager.find(Tag.class, t.getIdCode());
+		if (entityManager.contains(entity)) {
+			entityManager.remove(entityManager.merge(entity));
+		} else {
+			entityManager.remove(entity);
+		}
+		
+		return (!entityManager.contains(entity));
 	}
 	
 }
