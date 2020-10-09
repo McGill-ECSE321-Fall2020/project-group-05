@@ -17,6 +17,7 @@ public class ArtPieceRepository {
 
 	@Autowired
 	EntityManager entityManager;
+	ArtOrderRepository aoRepository;
 	
 	@Transactional
 	public ArtPiece getArtPiece(String idCode) {
@@ -30,5 +31,17 @@ public class ArtPieceRepository {
 		return apiece;
 	}
 	
+	@Transactional
+	public void updateArtPiece(ArtPiece ap) {
+		entityManager.merge(ap);
+	}
+	
+	@Transactional
+	public void deleteArtPiece(ArtPiece ap) {
+		entityManager.remove(ap);
+		if (ap.getArtOrder()!=null) {
+			aoRepository.deleteArtOrder(ap.getArtOrder());
+		}
+	}
 	
 }

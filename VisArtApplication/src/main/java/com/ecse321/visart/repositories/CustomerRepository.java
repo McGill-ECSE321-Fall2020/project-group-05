@@ -16,6 +16,7 @@ public class CustomerRepository {
 	
 	@Autowired
 	EntityManager entityManager;
+	ArtistRepository aRepository;
 	
 	@Transactional
 	public Customer createCustomer(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword) {
@@ -29,6 +30,22 @@ public class CustomerRepository {
 	@Transactional
 	public Customer getCustomer(String aIdCode) {
 		return entityManager.find(Customer.class, aIdCode);
+	}
+	
+	@Transactional
+	public void updateCustomer(Customer customer) {
+		entityManager.merge(customer.getUser());
+		entityManager.merge(customer);
+	}
+	
+	@Transactional
+	public void deleteCustomer(Customer customer) {
+		entityManager.remove(customer);
+		entityManager.remove(customer.getUser());
+		if (customer.getArtist()!=null) {
+			aRepository.deleteArtist(customer.getArtist());
+		}
+		
 	}
 
 }

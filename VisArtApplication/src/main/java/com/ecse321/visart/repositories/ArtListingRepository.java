@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.model.Artist;
-import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Manager;
+import com.ecse321.visart.model.Tag;
+import com.ecse321.visart.model.ArtPiece;
 
 
 
@@ -20,6 +20,8 @@ public class ArtListingRepository {
 	
 	@Autowired
 	EntityManager entityManager;
+	ArtPieceRepository apRepository;
+	TagRepository tRepository;
 	
 	@Transactional
 	public ArtListing createArtListing(PostVisibility aVisibility, String aIdCode, Artist aArtist) {
@@ -32,6 +34,22 @@ public class ArtListingRepository {
 	@Transactional
 	public ArtListing getArtListing(String aIdCode) {
 		return entityManager.find(ArtListing.class, aIdCode);
+	}
+	
+	@Transactional
+	public void updateArtListing(ArtListing al) {
+		entityManager.merge(al);
+	}
+	
+	@Transactional
+	public void deleteArtListing(ArtListing al) {
+		entityManager.remove(al);
+		for (Tag t : al.getTags()) {
+			tRepository.deleteTag(t);
+		}
+		for (ArtPiece t : al.getPieces()) {
+			apRepository.deleteArtPiece(t);
+		}
 	}
 	
 }

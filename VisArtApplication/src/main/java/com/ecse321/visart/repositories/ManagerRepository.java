@@ -37,7 +37,6 @@ public class ManagerRepository {
 		entityManager.merge(manager);
 	}
 	
-	
 	@Transactional 
 	public boolean deleteManager(Manager manager) {
 		Manager entity = entityManager.find(Manager.class, manager.getIdCode());

@@ -32,4 +32,14 @@ public class TagRepository {
 		return entityManager.find(Tag.class, aIdCode);
 	}
 	
+	@Transactional
+	public void updateTag(Tag t) {
+		entityManager.merge(t);
+	}
+	
+	@Transactional
+	public void deleteTag(Tag t) {
+		entityManager.remove(t);
+	}
+	
 }

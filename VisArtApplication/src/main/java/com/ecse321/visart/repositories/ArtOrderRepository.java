@@ -23,6 +23,7 @@ public class ArtOrderRepository {
 	
 	@Autowired
 	EntityManager entityManager;
+	TicketRepository tRepository;
 	
 	@Transactional
 	public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece) {
@@ -32,24 +33,21 @@ public class ArtOrderRepository {
 		return ao;
 	}
 	
-	/**
-	
-	@Transactional
-	public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket) {
-		
-		ArtOrder ao = new ArtOrder(aIsDelivered, aTargetLocation, aTargetAddress, aDeliveryTracker, aIdCode, aArtPiece);
-
-		entityManager.persist(ao.getTicket());
-
-		entityManager.persist(ao);
-		return ao;
-	}
-	
-	**/
-	
 	@Transactional
 	public ArtOrder getArtOrder(String aIdCode) {
 		return entityManager.find(ArtOrder.class, aIdCode);
 	}
 	
+	@Transactional
+	public void updateArtOrder(ArtOrder ao) {
+		entityManager.merge(ao);
+	}
+	
+	@Transactional
+	public void deleteArtOrder(ArtOrder ao) {
+		entityManager.remove(ao);
+		if(ao.getTicket()!=null) {
+			tRepository.deleteTicket(ao.getTicket());;
+		}
+	}
 }
