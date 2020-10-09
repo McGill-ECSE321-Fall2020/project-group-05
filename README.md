@@ -13,7 +13,7 @@ VisArt is a project made for art galleries facilitating Art Piece transactions f
 #### Nikola Milekic
 I am a U2 student studying Computer Engineering. Since the ripe age of 12, I've been writing code whether it be rigging an LED light show on an Arduino or setting up a Java server on Minecraft. I am currently working as a full-stack developer for a start-up and enjoying every bit of it. I love collaborating with new people on new challenging projects and I'm excited to demonstrate my programming skills in this one.
 #### Daniel Bucci
-[Insert Bio]
+I am a U2 Sotware Engineering student with a passion for technology and a proven track record of success in self starter and fast pace working environemnt. I've been writing Android applications since I was 16 years old and feel extremely comfertable with the Java programming language. I am an extrovert thtat loves working in teams, therefore I am extremely excited to work on a project of this scale in a large team with a suite of professional level tools to work with. 
 #### Ryan Au
 I am a U2 Software Engineering Major. I've been programming for several years now, including years prior to university, and I bring with me a vast amount of experience with error messages and compile time errors. I'm an indoorsy kind of guy, I play several musical instruments, I like origami, and I'm always looking to take my Software Engineering skills to the next level. I'll do everything I can to make this the best project I've ever made.
 #### Yuta Youness Bellali
