@@ -8,7 +8,7 @@ import java.util.*;
 @Entity
   @Table(name="customers")
   @DiscriminatorValue("1")
-// line 69 "../../../../../resources/visart.ump"
+// line 70 "../../../../../resources/visart.ump"
 public class Customer extends UserRole
 {
 
@@ -16,11 +16,9 @@ public class Customer extends UserRole
   // MEMBER VARIABLES
   //------------------------
 
-  @OneToOne
+  //Customer Associations
   private Artist artist;
-  @OneToMany
   private List<Ticket> boughtTickets;
-  @ManyToMany
   private List<ArtListing> favoriteListings;
 
   //------------------------
@@ -313,7 +311,7 @@ public class Customer extends UserRole
     super.delete();
   }
 
-  // line 86 "../../../../../resources/visart.ump"
+  // line 87 "../../../../../resources/visart.ump"
    public  Customer(){
     
   }

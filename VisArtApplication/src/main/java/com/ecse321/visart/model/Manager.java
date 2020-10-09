@@ -8,7 +8,7 @@ import java.util.*;
 @Entity
   @Table(name="managers")
   @DiscriminatorValue("0")
-// line 53 "../../../../../resources/visart.ump"
+// line 54 "../../../../../resources/visart.ump"
 public class Manager extends UserRole
 {
 
@@ -16,6 +16,8 @@ public class Manager extends UserRole
   // MEMBER VARIABLES
   //------------------------
 
+  //Manager Associations
+  private List<ArtListing> promotedListings;
 
   //------------------------
   // CONSTRUCTOR
@@ -37,10 +39,12 @@ public class Manager extends UserRole
     return aPromotedListing;
   }
 
-  
-  @OneToMany
-  private List<ArtListing> promotedListings;
-
+  /**
+   * %%AnnotateStart
+   * %%@OneToMany
+   * %%private List<ArtListing> promotedListings;
+   * %%AnnotateEnd
+   */
   public List<ArtListing> getPromotedListings()
   {
     List<ArtListing> newPromotedListings = Collections.unmodifiableList(promotedListings);
@@ -145,7 +149,7 @@ public class Manager extends UserRole
     super.delete();
   }
 
-  // line 63 "../../../../../resources/visart.ump"
+  // line 64 "../../../../../resources/visart.ump"
    public  Manager(){
     
   }

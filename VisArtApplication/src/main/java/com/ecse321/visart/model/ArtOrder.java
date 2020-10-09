@@ -7,7 +7,7 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 @Entity
   @Table(name="orders")
-// line 225 "../../../../../resources/visart.ump"
+// line 229 "../../../../../resources/visart.ump"
 public class ArtOrder
 {
 
@@ -20,7 +20,12 @@ public class ArtOrder
   private PieceLocation targetLocation;
   private String targetAddress;
   private String deliveryTracker;
- 
+  private String idCode;
+
+  //ArtOrder Associations
+  private ArtPiece artPiece;
+  private Ticket ticket;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -104,20 +109,21 @@ public class ArtOrder
     return deliveryTracker;
   }
 
-  
-  @OneToOne
-  private ArtPiece artPiece;
-  @OneToOne
-  private Ticket ticket;
-  @Id
-  private String idCode;
-
+  /**
+   * %%AnnotateStart
+   * %%@OneToOne
+   * %%private ArtPiece artPiece;
+   * %%@OneToOne
+   * %%private Ticket ticket;
+   * %%@Id
+   * %%private String idCode;
+   * %%AnnotateEnd
+   */
   public String getIdCode()
   {
     return idCode;
   }
   /* Code from template attribute_IsBoolean */
-  @Transient
   public boolean isIsDelivered()
   {
     return isDelivered;
@@ -210,7 +216,7 @@ public class ArtOrder
     }
   }
 
-  // line 246 "../../../../../resources/visart.ump"
+  // line 250 "../../../../../resources/visart.ump"
    public  ArtOrder(){
     
   }

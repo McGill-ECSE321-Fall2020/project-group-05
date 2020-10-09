@@ -7,7 +7,7 @@ import java.util.*;
 
 @Entity
   @Table(name="artists")
-// line 91 "../../../../../resources/visart.ump"
+// line 92 "../../../../../resources/visart.ump"
 public class Artist
 {
 
@@ -15,7 +15,13 @@ public class Artist
   // MEMBER VARIABLES
   //------------------------
 
+  //Artist Attributes
+  private String idCode;
 
+  //Artist Associations
+  private List<Ticket> soldTickets;
+  private List<ArtListing> postedListings;
+  private Customer customer;
 
   //------------------------
   // CONSTRUCTOR
@@ -45,16 +51,18 @@ public class Artist
     return wasSet;
   }
 
-  
-  @OneToMany
-  private List<Ticket> soldTickets;
-  @OneToMany
-  private List<ArtListing> postedListings;
-  @OneToOne
-  private Customer customer;
-  @Id
-  private String idCode;
-
+  /**
+   * %%AnnotateStart
+   * %%@OneToMany
+   * %%private List<Ticket> soldTickets;
+   * %%@OneToMany
+   * %%private List<ArtListing> postedListings;
+   * %%@OneToOne
+   * %%private Customer customer;
+   * %%@Id
+   * %%private String idCode;
+   * %%AnnotateEnd
+   */
   public String getIdCode()
   {
     return idCode;
@@ -202,9 +210,9 @@ public class Artist
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aIdCode)
+  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aDescription, String aTitle, String aIdCode)
   {
-    return new ArtListing(aVisibility, aIdCode, this);
+    return new ArtListing(aVisibility, aDescription, aTitle, aIdCode, this);
   }
 
   public boolean addPostedListing(ArtListing aPostedListing)
@@ -317,7 +325,7 @@ public class Artist
     }
   }
 
-  // line 109 "../../../../../resources/visart.ump"
+  // line 110 "../../../../../resources/visart.ump"
    public  Artist(){
     
   }

@@ -7,7 +7,7 @@ import java.util.*;
 
 @Entity
   @Table(name="artlistings")
-// line 114 "../../../../../resources/visart.ump"
+// line 115 "../../../../../resources/visart.ump"
 public class ArtListing
 {
 
@@ -23,15 +23,30 @@ public class ArtListing
 
   //ArtListing Attributes
   private PostVisibility visibility;
+  private List<Float> dimensions;
+  private String description;
+  private String title;
+  private List<String> postingPicLink;
+  private String idCode;
+
+  //ArtListing Associations
+  private List<ArtPiece> pieces;
+  private List<Tag> tags;
+  private Manager manager;
+  private List<Customer> favoritedCustomer;
+  private Artist artist;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ArtListing(PostVisibility aVisibility, String aIdCode, Artist aArtist)
+  public ArtListing(PostVisibility aVisibility, String aDescription, String aTitle, String aIdCode, Artist aArtist)
   {
     visibility = aVisibility;
     dimensions = new ArrayList<Float>();
+    description = aDescription;
+    title = aTitle;
+    postingPicLink = new ArrayList<String>();
     idCode = aIdCode;
     pieces = new ArrayList<ArtPiece>();
     tags = new ArrayList<Tag>();
@@ -66,6 +81,36 @@ public class ArtListing
   {
     boolean wasRemoved = false;
     wasRemoved = dimensions.remove(aDimension);
+    return wasRemoved;
+  }
+
+  public boolean setDescription(String aDescription)
+  {
+    boolean wasSet = false;
+    description = aDescription;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setTitle(String aTitle)
+  {
+    boolean wasSet = false;
+    title = aTitle;
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template attribute_SetMany */
+  public boolean addPostingPicLink(String aPostingPicLink)
+  {
+    boolean wasAdded = false;
+    wasAdded = postingPicLink.add(aPostingPicLink);
+    return wasAdded;
+  }
+
+  public boolean removePostingPicLink(String aPostingPicLink)
+  {
+    boolean wasRemoved = false;
+    wasRemoved = postingPicLink.remove(aPostingPicLink);
     return wasRemoved;
   }
 
@@ -113,22 +158,64 @@ public class ArtListing
     return index;
   }
 
-  
-  @OneToMany
-  private List<ArtPiece> pieces;
-  @OneToMany
-  private List<Tag> tags;
-  @ManyToOne
-  private Manager manager;
-  @ManyToMany
-  private List<Customer> favoritedCustomer;
-  @ManyToOne
-  private Artist artist;
-  @ElementCollection
-  private List<Float> dimensions;
-  @Id
-  private String idCode;
+  public String getDescription()
+  {
+    return description;
+  }
 
+  public String getTitle()
+  {
+    return title;
+  }
+  /* Code from template attribute_GetMany */
+  public String getPostingPicLink(int index)
+  {
+    String aPostingPicLink = postingPicLink.get(index);
+    return aPostingPicLink;
+  }
+
+  public String[] getPostingPicLink()
+  {
+    String[] newPostingPicLink = postingPicLink.toArray(new String[postingPicLink.size()]);
+    return newPostingPicLink;
+  }
+
+  public int numberOfPostingPicLink()
+  {
+    int number = postingPicLink.size();
+    return number;
+  }
+
+  public boolean hasPostingPicLink()
+  {
+    boolean has = postingPicLink.size() > 0;
+    return has;
+  }
+
+  public int indexOfPostingPicLink(String aPostingPicLink)
+  {
+    int index = postingPicLink.indexOf(aPostingPicLink);
+    return index;
+  }
+
+  /**
+   * %%AnnotateStart
+   * %%@OneToMany
+   * %%private List<ArtPiece> pieces;
+   * %%@OneToMany
+   * %%private List<Tag> tags;
+   * %%@ManyToOne
+   * %%private Manager manager;
+   * %%@ManyToMany
+   * %%private List<Customer> favoritedCustomer;
+   * %%@ManyToOne
+   * %%private Artist artist;
+   * %%@ElementCollection
+   * %%private List<Float> dimensions;
+   * %%@Id
+   * %%private String idCode;
+   * %%AnnotateEnd
+   */
   public String getIdCode()
   {
     return idCode;
@@ -538,7 +625,7 @@ public class ArtListing
     }
   }
 
-  // line 146 "../../../../../resources/visart.ump"
+  // line 150 "../../../../../resources/visart.ump"
    public  ArtListing(){
     
   }
@@ -547,6 +634,8 @@ public class ArtListing
   public String toString()
   {
     return super.toString() + "["+
+            "description" + ":" + getDescription()+ "," +
+            "title" + ":" + getTitle()+ "," +
             "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "visibility" + "=" + (getVisibility() != null ? !getVisibility().equals(this)  ? getVisibility().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "manager = "+(getManager()!=null?Integer.toHexString(System.identityHashCode(getManager())):"null") + System.getProperties().getProperty("line.separator") +

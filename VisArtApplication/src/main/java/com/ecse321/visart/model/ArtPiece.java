@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
   @Table(name="artpieces")
-// line 174 "../../../../../resources/visart.ump"
+// line 178 "../../../../../resources/visart.ump"
 public class ArtPiece
 {
 
@@ -23,7 +23,11 @@ public class ArtPiece
   //ArtPiece Attributes
   private PieceLocation basicLocation;
   private String addressLocation;
+  private String idCode;
 
+  //ArtPiece Associations
+  private ArtListing artListing;
+  private ArtOrder artOrder;
 
   //------------------------
   // CONSTRUCTOR
@@ -80,14 +84,16 @@ public class ArtPiece
     return addressLocation;
   }
 
-  
-  @ManyToOne
-  private ArtListing artListing;
-  @OneToOne
-  private ArtOrder artOrder;
-  @Id
-  private String idCode;
-
+  /**
+   * %%AnnotateStart
+   * %%@ManyToOne
+   * %%private ArtListing artListing;
+   * %%@OneToOne
+   * %%private ArtOrder artOrder;
+   * %%@Id
+   * %%private String idCode;
+   * %%AnnotateEnd
+   */
   public String getIdCode()
   {
     return idCode;
@@ -172,7 +178,7 @@ public class ArtPiece
     }
   }
 
-  // line 195 "../../../../../resources/visart.ump"
+  // line 199 "../../../../../resources/visart.ump"
    public  ArtPiece(){
     String note;
   }

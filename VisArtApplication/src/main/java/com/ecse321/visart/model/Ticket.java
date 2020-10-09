@@ -7,7 +7,7 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 @Entity
   @Table(name="tickets")
-// line 201 "../../../../../resources/visart.ump"
+// line 205 "../../../../../resources/visart.ump"
 public class Ticket
 {
 
@@ -18,7 +18,12 @@ public class Ticket
   //Ticket Attributes
   private boolean isPaymentConfirmed;
   private double paymentAmount;
+  private String idCode;
 
+  //Ticket Associations
+  private ArtOrder order;
+  private Customer customer;
+  private Artist artist;
 
   //------------------------
   // CONSTRUCTOR
@@ -87,22 +92,23 @@ public class Ticket
     return paymentAmount;
   }
 
-  
-  @OneToOne
-  private ArtOrder order;
-  @ManyToOne
-  private Customer customer;
-  @ManyToOne
-  private Artist artist;
-  @Id
-  private String idCode;
-
+  /**
+   * %%AnnotateStart
+   * %%@OneToOne
+   * %%private ArtOrder order;
+   * %%@ManyToOne
+   * %%private Customer customer;
+   * %%@ManyToOne
+   * %%private Artist artist;
+   * %%@Id
+   * %%private String idCode;
+   * %%AnnotateEnd
+   */
   public String getIdCode()
   {
     return idCode;
   }
   /* Code from template attribute_IsBoolean */
-  @Transient
   public boolean isIsPaymentConfirmed()
   {
     return isPaymentConfirmed;
@@ -211,7 +217,7 @@ public class Ticket
     }
   }
 
-  // line 220 "../../../../../resources/visart.ump"
+  // line 224 "../../../../../resources/visart.ump"
    public  Ticket(){
     
   }

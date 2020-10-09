@@ -26,8 +26,9 @@ class User {
   String displayname;
   String username;
   String password;
-
-  public User() {}
+  String profilePicLink;
+  String profileDescription;
+public User() {}
 }
 
 @Entity
@@ -124,6 +125,9 @@ class ArtListing {
   PostVisibility visibility;
 
   Float[]  dimensions;
+  String description;
+  String title;
+  String[] postingPicLink;
 
   //%%AnnotateStart
   //%%@OneToMany
