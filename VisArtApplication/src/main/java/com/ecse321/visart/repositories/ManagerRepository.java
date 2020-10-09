@@ -32,58 +32,14 @@ public class ManagerRepository {
 	}
 	
 	@Transactional
-	public Manager changeManagerUsername(String aIdCode, String aUsername) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setUsername(aUsername);
-		
-		entityManager.getTransaction().commit();
-		
-		return manager;
+	public void updateManager(Manager manager) {
+		entityManager.merge(manager);
 	}
-	
-	@Transactional
-	public Manager changeManagerDisplayname(String aIdCode, String aDisplayname) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setDisplayname(aDisplayname);
-		
-		entityManager.getTransaction().commit();
-		
-		return manager;
-	}
-	
-	@Transactional
-	public Manager changeManagerEmail(String aIdCode, String aEmail) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setEmailAddress(aEmail);
-	
-		entityManager.getTransaction().commit();
-		
-		return manager;
-	}
-	
-	@Transactional
-	public Manager changeManagerPassword(String aIdCode, String aPassword) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setPassword(aPassword);
-	
-		entityManager.getTransaction().commit();
-		
-		return manager;
-	}
-	
 	
 	@Transactional 
-	public void deleteManager(String aIdCode) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
+	public void deleteManager(Manager manager) {
 		entityManager.remove(manager);
+		entityManager.remove(manager.getUser());
 	}
 
 }

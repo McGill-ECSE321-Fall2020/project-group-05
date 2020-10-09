@@ -20,6 +20,8 @@ public class ArtListingRepository {
 	
 	@Autowired
 	EntityManager entityManager;
+	ArtPieceRepository apRepository;
+	TagRepository tRepository;
 	
 	@Transactional
 	public ArtListing createArtListing(PostVisibility aVisibility, String aIdCode, Artist aArtist) {
@@ -43,10 +45,10 @@ public class ArtListingRepository {
 	public void deleteArtListing(ArtListing al) {
 		entityManager.remove(al);
 		for (Tag t : al.getTags()) {
-			entityManager.remove(t);
+			tRepository.deleteTag(t);
 		}
 		for (ArtPiece t : al.getPieces()) {
-			entityManager.remove(t);
+			apRepository.deleteArtPiece(t);
 		}
 	}
 	

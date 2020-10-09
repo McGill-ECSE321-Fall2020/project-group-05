@@ -46,7 +46,7 @@ public class ArtistRepository {
 	}
 	
 	@Transactional
-	public void removeArtist(Artist artist) {
+	public void deleteArtist(Artist artist) {
 		entityManager.remove(artist);
 	}
 
