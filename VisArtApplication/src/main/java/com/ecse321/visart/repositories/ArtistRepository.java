@@ -127,7 +127,8 @@ public class ArtistRepository {
   public boolean deleteArtist(String id) {
     Artist entity = entityManager.find(Artist.class, id);
     Customer customer = entityManager.find(Customer.class, entity.getCustomer().getIdCode());
-    customer.getArtist().delete();
+    if (customer != null && customer.getArtist() != null)
+      customer.getArtist().delete();
     customerRepo.updateCustomer(customer);
 
     if (entityManager.contains(entity)) {

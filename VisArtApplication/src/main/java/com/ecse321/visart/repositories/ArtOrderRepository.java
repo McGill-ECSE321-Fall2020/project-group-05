@@ -86,6 +86,7 @@ public class ArtOrderRepository {
    */
   @Transactional
   public boolean deleteArtOrder(ArtOrder ao) {
+
     return deleteArtOrder(ao.getIdCode());
   }
 
@@ -98,8 +99,11 @@ public class ArtOrderRepository {
    */
   @Transactional
   public boolean deleteArtOrder(String id) {
-
     ArtOrder entity = entityManager.find(ArtOrder.class, id);
+    ArtPiece p = entityManager.find(ArtPiece.class, entity.getArtPiece().getIdCode());
+    if (p != null && p.getArtOrder() != null)
+      p.getArtOrder().delete();
+    entityManager.merge(p);
     if (entityManager.contains(entity)) {
       entityManager.remove(entityManager.merge(entity));
     } else {

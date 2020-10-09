@@ -15,6 +15,7 @@ import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.Ticket;
 
 /**
@@ -29,6 +30,9 @@ public class TicketRepository {
 
   @Autowired
   EntityManager entityManager;
+
+  @Autowired
+  ArtOrderRepository artOrderRepo;
 
   /**
    * createTicket method creates a Ticket instance for an ArtOrder.
@@ -64,7 +68,7 @@ public class TicketRepository {
   public Ticket getTicket(String aIdCode) {
     return entityManager.find(Ticket.class, aIdCode);
   }
-  
+
   /**
    * updateTicket method updates a Ticket instance's properties in the
    * database.
@@ -98,6 +102,11 @@ public class TicketRepository {
   @Transactional
   public boolean deleteTicket(String id) {
     Ticket entity = entityManager.find(Ticket.class, id);
+    ArtOrder ao = artOrderRepo.getArtOrder(entity.getOrder().getIdCode());
+    if (ao != null && ao.getTicket() != null)
+      ao.getTicket().delete();
+    artOrderRepo.updateArtOrder(ao);
+
     if (entityManager.contains(entity)) {
       entityManager.remove(entityManager.merge(entity));
     } else {
