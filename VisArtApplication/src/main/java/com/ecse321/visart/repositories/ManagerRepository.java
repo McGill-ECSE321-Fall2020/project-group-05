@@ -3,6 +3,7 @@ package com.ecse321.visart.repositories;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,7 @@ import com.ecse321.visart.model.UserRole;
 
 @Repository
 public class ManagerRepository {
-	
+		
 	@Autowired
 	EntityManager entityManager;
 	
@@ -32,58 +33,24 @@ public class ManagerRepository {
 	}
 	
 	@Transactional
-	public Manager changeManagerUsername(String aIdCode, String aUsername) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setUsername(aUsername);
-		
-		entityManager.getTransaction().commit();
-		
-		return manager;
+	public void updateManager(Manager manager) {
+		entityManager.merge(manager);
+		entityManager.merge(manager.getUser());
 	}
-	
-	@Transactional
-	public Manager changeManagerDisplayname(String aIdCode, String aDisplayname) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setDisplayname(aDisplayname);
-		
-		entityManager.getTransaction().commit();
-		
-		return manager;
-	}
-	
-	@Transactional
-	public Manager changeManagerEmail(String aIdCode, String aEmail) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setEmailAddress(aEmail);
-	
-		entityManager.getTransaction().commit();
-		
-		return manager;
-	}
-	
-	@Transactional
-	public Manager changeManagerPassword(String aIdCode, String aPassword) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		
-		entityManager.getTransaction().begin();
-		manager.getUser().setPassword(aPassword);
-	
-		entityManager.getTransaction().commit();
-		
-		return manager;
-	}
-	
 	
 	@Transactional 
-	public void deleteManager(String aIdCode) {
-		Manager manager = entityManager.find(Manager.class, aIdCode);
-		entityManager.remove(manager);
+	public boolean deleteManager(Manager manager) {
+		Manager entity = entityManager.find(Manager.class, manager.getIdCode());
+		User usr = entityManager.find(User.class, manager.getIdCode());
+		if(entityManager.contains(entity)){
+			entityManager.remove(entityManager.merge(entity));
+			entityManager.remove(entityManager.merge(usr));
+		} else {
+			entityManager.remove(entity);
+			entityManager.remove(usr);
+		}
+		
+		return !entityManager.contains(entity) && !entityManager.contains(usr);
 	}
 
 }

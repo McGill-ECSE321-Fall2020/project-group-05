@@ -8,9 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Gallery;
 import com.ecse321.visart.model.User;
-import com.ecse321.visart.model.UserRole;
 
 @Repository
 public class ArtistRepository {
@@ -45,6 +43,17 @@ public class ArtistRepository {
 	@Transactional
 	public Artist getArtist(String aIdCode) {
 		return entityManager.find(Artist.class, aIdCode);
+	}
+	
+	@Transactional
+	public boolean deleteArtist(Artist artist) {
+		Artist entity = entityManager.find(Artist.class, artist.getIdCode());
+		if(entityManager.contains(entity)) {
+			entityManager.remove(entityManager.merge(entity));
+		} else {
+			entityManager.remove(entity);
+		}
+		return !entityManager.contains(entity);
 	}
 
 }

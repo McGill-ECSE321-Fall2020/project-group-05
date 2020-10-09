@@ -23,6 +23,7 @@ public class ArtOrderRepository {
 	
 	@Autowired
 	EntityManager entityManager;
+	TicketRepository tRepository;
 	
 	@Transactional
 	public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece) {
@@ -32,24 +33,27 @@ public class ArtOrderRepository {
 		return ao;
 	}
 	
-	/**
-	
-	@Transactional
-	public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket) {
-		
-		ArtOrder ao = new ArtOrder(aIsDelivered, aTargetLocation, aTargetAddress, aDeliveryTracker, aIdCode, aArtPiece);
-
-		entityManager.persist(ao.getTicket());
-
-		entityManager.persist(ao);
-		return ao;
-	}
-	
-	**/
-	
 	@Transactional
 	public ArtOrder getArtOrder(String aIdCode) {
 		return entityManager.find(ArtOrder.class, aIdCode);
 	}
 	
+	@Transactional
+	public void updateArtOrder(ArtOrder ao) {
+		entityManager.merge(ao);
+	}
+	
+	@Transactional
+	public boolean deleteArtOrder(ArtOrder ao) {
+		ArtOrder entity = entityManager.find(ArtOrder.class, ao.getIdCode());
+		if(entityManager.contains(entity)) {
+			entityManager.remove(entityManager.merge(entity));
+		} else {
+			entityManager.remove(entity);
+		}
+		if(ao.getTicket()!=null) {
+			tRepository.deleteTicket(ao.getTicket());
+		}
+		return (!entityManager.contains(entity) && !entityManager.contains(ao.getTicket()));
+	}
 }

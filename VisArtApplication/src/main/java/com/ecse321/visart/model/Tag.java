@@ -80,8 +80,7 @@ public class Tag
     return keyword;
   }
 
-  
-  @Transient
+  @ManyToOne
   private ArtListing listing;
   @Id
   private String idCode;
