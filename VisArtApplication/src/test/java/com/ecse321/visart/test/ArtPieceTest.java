@@ -34,6 +34,8 @@ public class ArtPieceTest {
 	public static ArtListing artListing;
 	private static ArtPiece artPieceTest2;
 
+	// Pseudo-random ID for tested entities
+	static Long l = System.currentTimeMillis();
 	@Autowired
 	private ArtPieceRepository apRepo;
 
@@ -43,21 +45,19 @@ public class ArtPieceTest {
 	@Autowired
 	private ArtistRepository aRepo;
 
-	// Pseudo-random ID for tested entities
-	static Long l = System.currentTimeMillis();
-
 	@Test
 	@Order(1)
 	void init() {
-		artist = aRepo.createArtist("kl" + l + 13, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234", "steveimage", "ceo");
-		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public,"rainbowss","myartss", "ki" + l + 23, artist);
+		artist = aRepo.createArtist("kl" + l + 13, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234",
+				"steveimage", "ceo");
+		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, "rainbowss", "myartss", "ki" + l + 23,
+				artist);
 
 	}
 
 	@Test
 	@Order(2)
 	void testCreate1() {
-
 		// Create
 		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, "kk" + l + 33, artListing);
 
@@ -65,15 +65,14 @@ public class ArtPieceTest {
 		assertNotNull(artPieceTest);
 
 		// Print Art Listing
-		 System.out.println("=================CREATE===============");
-			System.out.println(artPieceTest);
-			System.out.println("=================CREATE===============");
+		System.out.println("=================CREATE===============");
+		System.out.println(artPieceTest);
+		System.out.println("=================CREATE===============");
 	}
 
 	@Test
 	@Order(3)
 	void testGet1() {
-
 		// Find artPieceTest
 		artPieceTest2 = apRepo.getArtPiece("kk" + l + 33);
 
@@ -82,6 +81,7 @@ public class ArtPieceTest {
 		assertEquals(address, artPieceTest2.getAddressLocation());
 		assertEquals(artListing.getIdCode(), artPieceTest2.getArtListing().getIdCode());
 
+		// Print art piece
 		System.out.println("=================FIND===============");
 		System.out.println(artPieceTest2);
 		System.out.println("=================FIND===============");
@@ -91,10 +91,10 @@ public class ArtPieceTest {
 	@Test
 	@Order(4)
 	void testUpdate() {
-
+		// Modify art piece attribute
 		artPieceTest2.setAddressLocation(addressupdate);
 
-		// Update art piece
+		// Update art piece in database
 		apRepo.updateArtPiece(artPieceTest2);
 
 		// Find updated art piece
@@ -104,18 +104,21 @@ public class ArtPieceTest {
 		assertNotNull(artPieceTest2);
 		assertEquals(addressupdate, artPieceTest2.getAddressLocation());
 		assertEquals(artListing.getIdCode(), artPieceTest2.getArtListing().getIdCode());
-		
+
+		// Print art piece
 		System.out.println("=================UPDATE===============");
 		System.out.println(artPieceTest2);
 		System.out.println("=================UPDATE===============");
 	}
-	
+
 	@Test
 	@Order(5)
 	void testDelete() {
-
+		// Delete
 		apRepo.deleteArtPiece(artPieceTest2);
-		assertEquals(null,	apRepo.getArtPiece("kk" + l + 33) );
+
+		// Test if art piece successfully deleted
+		assertEquals(null, apRepo.getArtPiece("kk" + l + 33));
 		System.out.println("=================DELETED===============");
 
 	}
