@@ -150,25 +150,6 @@ public class TicketTest {
     System.out.println("=================FIND===============");
 
   }
-  /*@Test
-	@Order(4)
-	void testUpdate1() {
-		// Find manager
-		testTicket2 = ticketRepo.getTicket(id);
-		
-		//Update Tag
-		testTicket2.setIsPaymentConfirmed(true);
-		ticketRepo.updateTicket(testTicket2);
-		
-
-		// TEST if Tag was retrieved and if properly updated
-		assertNotNull(testTicket2);
-	
-
-		System.out.println("=================UPDATE===============");
-		System.out.println(testTicket2);
-		System.out.println("=================UPDATE===============");
-	}*/
 
 	
 @Test
