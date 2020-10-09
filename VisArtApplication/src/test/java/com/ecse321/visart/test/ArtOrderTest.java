@@ -117,7 +117,7 @@ public class ArtOrderTest {
 	    assertEquals(address2, artOrder4.getTargetAddress());
 	    assertEquals(tracker, artOrder4.getDeliveryTracker());
 
-	    // Print Art Order
+	    // Print Order
 	    System.out.println("=================UPDATE===============");
 		System.out.println(artOrder4);
 		System.out.println("=================UPDATE===============");
