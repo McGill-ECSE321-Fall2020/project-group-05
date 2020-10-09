@@ -198,7 +198,7 @@ public class ArtListing
   private List<Tag> tags;
   @ManyToOne
   private Manager manager;
-  @ManyToMany(mappedBy="favorite_listings")
+  @ManyToMany
   private List<Customer> favoritedCustomer;
   @ManyToOne
   private Artist artist;
