@@ -34,13 +34,15 @@ public class ArtListingTest {
 	String description = "desctest";
 	String title = "titletest";
 	static private ArtListing artListingTest2;
+
 	// Pseudo-random ID for tested entities
 	static Long l = System.currentTimeMillis();
 
 	@Test
 	@Order(1)
 	void init() {
-		artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234", "www.hello.com", "testing");
+		artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234",
+				"www.hello.com", "testing");
 	}
 
 	@Test
@@ -48,7 +50,8 @@ public class ArtListingTest {
 	void testCreate1() {
 
 		// Create
-		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public,description, title, "tt" + l, artist);
+		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, description, title,
+				"tt" + l, artist);
 
 		// Test if artListing was created
 		assertNotNull(artListingTest);
@@ -97,7 +100,7 @@ public class ArtListingTest {
 		assertEquals(artist.getCustomer().getUser().getUsername(),
 				artListingTest2.getArtist().getCustomer().getUser().getUsername());
 		assertEquals(PostVisibility.Private, artListingTest2.getVisibility());
-		
+
 		System.out.println("=================UPDATE===============");
 		System.out.println(artListingTest2);
 		System.out.println("=================UPDATE===============");
@@ -108,9 +111,12 @@ public class ArtListingTest {
 	@Order(5)
 	void testDelete() {
 
+		// Delete
 		aListRepo.deleteArtListing(artListingTest2);
+
+		// Test if art listing was succesfully deleted
 		assertEquals(null, aListRepo.getArtListing("tt" + l));
-		
+
 		System.out.println("=================DELETED===============");
 
 	}

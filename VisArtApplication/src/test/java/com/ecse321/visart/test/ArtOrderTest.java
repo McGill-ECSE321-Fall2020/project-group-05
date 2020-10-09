@@ -25,114 +25,113 @@ import com.ecse321.visart.repositories.ArtListingRepository;
 @TestMethodOrder(OrderAnnotation.class)
 public class ArtOrderTest {
 
-  @Autowired
-  private ArtOrderRepository aoRepo;
+	@Autowired
+	private ArtOrderRepository aoRepo;
 
-  @Autowired
-  private ArtPieceRepository apRepo;
+	@Autowired
+	private ArtPieceRepository apRepo;
 
-  @Autowired
-  private ArtListingRepository alRepo;
+	@Autowired
+	private ArtListingRepository alRepo;
 
-  @Autowired
-  private ArtistRepository aRepo;
+	@Autowired
+	private ArtistRepository aRepo;
 
-  // Attributes for artOrder1
-  String address = "123 STLOUIS";
-  String tracker = "BABA123";
- 
+	// Attributes for artOrder1
+	String address = "123 STLOUIS";
+	String tracker = "BABA123";
 
-  // Attributes for artOrder2
-  String address2 = "125 ALSTON";
-  String tracker2 = "AZA124";
+	// Attributes for artOrder2
+	String address2 = "125 ALSTON";
+	String tracker2 = "AZA124";
 
-  private static ArtOrder artOrder4;
-  private static Artist artist;
-  private static ArtListing artListing;
-  private static ArtPiece artPiece2;
+	private static ArtOrder artOrder4;
+	private static Artist artist;
+	private static ArtListing artListing;
+	private static ArtPiece artPiece2;
 
-  // Pseudo-random ID for tested entities
-  static Long l = System.currentTimeMillis();
+	// Pseudo-random ID for tested entities
+	static Long l = System.currentTimeMillis();
 
-  @Test
-  @Order(1)
-  void init() {
-    artist = aRepo.createArtist("test" + l + 1, "steve@gmail.com", "Steve Jobs", "steve56",
-        "apple1234", "www.ipod.com", "iphones");
-    artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public,"rainbows", "myartworks", "t" + l + 2, artist);
+	@Test
+	@Order(1)
+	void init() {
+		artist = aRepo.createArtist("test" + l + 1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234",
+				"www.ipod.com", "iphones");
+		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, "rainbows", "myartworks", "t" + l + 2,
+				artist);
 
-    artPiece2 = apRepo.createArtPiece(PieceLocation.Offsite, "346STLOUIS", "ttt" + l + 3,
-        artListing);
-  }
+		artPiece2 = apRepo.createArtPiece(PieceLocation.Offsite, "346STLOUIS", "ttt" + l + 3, artListing);
+	}
 
-  @Test
-  @Order(2)
-  void testCreate1() {
-   ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2,
-        "tts" + l + 9,
-        artPiece2);
+	@Test
+	@Order(2)
+	void testCreate1() {
+		// Create
+		ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2,
+				"tts" + l + 9, artPiece2);
 
-    // Test if Art Order was created
-    assertNotNull(artOrder2);
+		// Test if Art Order was created
+		assertNotNull(artOrder2);
 
-    // Print Art Order
-    System.out.println("=================CREATE===============");
-	System.out.println(artOrder2);
-	System.out.println("=================CREATE===============");
-  }
+		// Print Art Order
+		System.out.println("=================CREATE===============");
+		System.out.println(artOrder2);
+		System.out.println("=================CREATE===============");
+	}
 
-  @Test
-  @Order(3)
-  void testGet1() {
-    // Find artOrder2
-    artOrder4 = aoRepo.getArtOrder("tts" + l + 9);
+	@Test
+	@Order(3)
+	void testGet1() {
+		// Find artOrder2
+		artOrder4 = aoRepo.getArtOrder("tts" + l + 9);
 
-    // Test if Art Order was retrieved
-    assertNotNull(artOrder4);
-    assertEquals(address2, artOrder4.getTargetAddress());
-    assertEquals(tracker2, artOrder4.getDeliveryTracker());
+		// Test if Art Order was retrieved
+		assertNotNull(artOrder4);
+		assertEquals(address2, artOrder4.getTargetAddress());
+		assertEquals(tracker2, artOrder4.getDeliveryTracker());
 
-    // Print Art Order
-    System.out.println("=================FIND===============");
-	System.out.println(artOrder4);
-	System.out.println("=================FIND===============");
-  }
-  
-  @Test
-  @Order(4)
-  void testUpdate() {
-	  
-	  
-	  
-	  artOrder4.setDeliveryTracker("BABA123");
-	  
-	  //update art order
-	  aoRepo.updateArtOrder(artOrder4);
-	  
-	  //Getting updated art order
-	  artOrder4 = aoRepo.getArtOrder("tts" + l + 9);
-	  
-	  	//Test
-	    assertNotNull(artOrder4);
-	    assertEquals(address2, artOrder4.getTargetAddress());
-	    assertEquals(tracker, artOrder4.getDeliveryTracker());
+		// Print Art Order
+		System.out.println("=================FIND===============");
+		System.out.println(artOrder4);
+		System.out.println("=================FIND===============");
+	}
 
-	    // Print Order
-	    System.out.println("=================UPDATE===============");
+	@Test
+	@Order(4)
+	void testUpdate() {
+
+		// Changing attribute of art order
+		artOrder4.setDeliveryTracker("BABA123");
+
+		// Update art order in database
+		aoRepo.updateArtOrder(artOrder4);
+
+		// Getting updated art order
+		artOrder4 = aoRepo.getArtOrder("tts" + l + 9);
+
+		// Test if art order updated successfully
+		assertNotNull(artOrder4);
+		assertEquals(address2, artOrder4.getTargetAddress());
+		assertEquals(tracker, artOrder4.getDeliveryTracker());
+
+		// Print art order
+		System.out.println("=================UPDATE===============");
 		System.out.println(artOrder4);
 		System.out.println("=================UPDATE===============");
-  }
-  
-  	@Test
+	}
+
+	@Test
 	@Order(5)
 	void testDelete() {
-
+		// Delete
 		aoRepo.deleteArtOrder(artOrder4);
+
+		// Test if art order successfully deleted
 		assertEquals(null, aoRepo.getArtOrder("tts" + l + 9));
-		
+
 		System.out.println("=================DELETED===============");
 
 	}
-  
-  
+
 }
