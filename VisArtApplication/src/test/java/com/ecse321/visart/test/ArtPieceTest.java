@@ -35,7 +35,7 @@ import com.ecse321.visart.repositories.ArtListingRepository;
 public class ArtPieceTest {
 
 	// ID generator
-	Long l = System.currentTimeMillis();
+	public static Long l;
 
 	// attributes
 	String aEmailAddress = "timcook@gmail.com";
@@ -44,8 +44,8 @@ public class ArtPieceTest {
 	String aPassword = "apple123";
 	String address = "124 Maywood";
 
-	Artist artist;
-	ArtListing artListing;
+	public static Artist artist;
+	public static ArtListing artListing;
 
 	@Autowired
 	private ArtPieceRepository apRepo;
@@ -56,22 +56,27 @@ public class ArtPieceTest {
 	@Autowired
 	private ArtistRepository aRepo;
 
-	@Before
+	
+	@Test
+	@Order(1)
 	void init() {
+		
+		l = System.currentTimeMillis();
+		artist = aRepo.createArtist("kl" + l + 13, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, "ki" + l + 23, artist);
 
-		artist = aRepo.createArtist("kl" + l + 1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
-		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, "" + l + 2, artist);
-
+		
+		
+		
 	}
 
 	@Test
-	@Order(1)
+	@Order(2)
 	void testEntry() {
 
-		init();
 
 		// Create
-		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, "kk" + l + 3, artListing);
+		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, "kk" + l + 33, artListing);
 
 		// Test if ArtPiece was created
 		assertNotNull(artPieceTest);
@@ -83,13 +88,12 @@ public class ArtPieceTest {
 	}
 
 	@Test
-	@Order(2)
+	@Order(3)
 	void testGet() {
 		
-		init();
 
 		// Find artPieceTest
-		ArtPiece artPieceTest2 = apRepo.getArtPiece("kk" + l + 3);
+		ArtPiece artPieceTest2 = apRepo.getArtPiece("kk" + l + 33);
 
 		// Test if ArtPiece was retrieved
 		assertNotNull(artPieceTest2);

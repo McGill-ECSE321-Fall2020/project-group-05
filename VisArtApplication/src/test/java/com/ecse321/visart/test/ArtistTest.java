@@ -25,26 +25,26 @@ public class ArtistTest {
   String aDisplayname;
   String aUsername;
   String aPassword;
-  Long l = System.currentTimeMillis();
+  public static Long l;
 
-  @Before
+  @Test
+  @Order(1)
   void init() {
 
     aEmailAddress = "timcook@gmail.com";
     aDisplayname = "Tim Cook";
     aUsername = "timcook56";
     aPassword = "apple123";
-
+    l=System.currentTimeMillis();
   }
 
   @Test
-  @Order(1)
+  @Order(2)
   void testEntry() {
 
-    init();
     
     // Create
-    Artist testArtist = aRepo.createArtist("12334556", aEmailAddress, aDisplayname, aUsername,
+    Artist testArtist = aRepo.createArtist(l+"test"+2, aEmailAddress, aDisplayname, aUsername,
         aPassword);
 
     // Test if Artist was created
@@ -56,14 +56,13 @@ public class ArtistTest {
 
   }
   
-  @Test
-  @Order(2)
+ @Test
+  @Order(3)
   void testGet() {
-	  
-	  init();
+
 	 
 	 //Getting
-    Artist testArtist2 = aRepo.getArtist("12334556");
+    Artist testArtist2 = aRepo.getArtist(l+"test"+2);
     
     //Test if got Artist corresponds to entry
     assertNotNull(testArtist2);

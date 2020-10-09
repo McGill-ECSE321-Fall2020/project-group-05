@@ -24,31 +24,33 @@ import com.ecse321.visart.model.Customer;
 @SpringBootTest
 public class ArtListingTest {
 
-	Long l = System.currentTimeMillis();
+	
 
 	@Autowired
 	private ArtListingRepository aListRepo;
 
 	@Autowired
 	private ArtistRepository artRepo;
-	Artist artist;
-	Customer customer;
-
-	@Before
+	
+	public static Artist artist;
+	public static Customer customer;
+	private static Long l;
+	
+	@Test
+	@Order(1)
 	void init() {
-
+		l= System.currentTimeMillis();
 		artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
 
 	}
 
 	@Test
-	@Order(1)
+	@Order(2)
 	void testEntry() {
 
-		init();
 
 		// Create
-		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "tt" + l + 29, artist);
+		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "tt"+l, artist);
 
 		// Test if artListing was created
 		assertNotNull(artListingTest);
@@ -61,10 +63,10 @@ public class ArtListingTest {
 	}
 
 	@Test
-	@Order(2)
+	@Order(3)
 	void testGet() {
 		// Find Art Listing
-		ArtListing artListingTest2 = aListRepo.getArtListing("tt" + l + 29);
+		ArtListing artListingTest2 = aListRepo.getArtListing("tt"+l);
 
 		// Test if Art Listing was retrieved
 		assertNotNull(artListingTest2);
