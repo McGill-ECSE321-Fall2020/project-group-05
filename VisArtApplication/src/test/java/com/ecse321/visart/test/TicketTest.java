@@ -1,3 +1,6 @@
+/**
+ * @author riad el mahmoudy
+ */
 package com.ecse321.visart.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -98,7 +101,7 @@ public class TicketTest {
     isAPaymentConfirmed = false;
     aPaymentAmount = 100.34;
     profilePic = "Bezos.jpg";
-    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
+    profileDesc = "ACAB, billionaires shouldnt exist";
     listingDesc = "mona lisa copy";
     title = "fake monalisa";
 
@@ -159,6 +162,13 @@ public class TicketTest {
   void testDelete1() {
     ticketRepo.deleteTicket(testTicket2);
     assertEquals(null, ticketRepo.getTicket(id));
+    customerRepo.deleteCustomer(aCustomer);
+    artistRepo.deleteArtist(anArtist);
+    managerRepo.deleteManager(aManager);
+    artlistingRepo.deleteArtListing(aListing);
+    artpieceRepo.deleteArtPiece(anArtPiece);
+    artorderRepo.deleteArtOrder(aOrder);
+
   }
 
 }

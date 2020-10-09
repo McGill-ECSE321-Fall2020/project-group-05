@@ -1,3 +1,6 @@
+/**
+ * @author riad el mahmoudy
+ */
 package com.ecse321.visart.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,7 +72,7 @@ public class TagTest {
     username = "riadelm";
     password = "aNicePassword";
     profilePic = "Bezos.jpg";
-    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
+    profileDesc = "ACAB, billionaires shouldnt exist";
     listingDesc = "mona lisa copy";
     title = "fake monalisa";
     aCustomer = customerRepo.createCustomer(id + 2, email, displayName, username, password,
@@ -139,5 +142,9 @@ public class TagTest {
   void testDelete1() {
     tagRepo.deleteTag(testTag2);
     assertEquals(null, tagRepo.getTag(id));
+    //Deleting the repositories created out of the database 
+    customerRepo.deleteCustomer(aCustomer);
+    artistRepo.deleteArtist(aArtist);
+    listingRepo.deleteArtListing(aListing);
   }
 }

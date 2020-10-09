@@ -1,3 +1,6 @@
+/**
+ * @author riad el mahmoudy
+ */
 package com.ecse321.visart.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
