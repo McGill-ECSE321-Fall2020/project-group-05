@@ -15,6 +15,12 @@ import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.User;
 
+/**
+ * 
+ * @author anwar
+ * 
+ *
+ */
 @Repository
 public class ArtistRepository {
 
@@ -24,6 +30,19 @@ public class ArtistRepository {
   @Autowired
   CustomerRepository customerRepo;
 
+  /**
+   * 
+   * This method creates a createArtist instance that is persisted in the database
+   * 
+   * @param  aIdCode             database Id for the artist
+   * @param  aEmailAddress       email address of the artist
+   * @param  aDisplayname        Full name of the artist
+   * @param  aUsername           User name for the profile to be created
+   * @param  aPassword           Password for the profile to be created
+   * @param  aProfilePicLink     Profile picture link of the artist
+   * @param  aProfileDescription Short description about the artist
+   * @return                     persisted createArtist instance
+   */
   @Transactional
   public Artist createArtist(String aIdCode, String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
@@ -38,10 +57,13 @@ public class ArtistRepository {
   }
 
   /**
+   * createArtist
    * 
-   * @param  aIdCode
-   * @param  aCustomer a persisted Customer object
-   * @return
+   * This method creates a createArtist instance that is persisted in the database
+   * 
+   * @param  aIdCode   database Id for this artist
+   * @param  aCustomer Customer information
+   * @return           an instance of createArtist
    */
   @Transactional
   public Artist createArtist(String aIdCode, Customer aCustomer) {
@@ -65,6 +87,14 @@ public class ArtistRepository {
     return a;
   }
 
+  /**
+   * deleteArtist
+   * 
+   * This method removes an artist from the database
+   * 
+   * @param  artist specific artist
+   * @return
+   */
   @Transactional
   public boolean deleteArtist(Artist artist) {
     Artist entity = entityManager.find(Artist.class, artist.getIdCode());
@@ -79,5 +109,4 @@ public class ArtistRepository {
     }
     return !entityManager.contains(entity);
   }
-
 }

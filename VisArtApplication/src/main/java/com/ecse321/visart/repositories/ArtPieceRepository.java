@@ -25,24 +25,42 @@ public class ArtPieceRepository {
 	@Autowired
 	EntityManager entityManager;
 	ArtOrderRepository aoRepository;
-	
+	/**
+	 * 
+	 * @param idCode
+	 * @return
+	 */
 	@Transactional
 	public ArtPiece getArtPiece(String idCode) {
 		return entityManager.find(ArtPiece.class, idCode);
 	}
-	
+	/**
+	 * 
+	 * @param aBasicLocation
+	 * @param aAddressLocation
+	 * @param aIdCode
+	 * @param aArtListing
+	 * @return
+	 */
 	@Transactional
 	public ArtPiece createArtPiece(PieceLocation aBasicLocation, String aAddressLocation, String aIdCode, ArtListing aArtListing) {
 		ArtPiece apiece = new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, aArtListing);
 		entityManager.persist(apiece);
 		return apiece;
 	}
-	
+	/**
+	 * 
+	 * @param ap
+	 */
 	@Transactional
 	public void updateArtPiece(ArtPiece ap) {
 		entityManager.merge(ap);
 	}
-	
+	/**
+	 * 
+	 * @param ap
+	 * @return
+	 */
 	@Transactional
 	public boolean deleteArtPiece(ArtPiece ap) {
 		ArtPiece ape = entityManager.find(ArtPiece.class, ap.getIdCode());
