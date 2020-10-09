@@ -104,9 +104,32 @@ public class TagTest {
 
   }
   @Test
-  @Order(4)
+	@Order(4)
+	void testUpdate1() {
+		// Find manager
+		testTag2 = tagRepo.getTag(id);
+		
+		//Update Tag
+		testTag2.setKeyword("newKeyWord");
+		tagRepo.updateTag(testTag2);
+		
+
+		// TEST if Tag was retrieved and if properly updated
+		assertNotNull(testTag2);
+		assertEquals(Tag.TagType.Material, testTag2.getType());
+		assertEquals("newKeyWord", testTag2.getKeyword());
+		assertEquals(aListing.getIdCode(), testTag2.getListing().getIdCode());
+
+		System.out.println("=================UPDATE===============");
+		System.out.println(testTag2);
+		System.out.println("=================UPDATE===============");
+	}
+
+	
+  @Test
+  @Order(5)
   void testDelete1() {
-    tagRepo.deleteTag(testTag2);
-    assertEquals(null, tagRepo.getTag(id));
+   tagRepo.deleteTag(testTag2);
+    assertEquals(false, tagRepo.getTag(id));
   }
 }
