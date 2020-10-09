@@ -94,7 +94,13 @@ public class ArtistTest {
   @Test
   @Order(4)
   void testUpdate() {
-
+    Artist artist = aRepo.getArtist(l + "test" + 2);
+    assertEquals(aDisplayname, artist.getCustomer().getUser().getDisplayname());
+    artist.getCustomer().getUser().setDisplayname("posh");
+    aRepo.updateArtist(artist);
+    cRepo.updateCustomer(artist.getCustomer());
+    Artist retrieved = aRepo.getArtist(l + "test" + 2);
+    assertEquals("posh", retrieved.getCustomer().getUser().getDisplayname());
   }
 
   @Test
