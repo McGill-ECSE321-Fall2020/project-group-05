@@ -48,10 +48,12 @@ public class ArtistTest {
 	void testCreate() {
 
 		// Create
-		Artist testArtist = aRepo.createArtist(l + "test" + 2, aEmailAddress, aDisplayname, aUsername, aPassword, ProfilePicLink, aProfileDescription);
+		Artist testArtist = aRepo.createArtist(l + "test" + 2, aEmailAddress, aDisplayname, aUsername, aPassword,
+				ProfilePicLink, aProfileDescription);
 
 		// Test if Artist was created
 		assertNotNull(testArtist);
+
 		// Print Artist
 		System.out.println("=================CREATE===============");
 		System.out.println(testArtist);
@@ -66,11 +68,14 @@ public class ArtistTest {
 		// Getting
 		testArtist2 = aRepo.getArtist(l + "test" + 2);
 
-		// Test if got Artist corresponds to entry
+		// Test if retrieved Artist corresponds to created artist
 		assertNotNull(testArtist2);
 		assertEquals(aEmailAddress, testArtist2.getCustomer().getUser().getEmailAddress());
+		assertEquals(aPassword, testArtist2.getCustomer().getUser().getPassword());
 		assertEquals(aUsername, testArtist2.getCustomer().getUser().getUsername());
+		assertEquals(aDisplayname, testArtist2.getCustomer().getUser().getDisplayname());
 
+		// Print Artist
 		System.out.println("=================FIND===============");
 		System.out.println(testArtist2);
 		System.out.println("=================FIND===============");
@@ -80,11 +85,13 @@ public class ArtistTest {
 	@Order(4)
 	void testDelete() {
 
+		// Delete
 		aRepo.deleteArtist(testArtist2);
+
+		// Test if artist has been successfully deleted
 		assertEquals(null, aRepo.getArtist(l + "test" + 2));
 
 		System.out.println("=================DELETED===============");
-		
 
 	}
 
