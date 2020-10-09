@@ -44,13 +44,19 @@ public class ManagerTest {
 
     // Find manager
     Manager testManager2 = managerRepo.getManager("" + l);
+    testManager2.getUser().setDisplayname("newDisplayName");
+    managerRepo.updateManager(testManager2);
 
     // TEST if Manager was retrieved
     assertNotNull(testManager2);
     assertEquals(email, testManager2.getUser().getEmailAddress());
-    assertEquals(displayName, testManager2.getUser().getDisplayname());
+    assertEquals("newDisplayName", testManager2.getUser().getDisplayname());
     assertEquals(username, testManager2.getUser().getUsername());
     assertEquals(password, testManager2.getUser().getPassword());
+    
+    managerRepo.deleteManager(testManager2);
+    assertEquals(null, managerRepo.getManager("" + l));
+    
     System.out.println("=================FIND===============");
     System.out.println(testManager2);
     System.out.println("=================FIND===============");
