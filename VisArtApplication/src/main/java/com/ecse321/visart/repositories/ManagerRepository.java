@@ -3,6 +3,7 @@ package com.ecse321.visart.repositories;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,7 @@ import com.ecse321.visart.model.UserRole;
 
 @Repository
 public class ManagerRepository {
-	
+		
 	@Autowired
 	EntityManager entityManager;
 	
@@ -38,8 +39,18 @@ public class ManagerRepository {
 	
 	
 	@Transactional 
-	public void deleteManager(Manager manager) {
-		entityManager.remove(manager);
+	public boolean deleteManager(Manager manager) {
+		Manager entity = entityManager.find(Manager.class, manager.getIdCode());
+		User usr = entityManager.find(User.class, manager.getIdCode());
+		if(entityManager.contains(entity)){
+			entityManager.remove(entityManager.merge(entity));
+			entityManager.remove(entityManager.merge(usr));
+		} else {
+			entityManager.remove(entity);
+			entityManager.remove(usr);
+		}
+		
+		return !entityManager.contains(entity);
 	}
 
 }
