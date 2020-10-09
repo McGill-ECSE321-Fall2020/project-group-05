@@ -159,7 +159,7 @@ class Tag {
   String keyword;
 
   //%%AnnotateStart
-  //%%@Transient
+  //%%@ManyToOne
   //%%private ArtListing listing;
   //%%@Id
   //%%private String idCode;
