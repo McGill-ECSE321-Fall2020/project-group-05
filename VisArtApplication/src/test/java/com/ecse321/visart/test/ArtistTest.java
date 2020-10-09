@@ -3,6 +3,7 @@ package com.ecse321.visart.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Before;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,11 @@ public class ArtistTest {
   }
 
   @Test
+  @Order(1)
   void testEntry() {
 
     init();
+    
     // Create
     Artist testArtist = aRepo.createArtist(l + "test", aEmailAddress, aDisplayname, aUsername,
         aPassword);
@@ -49,12 +52,24 @@ public class ArtistTest {
     System.out.println(testArtist);
     System.out.println("============================");
 
+  }
+  
+  @Test
+  @Order(2)
+  void testGet() {
+	 
+	 //Getting
     Artist testArtist2 = aRepo.getArtist(l + "test");
+    
+    //Test if got Artist corresponds to entry
     assertNotNull(testArtist2);
     assertEquals(aEmailAddress, testArtist2.getCustomer().getUser().getEmailAddress());
     System.out.println("============================");
     System.out.println(testArtist2);
     System.out.println("============================");
   }
+  
+  
+  
 
 }

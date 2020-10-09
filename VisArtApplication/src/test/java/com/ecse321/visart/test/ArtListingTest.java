@@ -3,6 +3,7 @@ package com.ecse321.visart.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Before;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,54 +22,58 @@ import com.ecse321.visart.model.Customer;
 @SpringBootTest
 public class ArtListingTest {
 
-  Long l = System.currentTimeMillis();
+	Long l = System.currentTimeMillis();
 
-  @Autowired
-  private ArtListingRepository aListRepo;
+	@Autowired
+	private ArtListingRepository aListRepo;
 
-  @Autowired
-  private ArtistRepository artRepo;
-  Artist artist;
-  Customer customer;
+	@Autowired
+	private ArtistRepository artRepo;
+	Artist artist;
+	Customer customer;
 
-  @Before
-  void init() {
+	@Before
+	void init() {
 
-  
-    artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+		artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
 
-  }
+	}
 
-  @Test
-  void testEntry() {
+	@Test
+	@Order(1)
+	void testEntry() {
 
-    init();
+		init();
 
-    // Create
-    ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "tt" + l + 29, artist);
+		// Create
+		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, "tt" + l + 29, artist);
 
-    // Test if artListing was created
-    assertNotNull(artListingTest);
+		// Test if artListing was created
+		assertNotNull(artListingTest);
 
-    // Print Art Listing
-    System.out.println("============================");
-    System.out.println(artListingTest);
-    System.out.println("============================");
+		// Print Art Listing
+		System.out.println("============================");
+		System.out.println(artListingTest);
+		System.out.println("============================");
 
-    ////// GET TEST
+	}
 
-    // Find Art Listing
-    ArtListing artListingTest2 = aListRepo.getArtListing("tt" + l + 29);
+	@Test
+	@Order(2)
+	void testGet() {
+		// Find Art Listing
+		ArtListing artListingTest2 = aListRepo.getArtListing("tt" + l + 29);
 
-    // Test if Art Listing was retrieved
-    assertNotNull(artListingTest2);
-    assertEquals(artist.getCustomer().getUser().getEmailAddress(), artListingTest2.getArtist().getCustomer().getUser().getEmailAddress());
-    assertEquals(artist.getCustomer().getUser().getUsername(), artListingTest2.getArtist().getCustomer().getUser().getUsername());
-  
+		// Test if Art Listing was retrieved
+		assertNotNull(artListingTest2);
+		assertEquals(artist.getCustomer().getUser().getEmailAddress(),
+				artListingTest2.getArtist().getCustomer().getUser().getEmailAddress());
+		assertEquals(artist.getCustomer().getUser().getUsername(),
+				artListingTest2.getArtist().getCustomer().getUser().getUsername());
 
-    System.out.println("============================");
-    System.out.println(artListingTest2);
-    System.out.println("============================");
-  }
+		System.out.println("============================");
+		System.out.println(artListingTest2);
+		System.out.println("============================");
+	}
 
 }

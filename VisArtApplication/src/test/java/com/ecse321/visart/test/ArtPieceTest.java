@@ -3,6 +3,7 @@ package com.ecse321.visart.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Before;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,68 +32,70 @@ import com.ecse321.visart.repositories.ArtListingRepository;
 @SpringBootTest
 public class ArtPieceTest {
 
-  // ID generator
-  Long l = System.currentTimeMillis();
+	// ID generator
+	Long l = System.currentTimeMillis();
 
-  // attributes
-  String aEmailAddress = "timcook@gmail.com";
-  String aDisplayname = "Tim Cook";
-  String aUsername = "timcook56";
-  String aPassword = "apple123";
-  String address = "124 Maywood";
+	// attributes
+	String aEmailAddress = "timcook@gmail.com";
+	String aDisplayname = "Tim Cook";
+	String aUsername = "timcook56";
+	String aPassword = "apple123";
+	String address = "124 Maywood";
 
-  Artist artist;
-  ArtListing artListing;
+	Artist artist;
+	ArtListing artListing;
 
-  @Autowired
-  private ArtPieceRepository apRepo;
+	@Autowired
+	private ArtPieceRepository apRepo;
 
-  @Autowired
-  private ArtListingRepository alRepo;
+	@Autowired
+	private ArtListingRepository alRepo;
 
-  @Autowired
-  private ArtistRepository aRepo;
+	@Autowired
+	private ArtistRepository aRepo;
 
-  @Before
-  void init() {
+	@Before
+	void init() {
 
-    artist = aRepo.createArtist("kl" + l + 1, "steve@gmail.com", "Steve Jobs", "steve56",
-        "apple1234");
-    artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, "" + l + 2, artist);
+		artist = aRepo.createArtist("kl" + l + 1, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234");
+		artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, "" + l + 2, artist);
 
-  }
+	}
 
-  @Test
-  void createEntry() {
+	@Test
+	@Order(1)
+	void testEntry() {
 
-    init();
+		init();
 
-    // Create
-    ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, "kk" + l + 3,
-        artListing);
+		// Create
+		ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, "kk" + l + 3, artListing);
 
-    // Test if ArtPiece was created
-    assertNotNull(artPieceTest);
+		// Test if ArtPiece was created
+		assertNotNull(artPieceTest);
 
-    // Print Art Listing
-    System.out.println("============================");
-    System.out.println(artPieceTest);
-    System.out.println("============================");
+		// Print Art Listing
+		System.out.println("============================");
+		System.out.println(artPieceTest);
+		System.out.println("============================");
+	}
 
-    ///////// TEST GET
+	@Test
+	@Order(2)
+	void testGet() {
 
-    // Find artPieceTest
-    ArtPiece artPieceTest2 = apRepo.getArtPiece("kk" + l + 3);
+		// Find artPieceTest
+		ArtPiece artPieceTest2 = apRepo.getArtPiece("kk" + l + 3);
 
-    // Test if ArtPiece was retrieved
-    assertNotNull(artPieceTest2);
-    assertEquals(address, artPieceTest2.getAddressLocation());
-    assertEquals(artListing.getIdCode(), artPieceTest2.getArtListing().getIdCode());
+		// Test if ArtPiece was retrieved
+		assertNotNull(artPieceTest2);
+		assertEquals(address, artPieceTest2.getAddressLocation());
+		assertEquals(artListing.getIdCode(), artPieceTest2.getArtListing().getIdCode());
 
-    System.out.println("============================");
-    System.out.println(artPieceTest2);
-    System.out.println("============================");
+		System.out.println("============================");
+		System.out.println(artPieceTest2);
+		System.out.println("============================");
 
-  }
+	}
 
 }
