@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-=======
 /** 
  *@author Nikola Milekic 
  *@author Daniel Bucci
  */
->>>>>>> branch 'repository-tests' of https://github.com/McGill-ECSE321-Fall2020/project-group-05.git
 
 package com.ecse321.visart.repositories;
 
