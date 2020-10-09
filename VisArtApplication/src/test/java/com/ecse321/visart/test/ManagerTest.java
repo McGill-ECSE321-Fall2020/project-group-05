@@ -30,8 +30,13 @@ public class ManagerTest {
 	private String username;
 
 	private String password;
+	
+	private static String profilePic;
+	  
+	private static String profileDesc;
 
 	static private Manager testManager2;
+	
 
 	// Pseudo-random ID for tested entities
 	static Long l = System.currentTimeMillis();
@@ -44,13 +49,15 @@ public class ManagerTest {
 		displayName = "Riad";
 		username = "riadelm";
 		password = "aNicePassword";
+		profilePic = "Bezos.jpg";
+	    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
 	}
 
 	@Test
 	@Order(2)
 	void testCreate1() {
 		// Create
-		Manager testManager = managerRepo.createManager("" + l, email, displayName, username, password);
+		Manager testManager = managerRepo.createManager("" + l, email, displayName, username, password, profilePic, profileDesc);
 
 		// TEST if Manager was created
 		assertNotNull(testManager);

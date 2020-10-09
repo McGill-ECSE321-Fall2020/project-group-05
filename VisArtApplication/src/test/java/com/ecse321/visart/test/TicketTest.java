@@ -1,5 +1,6 @@
 package com.ecse321.visart.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Manager;
+import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Ticket;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.ArtListingRepository;
@@ -54,6 +56,7 @@ public class TicketTest {
   private ArtOrderRepository artorderRepo;
 
   // Attributes
+  Ticket testTicket2;
   String email;
   String displayName;
   String username;
@@ -75,6 +78,10 @@ public class TicketTest {
   static ArtListing aListing;
   static ArtPiece anArtPiece;
   static ArtOrder aOrder;
+  static String profilePic;
+  static String profileDesc;
+  static String listingDesc;
+  static String title;
 
   // Pseudo-random ID for tested entities
   static Long l = System.currentTimeMillis();
@@ -88,16 +95,20 @@ public class TicketTest {
     username = "riadelm";
     password = "aNicePassword";
     id = "test" + l;
-    isAPaymentConfirmed = true;
+    isAPaymentConfirmed = false;
     aPaymentAmount = 100.34;
+    profilePic = "Bezos.jpg";
+    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
+    listingDesc = "mona lisa copy";
+    title = "fake monalisa";
 
     aCustomer = customerRepo.createCustomer(id + "1", email + "customer", displayName + "customer",
-        username + "customer", password + "customer");
+        username + "customer", password + "customer",profilePic+"customer", profileDesc+"customer");
     anArtist = artistRepo.createArtist(id + "2", email + "artist", displayName + "artist",
-        username + "artist", password + "artist");
+        username + "artist", password + "artist",profilePic+"artist", profileDesc+"artist");
     aManager = managerRepo.createManager(id + "3", email + "manager", displayName + "manager",
-        username + "manager", password + "manager");
-    aListing = artlistingRepo.createArtListing(ArtListing.PostVisibility.Public, id + "4",
+        username + "manager", password + "manager",profilePic+"manager", profileDesc+"manager");
+    aListing = artlistingRepo.createArtListing(ArtListing.PostVisibility.Public, listingDesc, title, id + "4",
         anArtist);
     anArtPiece = artpieceRepo.createArtPiece(ArtPiece.PieceLocation.AtGallery, "UniversityStreet",
         id + 5, aListing);
@@ -128,7 +139,7 @@ public class TicketTest {
   @Order(3)
   void testGet1() {
     // Find Ticket
-    Ticket testTicket2 = ticketRepo.getTicket(id);
+    testTicket2 = ticketRepo.getTicket(id);
 
     // TEST if Manager was retrieved
     assertNotNull(testTicket2);
@@ -139,5 +150,32 @@ public class TicketTest {
     System.out.println("=================FIND===============");
 
   }
+  /*@Test
+	@Order(4)
+	void testUpdate1() {
+		// Find manager
+		testTicket2 = ticketRepo.getTicket(id);
+		
+		//Update Tag
+		testTicket2.setIsPaymentConfirmed(true);
+		ticketRepo.updateTicket(testTicket2);
+		
+
+		// TEST if Tag was retrieved and if properly updated
+		assertNotNull(testTicket2);
+	
+
+		System.out.println("=================UPDATE===============");
+		System.out.println(testTicket2);
+		System.out.println("=================UPDATE===============");
+	}*/
+
+	
+@Test
+@Order(4)
+void testDelete1() {
+ ticketRepo.deleteTicket(testTicket2);
+  assertEquals(null, ticketRepo.getTicket(id));
+}
 
 }

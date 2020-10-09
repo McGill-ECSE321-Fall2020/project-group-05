@@ -46,10 +46,14 @@ public class TagTest {
   static String displayName;
   static String username;
   static String password;
-
   static Customer aCustomer;
   static Artist aArtist;
   static ArtListing aListing;
+  static String profilePic;
+  static String profileDesc;
+  static String title;
+  static String listingDesc;
+  
   
   // Pseudo-random ID for tested entities
   static Long l = System.currentTimeMillis();
@@ -65,9 +69,13 @@ public class TagTest {
     displayName = "Riad";
     username = "riadelm";
     password = "aNicePassword";
-    aCustomer = customerRepo.createCustomer(id + 2, email, displayName, username, password);
+    profilePic = "Bezos.jpg";
+    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
+    listingDesc = "mona lisa copy";
+    title = "fake monalisa";
+    aCustomer = customerRepo.createCustomer(id + 2, email, displayName, username, password, profilePic, profileDesc);
     aArtist = artistRepo.createArtist(id + 5, aCustomer);
-    aListing = listingRepo.createArtListing(ArtListing.PostVisibility.Public, id + 4, aArtist);
+    aListing = listingRepo.createArtListing(ArtListing.PostVisibility.Public, title, listingDesc, id + 4, aArtist);
 
   }
 
@@ -130,6 +138,6 @@ public class TagTest {
   @Order(5)
   void testDelete1() {
    tagRepo.deleteTag(testTag2);
-    assertEquals(false, tagRepo.getTag(id));
+    assertEquals(null, tagRepo.getTag(id));
   }
 }
