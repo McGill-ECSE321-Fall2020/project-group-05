@@ -25,6 +25,8 @@ public class ArtListing
   private PostVisibility visibility;
   private String description;
   private String title;
+  
+  @ElementCollection
   private List<String> postingPicLink;
 
   //ArtListing Associations
@@ -192,7 +194,7 @@ public class ArtListing
   }
 
   
-  @OneToMany(mappedBy="art_listing")
+  @OneToMany(mappedBy="artListing")
   private List<ArtPiece> pieces;
   @OneToMany(mappedBy="listing")
   private List<Tag> tags;

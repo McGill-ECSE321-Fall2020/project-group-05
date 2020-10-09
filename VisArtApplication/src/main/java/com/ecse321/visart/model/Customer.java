@@ -15,7 +15,7 @@ public class Customer extends UserRole
   private Artist artist;
   @OneToMany(mappedBy="customer")
   private List<Ticket> boughtTickets;
-  @ManyToMany
+  @ManyToMany(mappedBy="favoritedCustomer")
   private List<ArtListing> favoriteListings;
   //------------------------
   // MEMBER VARIABLES
