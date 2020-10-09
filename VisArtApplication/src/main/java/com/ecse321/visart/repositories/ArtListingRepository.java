@@ -49,10 +49,10 @@ public class ArtListingRepository {
 		} else {
 			entityManager.remove(entity);
 		}
-		for (Tag t : al.getTags()) {
+		for (Tag t : entity.getTags()) {
 			tRepository.deleteTag(t);
 		}
-		for (ArtPiece t : al.getPieces()) {
+		for (ArtPiece t : entity.getPieces()) {
 			apRepository.deleteArtPiece(t);
 		}
 		return !entityManager.contains(entity);
