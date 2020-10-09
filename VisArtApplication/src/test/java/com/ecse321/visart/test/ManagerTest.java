@@ -89,6 +89,7 @@ public class ManagerTest {
 		testManager2.getUser().setDisplayname("newDisplayName");
 		managerRepo.updateManager(testManager2);
 		
+		testManager2 = managerRepo.getManager(""+l);
 
 		// TEST if Manager was retrieved and if properly updated
 		assertNotNull(testManager2);
