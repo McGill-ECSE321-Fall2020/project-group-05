@@ -21,7 +21,7 @@ I am a U2 enrolled in the Software Engineering program. I only began coding last
 #### Riad El Mahmoudy
 I am a U2 Software Engineering student at McGill University. My experience with coding has been on and off since 2014 but i was able to pick up lots of programming knowledge in the last two years. I'm specifically interested in web-development as I'm currently working as a front-end developer for a start-up. For this reason, I'd like to get the most out of this project and give it my all. Other than programming, I do graphic design and painting as a hobby.
 #### Mahin Anwar
-[Insert Bio]
+I am a U3 Computer Engineering major at McGill university.I've been passionate about programming for a long time. Starting my journey at McGill was a gateway to the vast world of programming. McGill has allowed me to explore different aspects such as Computer Vision, Digital Systems. Besides programming, I enjoy soccer and playing FPS games including Call of Duty:Warzone. With this course I hope to enrich myself and gain valuable knowledge about web development.
 
 ### Overview Table
 
