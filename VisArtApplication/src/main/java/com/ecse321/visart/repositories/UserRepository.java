@@ -1,5 +1,7 @@
-
-
+/** 
+ *@author Nikola Milekic 
+ *@author Daniel Bucci
+ */
 
 package com.ecse321.visart.repositories;
 import javax.persistence.EntityManager;
