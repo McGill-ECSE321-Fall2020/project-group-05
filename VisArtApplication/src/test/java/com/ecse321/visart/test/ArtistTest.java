@@ -19,55 +19,68 @@ import com.ecse321.visart.repositories.ArtistRepository;
 @SpringBootTest
 public class ArtistTest {
 
-  @Autowired
-  private ArtistRepository aRepo;
-  String aEmailAddress;
-  String aDisplayname;
-  String aUsername;
-  String aPassword;
+	@Autowired
+	private ArtistRepository aRepo;
+	String aEmailAddress;
+	String aDisplayname;
+	String aUsername;
+	String aPassword;
+	static private Artist testArtist2;
 
-  // Pseudo-random ID for tested entities
-  static Long l = System.currentTimeMillis();
+	// Pseudo-random ID for tested entities
+	static Long l = System.currentTimeMillis();
 
-  @Test
-  @Order(1)
-  void init() {
-    aEmailAddress = "timcook@gmail.com";
-    aDisplayname = "Tim Cook";
-    aUsername = "timcook56";
-    aPassword = "apple123";
-  }
+	@Test
+	@Order(1)
+	void init() {
+		aEmailAddress = "timcook@gmail.com";
+		aDisplayname = "Tim Cook";
+		aUsername = "timcook56";
+		aPassword = "apple123";
+	}
 
-  @Test
-  @Order(2)
-  void testCreate1() {
+	@Test
+	@Order(2)
+	void testCreate() {
 
-    // Create
-    Artist testArtist = aRepo.createArtist(l + "test" + 2, aEmailAddress, aDisplayname, aUsername,
-        aPassword);
+		// Create
+		Artist testArtist = aRepo.createArtist(l + "test" + 2, aEmailAddress, aDisplayname, aUsername, aPassword);
 
-    // Test if Artist was created
-    assertNotNull(testArtist);
-    // Print Artist
-    System.out.println("============================");
-    System.out.println(testArtist);
-    System.out.println("============================");
+		// Test if Artist was created
+		assertNotNull(testArtist);
+		// Print Artist
+		System.out.println("=================CREATE===============");
+		System.out.println(testArtist);
+		System.out.println("=================CREATE===============");
 
-  }
+	}
 
-  @Test
-  @Order(3)
-  void testGet1() {
+	@Test
+	@Order(3)
+	void testGet() {
 
-    // Getting
-    Artist testArtist2 = aRepo.getArtist(l + "test" + 2);
+		// Getting
+		testArtist2 = aRepo.getArtist(l + "test" + 2);
 
-    // Test if got Artist corresponds to entry
-    assertNotNull(testArtist2);
-    assertEquals(aEmailAddress, testArtist2.getCustomer().getUser().getEmailAddress());
-    System.out.println("============================");
-    System.out.println(testArtist2);
-    System.out.println("============================");
-  }
+		// Test if got Artist corresponds to entry
+		assertNotNull(testArtist2);
+		assertEquals(aEmailAddress, testArtist2.getCustomer().getUser().getEmailAddress());
+
+		System.out.println("=================FIND===============");
+		System.out.println(testArtist2);
+		System.out.println("=================FIND===============");
+	}
+
+	@Test
+	@Order(4)
+	void testDelete() {
+
+		aRepo.deleteArtist(testArtist2);
+		assertEquals(null, aRepo.getArtist(l + "test" + 2));
+
+		System.out.println("=================DELETED===============");
+		
+
+	}
 
 }
