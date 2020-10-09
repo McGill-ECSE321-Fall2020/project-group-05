@@ -39,14 +39,14 @@ public class ArtOrderTest {
 
   // Attributes for artOrder1
   String address = "123 STLOUIS";
-  String tracker = "AZA123";
+  String tracker = "BABA123";
+ 
 
   // Attributes for artOrder2
   String address2 = "125 ALSTON";
   String tracker2 = "AZA124";
 
   private static ArtOrder artOrder4;
-  private static ArtOrder artOrder2;
   private static Artist artist;
   private static ArtListing artListing;
   private static ArtPiece artPiece2;
@@ -68,7 +68,7 @@ public class ArtOrderTest {
   @Test
   @Order(2)
   void testCreate1() {
-    artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2,
+   ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2, tracker2,
         "tts" + l + 9,
         artPiece2);
 
@@ -76,9 +76,9 @@ public class ArtOrderTest {
     assertNotNull(artOrder2);
 
     // Print Art Order
-    System.out.println("============================");
-    System.out.println(artOrder2);
-    System.out.println("============================");
+    System.out.println("=================CREATE===============");
+	System.out.println(artOrder2);
+	System.out.println("=================CREATE===============");
   }
 
   @Test
@@ -93,8 +93,46 @@ public class ArtOrderTest {
     assertEquals(tracker2, artOrder4.getDeliveryTracker());
 
     // Print Art Order
-    System.out.println("============================");
-    System.out.println(artOrder4);
-    System.out.println("============================");
+    System.out.println("=================FIND===============");
+	System.out.println(artOrder4);
+	System.out.println("=================FIND===============");
   }
+  
+  @Test
+  @Order(4)
+  void testUpdate() {
+	  
+	  
+	  
+	  artOrder4.setDeliveryTracker("BABA123");
+	  
+	  //update art order
+	  aoRepo.updateArtOrder(artOrder4);
+	  
+	  //Getting updated art order
+	  artOrder4 = aoRepo.getArtOrder("tts" + l + 9);
+	  
+	  	//Test
+	    assertNotNull(artOrder4);
+	    assertEquals(address2, artOrder4.getTargetAddress());
+	    assertEquals(tracker, artOrder4.getDeliveryTracker());
+
+	    // Print Order
+	    System.out.println("=================UPDATE===============");
+		System.out.println(artOrder4);
+		System.out.println("=================UPDATE===============");
+  }
+  
+  	@Test
+	@Order(5)
+	void testDelete() {
+
+		aoRepo.deleteArtOrder(artOrder4);
+		assertEquals(null, aoRepo.getArtOrder("tts" + l + 9));
+		
+		System.out.println("=================DELETED===============");
+
+	}
+  
+  
 }
