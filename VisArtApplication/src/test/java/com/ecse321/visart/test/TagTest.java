@@ -53,8 +53,7 @@ public class TagTest {
   static String profileDesc;
   static String title;
   static String listingDesc;
-  
-  
+
   // Pseudo-random ID for tested entities
   static Long l = System.currentTimeMillis();
 
@@ -73,9 +72,11 @@ public class TagTest {
     profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
     listingDesc = "mona lisa copy";
     title = "fake monalisa";
-    aCustomer = customerRepo.createCustomer(id + 2, email, displayName, username, password, profilePic, profileDesc);
+    aCustomer = customerRepo.createCustomer(id + 2, email, displayName, username, password,
+        profilePic, profileDesc);
     aArtist = artistRepo.createArtist(id + 5, aCustomer);
-    aListing = listingRepo.createArtListing(ArtListing.PostVisibility.Public, title, listingDesc, id + 4, aArtist);
+    aListing = listingRepo.createArtListing(ArtListing.PostVisibility.Public, title, listingDesc,
+        id + 4, aArtist);
 
   }
 
@@ -111,33 +112,32 @@ public class TagTest {
     System.out.println("=================FIND===============");
 
   }
+
   @Test
-	@Order(4)
-	void testUpdate1() {
-		// Find manager
-		testTag2 = tagRepo.getTag(id);
-		
-		//Update Tag
-		testTag2.setKeyword("newKeyWord");
-		tagRepo.updateTag(testTag2);
-		
+  @Order(4)
+  void testUpdate1() {
+    // Find manager
+    testTag2 = tagRepo.getTag(id);
 
-		// TEST if Tag was retrieved and if properly updated
-		assertNotNull(testTag2);
-		assertEquals(Tag.TagType.Material, testTag2.getType());
-		assertEquals("newKeyWord", testTag2.getKeyword());
-		assertEquals(aListing.getIdCode(), testTag2.getListing().getIdCode());
+    // Update Tag
+    testTag2.setKeyword("newKeyWord");
+    tagRepo.updateTag(testTag2);
 
-		System.out.println("=================UPDATE===============");
-		System.out.println(testTag2);
-		System.out.println("=================UPDATE===============");
-	}
+    // TEST if Tag was retrieved and if properly updated
+    assertNotNull(testTag2);
+    assertEquals(Tag.TagType.Material, testTag2.getType());
+    assertEquals("newKeyWord", testTag2.getKeyword());
+    assertEquals(aListing.getIdCode(), testTag2.getListing().getIdCode());
 
-	
+    System.out.println("=================UPDATE===============");
+    System.out.println(testTag2);
+    System.out.println("=================UPDATE===============");
+  }
+
   @Test
   @Order(5)
   void testDelete1() {
-   tagRepo.deleteTag(testTag2);
+    tagRepo.deleteTag(testTag2);
     assertEquals(null, tagRepo.getTag(id));
   }
 }

@@ -60,6 +60,7 @@ public class ArtPieceRepository {
       String aIdCode, ArtListing aArtListing) {
     ArtPiece apiece = new ArtPiece(aBasicLocation, aAddressLocation, aIdCode, aArtListing);
     entityManager.persist(apiece);
+    entityManager.merge(aArtListing);
     return apiece;
   }
 

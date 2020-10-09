@@ -27,13 +27,13 @@ public class CustomerTest {
   private static String username;
 
   private static String password;
-  
+
   private static String profilePic;
-  
+
   private static String profileDesc;
 
   static Customer testCustomer2;
-  
+
   // Pseudo-random ID for tested entities
   static Long l = System.currentTimeMillis();
 
@@ -73,42 +73,42 @@ public class CustomerTest {
     assertEquals(email, testCustomer2.getUser().getEmailAddress());
     assertEquals(profilePic, testCustomer2.getUser().getProfilePicLink());
     assertEquals(profileDesc, testCustomer2.getUser().getProfileDescription());
-    
+
     System.out.println(testCustomer2);
 
   }
-  
+
   @Test
-	@Order(4)
-	void testUpdate1() {
-		// Find manager
-		testCustomer2 = customerRepo.getCustomer("" + l);
-		
-		//Update Customer
-		testCustomer2.getUser().setDisplayname("newDisplayNameCustomer");
-		customerRepo.updateCustomer(testCustomer2);
-		 
-		testCustomer2 = customerRepo.getCustomer(""+l);
+  @Order(4)
+  void testUpdate1() {
+    // Find manager
+    testCustomer2 = customerRepo.getCustomer("" + l);
 
-		// TEST if Customer was retrieved and if properly updated
-		assertNotNull(testCustomer2);
-		assertEquals(email, testCustomer2.getUser().getEmailAddress());
-		assertEquals("newDisplayNameCustomer", testCustomer2.getUser().getDisplayname());
-		assertEquals(username, testCustomer2.getUser().getUsername());
-		assertEquals(password, testCustomer2.getUser().getPassword());
-		assertEquals(profilePic, testCustomer2.getUser().getProfilePicLink());
-	    assertEquals(profileDesc, testCustomer2.getUser().getProfileDescription());
+    // Update Customer
+    testCustomer2.getUser().setDisplayname("newDisplayNameCustomer");
+    customerRepo.updateCustomer(testCustomer2);
 
-		System.out.println("=================UPDATE===============");
-		System.out.println(testCustomer2);
-		System.out.println("=================UPDATE===============");
-	}
+    testCustomer2 = customerRepo.getCustomer("" + l);
 
-	@Test
-	@Order(5)
-	void testDelete1() {
-		customerRepo.deleteCustomer(testCustomer2);
-		assertEquals(null, customerRepo.getCustomer("" + l));
-	}
+    // TEST if Customer was retrieved and if properly updated
+    assertNotNull(testCustomer2);
+    assertEquals(email, testCustomer2.getUser().getEmailAddress());
+    assertEquals("newDisplayNameCustomer", testCustomer2.getUser().getDisplayname());
+    assertEquals(username, testCustomer2.getUser().getUsername());
+    assertEquals(password, testCustomer2.getUser().getPassword());
+    assertEquals(profilePic, testCustomer2.getUser().getProfilePicLink());
+    assertEquals(profileDesc, testCustomer2.getUser().getProfileDescription());
+
+    System.out.println("=================UPDATE===============");
+    System.out.println(testCustomer2);
+    System.out.println("=================UPDATE===============");
+  }
+
+  @Test
+  @Order(5)
+  void testDelete1() {
+    customerRepo.deleteCustomer(testCustomer2);
+    assertEquals(null, customerRepo.getCustomer("" + l));
+  }
 
 }

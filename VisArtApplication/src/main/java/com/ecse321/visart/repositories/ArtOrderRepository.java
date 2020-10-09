@@ -51,6 +51,7 @@ public class ArtOrderRepository {
     ArtOrder ao = new ArtOrder(aIsDelivered, aTargetLocation, aTargetAddress, aDeliveryTracker,
         aIdCode, aArtPiece);
     entityManager.persist(ao);
+    entityManager.merge(aArtPiece);
     return ao;
   }
 

@@ -66,6 +66,7 @@ public class ArtistRepository {
   public Artist createArtist(String aIdCode, Customer aCustomer) {
     Artist artist = new Artist(aIdCode, aCustomer);
     entityManager.persist(artist);
+    entityManager.merge(aCustomer);
     return artist;
   }
 
@@ -76,7 +77,7 @@ public class ArtistRepository {
    * @param artist the artist whose properties will be updated in the database
    */
   @Transactional
-  public void udpateArtist(Artist artist) {
+  public void updateArtist(Artist artist) {
     entityManager.merge(artist);
   }
 

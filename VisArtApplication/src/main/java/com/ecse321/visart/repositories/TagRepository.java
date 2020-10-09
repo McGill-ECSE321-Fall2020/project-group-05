@@ -43,6 +43,7 @@ public class TagRepository {
   public Tag createTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
     Tag tic = new Tag(aType, aKeyword, aIdCode, aListing);
     entityManager.persist(tic);
+    entityManager.merge(aListing);
     return tic;
   }
 

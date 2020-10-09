@@ -23,102 +23,104 @@ import com.ecse321.visart.model.Customer;
 @SpringBootTest
 public class ArtListingTest {
 
-	@Autowired
-	private ArtListingRepository aListRepo;
+  @Autowired
+  private ArtListingRepository aListRepo;
 
-	@Autowired
-	private ArtistRepository artRepo;
+  @Autowired
+  private ArtistRepository artRepo;
 
-	public static Artist artist;
-	public static Customer customer;
-	String description = "desctest";
-	String title = "titletest";
-	static private ArtListing artListingTest2;
+  public static Artist artist;
+  public static Customer customer;
+  String description = "desctest";
+  String title = "titletest";
+  static private ArtListing artListingTest2;
 
-	// Pseudo-random ID for tested entities
-	static Long l = System.currentTimeMillis();
+  // Pseudo-random ID for tested entities
+  static Long l = System.currentTimeMillis();
 
-	@Test
-	@Order(1)
-	void init() {
-		artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56", "apple1234",
-				"www.hello.com", "testing");
-	}
+  @Test
+  @Order(1)
+  void init() {
+    artist = artRepo.createArtist("tester" + l + 26, "steve@gmail.com", "Steve Jobs", "steve56",
+        "apple1234",
+        "www.hello.com", "testing");
+  }
 
-	@Test
-	@Order(2)
-	void testCreate1() {
+  @Test
+  @Order(2)
+  void testCreate1() {
 
-		// Create
-		ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public, description, title,
-				"tt" + l, artist);
+    // Create
+    ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public,
+        description, title,
+        "tt" + l, artist);
 
-		// Test if artListing was created
-		assertNotNull(artListingTest);
+    // Test if artListing was created
+    assertNotNull(artListingTest);
 
-		// Print Art Listing
-		System.out.println("=================CREATE===============");
-		System.out.println(artListingTest);
-		System.out.println("=================CREATE===============");
+    // Print Art Listing
+    System.out.println("=================CREATE===============");
+    System.out.println(artListingTest);
+    System.out.println("=================CREATE===============");
 
-	}
+  }
 
-	@Test
-	@Order(3)
-	void testGet1() {
-		// Find Art Listing
-		artListingTest2 = aListRepo.getArtListing("tt" + l);
+  @Test
+  @Order(3)
+  void testGet1() {
+    // Find Art Listing
+    artListingTest2 = aListRepo.getArtListing("tt" + l);
 
-		// Test if Art Listing was retrieved
-		assertNotNull(artListingTest2);
-		assertEquals(artist.getCustomer().getUser().getEmailAddress(),
-				artListingTest2.getArtist().getCustomer().getUser().getEmailAddress());
-		assertEquals(artist.getCustomer().getUser().getUsername(),
-				artListingTest2.getArtist().getCustomer().getUser().getUsername());
+    // Test if Art Listing was retrieved
+    assertNotNull(artListingTest2);
+    assertEquals(artist.getCustomer().getUser().getEmailAddress(),
+        artListingTest2.getArtist().getCustomer().getUser().getEmailAddress());
+    assertEquals(artist.getCustomer().getUser().getUsername(),
+        artListingTest2.getArtist().getCustomer().getUser().getUsername());
 
-		System.out.println("=================FIND===============");
-		System.out.println(artListingTest2);
-		System.out.println("=================FIND===============");
-	}
+    System.out.println("=================FIND===============");
+    System.out.println(artListingTest2);
+    System.out.println("=================FIND===============");
+  }
 
-	@Test
-	@Order(4)
-	void testUpdate() {
+  @Test
+  @Order(4)
+  void testUpdate() {
 
-		artListingTest2.setVisibility(PostVisibility.Private);
+    artListingTest2.setVisibility(PostVisibility.Private);
 
-		// Updating art listing
-		aListRepo.updateArtListing(artListingTest2);
+    // Updating art listing
+    aListRepo.updateArtListing(artListingTest2);
 
-		// Finding updated art listing
-		artListingTest2 = aListRepo.getArtListing("tt" + l);
+    // Finding updated art listing
+    artListingTest2 = aListRepo.getArtListing("tt" + l);
 
-		// Test if it was updated
-		assertNotNull(artListingTest2);
-		assertEquals(artist.getCustomer().getUser().getEmailAddress(),
-				artListingTest2.getArtist().getCustomer().getUser().getEmailAddress());
-		assertEquals(artist.getCustomer().getUser().getUsername(),
-				artListingTest2.getArtist().getCustomer().getUser().getUsername());
-		assertEquals(PostVisibility.Private, artListingTest2.getVisibility());
+    // Test if it was updated
+    assertNotNull(artListingTest2);
+    assertEquals(artist.getCustomer().getUser().getEmailAddress(),
+        artListingTest2.getArtist().getCustomer().getUser().getEmailAddress());
+    assertEquals(artist.getCustomer().getUser().getUsername(),
+        artListingTest2.getArtist().getCustomer().getUser().getUsername());
+    assertEquals(PostVisibility.Private, artListingTest2.getVisibility());
 
-		System.out.println("=================UPDATE===============");
-		System.out.println(artListingTest2);
-		System.out.println("=================UPDATE===============");
+    System.out.println("=================UPDATE===============");
+    System.out.println(artListingTest2);
+    System.out.println("=================UPDATE===============");
 
-	}
+  }
 
-	@Test
-	@Order(5)
-	void testDelete() {
+  @Test
+  @Order(5)
+  void testDelete() {
 
-		// Delete
-		aListRepo.deleteArtListing(artListingTest2);
+    // Delete
+    aListRepo.deleteArtListing(artListingTest2);
 
-		// Test if art listing was succesfully deleted
-		assertEquals(null, aListRepo.getArtListing("tt" + l));
+    // Test if art listing was succesfully deleted
+    assertEquals(null, aListRepo.getArtListing("tt" + l));
 
-		System.out.println("=================DELETED===============");
+    System.out.println("=================DELETED===============");
 
-	}
+  }
 
 }

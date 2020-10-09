@@ -20,53 +20,52 @@ import com.ecse321.visart.repositories.UserRepository;
 @SpringBootTest
 public class UserTest {
 
-	@Autowired
-	private UserRepository userRepo;
+  @Autowired
+  private UserRepository userRepo;
 
-	private String email;
+  private String email;
 
-	private String displayName;
+  private String displayName;
 
-	private String username;
+  private String username;
 
-	private String password;
-	
-	private static String profilePic;
-	  
-	private static String profileDesc;
+  private String password;
 
-	static private User User2;
-	
+  private static String profilePic;
 
-	// Pseudo-random ID for tested entities
-	static Long l = System.currentTimeMillis();
+  private static String profileDesc;
 
-	@Test
-	@Order(1)
-	void init() {
-		// Attributes
-		email = "blah";
-		displayName = "Riad";
-		username = "riadelm";
-		password = "aNicePassword";
-		profilePic = "Bezos.jpg";
-	    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
-	}
+  static private User User2;
 
-	@Test
-	@Order(2)
-	void testCreate1() {
-		// Create
-		User testUser = userRepo.createUser("" + l, email, displayName, username, password, profilePic, profileDesc);
+  // Pseudo-random ID for tested entities
+  static Long l = System.currentTimeMillis();
 
-		// TEST if User was created
-		assertNotNull(testUser);
+  @Test
+  @Order(1)
+  void init() {
+    // Attributes
+    email = "blah";
+    displayName = "Riad";
+    username = "riadelm";
+    password = "aNicePassword";
+    profilePic = "Bezos.jpg";
+    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
+  }
 
-		// Print Manager
-		System.out.println("=================CREATE===============");
-		System.out.println(testUser);
-		System.out.println("=================CREATE===============");
-	}
+  @Test
+  @Order(2)
+  void testCreate1() {
+    // Create
+    User testUser = userRepo.createUser("" + l, email, displayName, username, password, profilePic,
+        profileDesc);
 
-	
+    // TEST if User was created
+    assertNotNull(testUser);
+
+    // Print Manager
+    System.out.println("=================CREATE===============");
+    System.out.println(testUser);
+    System.out.println("=================CREATE===============");
+  }
+
 }

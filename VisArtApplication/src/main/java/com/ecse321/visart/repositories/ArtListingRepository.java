@@ -43,6 +43,7 @@ public class ArtListingRepository {
       String aIdCode, Artist aArtist) {
     ArtListing al = new ArtListing(aVisibility, aDescription, aTitle, aIdCode, aArtist);
     entityManager.persist(al);
+    entityManager.merge(aArtist);
     return al;
   }
 

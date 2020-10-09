@@ -47,6 +47,9 @@ public class TicketRepository {
     Ticket tic = new Ticket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer,
         aArtist);
     entityManager.persist(tic);
+    entityManager.merge(aOrder);
+    entityManager.merge(aCustomer);
+    entityManager.merge(aArtist);
     return tic;
   }
 

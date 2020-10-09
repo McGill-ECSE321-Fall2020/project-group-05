@@ -20,101 +20,101 @@ import com.ecse321.visart.repositories.ManagerRepository;
 @SpringBootTest
 public class ManagerTest {
 
-	@Autowired
-	private ManagerRepository managerRepo;
+  @Autowired
+  private ManagerRepository managerRepo;
 
-	private String email;
+  private String email;
 
-	private String displayName;
+  private String displayName;
 
-	private String username;
+  private String username;
 
-	private String password;
-	
-	private static String profilePic;
-	  
-	private static String profileDesc;
+  private String password;
 
-	static private Manager testManager2;
-	
+  private static String profilePic;
 
-	// Pseudo-random ID for tested entities
-	static Long l = System.currentTimeMillis();
+  private static String profileDesc;
 
-	@Test
-	@Order(1)
-	void init() {
-		// Attributes
-		email = "blah";
-		displayName = "Riad";
-		username = "riadelm";
-		password = "aNicePassword";
-		profilePic = "Bezos.jpg";
-	    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
-	}
+  static private Manager testManager2;
 
-	@Test
-	@Order(2)
-	void testCreate1() {
-		// Create
-		Manager testManager = managerRepo.createManager("" + l, email, displayName, username, password, profilePic, profileDesc);
+  // Pseudo-random ID for tested entities
+  static Long l = System.currentTimeMillis();
 
-		// TEST if Manager was created
-		assertNotNull(testManager);
+  @Test
+  @Order(1)
+  void init() {
+    // Attributes
+    email = "blah";
+    displayName = "Riad";
+    username = "riadelm";
+    password = "aNicePassword";
+    profilePic = "Bezos.jpg";
+    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
+  }
 
-		// Print Manager
-		System.out.println("=================CREATE===============");
-		System.out.println(testManager);
-		System.out.println("=================CREATE===============");
-	}
+  @Test
+  @Order(2)
+  void testCreate1() {
+    // Create
+    Manager testManager = managerRepo.createManager("" + l, email, displayName, username, password,
+        profilePic, profileDesc);
 
-	@Test
-	@Order(3)
-	void testGet1() {
-		// Find manager
-		testManager2 = managerRepo.getManager("" + l);
+    // TEST if Manager was created
+    assertNotNull(testManager);
 
-		// TEST if Manager was retrieved
-		assertNotNull(testManager2);
-		assertEquals(email, testManager2.getUser().getEmailAddress());
-		assertEquals(displayName, testManager2.getUser().getDisplayname());
-		assertEquals(username, testManager2.getUser().getUsername());
-		assertEquals(password, testManager2.getUser().getPassword());
+    // Print Manager
+    System.out.println("=================CREATE===============");
+    System.out.println(testManager);
+    System.out.println("=================CREATE===============");
+  }
 
-		System.out.println("=================FIND===============");
-		System.out.println(testManager2);
-		System.out.println("=================FIND===============");
-	}
+  @Test
+  @Order(3)
+  void testGet1() {
+    // Find manager
+    testManager2 = managerRepo.getManager("" + l);
 
-	@Test
-	@Order(4)
-	void testUpdate1() {
-		// Find manager
-		testManager2 = managerRepo.getManager("" + l);
-		
-		//Update Manager
-		testManager2.getUser().setDisplayname("newDisplayName");
-		managerRepo.updateManager(testManager2);
-		
-		testManager2 = managerRepo.getManager(""+l);
+    // TEST if Manager was retrieved
+    assertNotNull(testManager2);
+    assertEquals(email, testManager2.getUser().getEmailAddress());
+    assertEquals(displayName, testManager2.getUser().getDisplayname());
+    assertEquals(username, testManager2.getUser().getUsername());
+    assertEquals(password, testManager2.getUser().getPassword());
 
-		// TEST if Manager was retrieved and if properly updated
-		assertNotNull(testManager2);
-		assertEquals(email, testManager2.getUser().getEmailAddress());
-		assertEquals("newDisplayName", testManager2.getUser().getDisplayname());
-		assertEquals(username, testManager2.getUser().getUsername());
-		assertEquals(password, testManager2.getUser().getPassword());
+    System.out.println("=================FIND===============");
+    System.out.println(testManager2);
+    System.out.println("=================FIND===============");
+  }
 
-		System.out.println("=================UPDATE===============");
-		System.out.println(testManager2);
-		System.out.println("=================UPDATE===============");
-	}
+  @Test
+  @Order(4)
+  void testUpdate1() {
+    // Find manager
+    testManager2 = managerRepo.getManager("" + l);
 
-	@Test
-	@Order(5)
-	void testDelete1() {
-		managerRepo.deleteManager(testManager2);
-		assertEquals(null, managerRepo.getManager("" + l));
-	}
+    // Update Manager
+    testManager2.getUser().setDisplayname("newDisplayName");
+    managerRepo.updateManager(testManager2);
+
+    testManager2 = managerRepo.getManager("" + l);
+
+    // TEST if Manager was retrieved and if properly updated
+    assertNotNull(testManager2);
+    assertEquals(email, testManager2.getUser().getEmailAddress());
+    assertEquals("newDisplayName", testManager2.getUser().getDisplayname());
+    assertEquals(username, testManager2.getUser().getUsername());
+    assertEquals(password, testManager2.getUser().getPassword());
+
+    System.out.println("=================UPDATE===============");
+    System.out.println(testManager2);
+    System.out.println("=================UPDATE===============");
+  }
+
+  @Test
+  @Order(5)
+  void testDelete1() {
+    managerRepo.deleteManager(testManager2);
+    assertEquals(null, managerRepo.getManager("" + l));
+  }
 
 }
