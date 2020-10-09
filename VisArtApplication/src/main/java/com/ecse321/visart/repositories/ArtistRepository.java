@@ -70,6 +70,17 @@ public class ArtistRepository {
   }
 
   /**
+   * updateArtist method updates the given Artist instance's properties in the
+   * database.
+   * 
+   * @param artist the artist whose properties will be updated in the database
+   */
+  @Transactional
+  public void udpateArtist(Artist artist) {
+    entityManager.merge(artist);
+  }
+
+  /**
    * 
    * Overloaded getArtist method, that by lazy loads all nested Collections by
    * default.

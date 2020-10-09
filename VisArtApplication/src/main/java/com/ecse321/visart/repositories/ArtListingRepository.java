@@ -47,15 +47,42 @@ public class ArtListingRepository {
   }
 
   /**
-   * getArtListing method retrieves an instance of ArtListing from the database,
-   * based on a primary key.
+   * Overloaded getArtListing method retrieves an instance of ArtListing from the
+   * database, based on a primary key. All collections are lazy-loaded, and
+   * therefore inaccessible, unless set to true.
    * 
    * @param  aIdCode the database primary key for the ArtListing
-   * @return         a persisted of ArtListing from the database
+   * @return         a persisted instance of ArtListing from the database
    */
   @Transactional
   public ArtListing getArtListing(String aIdCode) {
-    return entityManager.find(ArtListing.class, aIdCode);
+    return getArtListing(aIdCode, false, false, false);
+  }
+
+  /**
+   * getArtListing method retrieves an instance of ArtListing from the database,
+   * based on a corresponding primary key. The collections of this instance are
+   * lazy loaded, and options can be set to true to fetch the corresponding
+   * collections when necessary.
+   * 
+   * @param  aIdCode                the primary key in the database of ArtListing
+   * @param  alsoArtPieces          also fetch associated ArtPieces
+   * @param  alsoTags               also fetch associated Tags
+   * @param  alsoFavoritedCustomers also fetch associated Customers
+   * @return                        a persisted instance of ArtListing from
+   *                                database
+   */
+  @Transactional
+  public ArtListing getArtListing(String aIdCode, boolean alsoArtPieces, boolean alsoTags,
+      boolean alsoFavoritedCustomers) {
+    ArtListing entity = entityManager.find(ArtListing.class, aIdCode);
+    if (alsoArtPieces)
+      entity.getPieces().size();
+    if (alsoTags)
+      entity.getTags().size();
+    if (alsoFavoritedCustomers)
+      entity.getFavoritedCustomer();
+    return entity;
   }
 
   /**

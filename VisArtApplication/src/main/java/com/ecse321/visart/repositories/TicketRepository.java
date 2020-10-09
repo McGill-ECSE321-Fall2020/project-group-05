@@ -61,6 +61,17 @@ public class TicketRepository {
   public Ticket getTicket(String aIdCode) {
     return entityManager.find(Ticket.class, aIdCode);
   }
+  
+  /**
+   * updateTicket method updates a Ticket instance's properties in the
+   * database.
+   * 
+   * @param t the Ticket whose changes are written to database
+   */
+  @Transactional
+  public void updateTicket(Ticket t) {
+    entityManager.merge(t);
+  }
 
   /**
    * Overloaded deleteTicket method deletes the given ticket instance from the

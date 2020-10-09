@@ -54,15 +54,38 @@ public class CustomerRepository {
   }
 
   /**
-   * getCustomer method retrieves a Customer instance from the database by primary
-   * key.
+   * Overloaded getCustomer method retrieves a Customer instance from the database
+   * by primary key. Lazy loads all collections by default, and so boughtTickets
+   * and favoriteListings are unaccessible unless those options are set to true.
    * 
    * @param  aIdCode database primary key for the customer
    * @return         a persisted Customer instance from the database
    */
   @Transactional
   public Customer getCustomer(String aIdCode) {
-    return entityManager.find(Customer.class, aIdCode);
+    return getCustomer(aIdCode, false, false);
+  }
+
+  /**
+   * getCustomer method retreives a Customer instance from the database by the
+   * corresponding primary key. All Collections are lazy loaded, so to access
+   * boughtTickets, and favoriteListings, those options must be set to true to
+   * load them from the database as well.
+   * 
+   * @param  aIdCode              the primary key in the database
+   * @param  alsoBoughtTickets    also fetch associated Tickets
+   * @param  alsoFavoriteListings also fetch asssociated Listings
+   * @return                      a Customer instance loaded from database
+   */
+  @Transactional
+  public Customer getCustomer(String aIdCode, boolean alsoBoughtTickets,
+      boolean alsoFavoriteListings) {
+    Customer c = entityManager.find(Customer.class, aIdCode);
+    if (alsoBoughtTickets)
+      c.getBoughtTickets().size();
+    if (alsoFavoriteListings)
+      c.getFavoriteListings().size();
+    return c;
   }
 
   /**
@@ -82,7 +105,7 @@ public class CustomerRepository {
    * database.
    * 
    * @param  customer the Customer instance to remove from database
-   * @return true if successful delete
+   * @return          true if successful delete
    */
   @Transactional
   public boolean deleteCustomer(Customer customer) {

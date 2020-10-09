@@ -49,14 +49,33 @@ public class ManagerRepository {
   }
 
   /**
-   * getManager method retrieves Manager instance from the database.
+   * Overloaded getManager method retrieves Manager instance from the database.
+   * Its collection of promotedListings will be inaccessible unless the option
+   * alsoPromotedListings is set to true.
    * 
    * @param  aIdCode the primary key of the Manager instance
    * @return         the Manager instance from the database
    */
   @Transactional
   public Manager getManager(String aIdCode) {
-    return entityManager.find(Manager.class, aIdCode);
+    return getManager(aIdCode, false);
+  }
+
+  /**
+   * getManager method retrieves a Manager instance from the database. Its
+   * promotedListings collection is lazy loaded, so alsoPromotedListings must be
+   * set to true, to load it.
+   * 
+   * @param  aIdCode              the primary key of the Manager instance
+   * @param  alsoPromotedListings also fetch the promotedListings from database
+   * @return                      the Manager instance from the database
+   */
+  @Transactional
+  public Manager getManager(String aIdCode, boolean alsoPromotedListings) {
+    Manager m = entityManager.find(Manager.class, aIdCode);
+    if (alsoPromotedListings)
+      m.getPromotedListings().size();
+    return m;
   }
 
   /**
