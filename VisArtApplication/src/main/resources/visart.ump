@@ -56,7 +56,7 @@ class Manager {
   isA UserRole;
 
   //%%AnnotateStart
-  //%%@OneToMany
+  //%%@OneToMany(mappedBy="manager")
   //%%private List<ArtListing> promotedListings;
   //%%AnnotateEnd
   0..1 manager -- 0..* ArtListing  promotedListings;
@@ -74,7 +74,7 @@ class Customer {
   //%%AnnotateStart
   //%%@OneToOne
   //%%private Artist artist;
-  //%%@OneToMany
+  //%%@OneToMany(mappedBy="customer")
   //%%private List<Ticket> boughtTickets;
   //%%@ManyToMany
   //%%private List<ArtListing> favoriteListings;
@@ -96,9 +96,9 @@ class Artist {
   1 artist -- 0..* ArtListing postedListings;
 
   //%%AnnotateStart
-  //%%@OneToMany
+  //%%@OneToMany(mappedBy="artist")
   //%%private List<Ticket> soldTickets;
-  //%%@OneToMany
+  //%%@OneToMany(mappedBy="artist")
   //%%private List<ArtListing> postedListings;
   //%%@OneToOne
   //%%private Customer customer;
@@ -130,13 +130,13 @@ class ArtListing {
   String[] postingPicLink;
 
   //%%AnnotateStart
-  //%%@OneToMany
+  //%%@OneToMany(mappedBy="art_listing")
   //%%private List<ArtPiece> pieces;
-  //%%@OneToMany
+  //%%@OneToMany(mappedBy="listing")
   //%%private List<Tag> tags;
   //%%@ManyToOne
   //%%private Manager manager;
-  //%%@ManyToMany
+  //%%@ManyToMany(mappedBy="favorite_listings")
   //%%private List<Customer> favoritedCustomer;
   //%%@ManyToOne
   //%%private Artist artist;

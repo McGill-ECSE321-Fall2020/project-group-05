@@ -23,11 +23,8 @@ public class ArtPiece
   //ArtPiece Attributes
   private PieceLocation basicLocation;
   private String addressLocation;
-  private String idCode;
 
   //ArtPiece Associations
-  private ArtListing artListing;
-  private ArtOrder artOrder;
 
   //------------------------
   // CONSTRUCTOR
@@ -84,16 +81,14 @@ public class ArtPiece
     return addressLocation;
   }
 
-  /**
-   * %%AnnotateStart
-   * %%@ManyToOne
-   * %%private ArtListing artListing;
-   * %%@OneToOne
-   * %%private ArtOrder artOrder;
-   * %%@Id
-   * %%private String idCode;
-   * %%AnnotateEnd
-   */
+  
+  @ManyToOne
+  private ArtListing artListing;
+  @OneToOne
+  private ArtOrder artOrder;
+  @Id
+  private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

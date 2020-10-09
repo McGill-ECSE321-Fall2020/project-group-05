@@ -23,11 +23,8 @@ public class Tag
   //Tag Attributes
   private TagType type;
   private String keyword;
-  private String idCode;
 
   //Tag Associations
-  private ArtListing listing;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -83,14 +80,12 @@ public class Tag
     return keyword;
   }
 
-  /**
-   * %%AnnotateStart
-   * %%@ManyToOne
-   * %%private ArtListing listing;
-   * %%@Id
-   * %%private String idCode;
-   * %%AnnotateEnd
-   */
+  
+  @ManyToOne
+  private ArtListing listing;
+  @Id
+  private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

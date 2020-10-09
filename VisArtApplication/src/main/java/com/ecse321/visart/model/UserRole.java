@@ -16,10 +16,8 @@ public class UserRole
   //------------------------
 
   //UserRole Attributes
-  private String idCode;
 
   //UserRole Associations
-  private User user;
 
   //------------------------
   // CONSTRUCTOR
@@ -47,14 +45,12 @@ public class UserRole
     return wasSet;
   }
 
-  /**
-   * %%AnnotateStart
-   * %%@OneToOne
-   * %%private User user;
-   * %%@Id
-   * %%private String idCode;
-   * %%AnnotateEnd
-   */
+  
+  @OneToOne
+  private User user;
+  @Id
+  private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

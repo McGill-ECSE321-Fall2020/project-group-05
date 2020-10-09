@@ -18,12 +18,8 @@ public class Ticket
   //Ticket Attributes
   private boolean isPaymentConfirmed;
   private double paymentAmount;
-  private String idCode;
 
   //Ticket Associations
-  private ArtOrder order;
-  private Customer customer;
-  private Artist artist;
 
   //------------------------
   // CONSTRUCTOR
@@ -92,18 +88,16 @@ public class Ticket
     return paymentAmount;
   }
 
-  /**
-   * %%AnnotateStart
-   * %%@OneToOne
-   * %%private ArtOrder order;
-   * %%@ManyToOne
-   * %%private Customer customer;
-   * %%@ManyToOne
-   * %%private Artist artist;
-   * %%@Id
-   * %%private String idCode;
-   * %%AnnotateEnd
-   */
+  
+  @OneToOne
+  private ArtOrder order;
+  @ManyToOne
+  private Customer customer;
+  @ManyToOne
+  private Artist artist;
+  @Id
+  private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

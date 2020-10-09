@@ -16,12 +16,6 @@ public class Artist
   //------------------------
 
   //Artist Attributes
-  private String idCode;
-
-  //Artist Associations
-  private List<Ticket> soldTickets;
-  private List<ArtListing> postedListings;
-  private Customer customer;
 
   //------------------------
   // CONSTRUCTOR
@@ -51,18 +45,16 @@ public class Artist
     return wasSet;
   }
 
-  /**
-   * %%AnnotateStart
-   * %%@OneToMany
-   * %%private List<Ticket> soldTickets;
-   * %%@OneToMany
-   * %%private List<ArtListing> postedListings;
-   * %%@OneToOne
-   * %%private Customer customer;
-   * %%@Id
-   * %%private String idCode;
-   * %%AnnotateEnd
-   */
+  
+  @OneToMany(mappedBy="artist")
+  private List<Ticket> soldTickets;
+  @OneToMany(mappedBy="artist")
+  private List<ArtListing> postedListings;
+  @OneToOne
+  private Customer customer;
+  @Id
+  private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

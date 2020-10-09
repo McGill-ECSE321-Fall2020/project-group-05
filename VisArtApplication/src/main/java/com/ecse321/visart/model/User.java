@@ -15,7 +15,6 @@ public class User
   //------------------------
 
   //User Attributes
-  private String idCode;
   private String emailAddress;
   private String displayname;
   private String username;
@@ -24,8 +23,6 @@ public class User
   private String profileDescription;
 
   //User Associations
-  private UserRole role;
-  private Gallery gallery;
 
   //------------------------
   // CONSTRUCTOR
@@ -102,16 +99,14 @@ public class User
     return wasSet;
   }
 
-  /**
-   * %%AnnotateStart
-   * %%@OneToOne
-   * %%private UserRole role;
-   * %%@Transient
-   * %%private Gallery gallery;
-   * %%@Id
-   * %%private String idCode;
-   * %%AnnotateEnd
-   */
+  
+  @OneToOne
+  private UserRole role;
+  @Transient
+  private Gallery gallery;
+  @Id
+  private String idCode;
+   
   public String getIdCode()
   {
     return idCode;

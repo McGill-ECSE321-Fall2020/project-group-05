@@ -17,7 +17,6 @@ public class Manager extends UserRole
   //------------------------
 
   //Manager Associations
-  private List<ArtListing> promotedListings;
 
   //------------------------
   // CONSTRUCTOR
@@ -39,12 +38,10 @@ public class Manager extends UserRole
     return aPromotedListing;
   }
 
-  /**
-   * %%AnnotateStart
-   * %%@OneToMany
-   * %%private List<ArtListing> promotedListings;
-   * %%AnnotateEnd
-   */
+  
+  @OneToMany(mappedBy="manager")
+  private List<ArtListing> promotedListings;
+   
   public List<ArtListing> getPromotedListings()
   {
     List<ArtListing> newPromotedListings = Collections.unmodifiableList(promotedListings);

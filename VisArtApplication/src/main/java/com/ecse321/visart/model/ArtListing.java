@@ -23,18 +23,11 @@ public class ArtListing
 
   //ArtListing Attributes
   private PostVisibility visibility;
-  private List<Float> dimensions;
   private String description;
   private String title;
   private List<String> postingPicLink;
-  private String idCode;
 
   //ArtListing Associations
-  private List<ArtPiece> pieces;
-  private List<Tag> tags;
-  private Manager manager;
-  private List<Customer> favoritedCustomer;
-  private Artist artist;
 
   //------------------------
   // CONSTRUCTOR
@@ -198,24 +191,22 @@ public class ArtListing
     return index;
   }
 
-  /**
-   * %%AnnotateStart
-   * %%@OneToMany
-   * %%private List<ArtPiece> pieces;
-   * %%@OneToMany
-   * %%private List<Tag> tags;
-   * %%@ManyToOne
-   * %%private Manager manager;
-   * %%@ManyToMany
-   * %%private List<Customer> favoritedCustomer;
-   * %%@ManyToOne
-   * %%private Artist artist;
-   * %%@ElementCollection
-   * %%private List<Float> dimensions;
-   * %%@Id
-   * %%private String idCode;
-   * %%AnnotateEnd
-   */
+  
+  @OneToMany(mappedBy="art_listing")
+  private List<ArtPiece> pieces;
+  @OneToMany(mappedBy="listing")
+  private List<Tag> tags;
+  @ManyToOne
+  private Manager manager;
+  @ManyToMany(mappedBy="favorite_listings")
+  private List<Customer> favoritedCustomer;
+  @ManyToOne
+  private Artist artist;
+  @ElementCollection
+  private List<Float> dimensions;
+  @Id
+  private String idCode;
+   
   public String getIdCode()
   {
     return idCode;
