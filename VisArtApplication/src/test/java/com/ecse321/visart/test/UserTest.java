@@ -87,6 +87,8 @@ public class UserTest {
 	    System.out.println(user2);
 
 	  } 
+	@Test
+		@Order(4)
 		void testUpdate1() {
 	    // Find user
 	    user2 = userRepo.getUser("" + l);
@@ -94,8 +96,6 @@ public class UserTest {
 	    //Update Customer
 	    user2.setDisplayname("newDisplayNameUser");
 	    userRepo.updateUser(user2);
-	     
-	    user2 = userRepo.getUser(""+l);
 
 	    // TEST if Customer was retrieved and if properly updated
 	    assertNotNull(user2);
