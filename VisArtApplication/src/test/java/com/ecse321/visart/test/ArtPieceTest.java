@@ -61,15 +61,15 @@ public class ArtPieceTest {
   @Order(2)
   void testCreate1() {
     // Create
-    ArtPiece artPieceTest = apRepo.createArtPiece(PieceLocation.AtGallery, address, "kk" + l + 33,
+    ArtPiece artPieceTest1 = apRepo.createArtPiece(PieceLocation.AtGallery, address, "kk" + l + 33,
         artListing);
 
     // Test if ArtPiece was created
-    assertNotNull(artPieceTest);
+    assertNotNull(artPieceTest1);
 
     // Print Art Listing
     System.out.println("=================CREATE===============");
-    System.out.println(artPieceTest);
+    System.out.println(artPieceTest1);
     System.out.println("=================CREATE===============");
   }
 
@@ -117,11 +117,19 @@ public class ArtPieceTest {
   @Test
   @Order(5)
   void testDelete() {
-    // Delete
+    // Delete everything that has been created
+	
     apRepo.deleteArtPiece(artPieceTest2);
-
+    aRepo.deleteArtist(artist);
+    alRepo.deleteArtListing(artListing);
     // Test if art piece successfully deleted
     assertEquals(null, apRepo.getArtPiece("kk" + l + 33));
+    
+    //Test if all creation has been successfully deleted
+    assertEquals(null, aRepo.getArtist("kl" + l + 13));
+    assertEquals(null, alRepo.getArtListing("ki" + l + 23));
+    
+    
     System.out.println("=================DELETED===============");
 
   }

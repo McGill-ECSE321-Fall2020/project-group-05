@@ -25,6 +25,8 @@ public class ArtListingTest {
 
   @Autowired
   private ArtListingRepository aListRepo;
+  
+  
 
   @Autowired
   private ArtistRepository artRepo;
@@ -51,16 +53,16 @@ public class ArtListingTest {
   void testCreate1() {
 
     // Create
-    ArtListing artListingTest = aListRepo.createArtListing(ArtListing.PostVisibility.Public,
+	  ArtListing artListingTest1 = aListRepo.createArtListing(ArtListing.PostVisibility.Public,
         description, title,
         "tt" + l, artist);
 
     // Test if artListing was created
-    assertNotNull(artListingTest);
+    assertNotNull(artListingTest1);
 
     // Print Art Listing
     System.out.println("=================CREATE===============");
-    System.out.println(artListingTest);
+    System.out.println(artListingTest1);
     System.out.println("=================CREATE===============");
 
   }
@@ -114,10 +116,15 @@ public class ArtListingTest {
   void testDelete() {
 
     // Delete
+    
     aListRepo.deleteArtListing(artListingTest2);
+    artRepo.deleteArtist(artist);
 
     // Test if art listing was succesfully deleted
     assertEquals(null, aListRepo.getArtListing("tt" + l));
+    
+    //Test if all other creation has been deleted
+    assertEquals(null, artRepo.getArtist("tester" + l + 26));
 
     System.out.println("=================DELETED===============");
 

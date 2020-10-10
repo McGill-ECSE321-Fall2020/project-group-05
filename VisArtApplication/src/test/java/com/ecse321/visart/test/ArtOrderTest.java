@@ -45,7 +45,8 @@ public class ArtOrderTest {
   String address2 = "125 ALSTON";
   String tracker2 = "AZA124";
 
-  private static ArtOrder artOrder4;
+ 
+  private static ArtOrder artOrder2;
   private static Artist artist;
   private static ArtListing artListing;
   private static ArtPiece artPiece2;
@@ -71,16 +72,16 @@ public class ArtOrderTest {
   @Order(2)
   void testCreate1() {
     // Create
-    ArtOrder artOrder2 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2,
+	 ArtOrder artOrder1 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2,
         tracker2,
         "tts" + l + 9, artPiece2);
 
     // Test if Art Order was created
-    assertNotNull(artOrder2);
+    assertNotNull(artOrder1);
 
     // Print Art Order
     System.out.println("=================CREATE===============");
-    System.out.println(artOrder2);
+    System.out.println(artOrder1);
     System.out.println("=================CREATE===============");
   }
 
@@ -88,16 +89,16 @@ public class ArtOrderTest {
   @Order(3)
   void testGet1() {
     // Find artOrder2
-    artOrder4 = aoRepo.getArtOrder("tts" + l + 9);
+    artOrder2 = aoRepo.getArtOrder("tts" + l + 9);
 
     // Test if Art Order was retrieved
-    assertNotNull(artOrder4);
-    assertEquals(address2, artOrder4.getTargetAddress());
-    assertEquals(tracker2, artOrder4.getDeliveryTracker());
+    assertNotNull(artOrder2);
+    assertEquals(address2, artOrder2.getTargetAddress());
+    assertEquals(tracker2, artOrder2.getDeliveryTracker());
 
     // Print Art Order
     System.out.println("=================FIND===============");
-    System.out.println(artOrder4);
+    System.out.println(artOrder2);
     System.out.println("=================FIND===============");
   }
 
@@ -106,33 +107,43 @@ public class ArtOrderTest {
   void testUpdate() {
 
     // Changing attribute of art order
-    artOrder4.setDeliveryTracker("BABA123");
+    artOrder2.setDeliveryTracker("BABA123");
 
     // Update art order in database
-    aoRepo.updateArtOrder(artOrder4);
+    aoRepo.updateArtOrder(artOrder2);
 
     // Getting updated art order
-    artOrder4 = aoRepo.getArtOrder("tts" + l + 9);
+    artOrder2 = aoRepo.getArtOrder("tts" + l + 9);
 
     // Test if art order updated successfully
-    assertNotNull(artOrder4);
-    assertEquals(address2, artOrder4.getTargetAddress());
-    assertEquals(tracker, artOrder4.getDeliveryTracker());
+    assertNotNull(artOrder2);
+    assertEquals(address2, artOrder2.getTargetAddress());
+    assertEquals(tracker, artOrder2.getDeliveryTracker());
 
     // Print art order
     System.out.println("=================UPDATE===============");
-    System.out.println(artOrder4);
+    System.out.println(artOrder2);
     System.out.println("=================UPDATE===============");
   }
 
   @Test
   @Order(5)
   void testDelete() {
-    // Delete
-    aoRepo.deleteArtOrder(artOrder4);
-
+    // Delete all creation
+	
+    aoRepo.deleteArtOrder(artOrder2);
+    aRepo.deleteArtist(artist);
+    alRepo.deleteArtListing(artListing);
+    apRepo.deleteArtPiece(artPiece2);
+    
     // Test if art order successfully deleted
     assertEquals(null, aoRepo.getArtOrder("tts" + l + 9));
+    
+    //Test if other creation has been successfully deleted
+    assertEquals(null, aRepo.getArtist("test" + l + 1));
+    assertEquals(null, alRepo.getArtListing("t" + l + 2));
+    assertEquals(null, apRepo.getArtPiece("ttt" + l + 3));
+    
 
     System.out.println("=================DELETED===============");
 
