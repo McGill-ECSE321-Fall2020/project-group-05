@@ -7,7 +7,7 @@
 ### Scope
 VisArt is a project made for art galleries facilitating Art Piece transactions from local Artists to art enthusiasts. VisArt will provide a website where customers can browse various Art Listings from local Artists as well as some straight from the gallery, if interested, customers can purchase straight from the website. Verified local artists can post their Art Listings which will be stored in our back-end database system.
 
-### [Wiki](https://github.com/McGill-ECSE321-Fall2020/project-group-05/wiki)
+### [Project Report Wiki](https://github.com/McGill-ECSE321-Fall2020/project-group-05/wiki)
 
 ### Team
 #### Nikola Milekic
@@ -29,7 +29,7 @@ I am a U3 Computer Engineering major at McGill university.I've been passionate a
 |---|---|---|---|---|---|
 | Nikola Milekic        | 20 hours: Domain Model, Repository classes, Documentation, Database setup |   |   |   |
 | Daniel Bucci          | 25 hours: Domain Model, Repository Classes, JPA Annotations, Documentation, Unit Tests, Project Report  |   |   |   |
-| Ryan Au               |   |   |   |   |
+| Ryan Au               | 25 hours: Domain Model, Hibernate Annotations, Repository, User Story, Gradle/Spring Setup, Travis CI, Heroku Database, Database Tests|   |   |   |
 | Yuta Youness Bellali  |   |   |   |   |
 |  Riad El Mahmoudy     | 20 hours: requirements, domain model, unit test classes, documentation |   |   |   |
 |  Mahin Anwar          | 15 hours: Requirements model, User stories,Domain model,Javadoc, Database tests, Documentation |   |   |   |
