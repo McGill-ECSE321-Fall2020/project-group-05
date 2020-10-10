@@ -109,9 +109,14 @@ public class ArtistTest {
 
     // Delete
     aRepo.deleteArtist(testArtist2);
+    
+    //Delete all creation
+    cRepo.deleteCustomer(testArtist2.getCustomer());
 
-    // Test if artist has been successfully deleted
+    // Test if artist have been successfully deleted
     assertEquals(null, aRepo.getArtist(l + "test" + 2));
+    
+    
 
     System.out.println("=================DELETED===============");
 
@@ -160,8 +165,14 @@ public class ArtistTest {
   @Order(10)
   void testDelete1() {
     Artist artist = aRepo.getArtist(id);
+    
+    //Deleting all creation
     aRepo.deleteArtist(artist);
+    cRepo.deleteCustomer(customer);
+    
+    //Test if all creation have been deleted
     assertNull(aRepo.getArtist(id));
+    assertNull(cRepo.getCustomer(l + "test_artist"));
   }
 
 }
