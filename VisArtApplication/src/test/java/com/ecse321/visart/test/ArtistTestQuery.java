@@ -44,8 +44,8 @@ public class ArtistTestQuery {
     cRepo.deleteCustomer(a2.getCustomer());
   }
 
-  @Test
-  @Order(2)
+  // @Test
+  // @Order(2)
   void deleteAll() {
     List<String> keys = aRepo.getAllKeys();
     if (keys != null)

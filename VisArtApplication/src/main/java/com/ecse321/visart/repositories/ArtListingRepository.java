@@ -1,5 +1,7 @@
 package com.ecse321.visart.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,16 +106,15 @@ public class ArtListingRepository {
    * referenced in this ArtListing.
    * 
    * @param  id the primary key of the entry to remove
-   * @return    true if successful
+   * @return    true if successful delete
    */
   @Transactional
   public boolean deleteArtListing(String id) {
     ArtListing entity = entityManager.find(ArtListing.class, id);
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-    } else {
-      entityManager.remove(entity);
+    if (entity == null) {
+      return true;
     }
+    entityManager.remove(entityManager.merge(entity));
     for (Tag t : entity.getTags()) {
       tRepository.deleteTag(t);
     }
@@ -133,5 +134,17 @@ public class ArtListingRepository {
   @Transactional
   public boolean deleteArtListing(ArtListing al) {
     return deleteArtListing(al.getIdCode());
+  }
+
+  /**
+   * getAllKeys queries the database for all of the primary keys of the
+   * ArtListings
+   * instances.
+   * 
+   * @return list of primary keys for ArtListings
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM ArtListing", String.class).getResultList();
   }
 }

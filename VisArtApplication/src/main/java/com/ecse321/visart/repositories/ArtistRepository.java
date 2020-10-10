@@ -1,16 +1,8 @@
 package com.ecse321.visart.repositories;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,16 +127,17 @@ public class ArtistRepository {
   @Transactional
   public boolean deleteArtist(String id) {
     Artist entity = entityManager.find(Artist.class, id);
-    Customer customer = entityManager.find(Customer.class, entity.getCustomer().getIdCode());
-    if (customer != null && customer.getArtist() != null)
-      customer.getArtist().delete();
-    customerRepo.updateCustomer(customer);
-
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-    } else {
-      entityManager.remove(entity);
+    if (entity == null) {
+      return true;
     }
+    if (entity.getCustomer() != null) { // Artist has a customer, that may have association
+      Customer customer = entityManager.find(Customer.class, entity.getCustomer().getIdCode());
+      if (customer != null && customer.getArtist() != null)
+        customer.getArtist().delete(); // Remove artist from association
+      customerRepo.updateCustomer(customer);
+    }
+
+    entityManager.remove(entityManager.merge(entity));
     return !entityManager.contains(entity);
   }
 

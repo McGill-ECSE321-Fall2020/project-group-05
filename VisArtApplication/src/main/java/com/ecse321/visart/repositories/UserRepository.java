@@ -1,15 +1,14 @@
 
 package com.ecse321.visart.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-// import com.ecse321.visart.model.User;
-import com.ecse321.visart.model.UserRole;
 import com.ecse321.visart.model.User;
 
 /**
@@ -95,12 +94,21 @@ public class UserRepository {
   @Transactional
   public boolean deleteUser(String id) {
     User entity = entityManager.find(User.class, id);
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-    } else {
-      entityManager.remove(entity);
+    if (entity == null) {
+      return true;
     }
+    entityManager.remove(entityManager.merge(entity));
     return !entityManager.contains(entity);
   }
 
+  /**
+   * getAllKeys queries the database for all of the primary keys of the Users
+   * instances.
+   * 
+   * @return list of primary keys for Users
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM User", String.class).getResultList();
+  }
 }
