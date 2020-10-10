@@ -1,3 +1,7 @@
+/** 
+
+ */
+
 package com.ecse321.visart.repositories;
 
 import javax.persistence.EntityManager;
@@ -11,34 +15,104 @@ import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.Ticket;
 
-
-
-
+/**
+ * CRUD Repository operations for a Ticket.
+ * 
+ * @author Nikola Milekic
+ * @author Daniel Bucci
+ *
+ */
 @Repository
 public class TicketRepository {
-	
-	@Autowired
-	EntityManager entityManager;
-	
-	@Transactional
-	public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode, ArtOrder aOrder, Customer aCustomer, Artist aArtist) {
-		Ticket tic = new Ticket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer, aArtist);
-		entityManager.persist(tic);
-		return tic;
-	}
-	
-	@Transactional
-	public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode, boolean aIsDeliveredForOrder, PieceLocation aTargetLocationForOrder, String aTargetAddressForOrder, String aDeliveryTrackerForOrder, String aIdCodeForOrder, ArtPiece aArtPieceForOrder, Customer aCustomer, Artist aArtist) {
-		Ticket tic = new Ticket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aIsDeliveredForOrder, aTargetLocationForOrder, aTargetAddressForOrder, aDeliveryTrackerForOrder, aIdCodeForOrder, aArtPieceForOrder, aCustomer, aArtist);
-		entityManager.persist(tic);
-		return tic;
-	}
-	
-	@Transactional
-	public Ticket getTicket(String aIdCode) {
-		return entityManager.find(Ticket.class, aIdCode);
-	}
-	
+
+  @Autowired
+  EntityManager entityManager;
+
+  @Autowired
+  ArtOrderRepository artOrderRepo;
+
+  /**
+   * createTicket method creates a Ticket instance for an ArtOrder.
+   * 
+   * @param  aIsPaymentConfirmed whether payment is paid or not
+   * @param  aPaymentAmount      price of the art piece
+   * @param  aIdCode             database primary key for the Ticket
+   * @param  aOrder              the ArtOrder to attach to
+   * @param  aCustomer           the Customer instance buying the artwork
+   * @param  aArtist             the Artist instance selling the artwork
+   * @return                     a persisted Ticket instance from database
+   */
+  @Transactional
+  public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
+      ArtOrder aOrder, Customer aCustomer, Artist aArtist) {
+    Ticket tic = new Ticket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer,
+        aArtist);
+    entityManager.persist(tic);
+    entityManager.merge(aOrder);
+    entityManager.merge(aCustomer);
+    entityManager.merge(aArtist);
+    return tic;
+  }
+
+  /**
+   * getTicket method retrieves a Ticket instance for an ArtOrder from the
+   * database, given its primary key.
+   * 
+   * @param  aIdCode database primary key for the art order
+   * @return         Ticket instance from database
+   */
+  @Transactional
+  public Ticket getTicket(String aIdCode) {
+    return entityManager.find(Ticket.class, aIdCode);
+  }
+
+  /**
+   * updateTicket method updates a Ticket instance's properties in the
+   * database.
+   * 
+   * @param t the Ticket whose changes are written to database
+   */
+  @Transactional
+  public void updateTicket(Ticket t) {
+    entityManager.merge(t);
+  }
+
+  /**
+   * Overloaded deleteTicket method deletes the given ticket instance from the
+   * database.
+   * 
+   * @param  t the Ticket instance to remove from database
+   * @return   true if successful delete
+   */
+  @Transactional
+  public boolean deleteTicket(Ticket t) {
+    return deleteTicket(t.getIdCode());
+  }
+
+  /**
+   * deleteTicket method deletes the Ticket instance by its primary key from the
+   * database.
+   * 
+   * @param  id the primary key of the Ticket to delete
+   * @return    true if successful delete
+   */
+  @Transactional
+  public boolean deleteTicket(String id) {
+    Ticket entity = entityManager.find(Ticket.class, id);
+    ArtOrder ao = artOrderRepo.getArtOrder(entity.getOrder().getIdCode());
+    if (ao != null && ao.getTicket() != null)
+      ao.getTicket().delete();
+    artOrderRepo.updateArtOrder(ao);
+
+    if (entityManager.contains(entity)) {
+      entityManager.remove(entityManager.merge(entity));
+    } else {
+      entityManager.remove(entity);
+    }
+    return !entityManager.contains(entity);
+  }
+
 }

@@ -7,7 +7,7 @@ import java.util.*;
 
 @Entity
   @Table(name="artists")
-// line 91 "../../../../../resources/visart.ump"
+// line 92 "../../../../../resources/visart.ump"
 public class Artist
 {
 
@@ -16,8 +16,6 @@ public class Artist
   //------------------------
 
   //Artist Attributes
-
-  //Artist Associations
 
   //------------------------
   // CONSTRUCTOR
@@ -48,14 +46,15 @@ public class Artist
   }
 
   
-  @OneToMany
+  @OneToMany(mappedBy="artist")
   private List<Ticket> soldTickets;
-  @OneToMany
+  @OneToMany(mappedBy="artist")
   private List<ArtListing> postedListings;
   @OneToOne
   private Customer customer;
   @Id
   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;
@@ -203,9 +202,9 @@ public class Artist
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Manager aManager)
+  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aDescription, String aTitle, String aIdCode)
   {
-    return new ArtListing(aVisibility, aIdCode, aManager, this);
+    return new ArtListing(aVisibility, aDescription, aTitle, aIdCode, this);
   }
 
   public boolean addPostedListing(ArtListing aPostedListing)
@@ -318,7 +317,7 @@ public class Artist
     }
   }
 
-  // line 109 "../../../../../resources/visart.ump"
+  // line 110 "../../../../../resources/visart.ump"
    public  Artist(){
     
   }

@@ -7,7 +7,7 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 @Entity
   @Table(name="orders")
-// line 223 "../../../../../resources/visart.ump"
+// line 229 "../../../../../resources/visart.ump"
 public class ArtOrder
 {
 
@@ -27,7 +27,7 @@ public class ArtOrder
   // CONSTRUCTOR
   //------------------------
 
-  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece, Ticket aTicket)
+  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece)
   {
     isDelivered = aIsDelivered;
     targetLocation = aTargetLocation;
@@ -39,26 +39,6 @@ public class ArtOrder
     {
       throw new RuntimeException("Unable to create artOrder due to artPiece. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    if (aTicket == null || aTicket.getOrder() != null)
-    {
-      throw new RuntimeException("Unable to create ArtOrder due to aTicket. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    ticket = aTicket;
-  }
-
-  public ArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece, boolean aIsPaymentConfirmedForTicket, double aPaymentAmountForTicket, String aIdCodeForTicket, Customer aCustomerForTicket, Artist aArtistForTicket)
-  {
-    isDelivered = aIsDelivered;
-    targetLocation = aTargetLocation;
-    targetAddress = aTargetAddress;
-    deliveryTracker = aDeliveryTracker;
-    idCode = aIdCode;
-    boolean didAddArtPiece = setArtPiece(aArtPiece);
-    if (!didAddArtPiece)
-    {
-      throw new RuntimeException("Unable to create artOrder due to artPiece. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    ticket = new Ticket(aIsPaymentConfirmedForTicket, aPaymentAmountForTicket, aIdCodeForTicket, this, aCustomerForTicket, aArtistForTicket);
   }
 
   //------------------------
@@ -133,12 +113,12 @@ public class ArtOrder
   private Ticket ticket;
   @Id
   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;
   }
   /* Code from template attribute_IsBoolean */
-  @Transient
   public boolean isIsDelivered()
   {
     return isDelivered;
@@ -152,6 +132,12 @@ public class ArtOrder
   public Ticket getTicket()
   {
     return ticket;
+  }
+
+  public boolean hasTicket()
+  {
+    boolean has = ticket != null;
+    return has;
   }
   /* Code from template association_SetOneToOptionalOne */
   public boolean setArtPiece(ArtPiece aNewArtPiece)
@@ -181,6 +167,33 @@ public class ArtOrder
     wasSet = true;
     return wasSet;
   }
+  /* Code from template association_SetOptionalOneToOne */
+  public boolean setTicket(Ticket aNewTicket)
+  {
+    boolean wasSet = false;
+    if (ticket != null && !ticket.equals(aNewTicket) && equals(ticket.getOrder()))
+    {
+      //Unable to setTicket, as existing ticket would become an orphan
+      return wasSet;
+    }
+
+    ticket = aNewTicket;
+    ArtOrder anOldOrder = aNewTicket != null ? aNewTicket.getOrder() : null;
+
+    if (!this.equals(anOldOrder))
+    {
+      if (anOldOrder != null)
+      {
+        anOldOrder.ticket = null;
+      }
+      if (ticket != null)
+      {
+        ticket.setOrder(this);
+      }
+    }
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
@@ -198,7 +211,7 @@ public class ArtOrder
     }
   }
 
-  // line 244 "../../../../../resources/visart.ump"
+  // line 250 "../../../../../resources/visart.ump"
    public  ArtOrder(){
     
   }

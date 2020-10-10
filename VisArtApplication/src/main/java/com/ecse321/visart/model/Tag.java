@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
   @Table(name="tags")
-// line 151 "../../../../../resources/visart.ump"
+// line 155 "../../../../../resources/visart.ump"
 public class Tag
 {
 
@@ -25,7 +25,6 @@ public class Tag
   private String keyword;
 
   //Tag Associations
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -82,10 +81,11 @@ public class Tag
   }
 
   
-  @Transient
+  @ManyToOne
   private ArtListing listing;
   @Id
   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;
@@ -125,7 +125,7 @@ public class Tag
     }
   }
 
-  // line 169 "../../../../../resources/visart.ump"
+  // line 173 "../../../../../resources/visart.ump"
    public  Tag(){
     
   }

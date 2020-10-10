@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
   @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
   @DiscriminatorColumn(name="user_type",discriminatorType=DiscriminatorType.INTEGER)
-// line 36 "../../../../../resources/visart.ump"
+// line 37 "../../../../../resources/visart.ump"
 public class UserRole
 {
 
@@ -50,6 +50,7 @@ public class UserRole
   private User user;
   @Id
   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;
@@ -98,7 +99,7 @@ public class UserRole
     }
   }
 
-  // line 47 "../../../../../resources/visart.ump"
+  // line 48 "../../../../../resources/visart.ump"
    public  UserRole(){
     
   }

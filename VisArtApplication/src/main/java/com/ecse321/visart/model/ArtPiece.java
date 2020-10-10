@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
   @Table(name="artpieces")
-// line 174 "../../../../../resources/visart.ump"
+// line 178 "../../../../../resources/visart.ump"
 public class ArtPiece
 {
 
@@ -88,6 +88,7 @@ public class ArtPiece
   private ArtOrder artOrder;
   @Id
   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;
@@ -172,9 +173,9 @@ public class ArtPiece
     }
   }
 
-  // line 194 "../../../../../resources/visart.ump"
+  // line 199 "../../../../../resources/visart.ump"
    public  ArtPiece(){
-    
+    String note;
   }
 
 

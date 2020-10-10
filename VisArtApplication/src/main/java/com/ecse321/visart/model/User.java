@@ -19,6 +19,8 @@ public class User
   private String displayname;
   private String username;
   private String password;
+  private String profilePicLink;
+  private String profileDescription;
 
   //User Associations
 
@@ -26,13 +28,15 @@ public class User
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword)
+  public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription)
   {
     idCode = aIdCode;
     emailAddress = aEmailAddress;
     displayname = aDisplayname;
     username = aUsername;
     password = aPassword;
+    profilePicLink = aProfilePicLink;
+    profileDescription = aProfileDescription;
   }
 
   //------------------------
@@ -79,6 +83,22 @@ public class User
     return wasSet;
   }
 
+  public boolean setProfilePicLink(String aProfilePicLink)
+  {
+    boolean wasSet = false;
+    profilePicLink = aProfilePicLink;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setProfileDescription(String aProfileDescription)
+  {
+    boolean wasSet = false;
+    profileDescription = aProfileDescription;
+    wasSet = true;
+    return wasSet;
+  }
+
   
   @OneToOne
   private UserRole role;
@@ -86,6 +106,7 @@ public class User
   private Gallery gallery;
   @Id
   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;
@@ -109,6 +130,16 @@ public class User
   public String getPassword()
   {
     return password;
+  }
+
+  public String getProfilePicLink()
+  {
+    return profilePicLink;
+  }
+
+  public String getProfileDescription()
+  {
+    return profileDescription;
   }
   /* Code from template association_GetOne */
   public UserRole getRole()
@@ -193,7 +224,7 @@ public class User
     }
   }
 
-  // line 30 "../../../../../resources/visart.ump"
+  // line 31 "../../../../../resources/visart.ump"
    public  User(){
     
   }
@@ -206,7 +237,9 @@ public class User
             "emailAddress" + ":" + getEmailAddress()+ "," +
             "displayname" + ":" + getDisplayname()+ "," +
             "username" + ":" + getUsername()+ "," +
-            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
+            "password" + ":" + getPassword()+ "," +
+            "profilePicLink" + ":" + getProfilePicLink()+ "," +
+            "profileDescription" + ":" + getProfileDescription()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "role = "+(getRole()!=null?Integer.toHexString(System.identityHashCode(getRole())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "gallery = "+(getGallery()!=null?Integer.toHexString(System.identityHashCode(getGallery())):"null");
   }

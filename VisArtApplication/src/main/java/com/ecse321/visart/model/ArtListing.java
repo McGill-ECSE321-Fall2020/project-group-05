@@ -7,7 +7,7 @@ import java.util.*;
 
 @Entity
   @Table(name="artlistings")
-// line 114 "../../../../../resources/visart.ump"
+// line 115 "../../../../../resources/visart.ump"
 public class ArtListing
 {
 
@@ -23,6 +23,11 @@ public class ArtListing
 
   //ArtListing Attributes
   private PostVisibility visibility;
+  private String description;
+  private String title;
+  
+  @ElementCollection
+  private List<String> postingPicLink;
 
   //ArtListing Associations
 
@@ -30,18 +35,16 @@ public class ArtListing
   // CONSTRUCTOR
   //------------------------
 
-  public ArtListing(PostVisibility aVisibility, String aIdCode, Manager aManager, Artist aArtist)
+  public ArtListing(PostVisibility aVisibility, String aDescription, String aTitle, String aIdCode, Artist aArtist)
   {
     visibility = aVisibility;
     dimensions = new ArrayList<Float>();
+    description = aDescription;
+    title = aTitle;
+    postingPicLink = new ArrayList<String>();
     idCode = aIdCode;
     pieces = new ArrayList<ArtPiece>();
     tags = new ArrayList<Tag>();
-    boolean didAddManager = setManager(aManager);
-    if (!didAddManager)
-    {
-      throw new RuntimeException("Unable to create promotedListing due to manager. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
     favoritedCustomer = new ArrayList<Customer>();
     boolean didAddArtist = setArtist(aArtist);
     if (!didAddArtist)
@@ -73,6 +76,36 @@ public class ArtListing
   {
     boolean wasRemoved = false;
     wasRemoved = dimensions.remove(aDimension);
+    return wasRemoved;
+  }
+
+  public boolean setDescription(String aDescription)
+  {
+    boolean wasSet = false;
+    description = aDescription;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setTitle(String aTitle)
+  {
+    boolean wasSet = false;
+    title = aTitle;
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template attribute_SetMany */
+  public boolean addPostingPicLink(String aPostingPicLink)
+  {
+    boolean wasAdded = false;
+    wasAdded = postingPicLink.add(aPostingPicLink);
+    return wasAdded;
+  }
+
+  public boolean removePostingPicLink(String aPostingPicLink)
+  {
+    boolean wasRemoved = false;
+    wasRemoved = postingPicLink.remove(aPostingPicLink);
     return wasRemoved;
   }
 
@@ -120,10 +153,50 @@ public class ArtListing
     return index;
   }
 
+  public String getDescription()
+  {
+    return description;
+  }
+
+  public String getTitle()
+  {
+    return title;
+  }
+  /* Code from template attribute_GetMany */
+  public String getPostingPicLink(int index)
+  {
+    String aPostingPicLink = postingPicLink.get(index);
+    return aPostingPicLink;
+  }
+
+  public String[] getPostingPicLink()
+  {
+    String[] newPostingPicLink = postingPicLink.toArray(new String[postingPicLink.size()]);
+    return newPostingPicLink;
+  }
+
+  public int numberOfPostingPicLink()
+  {
+    int number = postingPicLink.size();
+    return number;
+  }
+
+  public boolean hasPostingPicLink()
+  {
+    boolean has = postingPicLink.size() > 0;
+    return has;
+  }
+
+  public int indexOfPostingPicLink(String aPostingPicLink)
+  {
+    int index = postingPicLink.indexOf(aPostingPicLink);
+    return index;
+  }
+
   
-  @OneToMany
+  @OneToMany(mappedBy="artListing")
   private List<ArtPiece> pieces;
-  @OneToMany
+  @OneToMany(mappedBy="listing")
   private List<Tag> tags;
   @ManyToOne
   private Manager manager;
@@ -135,6 +208,7 @@ public class ArtListing
   private List<Float> dimensions;
   @Id
   private String idCode;
+   
   public String getIdCode()
   {
     return idCode;
@@ -203,6 +277,12 @@ public class ArtListing
   public Manager getManager()
   {
     return manager;
+  }
+
+  public boolean hasManager()
+  {
+    boolean has = manager != null;
+    return has;
   }
   /* Code from template association_GetMany */
   public Customer getFavoritedCustomer(int index)
@@ -383,22 +463,20 @@ public class ArtListing
     }
     return wasAdded;
   }
-  /* Code from template association_SetOneToMany */
+  /* Code from template association_SetOptionalOneToMany */
   public boolean setManager(Manager aManager)
   {
     boolean wasSet = false;
-    if (aManager == null)
-    {
-      return wasSet;
-    }
-
     Manager existingManager = manager;
     manager = aManager;
     if (existingManager != null && !existingManager.equals(aManager))
     {
       existingManager.removePromotedListing(this);
     }
-    manager.addPromotedListing(this);
+    if (aManager != null)
+    {
+      aManager.addPromotedListing(this);
+    }
     wasSet = true;
     return wasSet;
   }
@@ -520,10 +598,10 @@ public class ArtListing
       tags.remove(aTag);
     }
     
-    Manager placeholderManager = manager;
-    this.manager = null;
-    if(placeholderManager != null)
+    if (manager != null)
     {
+      Manager placeholderManager = manager;
+      this.manager = null;
       placeholderManager.removePromotedListing(this);
     }
     ArrayList<Customer> copyOfFavoritedCustomer = new ArrayList<Customer>(favoritedCustomer);
@@ -540,7 +618,7 @@ public class ArtListing
     }
   }
 
-  // line 146 "../../../../../resources/visart.ump"
+  // line 150 "../../../../../resources/visart.ump"
    public  ArtListing(){
     
   }
@@ -549,6 +627,8 @@ public class ArtListing
   public String toString()
   {
     return super.toString() + "["+
+            "description" + ":" + getDescription()+ "," +
+            "title" + ":" + getTitle()+ "," +
             "idCode" + ":" + getIdCode()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "visibility" + "=" + (getVisibility() != null ? !getVisibility().equals(this)  ? getVisibility().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "manager = "+(getManager()!=null?Integer.toHexString(System.identityHashCode(getManager())):"null") + System.getProperties().getProperty("line.separator") +

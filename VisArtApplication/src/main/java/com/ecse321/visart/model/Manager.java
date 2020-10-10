@@ -8,7 +8,7 @@ import java.util.*;
 @Entity
   @Table(name="managers")
   @DiscriminatorValue("0")
-// line 53 "../../../../../resources/visart.ump"
+// line 54 "../../../../../resources/visart.ump"
 public class Manager extends UserRole
 {
 
@@ -39,8 +39,9 @@ public class Manager extends UserRole
   }
 
   
-  @OneToMany
+  @OneToMany(mappedBy="manager")
   private List<ArtListing> promotedListings;
+   
   public List<ArtListing> getPromotedListings()
   {
     List<ArtListing> newPromotedListings = Collections.unmodifiableList(promotedListings);
@@ -69,21 +70,20 @@ public class Manager extends UserRole
   {
     return 0;
   }
-  /* Code from template association_AddManyToOne */
-  public ArtListing addPromotedListing(ArtListing.PostVisibility aVisibility, String aIdCode, Artist aArtist)
-  {
-    return new ArtListing(aVisibility, aIdCode, this, aArtist);
-  }
-
+  /* Code from template association_AddManyToOptionalOne */
   public boolean addPromotedListing(ArtListing aPromotedListing)
   {
     boolean wasAdded = false;
     if (promotedListings.contains(aPromotedListing)) { return false; }
     Manager existingManager = aPromotedListing.getManager();
-    boolean isNewManager = existingManager != null && !this.equals(existingManager);
-    if (isNewManager)
+    if (existingManager == null)
     {
       aPromotedListing.setManager(this);
+    }
+    else if (!this.equals(existingManager))
+    {
+      existingManager.removePromotedListing(aPromotedListing);
+      addPromotedListing(aPromotedListing);
     }
     else
     {
@@ -96,10 +96,10 @@ public class Manager extends UserRole
   public boolean removePromotedListing(ArtListing aPromotedListing)
   {
     boolean wasRemoved = false;
-    //Unable to remove aPromotedListing, as it must always have a manager
-    if (!this.equals(aPromotedListing.getManager()))
+    if (promotedListings.contains(aPromotedListing))
     {
       promotedListings.remove(aPromotedListing);
+      aPromotedListing.setManager(null);
       wasRemoved = true;
     }
     return wasRemoved;
@@ -139,15 +139,14 @@ public class Manager extends UserRole
 
   public void delete()
   {
-    for(int i=promotedListings.size(); i > 0; i--)
+    while( !promotedListings.isEmpty() )
     {
-      ArtListing aPromotedListing = promotedListings.get(i - 1);
-      aPromotedListing.delete();
+      promotedListings.get(0).setManager(null);
     }
     super.delete();
   }
 
-  // line 63 "../../../../../resources/visart.ump"
+  // line 64 "../../../../../resources/visart.ump"
    public  Manager(){
     
   }

@@ -8,16 +8,15 @@ import java.util.*;
 @Entity
   @Table(name="customers")
   @DiscriminatorValue("1")
-// line 69 "../../../../../resources/visart.ump"
+// line 70 "../../../../../resources/visart.ump"
 public class Customer extends UserRole
 {
   @OneToOne
   private Artist artist;
-  @OneToMany
+  @OneToMany(mappedBy="customer")
   private List<Ticket> boughtTickets;
-  @ManyToMany
+  @ManyToMany(mappedBy="favoritedCustomer")
   private List<ArtListing> favoriteListings;
-
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -314,7 +313,7 @@ public class Customer extends UserRole
     super.delete();
   }
 
-  // line 86 "../../../../../resources/visart.ump"
+  // line 87 "../../../../../resources/visart.ump"
    public  Customer(){
     
   }
