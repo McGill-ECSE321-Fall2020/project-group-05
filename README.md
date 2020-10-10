@@ -32,4 +32,4 @@ I am a U3 Computer Engineering major at McGill university.I've been passionate a
 | Ryan Au               |   |   |   |   |
 | Yuta Youness Bellali  |   |   |   |   |
 |  Riad El Mahmoudy     |   |   |   |   |
-|  Mahin Anwar          |   |   |   |   |
+|  Mahin Anwar          | 15 hours: Requirements model, User stories,Domain model,Javadoc, Database tests, Documentation |   |   |   |
