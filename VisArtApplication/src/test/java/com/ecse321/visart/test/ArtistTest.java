@@ -168,5 +168,4 @@ public class ArtistTest {
 		assertNull(aRepo.getArtist(id));
 		assertNull(cRepo.getCustomer(l + "test_artist"));
 	}
-
 }

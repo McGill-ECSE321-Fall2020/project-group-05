@@ -1,6 +1,15 @@
 package com.ecse321.visart.repositories;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -149,5 +158,19 @@ public class ArtistRepository {
   @Transactional
   public boolean deleteArtist(Artist artist) {
     return deleteArtist(artist.getIdCode());
+  }
+
+  @Transactional
+  public List<String> getAllKeys() {
+    // Query q = ;
+    // CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    // CriteriaQuery<Artist> query = cb.createQuery(Artist.class);
+    // Root<Artist> artist = query.from(Artist.class);
+    //
+    // Path<String> id_path = artist.get("id_code");
+    //
+    // query.select(artist).
+
+    return entityManager.createQuery("SELECT idCode FROM Artist", String.class).getResultList();
   }
 }
