@@ -31,5 +31,5 @@ I am a U3 Computer Engineering major at McGill university.I've been passionate a
 | Daniel Bucci          | 25 hours: Domain Model, Repository Classes, JPA Annotations, Documentation, Unit Tests, Project Report  |   |   |   |
 | Ryan Au               |   |   |   |   |
 | Yuta Youness Bellali  |   |   |   |   |
-|  Riad El Mahmoudy     |   |   |   |   |
+|  Riad El Mahmoudy     | 20 hours: requirements, domain model, unit test classes, documentation |   |   |   |
 |  Mahin Anwar          | 15 hours: Requirements model, User stories,Domain model,Javadoc, Database tests, Documentation |   |   |   |
