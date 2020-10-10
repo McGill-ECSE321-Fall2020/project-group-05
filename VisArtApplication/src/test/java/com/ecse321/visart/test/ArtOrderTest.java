@@ -17,6 +17,7 @@ import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.repositories.ArtPieceRepository;
 import com.ecse321.visart.repositories.ArtistRepository;
+import com.ecse321.visart.repositories.CustomerRepository;
 import com.ecse321.visart.repositories.ArtOrderRepository;
 import com.ecse321.visart.repositories.ArtListingRepository;
 
@@ -36,6 +37,9 @@ public class ArtOrderTest {
 
   @Autowired
   private ArtistRepository aRepo;
+  
+  @Autowired
+  private CustomerRepository cRepo;
 
   // Attributes for artOrder1
   String address = "123 STLOUIS";
@@ -130,9 +134,9 @@ public class ArtOrderTest {
   @Order(5)
   void testDelete() {
     // Delete all creation
-	
     aoRepo.deleteArtOrder(artOrder2);
     aRepo.deleteArtist(artist);
+    cRepo.deleteCustomer(artist.getCustomer());
     alRepo.deleteArtListing(artListing);
     apRepo.deleteArtPiece(artPiece2);
     

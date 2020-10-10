@@ -108,8 +108,8 @@ public class ManagerTest {
     assertEquals(username, testManager2.getUser().getUsername());
     assertEquals(password, testManager2.getUser().getPassword());
 
-    System.out.println("=================UPDATE===============");
-    System.out.println(testManager2);
+	System.out.println("=================UPDATE===============");
+	System.out.println(testManager2);
     System.out.println("=================UPDATE===============");
   }
 
