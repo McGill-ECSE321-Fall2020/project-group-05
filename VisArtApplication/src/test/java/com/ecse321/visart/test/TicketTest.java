@@ -160,13 +160,14 @@ public class TicketTest {
   @Test
   @Order(4)
   void testDelete1() {
-    ticketRepo.deleteTicket(testTicket2);
-    customerRepo.deleteCustomer(aCustomer);
-    artistRepo.deleteArtist(anArtist);
-    managerRepo.deleteManager(aManager);
-    artlistingRepo.deleteArtListing(aListing);
-    artpieceRepo.deleteArtPiece(anArtPiece);
-    artorderRepo.deleteArtOrder(aOrder);
+       ticketRepo.deleteTicket(testTicket2);
+	   artorderRepo.deleteArtOrder(aOrder);
+	   artpieceRepo.deleteArtPiece(anArtPiece);
+	   artlistingRepo.deleteArtListing(aListing);
+	   managerRepo.deleteManager(aManager);
+	   artistRepo.deleteArtist(anArtist);
+	   customerRepo.deleteCustomer(aCustomer);
+;
 
     assertEquals(null, ticketRepo.getTicket(id));
     assertEquals(null, customerRepo.getCustomer(id+"1"));

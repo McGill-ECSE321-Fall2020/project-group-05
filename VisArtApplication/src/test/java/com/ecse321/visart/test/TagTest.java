@@ -140,11 +140,12 @@ public class TagTest {
   @Test
   @Order(5)
   void testDelete1() {
-    tagRepo.deleteTag(testTag2);
+	  tagRepo.deleteTag(testTag2);
     //Deleting the repositories created out of the database 
-    customerRepo.deleteCustomer(aCustomer);
+    listingRepo.deleteArtListing(aListing); 
     artistRepo.deleteArtist(aArtist);
-    listingRepo.deleteArtListing(aListing);
+    customerRepo.deleteCustomer(aCustomer);
+
     assertEquals(null, tagRepo.getTag(id));
     assertEquals(null, artistRepo.getArtist(id+5));
     assertEquals(null, customerRepo.getCustomer(id+2));
