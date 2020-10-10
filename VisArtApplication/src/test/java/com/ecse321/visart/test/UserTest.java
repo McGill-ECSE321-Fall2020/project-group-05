@@ -1,3 +1,7 @@
+/**
+ * @author mahin anwar
+ * @author riad el mahmoudy
+ */
 package com.ecse321.visart.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +39,7 @@ public class UserTest {
 
   private static String profileDesc;
 
-  static private User User2;
+  static private User user2;
 
   // Pseudo-random ID for tested entities
   static Long l = System.currentTimeMillis();
@@ -49,7 +53,7 @@ public class UserTest {
     username = "riadelm";
     password = "aNicePassword";
     profilePic = "Bezos.jpg";
-    profileDesc = "ACAB, billionaires shouldnt exist, capitalism suxx";
+    profileDesc = "ACAB, billionaires shouldnt exist";
   }
 
   @Test
@@ -67,5 +71,51 @@ public class UserTest {
     System.out.println(testUser);
     System.out.println("=================CREATE===============");
   }
+	@Test
+	  @Order(3)
+	  void testGet1() {
+
+	    user2 = userRepo.getUser("" + l);
+	    assertNotNull(user2);
+	    assertEquals(displayName, user2.getDisplayname());
+	    assertEquals(username, user2.getUsername());
+	    assertEquals(password, user2.getPassword());
+	    assertEquals(email, user2.getEmailAddress());
+	    assertEquals(profilePic, user2.getProfilePicLink());
+	    assertEquals(profileDesc, user2.getProfileDescription());
+	    
+	    System.out.println(user2);
+
+	  } 
+	@Test
+		@Order(4)
+		void testUpdate1() {
+	    // Find user
+	    user2 = userRepo.getUser("" + l);
+	    
+	    //Update Customer
+	    user2.setDisplayname("newDisplayNameUser");
+	    userRepo.updateUser(user2);
+
+	    // TEST if Customer was retrieved and if properly updated
+	    assertNotNull(user2);
+	    assertEquals(email, user2.getEmailAddress());
+	    assertEquals("newDisplayNameUser", user2.getDisplayname());
+	    assertEquals(username, user2.getUsername());
+	    assertEquals(password, user2.getPassword());
+	    assertEquals(profilePic, user2.getProfilePicLink());
+	    assertEquals(profileDesc, user2.getProfileDescription());
+
+	    System.out.println("=================UPDATE===============");
+	    System.out.println(user2);
+	    System.out.println("=================UPDATE===============");
+	  }
+		
+		@Test
+	  @Order(5)
+	  void testDelete1() {
+	    userRepo.deleteUser(user2);
+	    assertEquals(null, userRepo.getUser("" + l));
+	  }
 
 }
