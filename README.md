@@ -27,9 +27,9 @@ I am a U3 Computer Engineering major at McGill university.I've been passionate a
 
 |  Name |Deliverable 1 |  Deliverable 2 | Deliverable 3   |Deliverable 4   | Deliverable 5
 |---|---|---|---|---|---|
-| Nikola Milekic        | 20 hours: Domain Model, Repository classes, Documentation, Database setup |   |   |   |
-| Daniel Bucci          | 25 hours: Domain Model, Repository Classes, JPA Annotations, Documentation, Unit Tests, Project Report  |   |   |   |
-| Ryan Au               | 25 hours: Domain Model, Hibernate Annotations, Repository, User Story, Gradle/Spring Setup, Travis CI, Heroku Database, Database Tests|   |   |   |
-| Yuta Youness Bellali  |   |   |   |   |
-|  Riad El Mahmoudy     | 20 hours: requirements, domain model, unit test classes, documentation |   |   |   |
-|  Mahin Anwar          | 15 hours: Requirements model, User stories,Domain model,Javadoc, Database tests, Documentation |   |   |   |
+| Nikola Milekic        | 20 hours: Domain Model, Repository classes, Documentation, Database setup, Use case scenario |   |   |   |
+| Daniel Bucci          | 25 hours: Domain Model, Repository Classes, JPA Annotations, Documentation, Unit Tests, Project Report, Use case scenario  |   |   |   |
+| Ryan Au               | 25 hours: Domain Model, Hibernate Annotations, Repository, User Story, Gradle/Spring Setup, Travis CI, Heroku Database, Database Tests, Use case scenario|   |   |   |
+| Yuta Youness Bellali  | 21 hours: Domain Model, Requirements, Unit Tests, documentation, Use case scenario, use case diagram   |   |   |   |
+|  Riad El Mahmoudy     | 20 hours: Requirements, domain model, unit test classes, documentation, Use case scenario |   |   |   |
+|  Mahin Anwar          | 15 hours: Requirements model, User case scenario,Domain model,Javadoc, Database tests, Documentation |   |   |   |
