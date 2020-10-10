@@ -160,17 +160,14 @@ public class ArtistRepository {
     return deleteArtist(artist.getIdCode());
   }
 
+  /**
+   * getAllKeys queries the database for all of the primary keys of the Artists
+   * instances.
+   * 
+   * @return list of primary keys for Artists
+   */
   @Transactional
   public List<String> getAllKeys() {
-    // Query q = ;
-    // CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-    // CriteriaQuery<Artist> query = cb.createQuery(Artist.class);
-    // Root<Artist> artist = query.from(Artist.class);
-    //
-    // Path<String> id_path = artist.get("id_code");
-    //
-    // query.select(artist).
-
     return entityManager.createQuery("SELECT idCode FROM Artist", String.class).getResultList();
   }
 }
