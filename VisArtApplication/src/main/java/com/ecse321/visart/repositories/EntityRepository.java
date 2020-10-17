@@ -18,11 +18,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Created a repository for generally accessing any entity class. Methods of
+ * this class are generic to any entity class and perform similar action/query
+ * for any entity. Methods in this class should always have a parameter for the
+ * Class of the entity to operate with.
+ * 
+ * @author Ryan Au
+ *
+ */
 @Repository
 public class EntityRepository {
 
   @Autowired
   EntityManager entityManager;
+
+  /**
+   * Performs a SELECT query on the given attribute of the given type of entity.
+   * It uses the java name of the attribute, not the column name in the database.
+   * 
+   * @param  <T>        the type of the entity to query
+   * @param  attribute  specifies which column of data to retrieve
+   * @param  entityType the entity class which we will get the data of
+   * @return            list of the data retrieved from the database as strings
+   */
+  public <T> List<String> getAllFromColumn(String attribute, Class entityType) {
+    // String name = entityType.getSimpleName();
+    // return entityManager.createQuery("SELECT idCode FROM " + name,
+    // String.class).getResultList();
+
+    CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    CriteriaQuery<String> query = cb.createQuery(entityType);
+    Root<T> entity = query.from(entityType);
+
+    query.select(entity.get(attribute));
+
+    return entityManager.createQuery(query).getResultList();
+  }
 
   /**
    * Overloaded findEntityByAttribute method that takes in just one searchValue
@@ -83,11 +115,11 @@ public class EntityRepository {
     CriteriaQuery<T> query = cb.createQuery(entityType);
     Root<T> entity = query.from(entityType);
 
-    Path<String> emailPath = entity.get(attribute);
+    Path<String> path = entity.get(attribute);
 
     List<Predicate> predicates = new ArrayList<>();
-    for (String email : valueSet) {
-      predicates.add(cb.like(emailPath, email));
+    for (String value : valueSet) {
+      predicates.add(cb.like(path, value));
     }
     query.select(entity)
         .where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
