@@ -1,0 +1,98 @@
+package com.ecse321.visart.repositories;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+@Repository
+public class EntityRepository {
+
+  @Autowired
+  EntityManager entityManager;
+
+  /**
+   * Overloaded findEntityByAttribute method that takes in just one searchValue
+   * for the search. Can output multiple entities or none.
+   * 
+   * @param  <T>         the class type of entity to return
+   * @param  attribute   entity class field name (java name)
+   * @param  entityType  class type of entity
+   * @param  searchValue string value to search for
+   * @return             list of entities that match one of the search values
+   */
+  @Transactional
+  public <T> List<T> findEntityByAttribute(String attribute, Class<T> entityType,
+      String searchValue) {
+    List<String> valueList = new ArrayList<String>();
+    valueList.add(searchValue);
+    return findEntityByAttribute(attribute, entityType, valueList);
+  }
+
+  /**
+   * Overloaded findEntityByAttribute method that takes in a String array of
+   * values to search for. Can output multiple entities or none.
+   * 
+   * @param  <T>        the class type of entity to return
+   * @param  attribute  entity class field name (java name)
+   * @param  entityType class type of entity
+   * @param  values     string array of values to search for
+   * @return            list of entities that match one of the search values
+   */
+  @Transactional
+  public <T> List<T> findEntityByAttribute(String attribute, Class<T> entityType, String[] values) {
+    List<String> valueList = Arrays.asList(values);
+    return findEntityByAttribute(attribute, entityType, valueList);
+  }
+
+  /**
+   * findEntityByAttribute method searches the database for the given entity,
+   * based on a given attribute (representing a column), and a collection of
+   * Strings as the values to search for.
+   * <br/>
+   * For example, to look for any Users with emailAddress person@mcgill.ca:
+   * attribute="emailAddress",
+   * entityType=User.class,
+   * valueCollection={"person@mcgill.ca"}
+   * 
+   * @param  <T>             the class type of entity to return
+   * @param  attribute       entity class field name (java name)
+   * @param  entityType      class type of entity
+   * @param  valueCollection collection of search values
+   * @return                 list of entities that match one of the search values
+   */
+  @Transactional
+  public <T> List<T> findEntityByAttribute(String attribute, Class<T> entityType,
+      Collection<String> valueCollection) {
+    Set<String> valueSet = new HashSet<String>(valueCollection);
+
+    CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    CriteriaQuery<T> query = cb.createQuery(entityType);
+    Root<T> entity = query.from(entityType);
+
+    Path<String> emailPath = entity.get(attribute);
+
+    List<Predicate> predicates = new ArrayList<>();
+    for (String email : valueSet) {
+      predicates.add(cb.like(emailPath, email));
+    }
+    query.select(entity)
+        .where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+
+    return entityManager.createQuery(query)
+        .getResultList();
+  }
+}
