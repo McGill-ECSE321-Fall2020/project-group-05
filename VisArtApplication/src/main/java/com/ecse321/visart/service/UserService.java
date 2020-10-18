@@ -23,6 +23,10 @@ public class UserService {
   @Transactional
   public User createUser(String aIdCode, String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
+    if (aIdCode == null || aIdCode == "") {
+      throw new IllegalArgumentException("User id code cannot be empty!");
+    }
+    
     return userRepo.createUser(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
   }
