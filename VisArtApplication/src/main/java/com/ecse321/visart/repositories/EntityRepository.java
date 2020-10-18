@@ -34,6 +34,23 @@ public class EntityRepository {
   EntityManager entityManager;
 
   /**
+   * getAllEntities method retrieves all entities of the given type entityType
+   * (ex. User.class) from the database.
+   * 
+   * @param  <T>        The type of entity to return in a List
+   * @param  entityType the type of entity to retrieve
+   * @return            a List of all the entities from the database
+   */
+  public <T> List<T> getAllEntities(Class<T> entityType) {
+    CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    CriteriaQuery<T> query = cb.createQuery(entityType);
+    Root<T> entity = query.from(entityType);
+    query.select(entity);
+
+    return entityManager.createQuery(query).getResultList();
+  }
+
+  /**
    * Performs a SELECT query on the given attribute of the given type of entity.
    * It uses the java name of the attribute, not the column name in the database.
    * 

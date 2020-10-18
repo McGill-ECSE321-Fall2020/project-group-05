@@ -27,12 +27,12 @@ public class DemoApplication {
   @RequestMapping("/")
   @ResponseBody
   String home() {
-    try {
-      Connection conn = getConnection();
-      return "Hey the connection worked! " + conn.getCatalog();
-    } catch (URISyntaxException | SQLException e) {
-      e.printStackTrace();
-    }
+    // try {
+    // Connection conn = getConnection();
+    // return "Hey the connection worked! " + conn.getCatalog();
+    // } catch (URISyntaxException | SQLException e) {
+    // e.printStackTrace();
+    // }
     return "Hello World! We are Vis Art!";
   }
 
