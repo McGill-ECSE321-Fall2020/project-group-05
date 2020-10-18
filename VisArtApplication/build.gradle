@@ -12,6 +12,7 @@ plugins {
     id 'org.springframework.boot' version '2.3.4.RELEASE' // Spring-Boot
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'// Spring-Boot
     id 'java'// Spring-Boot
+    id 'jacoco'
 }
 
 sourceCompatibility = '1.8'
@@ -83,4 +84,23 @@ tasks.register("compileUmple") {
             ]
         }
     }
+}
+
+task integrationTest(type: Test) {
+	filter {
+		includeTestsMatching "com.ecse321.visart.test.service.*"
+	}
+	useJUnitPlatform()
+	description = "Runs Integration Tests"
+	group = "Test"
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.6
+			}
+		}
+	}
 }
