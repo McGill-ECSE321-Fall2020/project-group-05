@@ -7,9 +7,9 @@ public class ArtPieceDto {
 
 	private PieceLocation basicLocation;
 	private String addressLocation;
-	private ArtListing artListing;
+	private ArtListingDto artListing;
 
-	public ArtPieceDto(PieceLocation basicLocation, String addressLocation, ArtListing artListing) {
+	public ArtPieceDto(PieceLocation basicLocation, String addressLocation, ArtListingDto artListing) {
 		super();
 		this.basicLocation = basicLocation;
 		this.addressLocation = addressLocation;
@@ -32,11 +32,11 @@ public class ArtPieceDto {
 		this.addressLocation = addressLocation;
 	}
 
-	public ArtListing getArtListing() {
+	public ArtListingDto getArtListing() {
 		return artListing;
 	}
 
-	public void setArtListing(ArtListing artListing) {
+	public void setArtListing(ArtListingDto artListing) {
 		this.artListing = artListing;
 	}
 }
