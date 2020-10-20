@@ -2,6 +2,7 @@ package com.ecse321.visart.dto;
 
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
+import com.ecse321.visart.model.ArtOrder;
 
 public class ArtOrderDto {
 
@@ -9,10 +10,12 @@ public class ArtOrderDto {
 	private PieceLocation targetLocation;
 	private String targetAddress;
 	private String deliveryTracker;
-	private ArtPiece artPiece;
+	private ArtPieceDto artPiece;
+	
+	
 
 	public ArtOrderDto(boolean isDelivered, PieceLocation targetLocation, String targetAddress, String deliveryTracker,
-			ArtPiece artPiece, String idCode) {
+			ArtPieceDto artPiece, String idCode) {
 		super();
 		this.isDelivered = isDelivered;
 		this.targetLocation = targetLocation;
@@ -54,11 +57,11 @@ public class ArtOrderDto {
 		this.deliveryTracker = deliveryTracker;
 	}
 
-	public ArtPiece getArtPiece() {
+	public ArtPieceDto getArtPiece() {
 		return artPiece;
 	}
 
-	public void setArtPiece(ArtPiece artPiece) {
+	public void setArtPiece(ArtPieceDto artPiece) {
 		this.artPiece = artPiece;
 	}
 
