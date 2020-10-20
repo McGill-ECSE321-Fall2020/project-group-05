@@ -16,7 +16,7 @@ public class TagDto {
 	
 	
 	//Constructor
-		public TagDto(String keyword, String tagIdCode, TagType tagType, ArtListing tagListing) {
+		public TagDto(String keyword, String tagIdCode, TagType tagType, ArtListingDto tagListing) {
 			super();
 			this.keyword = keyword;
 			this.tagIdCode = tagIdCode;
