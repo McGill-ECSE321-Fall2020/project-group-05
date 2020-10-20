@@ -9,6 +9,38 @@ public class TagDto {
 	private TagType tagType;
 	private ArtListingDto tagListing;
 	
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public String getTagIdCode() {
+		return tagIdCode;
+	}
+
+	public void setTagIdCode(String tagIdCode) {
+		this.tagIdCode = tagIdCode;
+	}
+
+	public TagType getTagType() {
+		return tagType;
+	}
+
+	public void setTagType(TagType tagType) {
+		this.tagType = tagType;
+	}
+
+	public ArtListingDto getTagListing() {
+		return tagListing;
+	}
+
+	public void setTagListing(ArtListingDto tagListing) {
+		this.tagListing = tagListing;
+	}
+
 	//constructor
 	public TagDto(String keyword, String tagIdCode, TagType tagType, ArtListing tagListing) {
 		super();
