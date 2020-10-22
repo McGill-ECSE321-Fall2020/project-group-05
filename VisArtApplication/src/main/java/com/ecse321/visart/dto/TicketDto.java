@@ -3,6 +3,8 @@
  */
 package com.ecse321.visart.dto;
 
+import com.ecse321.visart.model.Ticket;
+
 public class TicketDto {
 	
    //Private fields
@@ -13,7 +15,11 @@ public class TicketDto {
 	private CustomerDto ticketCustomer;
 	private ArtistDto ticketArtist;
 	
-	//Constructor
+	//Constructors
+	
+	public TicketDto(Ticket t) {
+		
+	}
 	public TicketDto(boolean isPaymentConfirmed, double paymentAmount, String ticketIdCode, ArtOrderDto ticketOrder,
 			CustomerDto ticketCustomer, ArtistDto ticketArtist) {
 		super();
