@@ -4,6 +4,7 @@
 package com.ecse321.visart.dto;
 
 import com.ecse321.visart.model.ArtListing;
+import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Tag.TagType;
 
 public class TagDto {
@@ -15,7 +16,11 @@ public class TagDto {
 	private ArtListingDto tagListing;
 	
 	
-	//Constructor
+	//Constructors
+	
+	    public TagDto(Tag t) {
+	    	this(t.getKeyword(), t.getIdCode(), t.getType(), new ArtListingDto(t.getListing()));
+	    }
 		public TagDto(String keyword, String tagIdCode, TagType tagType, ArtListingDto tagListing) {
 			super();
 			this.keyword = keyword;
