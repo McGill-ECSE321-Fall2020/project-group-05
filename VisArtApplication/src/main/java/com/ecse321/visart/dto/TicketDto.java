@@ -18,7 +18,7 @@ public class TicketDto {
 	//Constructors
 	
 	public TicketDto(Ticket t) {
-		
+		this(t.getIsPaymentConfirmed(), t.getPaymentAmount(), t.getIdCode(), new ArtOrderDto(t.getOrder()), new CustomerDto(t.getCustomer()), new ArtistDto(t.getArtist()));
 	}
 	public TicketDto(boolean isPaymentConfirmed, double paymentAmount, String ticketIdCode, ArtOrderDto ticketOrder,
 			CustomerDto ticketCustomer, ArtistDto ticketArtist) {
