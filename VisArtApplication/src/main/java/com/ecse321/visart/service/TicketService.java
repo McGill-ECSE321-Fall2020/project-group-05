@@ -6,6 +6,7 @@ package com.ecse321.visart.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtOrder;
@@ -16,6 +17,7 @@ import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TicketRepository;
 
+@Service
 public class TicketService {
 	
 	@Autowired
