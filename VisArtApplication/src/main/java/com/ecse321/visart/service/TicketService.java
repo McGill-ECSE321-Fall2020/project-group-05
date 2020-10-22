@@ -28,18 +28,18 @@ public class TicketService {
 	public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
 		      ArtOrder aOrder, Customer aCustomer, Artist aArtist){
 		if(aIdCode == null || aIdCode == "") {
-			throw new IllegalArgumentException("User id code cannot be empty!");
+			throw new IllegalArgumentException("Ticket id code cannot be empty!");
 		}
 		return ticketRepo.createTicket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer, aArtist);
 	}
 	
 	 @Transactional
-	  public Ticket getUser(String aIdCode) {
+	  public Ticket getTicket(String aIdCode) {
 	    return ticketRepo.getTicket(aIdCode);
 	  }
 	 
 	 @Transactional
-	  public List<Ticket> getAllUsers() {
+	  public List<Ticket> getAllTickets() {
 	    return entityRepo.getAllEntities(Ticket.class);
 	  }
 	  
