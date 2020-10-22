@@ -3,12 +3,17 @@
  */
 package com.ecse321.visart.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Ticket;
+import com.ecse321.visart.model.User;
+import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TicketRepository;
 
 public class TicketService {
@@ -16,6 +21,10 @@ public class TicketService {
 	@Autowired
 	TicketRepository ticketRepo;
 	
+	@Autowired
+	EntityRepository entityRepo;
+	
+	@Transactional
 	public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
 		      ArtOrder aOrder, Customer aCustomer, Artist aArtist){
 		if(aIdCode == null || aIdCode == "") {
@@ -23,5 +32,16 @@ public class TicketService {
 		}
 		return ticketRepo.createTicket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer, aArtist);
 	}
+	
+	 @Transactional
+	  public Ticket getUser(String aIdCode) {
+	    return ticketRepo.getTicket(aIdCode);
+	  }
+	 
+	 @Transactional
+	  public List<Ticket> getAllUsers() {
+	    return entityRepo.getAllEntities(Ticket.class);
+	  }
+	  
 
 }
