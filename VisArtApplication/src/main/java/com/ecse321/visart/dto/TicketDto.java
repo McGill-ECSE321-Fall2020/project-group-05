@@ -6,80 +6,89 @@ package com.ecse321.visart.dto;
 import com.ecse321.visart.model.Ticket;
 
 public class TicketDto {
-	
-   //Private fields
-	private boolean isPaymentConfirmed;
-	private double paymentAmount;
-	private String ticketIdCode;
-	private ArtOrderDto ticketOrder;
-	private CustomerDto ticketCustomer;
-	private ArtistDto ticketArtist;
-	
-	//Constructors
-	
-	public TicketDto(Ticket t) {
-		this(t.getIsPaymentConfirmed(), t.getPaymentAmount(), t.getIdCode(), new ArtOrderDto(t.getOrder()), new CustomerDto(t.getCustomer()), new ArtistDto(t.getArtist()));
-	}
-	public TicketDto(boolean isPaymentConfirmed, double paymentAmount, String ticketIdCode, ArtOrderDto ticketOrder,
-			CustomerDto ticketCustomer, ArtistDto ticketArtist) {
-		super();
-		this.isPaymentConfirmed = isPaymentConfirmed;
-		this.paymentAmount = paymentAmount;
-		this.ticketIdCode = ticketIdCode;
-		this.ticketOrder = ticketOrder;
-		this.ticketCustomer = ticketCustomer;
-		this.ticketArtist = ticketArtist;
-	}
 
-	
-	//Getters and Setters
-	public boolean isPaymentConfirmed() {
-		return isPaymentConfirmed;
-	}
+  // Private fields
+  private boolean isPaymentConfirmed;
+  private double paymentAmount;
+  private String idCode;
+  private String ticketOrderId;
+  private String ticketCustomerId;
+  private String ticketArtistId;
 
-	public void setPaymentConfirmed(boolean isPaymentConfirmed) {
-		this.isPaymentConfirmed = isPaymentConfirmed;
-	}
+  // Constructors
 
-	public double getPaymentAmount() {
-		return paymentAmount;
-	}
+  public TicketDto(Ticket t) {
+    this(t.getIsPaymentConfirmed(), t.getPaymentAmount(), t.getIdCode(), t.getOrder().getIdCode(),
+        t.getCustomer().getIdCode(), t.getArtist().getIdCode());
+  }
 
-	public void setPaymentAmount(double paymentAmount) {
-		this.paymentAmount = paymentAmount;
-	}
+  public TicketDto(boolean isPaymentConfirmed, double paymentAmount, String idCode,
+      String ticketOrderId,
+      String ticketCustomerId, String ticketArtistId) {
+    super();
+    this.isPaymentConfirmed = isPaymentConfirmed;
+    this.paymentAmount = paymentAmount;
+    this.idCode = idCode;
+    this.ticketOrderId = ticketOrderId;
+    this.ticketCustomerId = ticketCustomerId;
+    this.ticketArtistId = ticketArtistId;
+  }
 
-	public String getTicketIdCode() {
-		return ticketIdCode;
-	}
+  // Getters and Setters
+  public boolean isPaymentConfirmed() {
+    return isPaymentConfirmed;
+  }
 
-	public void setTicketIdCode(String ticketIdCode) {
-		this.ticketIdCode = ticketIdCode;
-	}
+  public void setPaymentConfirmed(boolean isPaymentConfirmed) {
+    this.isPaymentConfirmed = isPaymentConfirmed;
+  }
 
-	public ArtOrderDto getTicketOrder() {
-		return ticketOrder;
-	}
+  public double getPaymentAmount() {
+    return paymentAmount;
+  }
 
-	public void setTicketOrder(ArtOrderDto ticketOrder) {
-		this.ticketOrder = ticketOrder;
-	}
+  public void setPaymentAmount(double paymentAmount) {
+    this.paymentAmount = paymentAmount;
+  }
 
-	public CustomerDto getTicketCustomer() {
-		return ticketCustomer;
-	}
+  public String getTicketIdCode() {
+    return idCode;
+  }
 
-	public void setTicketCustomer(CustomerDto ticketCustomer) {
-		this.ticketCustomer = ticketCustomer;
-	}
+  public void setTicketIdCode(String ticketIdCode) {
+    this.idCode = ticketIdCode;
+  }
 
-	public ArtistDto getTicketArtist() {
-		return ticketArtist;
-	}
+  public String getTicketOrder() {
+    return ticketOrderId;
+  }
 
-	public void setTicketArtist(ArtistDto ticketArtist) {
-		this.ticketArtist = ticketArtist;
-	}
-	
-	
+  public void setTicketOrder(String ticketOrderId) {
+    this.ticketOrderId = ticketOrderId;
+  }
+
+  public String getTicketCustomer() {
+    return ticketCustomerId;
+  }
+
+  public void setTicketCustomer(String ticketCustomerId) {
+    this.ticketCustomerId = ticketCustomerId;
+  }
+
+  public String getTicketArtist() {
+    return ticketArtistId;
+  }
+
+  public void setTicketArtist(String ticketArtist) {
+    this.ticketArtistId = ticketArtist;
+  }
+
+  public String getIdCode() {
+    return idCode;
+  }
+
+  public void setIdCode(String idCode) {
+    this.idCode = idCode;
+  }
+
 }

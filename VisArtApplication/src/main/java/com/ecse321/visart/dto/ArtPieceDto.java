@@ -1,19 +1,30 @@
 package com.ecse321.visart.dto;
 
-import com.ecse321.visart.model.ArtListing;
+import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 public class ArtPieceDto {
 
 	private PieceLocation basicLocation;
 	private String addressLocation;
-	private ArtListingDto artListing;
+	private String artListingId;
+  private String artOrderId;
+  private String idCode;
 
-	public ArtPieceDto(PieceLocation basicLocation, String addressLocation, ArtListingDto artListing) {
+	public ArtPieceDto(PieceLocation basicLocation, String addressLocation, String artListingId, String idCode) {
 		super();
 		this.basicLocation = basicLocation;
 		this.addressLocation = addressLocation;
-		this.artListing = artListing;
+		this.artListingId = artListingId;
+		this.idCode = idCode;
+	}
+	
+	public ArtPieceDto(ArtPiece artPiece) {
+	  basicLocation = artPiece.getBasicLocation();
+	  addressLocation = artPiece.getAddressLocation();
+	  artListingId = artPiece.getArtListing().getIdCode();
+	  artOrderId = artPiece.getArtOrder().getIdCode();
+	  idCode = artPiece.getIdCode();
 	}
 
 	public PieceLocation getBasicLocation() {
@@ -32,11 +43,27 @@ public class ArtPieceDto {
 		this.addressLocation = addressLocation;
 	}
 
-	public ArtListingDto getArtListing() {
-		return artListing;
+	public String getArtListing() {
+		return artListingId;
 	}
 
-	public void setArtListing(ArtListingDto artListing) {
-		this.artListing = artListing;
+  public void setArtListing(String artListingId) {
+		this.artListingId = artListingId;
 	}
+
+  public String getArtOrder() {
+    return artOrderId;
+  }
+
+  public void setArtOrder(String artOrder) {
+    this.artOrderId = artOrder;
+  }
+
+  public String getIdCode() {
+    return idCode;
+  }
+
+  public void setIdCode(String idCode) {
+    this.idCode = idCode;
+  }
 }
