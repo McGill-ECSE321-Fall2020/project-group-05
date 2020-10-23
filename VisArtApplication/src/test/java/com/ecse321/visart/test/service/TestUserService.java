@@ -92,6 +92,7 @@ public class TestUserService {
       error = e.getMessage();
     }
     assertNull(user);
-    assertEquals("User id code cannot be empty!", error); // expected error message for service data validation.
+    assertEquals("User id code cannot be empty!", error); // expected error message for service data
+                                                          // validation.
   }
 }

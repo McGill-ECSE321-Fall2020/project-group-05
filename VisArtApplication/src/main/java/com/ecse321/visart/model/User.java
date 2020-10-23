@@ -1,20 +1,23 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
+/* PLEASE DO NOT EDIT THIS CODE */
+/*
+ * This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling
+ * language!
+ */
 
 package com.ecse321.visart.model;
+
 import javax.persistence.*;
 
 @Entity
-  @Table(name="users")
+@Table(name = "users")
 // line 10 "../../../../../resources/visart.ump"
-public class User
-{
+public class User {
 
-  //------------------------
+  // ------------------------
   // MEMBER VARIABLES
-  //------------------------
+  // ------------------------
 
-  //User Attributes
+  // User Attributes
   private String emailAddress;
   private String displayname;
   private String username;
@@ -22,14 +25,14 @@ public class User
   private String profilePicLink;
   private String profileDescription;
 
-  //User Associations
+  // User Associations
 
-  //------------------------
+  // ------------------------
   // CONSTRUCTOR
-  //------------------------
+  // ------------------------
 
-  public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription)
-  {
+  public User(String aIdCode, String aEmailAddress, String aDisplayname, String aUsername,
+      String aPassword, String aProfilePicLink, String aProfileDescription) {
     idCode = aIdCode;
     emailAddress = aEmailAddress;
     displayname = aDisplayname;
@@ -39,185 +42,159 @@ public class User
     profileDescription = aProfileDescription;
   }
 
-  //------------------------
+  // ------------------------
   // INTERFACE
-  //------------------------
+  // ------------------------
 
-  public boolean setIdCode(String aIdCode)
-  {
+  public boolean setIdCode(String aIdCode) {
     boolean wasSet = false;
     idCode = aIdCode;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setEmailAddress(String aEmailAddress)
-  {
+  public boolean setEmailAddress(String aEmailAddress) {
     boolean wasSet = false;
     emailAddress = aEmailAddress;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setDisplayname(String aDisplayname)
-  {
+  public boolean setDisplayname(String aDisplayname) {
     boolean wasSet = false;
     displayname = aDisplayname;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setUsername(String aUsername)
-  {
+  public boolean setUsername(String aUsername) {
     boolean wasSet = false;
     username = aUsername;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setPassword(String aPassword)
-  {
+  public boolean setPassword(String aPassword) {
     boolean wasSet = false;
     password = aPassword;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setProfilePicLink(String aProfilePicLink)
-  {
+  public boolean setProfilePicLink(String aProfilePicLink) {
     boolean wasSet = false;
     profilePicLink = aProfilePicLink;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setProfileDescription(String aProfileDescription)
-  {
+  public boolean setProfileDescription(String aProfileDescription) {
     boolean wasSet = false;
     profileDescription = aProfileDescription;
     wasSet = true;
     return wasSet;
   }
 
-  
   @OneToOne
   private UserRole role;
   @Transient
   private Gallery gallery;
   @Id
   private String idCode;
-   
-  public String getIdCode()
-  {
+
+  public String getIdCode() {
     return idCode;
   }
 
-  public String getEmailAddress()
-  {
+  public String getEmailAddress() {
     return emailAddress;
   }
 
-  public String getDisplayname()
-  {
+  public String getDisplayname() {
     return displayname;
   }
 
-  public String getUsername()
-  {
+  public String getUsername() {
     return username;
   }
 
-  public String getPassword()
-  {
+  public String getPassword() {
     return password;
   }
 
-  public String getProfilePicLink()
-  {
+  public String getProfilePicLink() {
     return profilePicLink;
   }
 
-  public String getProfileDescription()
-  {
+  public String getProfileDescription() {
     return profileDescription;
   }
+
   /* Code from template association_GetOne */
-  public UserRole getRole()
-  {
+  public UserRole getRole() {
     return role;
   }
 
-  public boolean hasRole()
-  {
+  public boolean hasRole() {
     boolean has = role != null;
     return has;
   }
+
   /* Code from template association_GetOne */
-  public Gallery getGallery()
-  {
+  public Gallery getGallery() {
     return gallery;
   }
 
-  public boolean hasGallery()
-  {
+  public boolean hasGallery() {
     boolean has = gallery != null;
     return has;
   }
+
   /* Code from template association_SetOptionalOneToOne */
-  public boolean setRole(UserRole aNewRole)
-  {
+  public boolean setRole(UserRole aNewRole) {
     boolean wasSet = false;
-    if (role != null && !role.equals(aNewRole) && equals(role.getUser()))
-    {
-      //Unable to setRole, as existing role would become an orphan
+    if (role != null && !role.equals(aNewRole) && equals(role.getUser())) {
+      // Unable to setRole, as existing role would become an orphan
       return wasSet;
     }
 
     role = aNewRole;
     User anOldUser = aNewRole != null ? aNewRole.getUser() : null;
 
-    if (!this.equals(anOldUser))
-    {
-      if (anOldUser != null)
-      {
+    if (!this.equals(anOldUser)) {
+      if (anOldUser != null) {
         anOldUser.role = null;
       }
-      if (role != null)
-      {
+      if (role != null) {
         role.setUser(this);
       }
     }
     wasSet = true;
     return wasSet;
   }
+
   /* Code from template association_SetOptionalOneToMany */
-  public boolean setGallery(Gallery aGallery)
-  {
+  public boolean setGallery(Gallery aGallery) {
     boolean wasSet = false;
     Gallery existingGallery = gallery;
     gallery = aGallery;
-    if (existingGallery != null && !existingGallery.equals(aGallery))
-    {
+    if (existingGallery != null && !existingGallery.equals(aGallery)) {
       existingGallery.removeUser(this);
     }
-    if (aGallery != null)
-    {
+    if (aGallery != null) {
       aGallery.addUser(this);
     }
     wasSet = true;
     return wasSet;
   }
 
-  public void delete()
-  {
+  public void delete() {
     UserRole existingRole = role;
     role = null;
-    if (existingRole != null)
-    {
+    if (existingRole != null) {
       existingRole.delete();
     }
-    if (gallery != null)
-    {
+    if (gallery != null) {
       Gallery placeholderGallery = gallery;
       this.gallery = null;
       placeholderGallery.removeUser(this);
@@ -225,22 +202,25 @@ public class User
   }
 
   // line 31 "../../../../../resources/visart.ump"
-   public  User(){
-    
+  public User() {
+
   }
 
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "idCode" + ":" + getIdCode()+ "," +
-            "emailAddress" + ":" + getEmailAddress()+ "," +
-            "displayname" + ":" + getDisplayname()+ "," +
-            "username" + ":" + getUsername()+ "," +
-            "password" + ":" + getPassword()+ "," +
-            "profilePicLink" + ":" + getProfilePicLink()+ "," +
-            "profileDescription" + ":" + getProfileDescription()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "role = "+(getRole()!=null?Integer.toHexString(System.identityHashCode(getRole())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "gallery = "+(getGallery()!=null?Integer.toHexString(System.identityHashCode(getGallery())):"null");
+  public String toString() {
+    return super.toString() + "[" +
+        "idCode" + ":" + getIdCode() + "," +
+        "emailAddress" + ":" + getEmailAddress() + "," +
+        "displayname" + ":" + getDisplayname() + "," +
+        "username" + ":" + getUsername() + "," +
+        "password" + ":" + getPassword() + "," +
+        "profilePicLink" + ":" + getProfilePicLink() + "," +
+        "profileDescription" + ":" + getProfileDescription() + "]"
+        + System.getProperties().getProperty("line.separator") +
+        "  " + "role = "
+        + (getRole() != null ? Integer.toHexString(System.identityHashCode(getRole())) : "null")
+        + System.getProperties().getProperty("line.separator") +
+        "  " + "gallery = "
+        + (getGallery() != null ? Integer.toHexString(System.identityHashCode(getGallery()))
+            : "null");
   }
 }

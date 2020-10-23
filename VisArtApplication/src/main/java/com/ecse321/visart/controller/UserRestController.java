@@ -16,7 +16,7 @@ import com.ecse321.visart.service.UserService;
 @CrossOrigin(origins = "*")
 @RestController
 public class UserRestController {
-  
+
   @Autowired
   private UserService service;
 
