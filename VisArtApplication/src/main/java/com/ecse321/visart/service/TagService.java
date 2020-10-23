@@ -6,6 +6,7 @@ package com.ecse321.visart.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtListing;
@@ -14,6 +15,7 @@ import com.ecse321.visart.model.Tag.TagType;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TagRepository;
 
+@Service
 public class TagService {
 
 	@Autowired
