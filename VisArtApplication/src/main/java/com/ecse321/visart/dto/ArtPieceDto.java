@@ -8,8 +8,8 @@ public class ArtPieceDto {
 	private PieceLocation basicLocation;
 	private String addressLocation;
 	private String artListingId;
-  private String artOrderId;
-  private String idCode;
+	private String artOrderId;
+	private String idCode;
 
 	public ArtPieceDto(PieceLocation basicLocation, String addressLocation, String artListingId, String idCode) {
 		super();
@@ -18,13 +18,13 @@ public class ArtPieceDto {
 		this.artListingId = artListingId;
 		this.idCode = idCode;
 	}
-	
+
 	public ArtPieceDto(ArtPiece artPiece) {
-	  basicLocation = artPiece.getBasicLocation();
-	  addressLocation = artPiece.getAddressLocation();
-	  artListingId = artPiece.getArtListing().getIdCode();
-	  artOrderId = artPiece.getArtOrder().getIdCode();
-	  idCode = artPiece.getIdCode();
+		basicLocation = artPiece.getBasicLocation();
+		addressLocation = artPiece.getAddressLocation();
+		artListingId = artPiece.getArtListing().getIdCode();
+		artOrderId = artPiece.getArtOrder().getIdCode();
+		idCode = artPiece.getIdCode();
 	}
 
 	public PieceLocation getBasicLocation() {
@@ -47,23 +47,23 @@ public class ArtPieceDto {
 		return artListingId;
 	}
 
-  public void setArtListing(String artListingId) {
+	public void setArtListing(String artListingId) {
 		this.artListingId = artListingId;
 	}
 
-  public String getArtOrder() {
-    return artOrderId;
-  }
+	public String getArtOrder() {
+		return artOrderId;
+	}
 
-  public void setArtOrder(String artOrder) {
-    this.artOrderId = artOrder;
-  }
+	public void setArtOrder(String artOrder) {
+		this.artOrderId = artOrder;
+	}
 
-  public String getIdCode() {
-    return idCode;
-  }
+	public String getIdCode() {
+		return idCode;
+	}
 
-  public void setIdCode(String idCode) {
-    this.idCode = idCode;
-  }
+	public void setIdCode(String idCode) {
+		this.idCode = idCode;
+	}
 }
