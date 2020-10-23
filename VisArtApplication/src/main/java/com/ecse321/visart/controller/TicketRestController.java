@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.TicketDto;
-import com.ecse321.visart.dto.UserDto;
-import com.ecse321.visart.model.Ticket;
 import com.ecse321.visart.service.TicketService;
 
 @CrossOrigin(origins = "*")

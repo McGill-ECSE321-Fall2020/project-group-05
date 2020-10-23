@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Tag;
-import com.ecse321.visart.model.Ticket;
 import com.ecse321.visart.model.Tag.TagType;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TagRepository;

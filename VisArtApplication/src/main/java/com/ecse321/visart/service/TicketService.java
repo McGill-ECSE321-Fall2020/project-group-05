@@ -12,7 +12,6 @@ import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Ticket;
-import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TicketRepository;
 
