@@ -37,7 +37,7 @@ public class ArtOrderTest {
 
   @Autowired
   private ArtistRepository aRepo;
-  
+
   @Autowired
   private CustomerRepository cRepo;
 
@@ -49,7 +49,6 @@ public class ArtOrderTest {
   String address2 = "125 ALSTON";
   String tracker2 = "AZA124";
 
- 
   private static ArtOrder artOrder2;
   private static Artist artist;
   private static ArtListing artListing;
@@ -76,7 +75,7 @@ public class ArtOrderTest {
   @Order(2)
   void testCreate1() {
     // Create
-	 ArtOrder artOrder1 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2,
+    ArtOrder artOrder1 = aoRepo.createArtOrder(false, ArtPiece.PieceLocation.Offsite, address2,
         tracker2,
         "tts" + l + 9, artPiece2);
 
@@ -139,15 +138,14 @@ public class ArtOrderTest {
     cRepo.deleteCustomer(artist.getCustomer());
     alRepo.deleteArtListing(artListing);
     apRepo.deleteArtPiece(artPiece2);
-    
+
     // Test if art order successfully deleted
     assertEquals(null, aoRepo.getArtOrder("tts" + l + 9));
-    
-    //Test if other creation has been successfully deleted
+
+    // Test if other creation has been successfully deleted
     assertEquals(null, aRepo.getArtist("test" + l + 1));
     assertEquals(null, alRepo.getArtListing("t" + l + 2));
     assertEquals(null, apRepo.getArtPiece("ttt" + l + 3));
-    
 
     System.out.println("=================DELETED===============");
 

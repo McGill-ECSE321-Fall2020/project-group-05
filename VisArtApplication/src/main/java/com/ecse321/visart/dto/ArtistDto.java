@@ -28,7 +28,8 @@ public class ArtistDto {
     idCode = artist.getIdCode();
   }
 
-  public ArtistDto(CustomerDto customer, List<String> listings, List<String> soldTickets, String idCode) {
+  public ArtistDto(CustomerDto customer, List<String> listings, List<String> soldTickets,
+      String idCode) {
     super();
     this.customer = customer;
     this.listingIds = listings;

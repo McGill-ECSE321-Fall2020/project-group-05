@@ -16,7 +16,7 @@ import com.ecse321.visart.repositories.UserRepository;
 public class UserService {
   @Autowired
   UserRepository userRepo;
-  
+
   @Autowired
   EntityRepository entityRepo;
 
@@ -26,7 +26,7 @@ public class UserService {
     if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("User id code cannot be empty!");
     }
-    
+
     return userRepo.createUser(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
   }
@@ -40,6 +40,5 @@ public class UserService {
   public List<User> getAllUsers() {
     return entityRepo.getAllEntities(User.class);
   }
-  
-  
+
 }

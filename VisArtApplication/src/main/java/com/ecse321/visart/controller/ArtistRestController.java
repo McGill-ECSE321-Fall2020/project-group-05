@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ArtistRestController {
 
-//@Autowired
-//private ArtistService artistService;
-	
+  // @Autowired
+  // private ArtistService artistService;
+
 }

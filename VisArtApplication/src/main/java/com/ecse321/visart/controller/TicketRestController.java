@@ -21,19 +21,19 @@ import com.ecse321.visart.service.TicketService;
 @CrossOrigin(origins = "*")
 @RestController
 public class TicketRestController {
- 
-	@Autowired
-	private TicketService ticService;
-	
-	@GetMapping(value = { "/tickets", "/tickets/" })
-	public List<TicketDto> getAllTickets(){
-		return ticService.getAllTickets().stream().map(u -> new TicketDto(u)).collect(Collectors.toList());
-	}
-	
-	@PostMapping(value = { "/tickets/{aIdCode}", "/tickets/{aIdCode}/" })
-	public TicketDto createTicket(@PathVariable("aIdCode") String aIdCode) {
-	    return new TicketDto(ticService.createTicket(false, 0.00, aIdCode, null, null, null));
-	  }
-		
-	}
 
+  @Autowired
+  private TicketService ticService;
+
+  @GetMapping(value = { "/tickets", "/tickets/" })
+  public List<TicketDto> getAllTickets() {
+    return ticService.getAllTickets().stream().map(u -> new TicketDto(u))
+        .collect(Collectors.toList());
+  }
+
+  @PostMapping(value = { "/tickets/{aIdCode}", "/tickets/{aIdCode}/" })
+  public TicketDto createTicket(@PathVariable("aIdCode") String aIdCode) {
+    return new TicketDto(ticService.createTicket(false, 0.00, aIdCode, null, null, null));
+  }
+
+}
