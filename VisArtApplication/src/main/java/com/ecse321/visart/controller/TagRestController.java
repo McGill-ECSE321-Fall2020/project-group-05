@@ -4,6 +4,7 @@
  */
 
 package com.ecse321.visart.controller;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,18 +21,18 @@ import com.ecse321.visart.service.TagService;
 @CrossOrigin(origins = "*")
 @RestController
 public class TagRestController {
- 
-	@Autowired
-	private TagService tagService;
-	
-	@GetMapping(value = { "/tags", "/tags/" })
-	public List<TagDto> getAllTags(){
-		return tagService.getAllTags().stream().map(u -> new TagDto(u)).collect(Collectors.toList());
-	}
-	
-	@PostMapping(value = { "/tags/{aIdCode}", "/tags/{aIdCode}/" })
-	public TagDto createTag(@PathVariable("aIdCode") String aIdCode) {
-	    return new TagDto(tagService.createTag(null, "", aIdCode, null));
-	  }
-		
-	}
+
+  @Autowired
+  private TagService tagService;
+
+  @GetMapping(value = { "/tags", "/tags/" })
+  public List<TagDto> getAllTags() {
+    return tagService.getAllTags().stream().map(u -> new TagDto(u)).collect(Collectors.toList());
+  }
+
+  @PostMapping(value = { "/tags/{aIdCode}", "/tags/{aIdCode}/" })
+  public TagDto createTag(@PathVariable("aIdCode") String aIdCode) {
+    return new TagDto(tagService.createTag(null, "", aIdCode, null));
+  }
+
+}

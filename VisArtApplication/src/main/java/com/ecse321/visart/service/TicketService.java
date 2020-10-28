@@ -18,31 +18,31 @@ import com.ecse321.visart.repositories.TicketRepository;
 
 @Service
 public class TicketService {
-	
-	@Autowired
-	TicketRepository ticketRepo;
-	
-	@Autowired
-	EntityRepository entityRepo;
-	
-	@Transactional
-	public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
-		      ArtOrder aOrder, Customer aCustomer, Artist aArtist){
-		if(aIdCode == null || aIdCode == "") {
-			throw new IllegalArgumentException("Ticket id code cannot be empty!");
-		}
-		return ticketRepo.createTicket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer, aArtist);
-	}
-	
-	 @Transactional
-	  public Ticket getTicket(String aIdCode) {
-	    return ticketRepo.getTicket(aIdCode);
-	  }
-	 
-	 @Transactional
-	  public List<Ticket> getAllTickets() {
-	    return entityRepo.getAllEntities(Ticket.class);
-	  }
-	  
+
+  @Autowired
+  TicketRepository ticketRepo;
+
+  @Autowired
+  EntityRepository entityRepo;
+
+  @Transactional
+  public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
+      ArtOrder aOrder, Customer aCustomer, Artist aArtist) {
+    if (aIdCode == null || aIdCode == "") {
+      throw new IllegalArgumentException("Ticket id code cannot be empty!");
+    }
+    return ticketRepo.createTicket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer,
+        aArtist);
+  }
+
+  @Transactional
+  public Ticket getTicket(String aIdCode) {
+    return ticketRepo.getTicket(aIdCode);
+  }
+
+  @Transactional
+  public List<Ticket> getAllTickets() {
+    return entityRepo.getAllEntities(Ticket.class);
+  }
 
 }

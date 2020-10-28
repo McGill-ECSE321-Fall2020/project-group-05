@@ -12,7 +12,6 @@ import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.repositories.ArtPieceRepository;
 import com.ecse321.visart.repositories.EntityRepository;
 
-
 @Service
 public class ArtPieceService {
 
@@ -92,11 +91,10 @@ public class ArtPieceService {
   public boolean deleteArtPiece(String id) {
     return ArtPieceRepo.deleteArtPiece(id);
   }
-  
+
   @Transactional
   public List<ArtPiece> getAllArtPiece() {
     return entityRepo.getAllEntities(ArtPiece.class);
   }
-  
 
 }
