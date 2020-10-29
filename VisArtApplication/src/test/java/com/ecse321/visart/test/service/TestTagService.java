@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.lenient;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import com.ecse321.visart.model.Artist;
+import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Tag.TagType;
 import com.ecse321.visart.model.User;
@@ -39,9 +41,13 @@ public class TestTagService {
   
   private static final String TAG_KEY = "MockTestForTag";
   private static final TagType TAG_TYPE = TagType.Material;
-  private static final ArtListing TAG_LISTING = new ArtListing(null, null, "listing", "mockcode",
-	      null);
+  private static final User aUser = new User("a","b","c","d","e","f","g");
+  private static final Customer aCustomer = new Customer("customerCode", aUser);
+  private static final Artist aArtist = new Artist("artistCode", aCustomer);
+  private static final ArtListing TAG_LISTING = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+	      aArtist);
 	  
+  @SuppressWarnings("deprecation")
   @BeforeEach
   public void setMockOutput() {
     // Mock the Repository methods, returning what we want to expect from the
@@ -61,10 +67,12 @@ public class TestTagService {
       return invocation.getArgument(0);
     };
 
-    lenient().when(tagRepo.createTag(TagType.Genre, anyString(), anyString(), new ArtListing(null, null, "listing2", "mockcode2",
-  	      null))).thenAnswer((InvocationOnMock invocation) -> {
-          Tag tag = (Tag)invocation.getArgument(0);
-         
+    lenient().when(tagRepo.createTag(anyObject(), anyString(), anyString(), 
+    		anyObject())).thenAnswer((InvocationOnMock invocation) -> {
+          String id = invocation.getArgument(0);
+          TagType type = (TagType)invocation.getArgument(0);
+          ArtListing listing = (ArtListing)invocation.getArgument(0);
+          Tag tag = new Tag(type, id, id, listing);
           return tag;
         });
 
@@ -104,7 +112,7 @@ public class TestTagService {
       error = e.getMessage();
     }
     assertNull(tag);
-    assertEquals("", error); // expected error message for service data
+    assertEquals("Tag id code cannot be empty!", error); // expected error message for service data
                                                           // validation.
   }
 }
