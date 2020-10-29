@@ -1,9 +1,14 @@
 package com.ecse321.visart.test.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -58,14 +63,50 @@ public class TestTagService {
 
     lenient().when(tagRepo.createTag(TagType.Genre, anyString(), anyString(), new ArtListing(null, null, "listing2", "mockcode2",
   	      null))).thenAnswer((InvocationOnMock invocation) -> {
-          String id = invocation.getArgument(0);
-          Tag tag = new Tag(id, id, id, id);
+          Tag tag = (Tag)invocation.getArgument(0);
+         
           return tag;
         });
 
     // In the tests below, test the Service class's DATA VALIDATION on the
     // parameters that are given to it.
+   
   }
 
+  @Test
+  public void testCreateUser() {
+    // assertEquals(0, service.getAllUsers().size());
 
+    String keyword = "key";
+    TagType type = TagType.Category;
+    ArtListing listing = null;
+    Tag tag = null;
+    try {
+      tag = tagService.createTag(type, keyword, keyword, listing);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(tag);
+    assertEquals(keyword, tag.getIdCode());
+  }
+
+  @Test
+  public void testCreateNullUser() {
+	String keyword = "key";
+	TagType type = TagType.Category;
+	ArtListing listing = null;
+    String error = null;
+    Tag tag = null;
+    try {
+      tag = tagService.createTag(type, keyword, keyword, listing);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(tag);
+    assertEquals("", error); // expected error message for service data
+                                                          // validation.
+  }
 }
+
+
