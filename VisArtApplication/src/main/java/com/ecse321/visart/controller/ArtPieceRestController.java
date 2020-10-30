@@ -24,13 +24,13 @@ public class ArtPieceRestController {
   private ArtListingService servicel;
   private ArtistService servicea;
 
-  @GetMapping(value = { "/ArtOrders", "/ArtOrders/" })
+  @GetMapping(value = { "/ArtPieces", "/ArtPieces/" })
   public List<ArtPieceDto> getAllArtPiece() {
     return service.getAllArtPieces().stream().map(ap -> new ArtPieceDto(ap))
         .collect(Collectors.toList());
   }
 
-  @PostMapping(value = { "/ArtOrders/{aIdCode}", "/ArtOrders/{aIdCode}/" })
+  @PostMapping(value = { "/ArtPieces/{aIdCode}", "/ArtPieces/{aIdCode}/" })
   public ArtPieceDto createArtPiece(@PathVariable("aIdCode") String aIdCode,
       @RequestParam(value = "pieceLocation") PieceLocation aBasicLocation,
       @RequestParam(value = "aAddressLocation") String aAddressLocation,
