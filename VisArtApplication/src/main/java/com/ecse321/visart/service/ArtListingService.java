@@ -9,20 +9,16 @@ import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.repositories.ArtListingRepository;
 
-
-
-
 @Service
 public class ArtListingService {
-  
+
   @Autowired
   ArtListingRepository ArtListingRepo;
-  
+
   @Transactional
   public ArtListing createArtListing(PostVisibility aVisibility, String aDescription, String aTitle,
       String aIdCode, Artist aArtist) {
-    
-    
+
     return ArtListingRepo.createArtListing(aVisibility, aDescription, aTitle, aIdCode, aArtist);
   }
 
@@ -30,5 +26,5 @@ public class ArtListingService {
   public ArtListing getArtListing(String aIdCode) {
     return ArtListingRepo.getArtListing(aIdCode);
   }
-  
+
 }
