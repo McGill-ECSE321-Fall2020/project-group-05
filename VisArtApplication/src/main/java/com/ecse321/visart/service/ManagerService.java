@@ -37,6 +37,11 @@ public class ManagerService {
   public Manager getManager(String aIdCode) {
     return managerRepo.getManager(aIdCode);
   }
+  
+  @Transactional
+  public Manager getManager(String aIdCode, Boolean promotedListings) {
+    return managerRepo.getManager(aIdCode, promotedListings);
+  }
 
   @Transactional
   public List<Manager> getAllUsers() {
