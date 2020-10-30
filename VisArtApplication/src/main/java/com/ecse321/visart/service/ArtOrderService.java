@@ -1,5 +1,7 @@
 package com.ecse321.visart.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,6 +116,11 @@ public class ArtOrderService {
   public boolean deleteArtOrder(String Id) {
 
     return ArtOrderRepo.deleteArtOrder(Id);
+  }
+  
+  @Transactional
+  public List<ArtOrder> getAllArtOrders() {
+    return entityRepo.getAllEntities(ArtOrder.class);
   }
 
 }
