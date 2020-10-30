@@ -16,15 +16,10 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-
-import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.User;
-import com.ecse321.visart.model.ArtListing.PostVisibility;
-import com.ecse321.visart.model.Tag.TagType;
 import com.ecse321.visart.model.Ticket;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TicketRepository;
@@ -40,7 +35,7 @@ public class TestTicketService {
   private EntityRepository entityRepo;
 
   @InjectMocks
-  private TicketService tagService;
+  private TicketService ticketService;
   
   private static final boolean TICKET_PAYMENT_BOOL = true;
   private static final double TICKET_AMOUNT = 420.69;
@@ -74,11 +69,14 @@ public class TestTicketService {
 
     lenient().when(ticketRepo.createTicket(false, 0, anyString(),any(),
     		any(),any())).thenAnswer((InvocationOnMock invocation) -> {
-          String id = invocation.getArgument(2);
-          TagType type = (TagType)invocation.getArgument(0);
-          ArtListing listing = (ArtListing)invocation.getArgument(3);
-          Tag tag = new Tag(type, id, id, listing);
-          return tag;
+          boolean payment = (boolean)invocation.getArgument(0);
+          double paymentPrice = (double)invocation.getArgument(1);
+          String id = (String)invocation.getArgument(2);
+          ArtOrder order = (ArtOrder)invocation.getArgument(3);
+          Customer customer = (Customer)invocation.getArgument(4);
+          Artist artist = (Artist)invocation.getArgument(5);
+          Ticket ticket = new Ticket(payment, paymentPrice, id, order, customer, artist);
+          return ticket;
         });
 
     // In the tests below, test the Service class's DATA VALIDATION on the
@@ -90,38 +88,43 @@ public class TestTicketService {
   public void testCreateTicket() {
     // assertEquals(0, service.getAllUsers().size());
 
-    String keyword = "key";
-    TagType type = TagType.Category;
+    String id = "id";
+    boolean payment = false;
+    double paymentPrice = 420.0;
     User aUser = new User("a","b","c","d","e","f","g");
+    User aUser2 = new User("h","i","j","k","l","m","n");
     Customer aCustomer = new Customer("customerCode", aUser);
-    Artist aArtist = new Artist("artistCode", aCustomer);
-    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
-  	      aArtist);
+    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
+    Artist aArtist = new Artist("artistCode", aCustomer2);
+    ArtOrder aOrder = new ArtOrder();
     
-    Tag tag = null;
+    Ticket ticket = null;
     try {
-      tag = tagService.createTag(type, keyword, keyword, listing);
+      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
     }
-    assertNotNull(tag);
-    assertEquals(keyword, tag.getIdCode());
+    assertNotNull(ticket);
+    assertEquals(id, ticket.getIdCode());
   }
 
   @Test
   public void testCreateNullTag() {
     String error = null;
-	String keyword = null;
-	TagType type = null;
-    Tag tag = null;
-    ArtListing listing = null;
+    Ticket ticket = null;
+    boolean payment = false;
+    double paymentPrice = 0;
+    String id = null;
+    ArtOrder aOrder = null;
+    Customer aCustomer = null;
+    Artist aArtist = null;
     try {
-      tag = tagService.createTag(type, keyword, keyword, listing);
+      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertNull(tag);
+    assertNull(ticket);
     assertEquals("Tag id code cannot be empty!", error); // expected error message for service data
                                                           // validation.
   }
