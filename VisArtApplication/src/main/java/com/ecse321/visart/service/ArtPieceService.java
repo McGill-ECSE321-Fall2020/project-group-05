@@ -93,7 +93,7 @@ public class ArtPieceService {
   }
 
   @Transactional
-  public List<ArtPiece> getAllArtPiece() {
+  public List<ArtPiece> getAllArtPieces() {
     return entityRepo.getAllEntities(ArtPiece.class);
   }
 
