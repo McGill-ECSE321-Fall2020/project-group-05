@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +47,7 @@ public class TestTagService {
   private static final ArtListing TAG_LISTING = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
 	      aArtist);
 	  
-  @SuppressWarnings("deprecation")
+ 
   @BeforeEach
   public void setMockOutput() {
     // Mock the Repository methods, returning what we want to expect from the
@@ -67,11 +67,11 @@ public class TestTagService {
       return invocation.getArgument(0);
     };
 
-    lenient().when(tagRepo.createTag(anyObject(), anyString(), anyString(), 
-    		anyObject())).thenAnswer((InvocationOnMock invocation) -> {
-          String id = invocation.getArgument(0);
+    lenient().when(tagRepo.createTag(any(), anyString(), anyString(), 
+    		any())).thenAnswer((InvocationOnMock invocation) -> {
+          String id = invocation.getArgument(2);
           TagType type = (TagType)invocation.getArgument(0);
-          ArtListing listing = (ArtListing)invocation.getArgument(0);
+          ArtListing listing = (ArtListing)invocation.getArgument(3);
           Tag tag = new Tag(type, id, id, listing);
           return tag;
         });
@@ -82,12 +82,17 @@ public class TestTagService {
   }
 
   @Test
-  public void testCreateUser() {
+  public void testCreateTag() {
     // assertEquals(0, service.getAllUsers().size());
 
     String keyword = "key";
     TagType type = TagType.Category;
-    ArtListing listing = null;
+    User aUser = new User("a","b","c","d","e","f","g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+  	      aArtist);
+    
     Tag tag = null;
     try {
       tag = tagService.createTag(type, keyword, keyword, listing);
@@ -100,12 +105,12 @@ public class TestTagService {
   }
 
   @Test
-  public void testCreateNullUser() {
-	String keyword = "key";
-	TagType type = TagType.Category;
-	ArtListing listing = null;
+  public void testCreateNullTag() {
     String error = null;
+	String keyword = null;
+	TagType type = null;
     Tag tag = null;
+    ArtListing listing = null;
     try {
       tag = tagService.createTag(type, keyword, keyword, listing);
     } catch (IllegalArgumentException e) {
