@@ -47,7 +47,7 @@ public class TestTagService {
   private static final ArtListing TAG_LISTING = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
 	      aArtist);
 	  
-  @SuppressWarnings("deprecation")
+ 
   @BeforeEach
   public void setMockOutput() {
     // Mock the Repository methods, returning what we want to expect from the
@@ -106,13 +106,6 @@ public class TestTagService {
 
   @Test
   public void testCreateNullTag() {
-	/*String keyword = "key";
-	TagType type = TagType.Category;
-	User aUser = new User("a","b","c","d","e","f","g");
-    Customer aCustomer = new Customer("customerCode", aUser); 
-    Artist aArtist = new Artist("artistCode", aCustomer);
-	ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
-	  	      aArtist);*/
     String error = null;
 	String keyword = null;
 	TagType type = null;
