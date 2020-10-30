@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.lenient;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +69,7 @@ public class TestTicketService {
       return invocation.getArgument(0);
     };
 
-    lenient().when(ticketRepo.createTicket(false, 0, anyString(),any(),
+    lenient().when(ticketRepo.createTicket(anyBoolean(), anyDouble(), anyString(),any(),
     		any(),any())).thenAnswer((InvocationOnMock invocation) -> {
           boolean payment = (boolean)invocation.getArgument(0);
           double paymentPrice = (double)invocation.getArgument(1);
@@ -125,7 +127,7 @@ public class TestTicketService {
       error = e.getMessage();
     }
     assertNull(ticket);
-    assertEquals("Tag id code cannot be empty!", error); // expected error message for service data
+    assertEquals("Ticket id code cannot be empty!", error); // expected error message for service data
                                                           // validation.
   }
 }
