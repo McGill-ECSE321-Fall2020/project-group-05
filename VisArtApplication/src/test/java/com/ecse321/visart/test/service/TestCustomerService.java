@@ -109,7 +109,6 @@ public class TestCustomerService {
   
   @Test
   public void testCreateCustomer() {
-    // assertEquals(0, service.getAllUsers().size());
 
     Customer customer = null;
     try {
@@ -123,7 +122,7 @@ public class TestCustomerService {
   }
   
   @Test
-  public void testCreateNullManager() {
+  public void testCreateNullCustomer() {
     String name = null;
     String error = null;
     Customer customer = null;
