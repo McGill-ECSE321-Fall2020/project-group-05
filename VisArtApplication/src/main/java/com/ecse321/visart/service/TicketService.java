@@ -14,7 +14,6 @@ import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Ticket;
-import com.ecse321.visart.model.Tag.TagType;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TicketRepository;
 
@@ -32,6 +31,12 @@ public class TicketService {
       ArtOrder aOrder, Customer aCustomer, Artist aArtist) {
     if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("Ticket id code cannot be empty!");
+    }else if (aOrder == null	) {
+        throw new IllegalArgumentException("Ticket order cannot be empty!");
+    }else if (aCustomer == null) {
+          throw new IllegalArgumentException("Ticket customer cannot be empty!");
+    }else if (aArtist == null) {
+          throw new IllegalArgumentException("Ticket artist cannot be empty!");
     }
     return ticketRepo.createTicket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer,
         aArtist);
