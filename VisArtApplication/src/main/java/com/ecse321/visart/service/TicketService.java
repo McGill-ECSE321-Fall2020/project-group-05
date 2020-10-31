@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Ticket;
+import com.ecse321.visart.model.Tag.TagType;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TicketRepository;
 
@@ -39,6 +41,7 @@ public class TicketService {
   public Ticket getTicket(String aIdCode) {
     return ticketRepo.getTicket(aIdCode);
   }
+  
 
   @Transactional
   public List<Ticket> getAllTickets() {

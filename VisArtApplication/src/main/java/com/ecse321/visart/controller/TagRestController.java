@@ -41,6 +41,11 @@ public class TagRestController {
   public List<TagDto> getTagsByType(@PathVariable("type") TagType type) {
     return tagService.getTagByType(type).stream().map(u -> new TagDto(u)).collect(Collectors.toList());
   }
+  
+  @GetMapping(value = { "/tags/{keyword}", "/tags/{keyword}/" })
+  public List<TagDto> getTagsByKeyword(@PathVariable("type") String keyword) {
+    return tagService.getTagByKeyword(keyword).stream().map(u -> new TagDto(u)).collect(Collectors.toList());
+  }
 
   @PostMapping(value = { "/tags/{aIdCode}", "/tags/{aIdCode}/" })
   public TagDto createTag(@PathVariable("aIdCode") String aIdCode) {
