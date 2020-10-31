@@ -34,7 +34,7 @@ public class ArtPieceRestController {
   public ArtPieceDto createArtPiece(@PathVariable("aIdCode") String aIdCode,
       @RequestParam(value = "pieceLocation") PieceLocation aBasicLocation,
       @RequestParam(value = "aAddressLocation") String aAddressLocation,
-      @RequestParam(value = "artListing") ArtListingDto ALDTO) {
+      ArtListingDto ALDTO) {
 
     ArtListing artListing = servicel.createArtListing(ALDTO.getVisibility(),
         ALDTO.getDescription(), ALDTO.getTitle(), ALDTO.getIdCode(),
