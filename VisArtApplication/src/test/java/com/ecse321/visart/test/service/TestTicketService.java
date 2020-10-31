@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.lenient;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +69,7 @@ public class TestTicketService {
       return invocation.getArgument(0);
     };
 
-    lenient().when(ticketRepo.createTicket(false, 0, anyString(),any(),
+    lenient().when(ticketRepo.createTicket(anyBoolean(), anyDouble(), anyString(),any(),
     		any(),any())).thenAnswer((InvocationOnMock invocation) -> {
           boolean payment = (boolean)invocation.getArgument(0);
           double paymentPrice = (double)invocation.getArgument(1);
@@ -110,7 +112,99 @@ public class TestTicketService {
   }
 
   @Test
-  public void testCreateNullTag() {
+  public void testCreateNullTicketID() {
+    String error = null;
+    Ticket ticket = null;
+    boolean payment = true;
+    double paymentPrice = 120;
+    String id = null;
+    ArtOrder aOrder = new ArtOrder();
+    User aUser = new User("a","b","c","d","e","f","g");
+    User aUser2 = new User("h","i","j","k","l","m","n");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
+    Artist aArtist = new Artist("artistCode", aCustomer2);
+    try {
+      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket id code cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testCreateNullTicketOrder() {
+    String error = null;
+    Ticket ticket = null;
+    boolean payment = true;
+    double paymentPrice = 120;
+    String id = "mockcode";
+    ArtOrder aOrder = null;
+    User aUser = new User("a","b","c","d","e","f","g");
+    User aUser2 = new User("h","i","j","k","l","m","n");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
+    Artist aArtist = new Artist("artistCode", aCustomer2);
+    try {
+      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket order cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testCreateNullTicketCustomer() {
+    String error = null;
+    Ticket ticket = null;
+    boolean payment = true;
+    double paymentPrice = 120;
+    String id = "mockcode";
+    ArtOrder aOrder = new ArtOrder();
+    //User aUser = new User("a","b","c","d","e","f","g");
+    User aUser2 = new User("h","i","j","k","l","m","n");
+    Customer aCustomer = null;
+    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
+    Artist aArtist = new Artist("artistCode", aCustomer2);
+    try {
+      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket customer cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testCreateNullTicketArtist() {
+    String error = null;
+    Ticket ticket = null;
+    boolean payment = true;
+    double paymentPrice = 120;
+    String id = "mockcode";
+    ArtOrder aOrder = new ArtOrder();
+    User aUser = new User("a","b","c","d","e","f","g");
+    //User aUser2 = new User("h","i","j","k","l","m","n");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    //Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
+    Artist aArtist = null;
+    try {
+      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket artist cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testCreateNullTicketAll() {
     String error = null;
     Ticket ticket = null;
     boolean payment = false;
@@ -125,9 +219,10 @@ public class TestTicketService {
       error = e.getMessage();
     }
     assertNull(ticket);
-    assertEquals("Tag id code cannot be empty!", error); // expected error message for service data
+    //assertEquals("Ticket id code cannot be empty!", error); // expected error message for service data
                                                           // validation.
   }
+  
 }
 
 

@@ -1,11 +1,17 @@
 package com.ecse321.visart.test.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
+
+import java.awt.List;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +31,14 @@ import com.ecse321.visart.service.ManagerService;
 @ExtendWith(MockitoExtension.class)
 public class TestManagerService {
   
+  private static String id = "123";
+  private static String email = "johndoe@gmail.com";
+  private static String displayname = "johndoe";
+  private static String username = "johndoe123";
+  private static String password = "password";
+  private static String profilepic = "";
+  private static String profileDescription = "Hi I am John Doe";
+  
   @Mock
   private ManagerRepository managerRepo;
   
@@ -34,7 +48,7 @@ public class TestManagerService {
   @InjectMocks
   private ManagerService service;
   
-  private static final String MANAGER_KEY = "MockTestManager";
+ 
   
   @BeforeEach
   public void setMockOutput() {
@@ -42,9 +56,8 @@ public class TestManagerService {
     // database, instead of actually querying the database.
     lenient().when(managerRepo.getManager(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
-          if (invocation.getArgument(0).equals(MANAGER_KEY)) {
-            User user = new User(MANAGER_KEY, MANAGER_KEY, MANAGER_KEY, MANAGER_KEY, MANAGER_KEY, MANAGER_KEY,
-                MANAGER_KEY);
+          if (invocation.getArgument(0).equals(id)) {
+            User user = new User(id, email, displayname, username, password, profilepic, profileDescription);
             return new Manager(invocation.getArgument(0),user);
           } else {
             return null;
@@ -54,11 +67,40 @@ public class TestManagerService {
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
     };
+    
+    lenient().when(entityRepo.findEntityByAttribute(anyString(), any(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
+      
+      String name = invocation.getArgument(2); //get the display name
+      
+      if(name.equals(displayname)||name.equals(username)) {
+        return new ArrayList<Manager>();
+      } else {
+       ArrayList<Manager> managersWithName = new ArrayList<Manager>();
+       managersWithName.add(new Manager());
+       return managersWithName;
+      }
+      
+     
+    });
+    
+    lenient().when(managerRepo.deleteManager(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+      if (invocation.getArgument(0) == id) {
+            return true;
+      } else {
+        return false;
+      }
+    });
 
     lenient().when(managerRepo.createManager(anyString(), anyString(), anyString(), anyString(),
         anyString(), anyString(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
           String id = invocation.getArgument(0);
-          User user = new User(id, id, id, id, id, id, id);
+          String email = invocation.getArgument(1);
+          String displayname = invocation.getArgument(2);
+          String username = invocation.getArgument(3);
+          String password = invocation.getArgument(4);
+          String profilepic = invocation.getArgument(5);
+          String profileDescription = invocation.getArgument(6);
+          User user = new User(id, email, displayname, username, password, profilepic, profileDescription);
           Manager manager = new Manager(id, user);
           return manager;
         });
@@ -71,16 +113,15 @@ public class TestManagerService {
   public void testCreateManager() {
     // assertEquals(0, service.getAllUsers().size());
 
-    String name = "Oscar";
     Manager manager = null;
     try {
-      manager = service.createManager(name, name, name, name, name, name, name);
+      manager = service.createManager(id, email, displayname, username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
-      fail();
+      System.out.println(e.getMessage());
     }
     assertNotNull(manager);
-    assertEquals(name, manager.getIdCode());
+    assertEquals(id, manager.getIdCode());
   }
   
   @Test
@@ -96,6 +137,117 @@ public class TestManagerService {
     assertNull(manager);
     assertEquals("Manager id code cannot be empty!", error); // expected error message for service data
                                                           // validation.
+  }
+  
+  @Test
+  public void testCreateBadEmailManager() {
+    // assertEquals(0, service.getAllUsers().size());
+    String error = null;
+    Manager manager = null;
+    try {
+      manager = service.createManager(id, email+"@.com", displayname, username, password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      error = e.getMessage();
+    }
+    assertNull(manager);
+    assertEquals("Email address is invalid", error);
+  }
+  
+  
+  @Test
+  public void testCreateInvalidUsernamenameManager() {
+    // assertEquals(0, service.getAllUsers().size());
+    String error = null;
+    Manager manager = null;
+    try {
+      manager = service.createManager(id, email, displayname, "hi", password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      error = e.getMessage();
+    }
+    assertNull(manager);
+    assertEquals("This User Name is invalid, must be between 5 and 25 characters!", error);
+  }
+  
+  
+  @Test
+  public void testCreateInvalidDisplaynameManager() {
+    // assertEquals(0, service.getAllUsers().size());
+    String error = null;
+    Manager manager = null;
+    try {
+      manager = service.createManager(id, email, "test", username, password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      error = e.getMessage();
+    }
+    assertNull(manager);
+    assertEquals("This Display Name is invalid, must be between 5 and 25 characters!", error);
+  }
+  
+  @Test
+  public void testCreateDuplicateDisplaynameManager() {
+    // assertEquals(0, service.getAllUsers().size());
+    String error = null;
+    Manager manager = null;
+    try {
+      manager = service.createManager(id, email, displayname+"1", username, password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      error = e.getMessage();
+    }
+    assertNull(manager);
+    assertEquals("This Display Name is already taken!", error);
+  }
+
+  @Test
+  public void testCreateDuplicateUsernameManager() {
+    // assertEquals(0, service.getAllUsers().size());
+    String error = null;
+    Manager manager = null;
+    try {
+      manager = service.createManager(id, email, displayname, username+"1", password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      error = e.getMessage();
+    }
+    assertNull(manager);
+    assertEquals("This Username is already taken!", error);
+  }
+  
+  
+  
+  @Test
+  public void testGetManager() {
+    Manager manager = null;
+    try {
+      manager = service.createManager(id, email, displayname, username, password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(manager);
+    assertEquals(id, manager.getIdCode());
+    
+    try {
+      manager = service.getManager(id);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(manager);
+    assertEquals(id, manager.getIdCode());
+    
+  }
+  
+  @Test
+  public void testDeleteManager() {
+    
+    assertTrue(service.deleteManager(id));
+    assertFalse(service.deleteManager(""));
+    assertFalse(service.deleteManager(null));
+    
   }
   
 

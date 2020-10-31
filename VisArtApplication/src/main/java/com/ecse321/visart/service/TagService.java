@@ -15,6 +15,8 @@ import com.ecse321.visart.model.Tag.TagType;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TagRepository;
 
+import javassist.compiler.ast.Keyword;
+
 @Service
 public class TagService {
 
@@ -36,6 +38,18 @@ public class TagService {
   public Tag getTag(String aIdCode) {
     return tagRepo.getTag(aIdCode);
   }
+  
+  @Transactional
+  public List<Tag> getTagByType(TagType type) {
+    return entityRepo.findEntityByAttribute("type",Tag.class, ""+type.ordinal());
+  }
+  
+  @Transactional
+  public List<Tag> getTagByKeyword(String keyword) {
+    return entityRepo.findEntityByAttribute("keyword",Tag.class,""+keyword);
+  }
+ 
+ 
 
   @Transactional
   public List<Tag> getAllTags() {

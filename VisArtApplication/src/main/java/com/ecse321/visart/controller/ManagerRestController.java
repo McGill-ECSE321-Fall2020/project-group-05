@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.ManagerDto;
+import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.service.ManagerService;
 
 @CrossOrigin(origins = "*")
@@ -24,7 +25,7 @@ public class ManagerRestController {
   private ManagerService service;
   
   @GetMapping(value = { "/managers", "/managers/" })
-  public List<ManagerDto> getAllUsers() {
+  public List<ManagerDto> getAllManagers() {
     return service.getAllUsers().stream().map(m -> new ManagerDto(m)).collect(Collectors.toList());
   }
     
@@ -39,12 +40,25 @@ public class ManagerRestController {
      return manager.getPromotedListings();
   }
   
+//  @PostMapping(value = {"/managers/{listing}","/managers/{listing}"})
+//  public ManagerDto addManagerListing(@RequestBody MultiValueMap<String, String> values) {
+//      Manager manager = service.getManager(values.getFirst("idCode"));
+//      
+//      return new ManagerDto();
+//  }
+  
   @PostMapping(value = { "/managers/{name}", "/managers/{name}/" })
-  public ManagerDto createUser(@RequestBody MultiValueMap<String, String> values) {
+  public ManagerDto createManager(@RequestBody MultiValueMap<String, String> values) {
     return new ManagerDto(service.createManager(values.getFirst("idCode"), 
         values.getFirst("emailAddress"), values.getFirst("displayName"),
         values.getFirst("userName"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
+  
+  @PostMapping(value = {"/delete_managers/{id}","delete_manager/{id}/"})
+  public Boolean deleteManager(@PathVariable("id") String idCode) {
+    return service.deleteManager(idCode);
+  }
+  
 
 }
