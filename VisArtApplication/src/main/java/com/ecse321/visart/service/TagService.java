@@ -36,6 +36,12 @@ public class TagService {
   public Tag getTag(String aIdCode) {
     return tagRepo.getTag(aIdCode);
   }
+  
+  @Transactional
+  public List<Tag> getTagByType(TagType type) {
+    return entityRepo.findEntityByAttribute("type",Tag.class, ""+type.ordinal());
+  }
+ 
 
   @Transactional
   public List<Tag> getAllTags() {

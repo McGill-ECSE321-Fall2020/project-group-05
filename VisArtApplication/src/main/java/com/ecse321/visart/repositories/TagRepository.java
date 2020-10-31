@@ -59,6 +59,7 @@ public class TagRepository {
   public Tag getTag(String aIdCode) {
     return entityManager.find(Tag.class, aIdCode);
   }
+  
 
   /**
    * updateTag method updates a Tag instance's properties in the
