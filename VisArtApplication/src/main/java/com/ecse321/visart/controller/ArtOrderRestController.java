@@ -28,7 +28,7 @@ public class ArtOrderRestController {
   @Autowired
   private ArtOrderService service;
   private ArtPieceService servicep;
-  private ArtListingService service1;
+  private ArtListingService servicel;
 
   @GetMapping(value = { "/ArtOrders", "/ArtOrders/" })
   public List<ArtOrderDto> getAllArtOrders() {
@@ -42,10 +42,10 @@ public class ArtOrderRestController {
       @RequestParam(value = "PieceLocation") PieceLocation aTargetLocation,
       @RequestParam(value = "aTargetAddress") String aTargetAddress,
       @RequestParam(value = "aDeliveryTracker") String aDeliveryTracker,
-      @RequestParam(value = "artPiece") ArtPieceDto APDTO) {
+      ArtPieceDto APDTO) {
 
     ArtPiece ap = servicep.createArtPiece(APDTO.getBasicLocation(), APDTO.getAddressLocation(),
-        APDTO.getIdCode(), service1.getArtListing(APDTO.getArtListing()));
+        APDTO.getIdCode(), servicel.getArtListing(APDTO.getArtListing()));
     return new ArtOrderDto(service.createArtOrder(aIsDelivered, aTargetLocation, aTargetAddress,
         aDeliveryTracker, aIdCode, ap));
   }
