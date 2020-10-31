@@ -30,6 +30,12 @@ public class TagService {
   public Tag createTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
     if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("Tag id code cannot be empty!");
+    }else if (aType == null) {
+        throw new IllegalArgumentException("Tag type cannot be empty!");
+    }else if (aKeyword == null || aKeyword == "") {
+          throw new IllegalArgumentException("Tag keyword cannot be empty!");
+    }else if (aListing == null) {
+          throw new IllegalArgumentException("Tag listing cannot be empty!");
     }
     return tagRepo.createTag(aType, aKeyword, aIdCode, aListing);
   }

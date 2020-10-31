@@ -117,9 +117,73 @@ public class TestTagService {
       error = e.getMessage();
     }
     assertNull(tag);
+    //assertEquals("Tag id code cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testCreateNullTagID() {
+    String error = null;
+	String keyword = "renaissance";
+	String id = null;
+	TagType type = TagType.Topic;
+    Tag tag = null;
+    User aUser = new User("a","b","c","d","e","f","g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+  	      aArtist);
+    try {
+      tag = tagService.createTag(type, keyword, id, listing);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(tag);
     assertEquals("Tag id code cannot be empty!", error); // expected error message for service data
                                                           // validation.
   }
+  
+  @Test
+  public void testCreateNullTagType() {
+    String error = null;
+	String keyword = "renaissance";
+	String id = "mockcode";
+	TagType type = null;
+    Tag tag = null;
+    User aUser = new User("a","b","c","d","e","f","g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+  	      aArtist);
+    try {
+      tag = tagService.createTag(type, keyword, id, listing);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(tag);
+    assertEquals("Tag type cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testCreateNullTagListing() {
+    String error = null;
+	String keyword = "renaissance";
+	String id = "mockcode";
+	TagType type = TagType.Topic;
+    Tag tag = null;
+    ArtListing listing = null;
+    try {
+      tag = tagService.createTag(type, keyword, id, listing);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(tag);
+    assertEquals("Tag listing cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  
   
 
   
