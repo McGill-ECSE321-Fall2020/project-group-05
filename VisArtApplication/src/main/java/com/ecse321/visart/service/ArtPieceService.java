@@ -30,7 +30,7 @@ public class ArtPieceService {
     }
 
     if (aBasicLocation == null) {
-      throw new IllegalArgumentException("Basic Location cannot be empty!");
+      throw new IllegalArgumentException("Piece Location cannot be empty!");
     }
 
     if (aAddressLocation == null || aAddressLocation == "") {

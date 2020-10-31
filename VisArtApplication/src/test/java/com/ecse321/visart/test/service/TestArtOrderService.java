@@ -7,8 +7,8 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -63,10 +63,10 @@ public class TestArtOrderService {
           if (invocation.getArgument(0).equals(AO_KEY)) {
             ArtOrder artOrder1 = new ArtOrder(TEST_BOOLEAN, pieceLocation, AO_KEY,
                 AO_KEY, AO_KEY, AP_TEST);
-            
+
             return artOrder1;
           } else {
-            
+
             return null;
           }
         });
@@ -78,9 +78,14 @@ public class TestArtOrderService {
     lenient().when(aoRepo.createArtOrder(Mockito.anyBoolean(), Mockito.any(PieceLocation.class),
         anyString(), anyString(), anyString(), Mockito.any(ArtPiece.class)))
         .thenAnswer((InvocationOnMock invocation) -> {
-          String id = invocation.getArgument(0);
-          ArtOrder artOrder2 = new ArtOrder(TEST_BOOLEAN, pieceLocation, id,
-              id, id, AP_TEST);
+          Boolean delivery = invocation.getArgument(0);
+          PieceLocation location = invocation.getArgument(1);
+          String target = invocation.getArgument(2);
+          String tracker = invocation.getArgument(3);
+          String id = invocation.getArgument(4);
+          ArtPiece artpiece = invocation.getArgument(5);
+          ArtOrder artOrder2 = new ArtOrder(delivery, location, target,
+              tracker, id, artpiece);
           ;
           return artOrder2;
         });
@@ -93,28 +98,54 @@ public class TestArtOrderService {
   public void testCreateArtOrder() {
 
     ArtOrder artOrder = null;
+    Boolean delivery = true;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "123";
+    String tracker = "111122223333";
+    String id = "1234";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+    ArtPiece AP_TEST = new ArtPiece(Piecelocation, "locationtest",
+        "123", TEST_LISTING);
 
     try {
-      artOrder = serviceAo.createArtOrder(true, PieceLocation.AtGallery,
-          AO_KEY, AO_KEY, AO_KEY, AP_TEST);
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation,
+          target, tracker, id, AP_TEST);
     } catch (IllegalArgumentException e) {
 
       fail();
     }
 
     assertNotNull(artOrder);
-    assertEquals(artOrder.getIdCode(), AO_KEY);
+    assertEquals(artOrder.getIdCode(), id);
 
   }
 
   @Test
   public void testCreateArtOrderNullID() {
+
+    Boolean delivery = true;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "123";
+    String tracker = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+    ArtPiece AP_TEST = new ArtPiece(Piecelocation, "locationtest",
+        "123", TEST_LISTING);
     ArtOrder artOrder = null;
     String idNull = null;
     String error = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(TEST_BOOLEAN, pieceLocation, AO_KEY, AO_KEY, idNull,
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker, idNull,
           AP_TEST);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -123,95 +154,149 @@ public class TestArtOrderService {
     assertEquals("User id code cannot be empty!", error); // expected error message for service data
                                                           // validation.
   }
-  
+
   @Test
   public void testCreateArtOrderNullLocation() {
-    PieceLocation piece = null;
+    Boolean delivery = true;
+    PieceLocation Piecelocation = null;
+    String target = "123";
+    String tracker = "111122223333";
+    String id = "1234";
     String error = null;
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+    ArtPiece AP_TEST = new ArtPiece(Piecelocation, "locationtest",
+        "123", TEST_LISTING);
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(TEST_BOOLEAN, piece, AO_KEY, AO_KEY, AO_KEY,
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker, id,
           AP_TEST);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(artOrder);
-    assertEquals("Target Location cannot be empty!", error); // expected error message for service data
-                                                          // validation.
+    assertEquals("Target Location cannot be empty!", error); // expected error message for service
+                                                             // data
+    // validation.
   }
-  
+
   @Test
   public void testCreateArtOrderNullAddress() {
-   
-    String aTargetAddress = null;
+
+    Boolean delivery = true;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = null;
+    String tracker = "111122223333";
+    String id = "1234";
     String error = null;
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+    ArtPiece AP_TEST = new ArtPiece(Piecelocation, "locationtest",
+        "123", TEST_LISTING);
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(TEST_BOOLEAN, pieceLocation, aTargetAddress, AO_KEY, AO_KEY,
-          AP_TEST);
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker,
+          id, AP_TEST);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(artOrder);
-    assertEquals("Target Address cannot be empty!", error); // expected error message for service data
-                                                          // validation.
+    assertEquals("Target Address cannot be empty!", error); // expected error message for service
+                                                            // data
+    // validation.
   }
-  
+
   @Test
   public void testCreateArtOrderNullDelivery() {
-   
-    String aDeliveryTracker = null;
+
+    Boolean delivery = true;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "123";
+    String tracker = null;
+    String id = "1234";
     String error = null;
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+    ArtPiece AP_TEST = new ArtPiece(Piecelocation, "locationtest",
+        "123", TEST_LISTING);
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(TEST_BOOLEAN, pieceLocation,
-          AO_KEY, aDeliveryTracker, AO_KEY,
-          AP_TEST);
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation,
+          target, tracker, id, AP_TEST);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(artOrder);
-    assertEquals("Delivery Tracker cannot be empty!", error); // expected error message for service data
-  }                                            // validation.
-  
+    assertEquals("Delivery Tracker cannot be empty!", error); // expected error message for service
+                                                              // data
+  } // validation.
+
   @Test
   public void testCreateArtOrderBadTracker() {
-   
-    String aDeliveryTracker = "1Z8DJ2";
+
+    Boolean delivery = true;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "123";
+    String tracker = "ER24";
+    String id = "1234";
     String error = null;
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+    ArtPiece AP_TEST = new ArtPiece(Piecelocation, "locationtest",
+        "123", TEST_LISTING);
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(TEST_BOOLEAN, pieceLocation,
-          AO_KEY, aDeliveryTracker, AO_KEY,
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation,
+          target, tracker, id,
           AP_TEST);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(artOrder);
-    assertEquals("Delivery Tracker must contain 12 digits", error); // expected error message for service data
-  }          
-  
-  
+    assertEquals("Delivery Tracker must contain 12 digits", error); // expected error message for
+                                                                    // service data
+  }
 
   @Test
   public void testCreateArtOrderNullPiece() {
-   
-    ArtPiece artpiece = null;
+
+    Boolean delivery = true;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "123";
+    String tracker = "111122223333";
+    String id = "1234";
     String error = null;
+    ArtPiece AP_TEST = null;
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(TEST_BOOLEAN, pieceLocation, AO_KEY, AO_KEY, AO_KEY,
-          artpiece);
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker, id,
+         AP_TEST );
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(artOrder);
     assertEquals("Art Piece cannot be empty!", error); // expected error message for service data
-  }                       
+  }
 
 }
