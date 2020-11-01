@@ -46,8 +46,10 @@ public class CustomerService {
    */
 
   @Transactional
-  public Customer createCustomer(String aIdCode, String aEmailAddress, String aDisplayname,
+  public Customer createCustomer(String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
+    
+    String aIdCode = EntityRepository.getUniqueKey();
 
     if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("Customer id code cannot be empty!");
