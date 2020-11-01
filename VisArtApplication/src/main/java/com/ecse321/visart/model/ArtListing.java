@@ -31,7 +31,7 @@ public class ArtListing {
   private String description;
   private String title;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   private List<String> postingPicLink;
 
   // ArtListing Associations
@@ -191,7 +191,7 @@ public class ArtListing {
   private List<Customer> favoritedCustomer;
   @ManyToOne
   private Artist artist;
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   private List<Float> dimensions;
   @Id
   private String idCode;

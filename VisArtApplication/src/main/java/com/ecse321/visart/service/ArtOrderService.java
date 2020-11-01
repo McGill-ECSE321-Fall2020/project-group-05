@@ -61,6 +61,10 @@ public class ArtOrderService {
       throw new IllegalArgumentException("Delivery Tracker cannot be empty!");
     }
 
+    if (aDeliveryTracker.length() > 1000) {
+      throw new IllegalArgumentException("Delivery Tracker is too long!");
+    }
+
     ArtPiece aArtPiece = artPieceRepo.getArtPiece(aArtPieceId);
     if (aArtPiece == null) {
       throw new IllegalArgumentException("Art Piece id must be valid!");
@@ -102,7 +106,7 @@ public class ArtOrderService {
       String aArtPieceId) {
 
     if (aIdCode == null || aIdCode == "") {
-      throw new IllegalArgumentException("User id code cannot be empty!");
+      throw new IllegalArgumentException("ArtOrder id code cannot be empty!");
     }
 
     ArtOrder artOrder = artOrderRepo.getArtOrder(aIdCode);
@@ -117,6 +121,10 @@ public class ArtOrderService {
 
     if (aTargetAddress != null && aTargetAddress.length() > 0) {
       artOrder.setTargetAddress(aTargetAddress);
+    }
+
+    if (aDeliveryTracker != null && aDeliveryTracker.length() > 1000) {
+      throw new IllegalArgumentException("Delivery Tracker is too long!");
     }
 
     if (aDeliveryTracker != null && aDeliveryTracker.length() > 0) {

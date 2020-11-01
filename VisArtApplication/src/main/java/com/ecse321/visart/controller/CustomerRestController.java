@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.CustomerDto;
+import com.ecse321.visart.dto.ManagerDto;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.service.CustomerService;
 
@@ -26,17 +27,30 @@ public class CustomerRestController {
 
   @GetMapping(value = { "/customers", "/customers/" })
   public List<CustomerDto> getAllCustomers() {
-    return service.getAllUsers().stream().map(u -> new CustomerDto(u)).collect(Collectors.toList());
+    return service.getAllCustomers().stream().map(u -> new CustomerDto(u)).collect(Collectors.toList());
   }
 
   @GetMapping(value = { "/get_customer", "/get_customer/" })
   public CustomerDto getCustomer(@RequestParam("idCode") String aIdCode) {
     return new CustomerDto(service.getCustomer(aIdCode));
   }
+  
+  @GetMapping(value = { "/customer_favorite_listings", "/customer_favorite_listings" })
+  public  List<String> getCustomerFavListings(@RequestParam("idCode" )String aIdCode) {
+     CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode,false,true));
+     return customer.getFavoriteListings();
+  }
+  
+  @GetMapping(value = { "/bought_tickets", "/bought_tickets" })
+  public  List<String> getboughtTicketsList(@RequestParam("idCode" )String aIdCode) {
+     CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode,true,true));
+     return customer.getBoughtTickets();
+  }
+  
 
   @PostMapping(value = { "/customers/{name}", "/customers/{name}/" })
   public CustomerDto createCustomer(@RequestBody MultiValueMap<String, String> values) {
-    return new CustomerDto(service.createCustomer(values.getFirst("idCode"),
+    return new CustomerDto(service.createCustomer(
         values.getFirst("emailAddress"), values.getFirst("displayName"),
         values.getFirst("userName"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));

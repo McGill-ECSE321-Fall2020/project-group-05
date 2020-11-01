@@ -136,7 +136,7 @@ public class TestManagerService {
       error = e.getMessage();
     }
     assertNull(manager);
-    assertEquals("Manager id code cannot be empty!", error); // expected error message for service data
+    assertEquals("Email address is invalid", error); // expected error message for service data
                                                           // validation.
   }
   
@@ -157,7 +157,7 @@ public class TestManagerService {
   
   
   @Test
-  public void testCreateInvalidUsernamenameManager() {
+  public void testCreateInvalidUsernameManager() {
     // assertEquals(0, service.getAllUsers().size());
     String error = null;
     Manager manager = null;

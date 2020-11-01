@@ -52,12 +52,12 @@ public class TagRestController {
 
   @PostMapping(value = { "/tags/{aIdCode}", "/tags/{aIdCode}/" })
   public TagDto createTag(@PathVariable("aIdCode") String aIdCode) {
-    return new TagDto(tagService.createTag(null, "", aIdCode, null));
+    return new TagDto(tagService.createTag(null, null, null));
   }
   
   @PostMapping(value = { "/tag_update/{aIdCode}", "/tag_update/{aIdCode}/" })
   public TagDto updateTag(@PathVariable("aIdCode") String aIdCode) {
-	    return new TagDto(tagService.updateTag(null, "", aIdCode, null));
+	    return new TagDto(tagService.updateTag(null, null, null));
   }
   
   @PostMapping(value = {"/delete_tag/{id}","delete_tag/{id}/"})
