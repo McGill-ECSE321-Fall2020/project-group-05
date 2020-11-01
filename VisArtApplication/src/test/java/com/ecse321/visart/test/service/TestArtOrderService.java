@@ -132,7 +132,7 @@ public class TestArtOrderService {
 
     try {
       artOrder = serviceAo.createArtOrder(delivery, Piecelocation,
-          target, tracker, id, AP_TEST);
+          target, tracker, AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
 
       fail();
@@ -163,8 +163,8 @@ public class TestArtOrderService {
     String error = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker, idNull,
-          AP_TEST);
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -192,8 +192,8 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker, id,
-          AP_TEST);
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -224,7 +224,7 @@ public class TestArtOrderService {
 
     try {
       artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker,
-          id, AP_TEST);
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -255,7 +255,7 @@ public class TestArtOrderService {
 
     try {
       artOrder = serviceAo.createArtOrder(delivery, Piecelocation,
-          target, tracker, id, AP_TEST);
+          target, tracker, AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -285,8 +285,8 @@ public class TestArtOrderService {
 
     try {
       artOrder = serviceAo.createArtOrder(delivery, Piecelocation,
-          target, tracker, id,
-          AP_TEST);
+          target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -308,8 +308,8 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker, id,
-          AP_TEST);
+      artOrder = serviceAo.createArtOrder(delivery, Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -336,7 +336,7 @@ public class TestArtOrderService {
 
     try {
       artOrder = serviceAo.createArtOrder(delivery, Piecelocation,
-          target, tracker, id, AP_TEST);
+          target, tracker, AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
 
       fail();
@@ -377,7 +377,7 @@ public class TestArtOrderService {
 
     try {
       artOrder = serviceAo.createArtOrder(delivery, Piecelocation,
-          target, tracker, id, AP_TEST);
+          target, tracker, AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
 
       fail();
@@ -416,8 +416,8 @@ public class TestArtOrderService {
     String error = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation, target, tracker, idNull,
-          AP_TEST);
+      artOrder = serviceAo.updateArtOrder(idNull, delivery, Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -446,8 +446,8 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation, target, tracker, id,
-          AP_TEST);
+      artOrder = serviceAo.updateArtOrder(id, delivery, Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -477,8 +477,8 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation, target, tracker,
-          id, AP_TEST);
+      artOrder = serviceAo.updateArtOrder(id, delivery, Piecelocation, target,
+          tracker, AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -508,8 +508,8 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation,
-          target, tracker, id, AP_TEST);
+      artOrder = serviceAo.updateArtOrder(id, delivery,
+          Piecelocation, target, tracker, AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -538,9 +538,9 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation,
-          target, tracker, id,
-          AP_TEST);
+      artOrder = serviceAo.updateArtOrder(id, delivery,
+          Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -562,8 +562,8 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation, target, tracker, id,
-          AP_TEST);
+      artOrder = serviceAo.updateArtOrder(id, delivery, Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -589,9 +589,9 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation,
-          target, tracker, AO_KEY,
-          AP_TEST);
+      artOrder = serviceAo.updateArtOrder(AO_KEY, delivery,
+          Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
 
     }
@@ -618,9 +618,9 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation,
-          target, tracker, AO_KEY,
-          AP_TEST);
+      artOrder = serviceAo.updateArtOrder(AO_KEY, delivery,
+          Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
 
     }
@@ -647,9 +647,9 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation,
-          target, tracker, AO_KEY,
-          AP_TEST);
+      artOrder = serviceAo.updateArtOrder(AO_KEY, delivery,
+          Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
 
     }
@@ -676,9 +676,9 @@ public class TestArtOrderService {
     ArtOrder artOrder = null;
 
     try {
-      artOrder = serviceAo.updateArtOrder(delivery, Piecelocation,
-          target, tracker, AO_KEY,
-          AP_TEST);
+      artOrder = serviceAo.updateArtOrder(AO_KEY, delivery,
+          Piecelocation, target, tracker,
+          AP_TEST.getIdCode());
     } catch (IllegalArgumentException e) {
 
     }

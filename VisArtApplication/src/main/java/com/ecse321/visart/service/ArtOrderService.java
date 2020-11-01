@@ -17,14 +17,17 @@ import com.ecse321.visart.repositories.EntityRepository;
 public class ArtOrderService {
 
   @Autowired
-  ArtOrderRepository ArtOrderRepo;
+  ArtOrderRepository artOrderRepo;
+
+  @Autowired
+  ArtPieceRepository artPieceRepo;
 
   @Autowired
   EntityRepository entityRepo;
 
   /**
    * createOrder method creates an ArtOrder instance that is persisted in the
-   * database
+   * database.
    * 
    * @param  aIsDelivered     status of delivered ArtPiece
    * @param  aTargetLocation  whether the ArtPiece is at gallery, or elsewhere
@@ -35,38 +38,35 @@ public class ArtOrderService {
    * @return                  a persisted art order instance
    */
   @Transactional
-  public ArtOrder createArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation,
-      String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece) {
-
-    if (aIdCode == null || aIdCode == "") {
-      throw new IllegalArgumentException("User id code cannot be empty!");
+  public ArtOrder createArtOrder(Boolean aIsDelivered, PieceLocation aTargetLocation,
+      String aTargetAddress, String aDeliveryTracker, String aArtPieceId) {
+    String aIdCode = EntityRepository.getUniqueKey();
+    if (aIdCode == null || aIdCode.length() < 1) {
+      throw new IllegalArgumentException("ArtOrder id code cannot be empty!");
     }
 
-    if (aIsDelivered != true && aIsDelivered != false) {
-      throw new IllegalArgumentException("Delivery status must be true or false");
+    if (aIsDelivered == null) {
+      throw new IllegalArgumentException("aIsDelivered must be set to true/false!");
     }
 
     if (aTargetLocation == null) {
       throw new IllegalArgumentException("Target Location cannot be empty!");
     }
 
-    if (aTargetAddress == null) {
+    if (aTargetAddress == null || aTargetAddress.length() < 1) { // target address is also a string
       throw new IllegalArgumentException("Target Address cannot be empty!");
     }
 
-    if (aDeliveryTracker == null || aDeliveryTracker == "") {
+    if (aDeliveryTracker == null || aDeliveryTracker.length() < 1) {
       throw new IllegalArgumentException("Delivery Tracker cannot be empty!");
     }
 
-    if (aDeliveryTracker.length() != 12) {
-      throw new IllegalArgumentException("Delivery Tracker must contain 12 digits");
-    }
-
+    ArtPiece aArtPiece = artPieceRepo.getArtPiece(aArtPieceId);
     if (aArtPiece == null) {
-      throw new IllegalArgumentException("Art Piece cannot be empty!");
+      throw new IllegalArgumentException("Art Piece id must be valid!");
     }
 
-    return ArtOrderRepo.createArtOrder(aIsDelivered, aTargetLocation, aTargetAddress,
+    return artOrderRepo.createArtOrder(aIsDelivered, aTargetLocation, aTargetAddress,
         aDeliveryTracker, aIdCode, aArtPiece);
   }
 
@@ -74,74 +74,66 @@ public class ArtOrderService {
    * getArtOrder method retrieves a persisted ArtOrder instance from the database.
    * 
    * @param  aIdCode database Id for a specific order
-   * @return
+   * @return         the ArtOrder from the database or null if not present
    */
   @Transactional
   public ArtOrder getArtOrder(String aIdCode) {
-    return ArtOrderRepo.getArtOrder(aIdCode);
+    return artOrderRepo.getArtOrder(aIdCode);
   }
 
   /**
    * updateArtOrder method updates an ArtOrder instance's properties in the
+   * database. If a parameter is null, then the attribute is unchanged in
    * database.
    * 
-   * @param ao the ArtOrder instance to write to the database
+   * @param  aIdCode          the id of the artOrder to update
+   * @param  aIsDelivered     can be null for unchange, true/false to change
+   * @param  aTargetLocation  null to unchange, new value to change
+   * @param  aTargetAddress   null or empty string to unchange, new value changes
+   * @param  aDeliveryTracker null or empty string unchange, new value changes
+   * @param  aArtPieceId      null or empty string to uncahnge, valid artpiece id
+   *                          changes
+   * 
+   * @return                  the updated ArtOrder object, persisted in database
    */
   @Transactional
-  public ArtOrder updateArtOrder(boolean aIsDelivered, PieceLocation aTargetLocation,
-      String aTargetAddress, String aDeliveryTracker, String aIdCode, ArtPiece aArtPiece) {
+  public ArtOrder updateArtOrder(String aIdCode, Boolean aIsDelivered,
+      PieceLocation aTargetLocation, String aTargetAddress, String aDeliveryTracker,
+      String aArtPieceId) {
 
     if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("User id code cannot be empty!");
     }
 
-    if (aIsDelivered != true && aIsDelivered != false) {
-      throw new IllegalArgumentException("Delivery status must be true or false");
+    ArtOrder artOrder = artOrderRepo.getArtOrder(aIdCode);
+
+    if (aIsDelivered != null) {
+      artOrder.setIsDelivered(aIsDelivered);
     }
 
-    if (aTargetLocation == null) {
-      throw new IllegalArgumentException("Target Location cannot be empty!");
+    if (aTargetLocation != null) {
+      artOrder.setTargetLocation(aTargetLocation);
     }
 
-    if (aTargetAddress == null) {
-      throw new IllegalArgumentException("Target Address cannot be empty!");
+    if (aTargetAddress != null && aTargetAddress.length() > 0) {
+      artOrder.setTargetAddress(aTargetAddress);
     }
 
-    if (aDeliveryTracker == null || aDeliveryTracker == "") {
-      throw new IllegalArgumentException("Delivery Tracker cannot be empty!");
+    if (aDeliveryTracker != null && aDeliveryTracker.length() > 0) {
+      artOrder.setDeliveryTracker(aDeliveryTracker);
     }
 
-    if (aDeliveryTracker.length() != 12) {
-      throw new IllegalArgumentException("Delivery Tracker must contain 12 digits");
+    if (aArtPieceId != null && aArtPieceId.length() > 0) {
+      ArtPiece aArtPiece = artPieceRepo.getArtPiece(aArtPieceId);
+      if (aArtPiece == null) {
+        throw new IllegalArgumentException("Art Piece id must be valid!");
+      }
+      artOrder.setArtPiece(aArtPiece);
     }
 
-    if (aArtPiece == null) {
-      throw new IllegalArgumentException("Art Piece cannot be empty!");
-    }
-
-    ArtOrder artOrder = ArtOrderRepo.getArtOrder(aIdCode);
-    artOrder.setIsDelivered(aIsDelivered);
-    artOrder.setTargetLocation(aTargetLocation);
-    artOrder.setTargetAddress(aTargetAddress);
-    artOrder.setDeliveryTracker(aDeliveryTracker);
-    artOrder.setArtPiece(aArtPiece);
-
-    ArtOrderRepo.updateArtOrder(artOrder);
+    artOrderRepo.updateArtOrder(artOrder);
 
     return artOrder;
-  }
-
-  /**
-   * Overloaded deleteArtOrder method removes the specified ArtOrder instance from
-   * the database.
-   * 
-   * @param  ao the ArtOrder instance to remove
-   * @return    true if successful removal
-   */
-  @Transactional
-  public boolean deleteArtOrder(ArtOrder ao) {
-
-    return ArtOrderRepo.deleteArtOrder(ao.getIdCode());
   }
 
   /**
@@ -152,11 +144,15 @@ public class ArtOrderService {
    * @return    true if successful delete
    */
   @Transactional
-  public boolean deleteArtOrder(String Id) {
-
-    return ArtOrderRepo.deleteArtOrder(Id);
+  public boolean deleteArtOrder(String idCode) {
+    return artOrderRepo.deleteArtOrder(idCode);
   }
 
+  /**
+   * getAllArtOrders retrieves all art orders from the database
+   * 
+   * @return list of all ArtOrders in database
+   */
   @Transactional
   public List<ArtOrder> getAllArtOrders() {
     return entityRepo.getAllEntities(ArtOrder.class);
