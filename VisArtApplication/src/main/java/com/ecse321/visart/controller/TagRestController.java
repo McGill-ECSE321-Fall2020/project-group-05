@@ -57,7 +57,7 @@ public class TagRestController {
   
   @PostMapping(value = { "/tag_update/{aIdCode}", "/tag_update/{aIdCode}/" })
   public TagDto updateTag(@PathVariable("aIdCode") String aIdCode) {
-	    return new TagDto(tagService.updateTag(null, null, null));
+	    return new TagDto(tagService.updateTag(null, null, null, null));
   }
   
   @PostMapping(value = {"/delete_tag/{id}","delete_tag/{id}/"})
