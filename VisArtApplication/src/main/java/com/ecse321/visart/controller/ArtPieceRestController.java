@@ -32,14 +32,13 @@ public class ArtPieceRestController {
 
   @PostMapping(value = { "/ArtPieces/{aIdCode}", "/ArtPieces/{aIdCode}/" })
   public ArtPieceDto createArtPiece(@PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "pieceLocation") PieceLocation aBasicLocation,
+      @RequestParam(value = "pieceLocation") String aBasicLocation,
       @RequestParam(value = "aAddressLocation") String aAddressLocation,
-      ArtListingDto ALDTO) {
+      @RequestParam(value = "ArtListingDto") String ArtListingDto) {
 
-    ArtListing artListing = servicel.createArtListing(ALDTO.getVisibility(),
-        ALDTO.getDescription(), ALDTO.getTitle(), ALDTO.getIdCode(),
-        servicea.getArtist(ALDTO.getIdCode()));
+    ArtListing artListing = servicel.getArtListing(ArtListingDto);
+    PieceLocation BasicLocation = PieceLocation.valueOf(aBasicLocation);
     return new ArtPieceDto(
-        service.createArtPiece(aBasicLocation, aAddressLocation, aIdCode, artListing));
+        service.createArtPiece(BasicLocation, aAddressLocation, aIdCode, artListing));
   }
 }
