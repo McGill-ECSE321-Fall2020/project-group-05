@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -34,6 +35,16 @@ public class EntityRepository {
   EntityManager entityManager;
 
   /**
+   * getUniqueKey creates a unique key to utilize for id codes of entities in the
+   * database.
+   * 
+   * @return a unique UUID string key
+   */
+  public static String getUniqueKey() {
+    return UUID.randomUUID().toString();
+  }
+
+  /**
    * getAllEntities method retrieves all entities of the given type entityType
    * (ex. User.class) from the database.
    * 
@@ -55,18 +66,18 @@ public class EntityRepository {
    * It uses the java name of the attribute, not the column name in the database.
    * 
    * @param  <T>        the type of the entity to query
+   * @param  <E>        the type of value to return
    * @param  attribute  specifies which column of data to retrieve
    * @param  entityType the entity class which we will get the data of
+   * @param  resultType the Java type of the retrieved attribute from database
    * @return            list of the data retrieved from the database as strings
    */
-  public <T> List<String> getAllFromColumn(String attribute, Class entityType) {
-    // String name = entityType.getSimpleName();
-    // return entityManager.createQuery("SELECT idCode FROM " + name,
-    // String.class).getResultList();
+  public <E, T> List<T> getAllFromColumn(String attribute, Class<E> entityType,
+      Class<T> resultType) {
 
     CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-    CriteriaQuery<String> query = cb.createQuery(entityType);
-    Root<T> entity = query.from(entityType);
+    CriteriaQuery<T> query = (CriteriaQuery<T>) cb.createQuery(resultType);
+    Root<E> entity = query.from(entityType);
 
     query.select(entity.get(attribute));
 

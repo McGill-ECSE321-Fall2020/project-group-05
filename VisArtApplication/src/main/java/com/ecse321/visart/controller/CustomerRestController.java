@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.CustomerDto;
-import com.ecse321.visart.dto.ManagerDto;
+import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.service.CustomerService;
 
 @CrossOrigin(origins = "*")
@@ -25,7 +25,7 @@ public class CustomerRestController {
   private CustomerService service;
 
   @GetMapping(value = { "/customers", "/customers/" })
-  public List<CustomerDto> getAllUsers() {
+  public List<CustomerDto> getAllCustomers() {
     return service.getAllUsers().stream().map(u -> new CustomerDto(u)).collect(Collectors.toList());
   }
 
@@ -35,11 +35,17 @@ public class CustomerRestController {
   }
 
   @PostMapping(value = { "/customers/{name}", "/customers/{name}/" })
-  public CustomerDto createUser(@RequestBody MultiValueMap<String, String> values) {
+  public CustomerDto createCustomer(@RequestBody MultiValueMap<String, String> values) {
     return new CustomerDto(service.createCustomer(values.getFirst("idCode"),
         values.getFirst("emailAddress"), values.getFirst("displayName"),
         values.getFirst("userName"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
+  
+  @PostMapping(value = {"/delete_managers/{id}","delete_manager/{id}/"})
+  public Boolean deleteCustomer(@PathVariable("id") String idCode) {
+    return service.deleteCustomer(idCode);
+  }
+  
 
 }

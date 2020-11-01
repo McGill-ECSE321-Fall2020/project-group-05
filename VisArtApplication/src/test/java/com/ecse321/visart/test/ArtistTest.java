@@ -99,7 +99,7 @@ public class ArtistTest {
     assertEquals(aUsername, testArtist2.getCustomer().getUser().getUsername());
     assertEquals(aDisplayname, testArtist2.getCustomer().getUser().getDisplayname());
 
-    List<String> keys = eRepo.getAllFromColumn("idCode", User.class);
+    List<String> keys = eRepo.getAllFromColumn("idCode", User.class, String.class);
 
     User user = eRepo.findEntityByAttribute("emailAddress", User.class, aEmailAddress).get(0);
     assertEquals(aEmailAddress, user.getEmailAddress());
