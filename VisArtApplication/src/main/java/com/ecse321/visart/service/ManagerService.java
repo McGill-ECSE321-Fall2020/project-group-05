@@ -26,18 +26,16 @@ public class ManagerService {
   ArtListingService artListingService;
 
   @Transactional
-  public Manager createManager(String aIdCode, String aEmailAddress, String aDisplayname,
+  public Manager createManager(String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
 
-    if (aIdCode == null || aIdCode == "") {
-      throw new IllegalArgumentException("Manager id code cannot be empty!");
-    }
+    String aIdCode = EntityRepository.getUniqueKey();
 
-    if(isValidEmail(aEmailAddress)==false) {
+    if(aEmailAddress == null||isValidEmail(aEmailAddress)==false) {
       throw new IllegalArgumentException("Email address is invalid");
     }
 
-    if(aDisplayname.length()<5 || aDisplayname.length()>25) {
+    if(aDisplayname == null||aDisplayname.length()<5 || aDisplayname.length()>25) {
       throw new IllegalArgumentException("This Display Name is invalid, must be between 5 and 25 characters!");
     }
 
@@ -46,7 +44,7 @@ public class ManagerService {
         throw new IllegalArgumentException("This Display Name is already taken!");
     }
 
-    if(aUsername.length()<5 || aUsername.length()>25 ) {
+    if(aUsername == null||aUsername.length()<5 || aUsername.length()>25 ) {
       throw new IllegalArgumentException("This User Name is invalid, must be between 5 and 25 characters!");
     }
 
@@ -55,11 +53,11 @@ public class ManagerService {
         throw new IllegalArgumentException("This Username is already taken!");
     }
 
-    if(aPassword.length()<8 || aPassword.length()>40) {
+    if(aPassword == null || aPassword.length()<8 || aPassword.length()>40) {
       throw new IllegalArgumentException("Password must be between 8 and 40 characters");
     }
 
-    if(aProfileDescription.length()>255) {
+    if(aProfileDescription == null || aProfileDescription.length()>255) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 

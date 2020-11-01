@@ -93,7 +93,7 @@ public class TestManagerService {
 
     lenient().when(managerRepo.createManager(anyString(), anyString(), anyString(), anyString(),
         anyString(), anyString(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
-          String id = invocation.getArgument(0);
+          id = invocation.getArgument(0);
           String email = invocation.getArgument(1);
           String displayname = invocation.getArgument(2);
           String username = invocation.getArgument(3);
@@ -115,13 +115,14 @@ public class TestManagerService {
 
     Manager manager = null;
     try {
-      manager = service.createManager(id, email, displayname, username, password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       System.out.println(e.getMessage());
     }
     assertNotNull(manager);
-    assertEquals(id, manager.getIdCode());
+    id = manager.getIdCode();
+    assertEquals(email, manager.getUser().getEmailAddress());
   }
   
   @Test
@@ -130,7 +131,7 @@ public class TestManagerService {
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(name, name, name, name, name, name, name);
+      manager = service.createManager(name, name, name, name, name, name);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -145,7 +146,7 @@ public class TestManagerService {
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(id, email+"@.com", displayname, username, password, profilepic, profileDescription);
+      manager = service.createManager(email+"@.com", displayname, username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -161,7 +162,7 @@ public class TestManagerService {
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(id, email, displayname, "hi", password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, "hi", password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -177,7 +178,7 @@ public class TestManagerService {
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(id, email, "test", username, password, profilepic, profileDescription);
+      manager = service.createManager(email, "test", username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -192,7 +193,7 @@ public class TestManagerService {
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(id, email, displayname+"1", username, password, profilepic, profileDescription);
+      manager = service.createManager( email, displayname+"1", username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -207,7 +208,7 @@ public class TestManagerService {
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(id, email, displayname, username+"1", password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, username+"1", password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -222,7 +223,7 @@ public class TestManagerService {
   public void testGetManager() {
     Manager manager = null;
     try {
-      manager = service.createManager(id, email, displayname, username, password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
