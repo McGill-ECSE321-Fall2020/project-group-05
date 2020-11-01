@@ -18,7 +18,14 @@ public class Tag {
   // ------------------------
 
   public enum TagType {
-    Topic, Category, Genre, Material, Other
+    Topic, Category, Genre, Material, Other;
+    public static TagType fromString(String name) {
+      try {
+        return TagType.valueOf(TagType.class, name);
+      } catch (IllegalArgumentException | NullPointerException e) {
+        return null;
+      }
+    }
   }
 
   // ------------------------
