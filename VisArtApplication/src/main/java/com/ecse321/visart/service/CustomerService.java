@@ -1,6 +1,7 @@
 package com.ecse321.visart.service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,27 +28,48 @@ public class CustomerService {
       if (aIdCode == null || aIdCode == "") {
         throw new IllegalArgumentException("Customer id code cannot be empty!");
       }
-      else if  (aEmailAddress == null) {
+      if  (aEmailAddress == null) {
         throw new IllegalArgumentException("Email address cannot be empty!");
       }
-      else if (aDisplayname == null) {
+      if (aDisplayname == null) {
         throw new IllegalArgumentException("Display name cannot be empty!");
       }
-      else if (aUsername == null) {
+      if(aDisplayname.length()<5 || aDisplayname.length()>25) {
+        throw new IllegalArgumentException("This Display Name is invalid, must be between 5 and 25 characters!");
+      }
+      List<User> l1 = entityRepo.findEntityByAttribute("displayname",User.class,aDisplayname);
+      if (l1 != null && l1.size() > 0) {
+          throw new IllegalArgumentException("This Display Name is already taken!");
+      }
+      
+      if (aUsername == null) {
         throw new IllegalArgumentException("User name cannot be empty!");
       }
-      else if (aPassword == null) {
+      if(aUsername.length()<5 || aUsername.length()>25 ) {
+        throw new IllegalArgumentException("This User Name is invalid, must be between 5 and 25 characters!");
+      }
+      
+      List<User> l2 = entityRepo.findEntityByAttribute("username",User.class,aUsername);
+      if (l2 != null && l2.size() > 0) {
+          throw new IllegalArgumentException("This Username is already taken!");
+      }
+      
+      if (aPassword == null) {
         throw new IllegalArgumentException("Password cannot be empty!");
       }
-      else if(aPassword.length()<8 || aPassword.length()>255) {
-        throw new IllegalArgumentException("Password must have atleast 8 characters and less than 255 ");
+      if(aPassword.length()<8 || aPassword.length()>40) {
+        throw new IllegalArgumentException("Password must have atleast 8 characters and less than 40 ");
       }
-      else if( aProfilePicLink == null) {
+      if( aProfilePicLink == null) {
         throw new IllegalArgumentException("Profile picture link cannot be empty!");
       }
-      else if (aProfileDescription == null) {
+      if (aProfileDescription == null) {
         throw new IllegalArgumentException("Profile description cannot be empty!");
       }
+      if (aProfileDescription.length()>255) {
+        throw new IllegalArgumentException("Profile description cannot exceed 255 characters!");
+      }
+      
 
       return customerRepo.createCustomer(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
           aProfilePicLink, aProfileDescription);
@@ -58,11 +80,32 @@ public class CustomerService {
     public Customer getCustomer(String aIdCode) {
       return customerRepo.getCustomer(aIdCode);
     }
+    
+    @Transactional
+    public Boolean deleteCustomer(String aIdCode) {
+      if(aIdCode != null && !aIdCode.contentEquals("")) {
+        return customerRepo.deleteCustomer(aIdCode);
+      } else {
+        return false;
+      }
+    }
 
     @Transactional
     public List<Customer> getAllUsers() {
       return entityRepo.getAllEntities(Customer.class);
     }
+    
+    public static boolean isValidEmail(String email) {
+      String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                          "[a-zA-Z0-9_+&*-]+)*@" +
+                          "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                          "A-Z]{2,7}$";
+
+      Pattern pat = Pattern.compile(emailRegex);
+      if (email == null)
+          return false;
+      return pat.matcher(email).matches();
+  }
 
   }
 
