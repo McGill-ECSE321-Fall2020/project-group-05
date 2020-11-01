@@ -71,8 +71,6 @@ public class UserService {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
-    String hashedPassword; // TODO: remove unnecessary code
-
     return userRepo.createUser(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
 
@@ -101,11 +99,11 @@ public class UserService {
 
     User user = userRepo.getUser(aIdCode); // TODO: must check that user is not null
 
-    if (aEmailAddress == null || isValidEmail(aEmailAddress) == false) {
+    if (aEmailAddress != null && isValidEmail(aEmailAddress) == false) {
       throw new IllegalArgumentException("Email address is invalid");
     }
 
-    if (aDisplayname == null || aDisplayname.length() < 5 || aDisplayname.length() > 25) {
+    if (aDisplayname != null && (aDisplayname.length() < 5 || aDisplayname.length() > 25)) {
       throw new IllegalArgumentException(
           "This Display Name is invalid, must be between 5 and 25 characters!");
     }
@@ -115,7 +113,7 @@ public class UserService {
       throw new IllegalArgumentException("This Display Name is already taken!");
     }
 
-    if (aUsername == null || aUsername.length() < 5 || aUsername.length() > 25) {
+    if (aUsername != null && (aUsername.length() < 5 || aUsername.length() > 25)) {
       throw new IllegalArgumentException(
           "This User Name is invalid, must be between 5 and 25 characters!");
     }
@@ -125,24 +123,26 @@ public class UserService {
       throw new IllegalArgumentException("This Username is already taken!");
     }
 
-    if (aPassword == null || aPassword.length() < 8 || aPassword.length() > 40) {
+    if (aPassword != null && (aPassword.length() < 8 || aPassword.length() > 40)) {
       throw new IllegalArgumentException("Password must be between 8 and 40 characters");
     }
 
-    if (aProfileDescription == null || aProfileDescription.length() > 255) {
+    if (aProfileDescription != null && aProfileDescription.length() > 255) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
-    String hashedPassword; // TODO: remove unused code
-
-    // TODO: each of these setter methods should be in an if statement (saying that
-    // the parameter is not null before attempting a set)
-    user.setDisplayname(aDisplayname);
-    user.setUsername(aUsername);
-    user.setEmailAddress(aEmailAddress);
-    user.setPassword(aPassword);
-    user.setProfilePicLink(aProfilePicLink);
-    user.setProfileDescription(aProfileDescription);
+    if (aDisplayname != null)
+      user.setDisplayname(aDisplayname);
+    if(aUsername != null)
+      user.setUsername(aUsername);
+    if(aEmailAddress != null)
+      user.setEmailAddress(aEmailAddress);
+    if(aPassword !=null)
+      user.setPassword(aPassword);
+    if(aProfilePicLink!= null)
+      user.setProfilePicLink(aProfilePicLink);
+    if(aProfileDescription!=null)
+      user.setProfileDescription(aProfileDescription);
 
     userRepo.updateUser(user);
 
