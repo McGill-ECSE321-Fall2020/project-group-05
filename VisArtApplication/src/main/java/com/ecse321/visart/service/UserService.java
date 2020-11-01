@@ -23,40 +23,38 @@ public class UserService {
   EntityRepository entityRepo;
 
   @Transactional
-  public User createUser(String aIdCode, String aEmailAddress, String aDisplayname,
+  public User createUser(String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
+    
+    String aIdCode = EntityRepository.getUniqueKey();
 
-    if (aIdCode == null || aIdCode == "") {
-      throw new IllegalArgumentException("Manager id code cannot be empty!");
-    }
-
-    if(isValidEmail(aEmailAddress)==false) {
+    if(aEmailAddress == null||isValidEmail(aEmailAddress)==false) {
       throw new IllegalArgumentException("Email address is invalid");
     }
 
-    if(aDisplayname.length()<5 || aDisplayname.length()>25) {
+    if(aDisplayname == null||aDisplayname.length()<5 || aDisplayname.length()>25) {
       throw new IllegalArgumentException("This Display Name is invalid, must be between 5 and 25 characters!");
     }
 
-    List<Manager> l1 = entityRepo.findEntityByAttribute("displayname",Manager.class,aDisplayname);
+    List<User> l1 = entityRepo.findEntityByAttribute("displayname",User.class,aDisplayname);
     if (l1 != null && l1.size() > 0) {
         throw new IllegalArgumentException("This Display Name is already taken!");
     }
 
-    if(aUsername.length()<5 || aUsername.length()>25 ) {
+    if(aUsername == null||aUsername.length()<5 || aUsername.length()>25 ) {
       throw new IllegalArgumentException("This User Name is invalid, must be between 5 and 25 characters!");
     }
 
-    List<Manager> l2 = entityRepo.findEntityByAttribute("username",Manager.class,aUsername);
+    List<User> l2 = entityRepo.findEntityByAttribute("username",User.class,aUsername);
     if (l2 != null && l2.size() > 0) {
         throw new IllegalArgumentException("This Username is already taken!");
     }
 
-    if(aPassword.length()<8 || aPassword.length()>40) {
+    if(aPassword == null || aPassword.length()<8 || aPassword.length()>40) {
       throw new IllegalArgumentException("Password must be between 8 and 40 characters");
     }
 
-    if(aProfileDescription.length()>255) {
+    if(aProfileDescription == null || aProfileDescription.length()>255) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
@@ -71,39 +69,39 @@ public class UserService {
   public User updateUser(String aIdCode, String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
 
-    User user = userRepo.getUser(aIdCode);
-
-    if (aIdCode == null || aIdCode == "" || user == null) {
+    if (aIdCode == null || aIdCode == "" || aIdCode == null) {
       throw new IllegalArgumentException("User cannot be found");
     }
+    
+    User user = userRepo.getUser(aIdCode);
 
-    if(isValidEmail(aEmailAddress)==false) {
+    if(aEmailAddress == null||isValidEmail(aEmailAddress)==false) {
       throw new IllegalArgumentException("Email address is invalid");
     }
 
-    if(aDisplayname.length()<5 || aDisplayname.length()>25) {
+    if(aDisplayname == null||aDisplayname.length()<5 || aDisplayname.length()>25) {
       throw new IllegalArgumentException("This Display Name is invalid, must be between 5 and 25 characters!");
     }
 
-    List<Manager> l1 = entityRepo.findEntityByAttribute("displayname",Manager.class,aDisplayname);
+    List<User> l1 = entityRepo.findEntityByAttribute("displayname",User.class,aDisplayname);
     if (l1 != null && l1.size() > 0) {
         throw new IllegalArgumentException("This Display Name is already taken!");
     }
 
-    if(aUsername.length()<5 || aUsername.length()>25 ) {
+    if(aUsername == null||aUsername.length()<5 || aUsername.length()>25 ) {
       throw new IllegalArgumentException("This User Name is invalid, must be between 5 and 25 characters!");
     }
 
-    List<Manager> l2 = entityRepo.findEntityByAttribute("username",Manager.class,aUsername);
+    List<User> l2 = entityRepo.findEntityByAttribute("username",User.class,aUsername);
     if (l2 != null && l2.size() > 0) {
         throw new IllegalArgumentException("This Username is already taken!");
     }
 
-    if(aPassword.length()<8 || aPassword.length()>40) {
+    if(aPassword == null || aPassword.length()<8 || aPassword.length()>40) {
       throw new IllegalArgumentException("Password must be between 8 and 40 characters");
     }
 
-    if(aProfileDescription.length()>255) {
+    if(aProfileDescription == null || aProfileDescription.length()>255) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 

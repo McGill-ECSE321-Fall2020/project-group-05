@@ -136,7 +136,7 @@ public class TestManagerService {
       error = e.getMessage();
     }
     assertNull(manager);
-    assertEquals("Manager id code cannot be empty!", error); // expected error message for service data
+    assertEquals("Email address is invalid", error); // expected error message for service data
                                                           // validation.
   }
   

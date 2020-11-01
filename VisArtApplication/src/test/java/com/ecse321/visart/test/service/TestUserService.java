@@ -121,13 +121,14 @@ public class TestUserService {
     // assertEquals(0, service.getAllUsers().size());
     User user = null;
     try {
-      user = service.createUser(id, email, displayname, username, password, profilepic, profileDescription);
+      user = service.createUser(email, displayname, username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
     }
     assertNotNull(user);
-    assertEquals(id, user.getIdCode());
+    id = user.getIdCode();
+    assertEquals(email, user.getEmailAddress());
   }
 
   @Test
@@ -136,12 +137,12 @@ public class TestUserService {
     String error = null;
     User user = null;
     try {
-      user = service.createUser(name, name, name, name, name, name, name);
+      user = service.createUser(name, name, name, name, name, name);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(user);
-    assertEquals("Manager id code cannot be empty!", error); // expected error message for service data
+    assertEquals("Email address is invalid", error); // expected error message for service data
                                                           // validation.
   }
   
@@ -151,7 +152,7 @@ public class TestUserService {
     String error = null;
     User User = null;
     try {
-      User = service.createUser(id, email+"@.com", displayname, username, password, profilepic, profileDescription);
+      User = service.createUser(email+"@.com", displayname, username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -167,7 +168,7 @@ public class TestUserService {
     String error = null;
     User User = null;
     try {
-      User = service.createUser(id, email, displayname, "hi", password, profilepic, profileDescription);
+      User = service.createUser( email, displayname, "hi", password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -183,7 +184,7 @@ public class TestUserService {
     String error = null;
     User User = null;
     try {
-      User = service.createUser(id, email, "test", username, password, profilepic, profileDescription);
+      User = service.createUser( email, "test", username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -198,7 +199,7 @@ public class TestUserService {
     String error = null;
     User User = null;
     try {
-      User = service.createUser(id, email, displayname+"1", username, password, profilepic, profileDescription);
+      User = service.createUser( email, displayname+"1", username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -213,7 +214,7 @@ public class TestUserService {
     String error = null;
     User User = null;
     try {
-      User = service.createUser(id, email, displayname, username+"1", password, profilepic, profileDescription);
+      User = service.createUser( email, displayname, username+"1", password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
