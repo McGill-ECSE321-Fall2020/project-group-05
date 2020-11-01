@@ -113,7 +113,7 @@ public class TestTagService {
     
     Tag tag = null;
     try {
-      tag = tagService.createTag(type, keyword, keyword, listing);
+      tag = tagService.createTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
@@ -130,7 +130,7 @@ public class TestTagService {
     Tag tag = null;
     ArtListing listing = null;
     try {
-      tag = tagService.createTag(type, keyword, keyword, listing);
+      tag = tagService.createTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -139,27 +139,6 @@ public class TestTagService {
                                                           // validation.
   }
   
-  @Test
-  public void testCreateNullTagID() {
-    String error = null;
-	String keyword = "renaissance";
-	String id = null;
-	TagType type = TagType.Topic;
-    Tag tag = null;
-    User aUser = new User("a","b","c","d","e","f","g");
-    Customer aCustomer = new Customer("customerCode", aUser);
-    Artist aArtist = new Artist("artistCode", aCustomer);
-    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
-  	      aArtist);
-    try {
-      tag = tagService.createTag(type, keyword, id, listing);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(tag);
-    assertEquals("Tag id code cannot be empty!", error); // expected error message for service data
-                                                          // validation.
-  }
   
   @Test
   public void testCreateNullTagType() {
@@ -174,7 +153,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.createTag(type, keyword, id, listing);
+      tag = tagService.createTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -192,7 +171,7 @@ public class TestTagService {
     Tag tag = null;
     ArtListing listing = null;
     try {
-      tag = tagService.createTag(type, keyword, id, listing);
+      tag = tagService.createTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -214,7 +193,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.createTag(type, keyword, id, listing);
+      tag = tagService.createTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -250,7 +229,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.createTag(type, keyword, id, listing);
+      tag = tagService.createTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -271,7 +250,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.createTag(type, keyword, id, listing);
+      tag = tagService.createTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
@@ -302,7 +281,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -324,7 +303,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -342,7 +321,7 @@ public class TestTagService {
     Tag tag = null;
     ArtListing listing = null;
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -364,7 +343,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -400,7 +379,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -408,6 +387,69 @@ public class TestTagService {
     assertEquals("Tag keyword is too long!", error); // expected error message for service data
                                                           // validation.
   }
+  
+  @Test
+  public void testUpdateTagKeyword() {
+   String error = null;
+   String keyword = "key";
+   TagType type = TagType.Topic;
+   Tag tag = null;
+   User aUser = new User("a","b","c","d","e","f","g");
+   Customer aCustomer = new Customer("customerCode", aUser);
+   Artist aArtist = new Artist("artistCode", aCustomer);
+   ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+ 	      aArtist);
+   try {
+     tag = tagService.updateTag(type, keyword, listing);
+   } catch (IllegalArgumentException e) {
+     error = e.getMessage();
+   }
+   assertNotNull(tag);
+   assertEquals(tag.getKeyword(), keyword); // expected error message for service data
+                                                         // validation.
+ }
+  
+  @Test
+  public void testUpdateTagType() {
+   String error = null;
+   String keyword = "key";
+   TagType type = TagType.Topic;
+   Tag tag = null;
+   User aUser = new User("a","b","c","d","e","f","g");
+   Customer aCustomer = new Customer("customerCode", aUser);
+   Artist aArtist = new Artist("artistCode", aCustomer);
+   ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+ 	      aArtist);
+   try {
+     tag = tagService.updateTag(type, keyword, listing);
+   } catch (IllegalArgumentException e) {
+     error = e.getMessage();
+   }
+   assertNotNull(tag);
+   assertEquals(tag.getType(), type); // expected error message for service data
+                                                         // validation.
+ }
+  
+  @Test
+  public void testUpdateTagListing() {
+   String error = null;
+   String keyword = "key";
+   TagType type = TagType.Topic;
+   Tag tag = null;
+   User aUser = new User("a","b","c","d","e","f","g");
+   Customer aCustomer = new Customer("customerCode", aUser);
+   Artist aArtist = new Artist("artistCode", aCustomer);
+   ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+ 	      aArtist);
+   try {
+     tag = tagService.updateTag(type, keyword, listing);
+   } catch (IllegalArgumentException e) {
+     error = e.getMessage();
+   }
+   assertNotNull(tag);
+   assertEquals(tag.getListing(), listing); // expected error message for service data
+                                                         // validation.
+ }
   
  @Test
   public void testDeleteManager() {

@@ -27,8 +27,8 @@ public class TagService {
   EntityRepository entityRepo;
 
   @Transactional
-  public Tag createTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
-	  
+  public Tag createTag(TagType aType, String aKeyword, ArtListing aListing) {
+	  String aIdCode = EntityRepository.getUniqueKey();
     if (aIdCode == null || aIdCode.length()<1) {
       throw new IllegalArgumentException("Tag id code cannot be empty!");
     }
@@ -73,8 +73,8 @@ public class TagService {
   }
   
   @Transactional
-  public Tag updateTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
-	  
+  public Tag updateTag(TagType aType, String aKeyword, ArtListing aListing) {
+	  String aIdCode = EntityRepository.getUniqueKey();
 	if (aIdCode == null || aIdCode.length()<1) {
 	      throw new IllegalArgumentException("Tag id code cannot be empty!");
 	    }
