@@ -22,14 +22,12 @@ public class CustomerService {
 
   @Autowired
   EntityRepository entityRepo;
-  
+
   @Autowired
   ArtListingService artListingService;
-  
+
   @Autowired
   TicketService ticketService;
-  
-  
 
   /**
    * createCustomer method creates an instance of Customer that is persisted in
@@ -48,16 +46,16 @@ public class CustomerService {
   @Transactional
   public Customer createCustomer(String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
-    
+
     String aIdCode = EntityRepository.getUniqueKey();
 
     if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("Customer id code cannot be empty!");
     }
-    if (aEmailAddress == null) {
+    if (aEmailAddress == null) { // TODO: check string length is not 0
       throw new IllegalArgumentException("Email address cannot be empty!");
     }
-    if (aDisplayname == null) {
+    if (aDisplayname == null) { // TODO: check string length is not 0
       throw new IllegalArgumentException("Display name cannot be empty!");
     }
     if (aDisplayname.length() > 25) {
@@ -90,56 +88,73 @@ public class CustomerService {
           "Password must have atleast 8 characters and less than 40 ");
     }
     if (aProfilePicLink == null) {
-      throw new IllegalArgumentException("Profile picture link cannot be empty!");
+      throw new IllegalArgumentException("Profile picture link cannot be empty!"); // TODO: check
+                                                                                   // length of
+                                                                                   // picLink string
+                                                                                   // as well
     }
-    if (aProfileDescription == null) {
+    if (aProfileDescription == null) { // TODO: check string length is not 0
       throw new IllegalArgumentException("Profile description cannot be empty!");
     }
     if (aProfileDescription.length() > 255) {
-      throw new IllegalArgumentException("Profile description cannot exceed 255 characters!");
+      throw new IllegalArgumentException("Profile description cannot exceed 255 characters!"); // TODO:
+                                                                                               // change
+                                                                                               // it
+                                                                                               // to
+                                                                                               // 1000
+                                                                                               // maximum
     }
 
     return customerRepo.createCustomer(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
-
   }
-  
+
   @Transactional
   public Customer getCustomer(String aIdCode, boolean alsoBoughtTickets,
-      boolean alsoFavoriteListings) { 
-    return customerRepo.getCustomer(aIdCode, alsoBoughtTickets,alsoFavoriteListings);
+      boolean alsoFavoriteListings) {
+    return customerRepo.getCustomer(aIdCode, alsoBoughtTickets, alsoFavoriteListings);
   }
+
   /**
-   * addfavoriteList method adds 
+   * addfavoriteList method adds
+   * 
    * @param aIdCode
    * @param aListingIdCode
    */
   @Transactional
-  public void addfavoriteList(String aIdCode ,String aListingIdCode) {
+  public void addfavoriteList(String aIdCode, String aListingIdCode) {
     Customer customer = getCustomer(aIdCode, false, true);
+    // TODO: check that artListing retrieved is not null before setting it
     customer.addFavoriteListing(artListingService.getArtListing(aListingIdCode));
     customerRepo.updateCustomer(customer);
   }
 
   @Transactional
   public void removefavoriteList(String aIdCode, String aListingIdCode) {
-    Customer customer = getCustomer(aIdCode, false,true);
+    Customer customer = getCustomer(aIdCode, false, true);
+    // TODO: check that artListing retrieved is not null before removing it
+    // TODO: check that artListing is a member of artListing before removing it
     customer.removeFavoriteListing(artListingService.getArtListing(aListingIdCode));
     customerRepo.updateCustomer(customer);
   }
-  
-  public void addtickets(String aIdCode ,String aListingIdCode) {
-    Customer customer = getCustomer(aIdCode, true, true);
+
+  public void addtickets(String aIdCode, String aListingIdCode) { // TODO: make this ticketIdCode
+    Customer customer = getCustomer(aIdCode, true, true); // TODO: make this true,false
+
+    // TODO: check that the retrieved ticke is not null first
     customer.addBoughtTicket(ticketService.getTicket(aListingIdCode));
     customerRepo.updateCustomer(customer);
   }
-  
-  public void removetickets(String aIdCode ,String aListingIdCode) {
-    Customer customer = getCustomer(aIdCode, true, true);
+
+  public void removetickets(String aIdCode, String aListingIdCode) { // TODO: make this ticketIdCode
+    Customer customer = getCustomer(aIdCode, true, true); // TODO: make this true,false
+
+    // TODO: check that the retrieved ticke is not null first
+    // TODO: check that the retrieved ticket is connected to the Customer object
     customer.removeBoughtTicket(ticketService.getTicket(aListingIdCode));
     customerRepo.updateCustomer(customer);
   }
-  
+
   /**
    * Overloaded getCustomer method retrieves a Customer instance from the database
    * by primary key. Lazy loads all collections by default, and so boughtTickets
@@ -180,7 +195,7 @@ public class CustomerService {
     return entityRepo.getAllEntities(Customer.class);
   }
 
-  public static boolean isValidEmail(String email) {
+  public static boolean isValidEmail(String email) { // TODO: use the isValidEmail from UserService class
     String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
         "[a-zA-Z0-9_+&*-]+)*@" +
         "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
