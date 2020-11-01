@@ -10,6 +10,7 @@ import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
+import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.ArtPieceRepository;
 import com.ecse321.visart.repositories.EntityRepository;
 
@@ -17,16 +18,20 @@ import com.ecse321.visart.repositories.EntityRepository;
 public class ArtPieceService {
 
   @Autowired
-  ArtPieceRepository ArtPieceRepo;
+  ArtPieceRepository artPieceRepo;
+
+  @Autowired
+  ArtListingRepository artListingRepo;
 
   @Autowired
   EntityRepository entityRepo;
 
   @Transactional
   public ArtPiece createArtPiece(PieceLocation aBasicLocation, String aAddressLocation,
-      String aIdCode, ArtListing aArtListing) {
+      String aArtListingId) {
+    String aIdCode = EntityRepository.getUniqueKey();
 
-    if (aIdCode == null || aIdCode == "") {
+    if (aIdCode == null || aIdCode.length() < 1) {
       throw new IllegalArgumentException("User id code cannot be empty!");
     }
 
@@ -34,15 +39,16 @@ public class ArtPieceService {
       throw new IllegalArgumentException("Piece Location cannot be empty!");
     }
 
-    if (aAddressLocation == null || aAddressLocation == "") {
+    if (aAddressLocation == null || aAddressLocation.length() < 1) {
       throw new IllegalArgumentException("Address Location cannot be empty!");
     }
 
+    ArtListing aArtListing = artListingRepo.getArtListing(aArtListingId);
     if (aArtListing == null) {
-      throw new IllegalArgumentException("Art Listing cannot be empty!");
+      throw new IllegalArgumentException("Art Listing id must be valid!");
     }
 
-    return ArtPieceRepo.createArtPiece(aBasicLocation, aAddressLocation,
+    return artPieceRepo.createArtPiece(aBasicLocation, aAddressLocation,
         aIdCode, aArtListing);
   }
 
@@ -55,7 +61,7 @@ public class ArtPieceService {
    */
   @Transactional
   public ArtPiece getArtPiece(String idCode) {
-    return ArtPieceRepo.getArtPiece(idCode);
+    return artPieceRepo.getArtPiece(idCode);
   }
 
   /**
@@ -66,30 +72,31 @@ public class ArtPieceService {
    */
   @Transactional
   public ArtPiece updateArtPiece(PieceLocation aBasicLocation, String aAddressLocation,
-      String aIdCode, ArtListing aArtListing) {
+      String aIdCode, String aArtListingId) {
 
-    if (aIdCode == null || aIdCode == "") {
+    if (aIdCode == null || aIdCode.length() < 1) {
       throw new IllegalArgumentException("User id code cannot be empty!");
     }
 
-    if (aBasicLocation == null) {
-      throw new IllegalArgumentException("Piece Location cannot be empty!");
+    ArtPiece artPiece = artPieceRepo.getArtPiece(aIdCode);
+
+    if (aBasicLocation != null) {
+      artPiece.setBasicLocation(aBasicLocation);
     }
 
-    if (aAddressLocation == null || aAddressLocation == "") {
-      throw new IllegalArgumentException("Address Location cannot be empty!");
+    if (aAddressLocation != null && aAddressLocation.length() > 0) {
+      artPiece.setAddressLocation(aAddressLocation);
     }
 
-    if (aArtListing == null) {
-      throw new IllegalArgumentException("Art Listing cannot be empty!");
+    if (aArtListingId != null && aArtListingId.length() > 0) {
+      ArtListing aArtListing = artListingRepo.getArtListing(aArtListingId);
+      if (aArtListing == null) {
+        throw new IllegalArgumentException("Art Listing id must be valid!");
+      }
+      artPiece.setArtListing(aArtListing);
     }
 
-    ArtPiece artPiece = ArtPieceRepo.getArtPiece(aIdCode);
-    artPiece.setAddressLocation(aAddressLocation);
-    artPiece.setArtListing(aArtListing);
-    artPiece.setBasicLocation(aBasicLocation);
-
-    ArtPieceRepo.updateArtPiece(artPiece);
+    artPieceRepo.updateArtPiece(artPiece);
 
     return artPiece;
   }
@@ -103,7 +110,7 @@ public class ArtPieceService {
    */
   @Transactional
   public boolean deleteArtPiece(ArtPiece ap) {
-    return ArtPieceRepo.deleteArtPiece(ap.getIdCode());
+    return artPieceRepo.deleteArtPiece(ap.getIdCode());
   }
 
   /**
@@ -115,7 +122,7 @@ public class ArtPieceService {
    */
   @Transactional
   public boolean deleteArtPiece(String id) {
-    return ArtPieceRepo.deleteArtPiece(id);
+    return artPieceRepo.deleteArtPiece(id);
   }
 
   @Transactional

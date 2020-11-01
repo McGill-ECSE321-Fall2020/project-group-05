@@ -50,7 +50,7 @@ public class CustomerRestController {
 
   @PostMapping(value = { "/customers/{name}", "/customers/{name}/" })
   public CustomerDto createCustomer(@RequestBody MultiValueMap<String, String> values) {
-    return new CustomerDto(service.createCustomer(values.getFirst("idCode"),
+    return new CustomerDto(service.createCustomer(
         values.getFirst("emailAddress"), values.getFirst("displayName"),
         values.getFirst("userName"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));

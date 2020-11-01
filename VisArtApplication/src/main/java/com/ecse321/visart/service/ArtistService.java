@@ -1,17 +1,21 @@
 package com.ecse321.visart.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.User;
-import com.ecse321.visart.repositories.ArtOrderRepository;
+import com.ecse321.visart.model.Ticket;
+import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.ArtistRepository;
+import com.ecse321.visart.repositories.CustomerRepository;
 import com.ecse321.visart.repositories.EntityRepository;
+import com.ecse321.visart.repositories.TicketRepository;
 
 @Service
 public class ArtistService {
@@ -20,57 +24,39 @@ public class ArtistService {
   ArtistRepository artistRepo;
 
   @Autowired
+  CustomerRepository customerRepo;
+
+  @Autowired
+  TicketRepository ticketRepo;
+
+  @Autowired
+  ArtListingRepository artListingRepo;
+
+  @Autowired
   EntityRepository entityRepo;
 
   /**
    * 
    * This method creates an Artist instance that is persisted in the database.
-   * This method also creates a User and Customer attached to it, which are also
-   * persisted in the database.
+   * This method also creates a User given a Customer id to attach to, which are
+   * all persisted in the database.
    * 
-   * @param  aIdCode             the database primary key for the artist
-   * @param  aEmailAddress       email address of the artist
-   * @param  aDisplayname        Full name of the artist
-   * @param  aUsername           User name for the profile to be created
-   * @param  aPassword           Password for the profile to be created
-   * @param  aProfilePicLink     Profile picture link of the artist
-   * @param  aProfileDescription Short description about the artist
-   * @return                     persisted Artist instance
+   * @param  customerId the id of the customer to add an Artist to
+   * @return            persisted Artist instance
    */
   @Transactional
-  public Artist createArtist(String aIdCode, String aEmailAddress, String aDisplayname,
-      String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
+  public Artist createArtist(String customerId) {
+    String key = EntityRepository.getUniqueKey();
 
-    if (aIdCode == null || aIdCode == "") {
-      throw new IllegalArgumentException("User id code cannot be empty!");
+    if (customerId == null || customerId.length() < 1) {
+      throw new IllegalArgumentException("Customer id code cannot be empty!");
+    }
+    Customer customer = customerRepo.getCustomer(customerId);
+    if (customer == null) {
+      throw new IllegalArgumentException("Customer id must be valid id of existing customer!");
     }
 
-    if (aEmailAddress == null || aEmailAddress == "") {
-      throw new IllegalArgumentException("Email Address cannot be empty!");
-    }
-
-    if (aDisplayname == null || aDisplayname == "") {
-      throw new IllegalArgumentException("Display name cannot be empty!");
-    }
-
-    if (aUsername == null || aUsername == "") {
-      throw new IllegalArgumentException("Username cannot be empty!");
-    }
-
-    if (aPassword == null || aPassword == "") {
-      throw new IllegalArgumentException("Password cannot be empty!"); // add more constraints
-    }
-
-    if (aProfilePicLink == null || aProfilePicLink == "") {
-      throw new IllegalArgumentException("Profile picture link cannot be empty!");
-    }
-
-    if (aProfileDescription == null || aProfileDescription == "") {
-      throw new IllegalArgumentException("Profile picture description cannot be empty!");
-    }
-
-    return artistRepo.createArtist(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
-        aProfilePicLink, aProfileDescription);
+    return artistRepo.createArtist(key, customer);
   }
 
   /**
@@ -80,14 +66,138 @@ public class ArtistService {
    * @param artist the artist whose properties will be updated in the database
    */
   @Transactional
-  public void updateArtist(Artist artist) {
+  public void updateArtist(String artistId) {
+    Artist artist = artistRepo.getArtist(artistId);
+    artistRepo.updateArtist(artist);
+  }
+
+  /**
+   * addListings adds a list of ArtListings to an Artist. The list must not be
+   * empty or null, and the ids must all be of valid, existing objects in the
+   * database.
+   * 
+   * @param artistId   the id of the artist to add listings to
+   * @param listingIds the list of listing ids to add to the artist
+   */
+  @Transactional
+  public void addListings(String artistId, List<String> listingIds) {
+    Artist artist = artistRepo.getArtist(artistId, false, true);
+    if (artist == null) {
+      throw new IllegalArgumentException("Artist id must be valid id of existing artist!");
+    }
+    if (listingIds == null) {
+      throw new IllegalArgumentException("list of art listing ids must not be null!");
+    }
+    List<ArtListing> listings = listingIds.stream().map(id -> artListingRepo.getArtListing(id))
+        .collect(Collectors.toList());
+    if (listings.stream().anyMatch(listing -> listing == null)) {
+      throw new IllegalArgumentException(
+          "art listing id must be valid id of existing art listing!");
+    }
+    for (ArtListing listing : listings) {
+      artist.addPostedListing(listing);
+    }
+    artistRepo.updateArtist(artist);
+  }
+
+  /**
+   * removeListings removes a list of ArtListings from an Artist. The list must
+   * not be empty or null, and the ids must all be of valid, existing objects in
+   * the database, which are added to the Artist object specified by the id.
+   * 
+   * @param artistId   the id of the artist to remove listings from
+   * @param listingIds the list of listing ids to remove from the artist
+   */
+  @Transactional
+  public void removeListings(String artistId, List<String> listingIds) {
+    Artist artist = artistRepo.getArtist(artistId, false, true);
+    if (artist == null) {
+      throw new IllegalArgumentException("Artist id must be valid id of existing artist!");
+    }
+    if (listingIds == null) {
+      throw new IllegalArgumentException("list of art listing ids must not be null!");
+    }
+
+    List<ArtListing> listings = listingIds.stream().map(id -> artListingRepo.getArtListing(id))
+        .collect(Collectors.toList());
+    if (listings.stream().anyMatch(listing -> listing == null
+        || !listing.getArtist().getIdCode().equals(artist.getIdCode()))) {
+      throw new IllegalArgumentException(
+          "art listing id must be valid id of existing art listing belonging to artist!");
+    }
+    for (ArtListing listing : listings) {
+      artist.removePostedListing(listing);
+    }
+    artistRepo.updateArtist(artist);
+  }
+
+  /**
+   * addSoldTickets adds Tickets to an Artist specified by id. The list must not
+   * be empty or null, and the ids must all be of valid, existing objects in the
+   * database.
+   * 
+   * @param artistId  the id of the artist to add tickets to
+   * @param ticketIds the list of ticket ids to add to the artist
+   */
+  @Transactional
+  public void addSoldTickets(String artistId, List<String> ticketIds) {
+    Artist artist = artistRepo.getArtist(artistId, true, false);
+    if (artist == null) {
+      throw new IllegalArgumentException("Artist id must be valid id of existing artist!");
+    }
+    if (ticketIds == null) {
+      throw new IllegalArgumentException("list of ticket ids must not be null!");
+    }
+
+    List<Ticket> tickets = ticketIds.stream().map(id -> ticketRepo.getTicket(id))
+        .collect(Collectors.toList());
+    if (tickets.stream().anyMatch(ticket -> ticket == null)) {
+      throw new IllegalArgumentException(
+          "ticket id must be valid id of existing ticket!");
+    }
+
+    for (Ticket ticket : tickets) {
+      artist.addSoldTicket(ticket);
+    }
+    artistRepo.updateArtist(artist);
+  }
+
+  /**
+   * removeSoldTickets removes Tickets from an Artist specified by id. The list
+   * must not be empty or null, and the ids must all be of valid, existing objects
+   * in the database, added to the Artist.
+   * 
+   * @param artistId  the id of the artist to remove tickets from
+   * @param ticketIds the list of ticket ids to remove from the artist
+   */
+  @Transactional
+  public void removeSoldTickets(String artistId, List<String> ticketIds) {
+    Artist artist = artistRepo.getArtist(artistId, true, false);
+    if (artist == null) {
+      throw new IllegalArgumentException("Artist id must be valid id of existing artist!");
+    }
+    if (ticketIds == null) {
+      throw new IllegalArgumentException("list of ticket ids must not be null!");
+    }
+
+    List<Ticket> tickets = ticketIds.stream().map(id -> ticketRepo.getTicket(id))
+        .collect(Collectors.toList());
+    if (tickets.stream().anyMatch(
+        ticket -> ticket == null || !ticket.getArtist().getIdCode().equals(artist.getIdCode()))) {
+      throw new IllegalArgumentException(
+          "ticket id must be valid id of existing ticket!");
+    }
+
+    for (Ticket ticket : tickets) {
+      artist.removeSoldTicket(ticket);
+    }
     artistRepo.updateArtist(artist);
   }
 
   /**
    * 
-   * Overloaded getArtist method, that by lazy loads all nested Collections by
-   * default.
+   * Overloaded getArtist method, that by default, does not load collections of
+   * tickets or artListings.
    * 
    * @param  aIdCode the database primary key
    * @return         a persisted Artist instance, loaded from the database
@@ -124,7 +234,6 @@ public class ArtistService {
    */
   @Transactional
   public boolean deleteArtist(String id) {
-
     return artistRepo.deleteArtist(id);
   }
 

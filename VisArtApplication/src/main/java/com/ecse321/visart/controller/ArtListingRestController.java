@@ -38,8 +38,8 @@ public class ArtListingRestController {
     return new ArtListingDto(service.getArtListing(aIdCode));
   }
 
-  @PostMapping(value = { "/ArtListings/{aIdCode}", "/ArtListings/{aIdCode}/" })
-  public ArtListingDto createArtListing(@PathVariable("aIdCode") String aIdCode,
+  @PostMapping(value = { "/ArtListings/new", "/ArtListings/new/" })
+  public ArtListingDto createArtListing(
       @RequestParam(value = "aVisibility") PostVisibility aVisibility,
       @RequestParam(value = "aDescription") String aDescription,
       @RequestParam(value = "aTitle") String aTitle,
@@ -47,6 +47,6 @@ public class ArtListingRestController {
 
     Artist a = servicea.createArtist(ADTO.getIdCode(), ADTO.getCustomer().getUser().getEmailAddress(), ADTO.getCustomer().getUser().getDisplayname(), ADTO.getCustomer().getUser().getUsername(), ADTO.getCustomer().getUser().getPassword(), ADTO.getCustomer().getUser().getProfilePicLink(), ADTO.getCustomer().getUser().getProfileDescription());
     return new ArtListingDto(service.createArtListing(aVisibility, aDescription, aTitle,
-        aIdCode, a));
+        a));
   }
 }

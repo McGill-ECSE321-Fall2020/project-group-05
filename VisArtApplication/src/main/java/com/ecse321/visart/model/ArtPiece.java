@@ -18,7 +18,14 @@ public class ArtPiece {
   // ------------------------
 
   public enum PieceLocation {
-    AtGallery, Offsite
+    AtGallery, Offsite;
+    public static PieceLocation fromString(String name) {
+      try {
+        return Enum.valueOf(PieceLocation.class, name);
+      } catch (IllegalArgumentException | NullPointerException e) {
+        return null;
+      }
+    }
   }
 
   // ------------------------
