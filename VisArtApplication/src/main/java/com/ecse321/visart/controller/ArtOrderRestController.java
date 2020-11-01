@@ -42,12 +42,11 @@ public class ArtOrderRestController {
       @RequestParam(value = "PieceLocation") String aTargetLocation,
       @RequestParam(value = "aTargetAddress") String aTargetAddress,
       @RequestParam(value = "aDeliveryTracker") String aDeliveryTracker,
-      @RequestParam(value = "ArtPieceDto") String ArtPieceDto) {
+      @RequestParam(value = "ArtPieceDto") String artPieceDto) {
 
     boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
-    ArtPiece ap = servicep.getArtPiece(ArtPieceDto);
     PieceLocation TargetLocation = PieceLocation.valueOf(aTargetLocation);
     return new ArtOrderDto(service.createArtOrder(IsDelivered, TargetLocation, aTargetAddress,
-        aDeliveryTracker, aIdCode, ap));
+        aDeliveryTracker, artPieceDto));
   }
 }
