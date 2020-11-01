@@ -38,7 +38,7 @@ public class ManagerService {
       throw new IllegalArgumentException("This Display Name is invalid, must be between 5 and 25 characters!");
     }
     
-    List<Manager> l1 = entityRepo.findEntityByAttribute("displayname",Manager.class,aDisplayname);
+    List<User> l1 = entityRepo.findEntityByAttribute("displayname",User.class,aDisplayname);
     if (l1 != null && l1.size() > 0) {
         throw new IllegalArgumentException("This Display Name is already taken!");
     }
@@ -47,7 +47,7 @@ public class ManagerService {
       throw new IllegalArgumentException("This User Name is invalid, must be between 5 and 25 characters!");
     }
     
-    List<Manager> l2 = entityRepo.findEntityByAttribute("username",Manager.class,aUsername);
+    List<User> l2 = entityRepo.findEntityByAttribute("username",User.class,aUsername);
     if (l2 != null && l2.size() > 0) {
         throw new IllegalArgumentException("This Username is already taken!");
     }

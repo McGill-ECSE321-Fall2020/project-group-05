@@ -86,13 +86,16 @@ tasks.register("compileUmple") {
     }
 }
 
-task integrationTest(type: Test) {
-	filter {
-		includeTestsMatching "com.ecse321.visart.test.service.*"
-	}
-	useJUnitPlatform()
-	description = "Runs Integration Tests"
-	group = "Test"
+task integrationTest(type: Exec) {
+	dependsOn 'bootJar'
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        // on windows
+        commandLine 'start', 'cmd', '/k', 'java','-jar','build/libs/VisArtApplication-0.0.1-SNAPSHOT.jar'
+        commandLine 'cmd','/c','integrationTest.bat'
+    } else {
+        // on linux
+        commandLine './integrationTest.sh'
+    }
 }
 
 jacocoTestCoverageVerification {
