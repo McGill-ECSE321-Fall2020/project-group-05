@@ -38,15 +38,16 @@ public class ArtOrderRestController {
 
   @PostMapping(value = { "/ArtOrders/{aIdCode}", "/ArtOrders/{aIdCode}/" })
   public ArtOrderDto createArtOrder(@PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "aIsDelivered") boolean aIsDelivered,
-      @RequestParam(value = "PieceLocation") PieceLocation aTargetLocation,
+      @RequestParam(value = "aIsDelivered") String aIsDelivered,
+      @RequestParam(value = "PieceLocation") String aTargetLocation,
       @RequestParam(value = "aTargetAddress") String aTargetAddress,
       @RequestParam(value = "aDeliveryTracker") String aDeliveryTracker,
-      ArtPieceDto APDTO) {
+      @RequestParam(value = "ArtPieceDto") String ArtPieceDto) {
 
-    ArtPiece ap = servicep.createArtPiece(APDTO.getBasicLocation(), APDTO.getAddressLocation(),
-        APDTO.getIdCode(), servicel.getArtListing(APDTO.getArtListing()));
-    return new ArtOrderDto(service.createArtOrder(aIsDelivered, aTargetLocation, aTargetAddress,
+    boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
+    ArtPiece ap = servicep.getArtPiece(ArtPieceDto);
+    PieceLocation TargetLocation = PieceLocation.valueOf(aTargetLocation);
+    return new ArtOrderDto(service.createArtOrder(IsDelivered, TargetLocation, aTargetAddress,
         aDeliveryTracker, aIdCode, ap));
   }
 }

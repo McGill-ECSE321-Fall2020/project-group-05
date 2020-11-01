@@ -1,9 +1,12 @@
 package com.ecse321.visart.test.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
@@ -48,9 +51,7 @@ public class TestArtPieceService {
   private static final User aUser = new User("a", "b", "c", "d", "e", "f", "g");
   private static final Customer aCustomer = new Customer("customerCode", aUser);
   private static final Artist aArtist = new Artist("artistCode", aCustomer);
-  private static final ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
-      "listing", "mockcode",
-      aArtist);
+  private static ArtPiece artPieceTest = null;
 
   @BeforeEach
   public void setMockOutput() {
@@ -60,6 +61,9 @@ public class TestArtPieceService {
     lenient().when(apRepo.getArtPiece(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(AP_KEY)) {
+            ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+                "listing", "mockcode",
+                aArtist);
             ArtPiece artPiece = new ArtPiece(pieceLocation, AP_KEY, AP_KEY,
                 TEST_LISTING);
             return artPiece;
@@ -86,6 +90,19 @@ public class TestArtPieceService {
 
           return artpiece;
         });
+
+    lenient().doAnswer((InvocationOnMock invocation) -> {
+      artPieceTest = invocation.getArgument(0);
+      return artPieceTest;
+    }).when(apRepo).updateArtPiece(any());
+
+    lenient().when(apRepo.deleteArtPiece(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+      if (invocation.getArgument(0).equals(AP_KEY)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
 
     // In the tests below, test the Service class's DATA VALIDATION on the
     // parameters that are given to it.
@@ -116,7 +133,7 @@ public class TestArtPieceService {
     assertEquals(artPiece.getIdCode(), id);
 
   }
-  
+
   @Test
   public void testCreateArtPieceNullId() {
     ArtPiece artPiece = null;
@@ -136,14 +153,14 @@ public class TestArtPieceService {
           id, TEST_LISTING);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
-      
+
     }
 
     assertNull(artPiece);
     assertEquals("User id code cannot be empty!", error);
 
   }
-  
+
   @Test
   public void testCreateArtPieceNullLocation() {
     ArtPiece artPiece = null;
@@ -163,14 +180,14 @@ public class TestArtPieceService {
           id, TEST_LISTING);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
-      
+
     }
 
     assertNull(artPiece);
     assertEquals("Piece Location cannot be empty!", error);
 
   }
-  
+
   @Test
   public void testCreateArtPieceNullTarget() {
     ArtPiece artPiece = null;
@@ -190,14 +207,14 @@ public class TestArtPieceService {
           id, TEST_LISTING);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
-      
+
     }
 
     assertNull(artPiece);
     assertEquals("Address Location cannot be empty!", error);
 
   }
-  
+
   @Test
   public void testCreateArtPieceNullListing() {
     ArtPiece artPiece = null;
@@ -215,14 +232,250 @@ public class TestArtPieceService {
           id, TEST_LISTING);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
-      
+
     }
 
     assertNull(artPiece);
     assertEquals("Art Listing cannot be empty!", error);
 
   }
-  
-  
+
+  @Test
+  public void testGetOrder() {
+
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "123";
+    String id = AP_KEY;
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+    ArtPiece artPiece = null;
+
+    try {
+      artPiece = serviceAp.createArtPiece(Piecelocation, target,
+          id, TEST_LISTING);
+    } catch (IllegalArgumentException e) {
+
+    }
+
+    // artOrder = null;
+
+    try {
+      artPiece = serviceAp.getArtPiece(id);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+
+    assertNotNull(artPiece);
+
+    assertEquals(id, artPiece.getIdCode());
+
+  }
+
+  @Test
+  public void testGetNonExistingArtOrder() {
+
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "123";
+    String id = AP_KEY;
+    String idFake = "fake";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+    ArtPiece artPiece = null;
+
+    try {
+      artPiece = serviceAp.createArtPiece(Piecelocation, target,
+          id, TEST_LISTING);
+    } catch (IllegalArgumentException e) {
+
+    }
+
+    // artOrder = null;
+
+    try {
+      artPiece = serviceAp.getArtPiece(idFake);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+
+    assertNull(artPiece);
+
+  }
+
+  @Test
+  public void testupdateArtPieceNullLocation() {
+    ArtPiece artPiece = null;
+    String error = null;
+    PieceLocation Piecelocation = null;
+    String target = "123";
+    String id = "1223";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+
+    try {
+      artPiece = serviceAp.updateArtPiece(Piecelocation, target,
+          AP_KEY, TEST_LISTING);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+
+    }
+
+    assertNull(artPiece);
+    assertEquals("Piece Location cannot be empty!", error);
+
+  }
+
+  @Test
+  public void testUpdateArtPieceNullTarget() {
+    ArtPiece artPiece = null;
+    String error = null;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = null;
+    String id = "1223";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+
+    try {
+      artPiece = serviceAp.updateArtPiece(Piecelocation, target,
+          AP_KEY, TEST_LISTING);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+
+    }
+
+    assertNull(artPiece);
+    assertEquals("Address Location cannot be empty!", error);
+
+  }
+
+  @Test
+  public void testUpdateArtPieceNullListing() {
+    ArtPiece artPiece = null;
+    String error = null;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "4433";
+    String id = "1223";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = null;
+
+    try {
+      artPiece = serviceAp.updateArtPiece(Piecelocation, target,
+          AP_KEY, TEST_LISTING);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+
+    }
+
+    assertNull(artPiece);
+    assertEquals("Art Listing cannot be empty!", error);
+
+  }
+
+  @Test
+  public void testupdateArtPieceValidLocation() {
+    ArtPiece artPiece = null;
+    String error = null;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "123";
+    String id = "1223";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+
+    try {
+      artPiece = serviceAp.updateArtPiece(Piecelocation, target,
+          AP_KEY, TEST_LISTING);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+
+    }
+
+    assertNotNull(artPiece);
+    assertEquals(artPiece.getBasicLocation(), Piecelocation);
+
+  }
+
+  @Test
+  public void testUpdateArtPieceValidTarget() {
+    ArtPiece artPiece = null;
+    String error = null;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "AADD";
+    String id = "1223";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+
+    try {
+      artPiece = serviceAp.updateArtPiece(Piecelocation, target,
+          AP_KEY, TEST_LISTING);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+
+    }
+
+    assertNotNull(artPiece);
+    assertEquals(artPiece.getAddressLocation(), target);
+
+  }
+
+  @Test
+  public void testUpdateArtPieceValidListing() {
+    ArtPiece artPiece = null;
+    String error = null;
+    PieceLocation Piecelocation = PieceLocation.AtGallery;
+    String target = "4433";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        "listing", "mockcode",
+        aArtist);
+
+    try {
+      artPiece = serviceAp.updateArtPiece(Piecelocation, target,
+          AP_KEY, TEST_LISTING);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+
+    }
+
+    assertNotNull(artPiece);
+    assertEquals(artPiece.getArtListing(), TEST_LISTING);
+
+  }
+
+  @Test
+  public void testDeleteArtOrder() {
+
+    assertTrue(serviceAp.deleteArtPiece(AP_KEY));
+    assertFalse(serviceAp.deleteArtPiece(""));
+
+  }
 
 }
