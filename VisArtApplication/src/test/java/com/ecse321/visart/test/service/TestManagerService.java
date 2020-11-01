@@ -157,7 +157,7 @@ public class TestManagerService {
   
   
   @Test
-  public void testCreateInvalidUsernamenameManager() {
+  public void testCreateInvalidUsernameManager() {
     // assertEquals(0, service.getAllUsers().size());
     String error = null;
     Manager manager = null;
