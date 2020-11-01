@@ -289,7 +289,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(id, type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -311,7 +311,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(id, type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -329,7 +329,7 @@ public class TestTagService {
     Tag tag = null;
     ArtListing listing = null;
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(id, type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -351,7 +351,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(id, type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -373,7 +373,7 @@ public class TestTagService {
     ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
   	      aArtist);
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tag = tagService.updateTag(id, type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
