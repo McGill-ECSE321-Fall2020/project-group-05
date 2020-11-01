@@ -151,9 +151,9 @@ public class TestTagService {
 	String id = "mockcode";
 	String type = null;
     Tag tag = null;
-    
+    String listing = "listingcode";
     try {
-      tag = tagService.createTag(type, keyword, TAG_LISTING.getIdCode());
+      tag = tagService.createTag(type, keyword, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -263,14 +263,10 @@ public class TestTagService {
 	String id = null;
 	String type = "Topic";
     Tag tag = null;
-    User aUser = new User("a","b","c","d","e","f","g");
-    Customer aCustomer = new Customer("customerCode", aUser);
-    Artist aArtist = new Artist("artistCode", aCustomer);
-    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
-  	      aArtist);
+    String listing = "listingcode";
     try {
 
-      tag = tagService.updateTag(type, keyword, id, TAG_LISTING.getIdCode());
+      tag = tagService.updateTag(type, keyword, id, listing);
 
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -304,7 +300,7 @@ public class TestTagService {
 	String id = TAG_ID;
 	String type = "Topic";
     Tag tag = null;
-    String listing = "notlistingcode";
+    String listing = null;
     try {
       tag = tagService.updateTag(type, keyword, id,  listing);
     } catch (IllegalArgumentException e) {
@@ -401,7 +397,7 @@ public class TestTagService {
   public void testUpdateTagListing() {
    String error = null;
    String keyword = "renaissance";
-   String id = "";
+   String id = TAG_ID;
    String type = "Material";
    Tag tag = null;
    String listing = "listingcode";

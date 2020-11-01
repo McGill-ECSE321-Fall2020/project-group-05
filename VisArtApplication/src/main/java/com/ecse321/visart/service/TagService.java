@@ -170,7 +170,7 @@ public class TagService {
     }
 
     ArtListing aListing = artListingRepo.getArtListing(aListingId);
-    if (aListing != null) {
+    if (aListing == null) {
       throw new IllegalArgumentException("Tag listing cannot be empty!");
     }
 
