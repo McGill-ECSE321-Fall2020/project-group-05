@@ -28,15 +28,27 @@ public class TagService {
 
   @Transactional
   public Tag createTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
+	  
     if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("Tag id code cannot be empty!");
-    }else if (aType == null) {
+    }
+    
+    else if (aType == null) {
         throw new IllegalArgumentException("Tag type cannot be empty!");
-    }else if (aKeyword == null || aKeyword == "") {
+    }
+    
+    else if (aKeyword == null || aKeyword == "") {
           throw new IllegalArgumentException("Tag keyword cannot be empty!");
-    }else if (aListing == null) {
+    }
+    
+    else if (aListing == null) {
           throw new IllegalArgumentException("Tag listing cannot be empty!");
     }
+    
+    else if (aKeyword.length()>25) {
+    	  throw new IllegalArgumentException("Tag keyword is too long!");
+    }
+    
     return tagRepo.createTag(aType, aKeyword, aIdCode, aListing);
   }
 
@@ -54,11 +66,53 @@ public class TagService {
   public List<Tag> getTagByKeyword(String keyword) {
     return entityRepo.findEntityByAttribute("keyword",Tag.class,""+keyword);
   }
- 
- 
 
   @Transactional
   public List<Tag> getAllTags() {
     return entityRepo.getAllEntities(Tag.class);
+  }
+  
+  @Transactional
+  public Tag updateTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
+	  
+    if (aIdCode == null || aIdCode == "") {
+	      throw new IllegalArgumentException("Tag id code cannot be empty!");
+	    }
+	    
+	else if (aType == null) {
+	        throw new IllegalArgumentException("Tag type cannot be empty!");
+	    }
+	    
+	else if (aKeyword == null || aKeyword == "") {
+	          throw new IllegalArgumentException("Tag keyword cannot be empty!");
+	    }
+	    
+	else if (aListing == null) {
+	          throw new IllegalArgumentException("Tag listing cannot be empty!");
+	    }
+	    
+	else if (aKeyword.length()>25) {
+	    	  throw new IllegalArgumentException("Tag keyword is too long!");
+	    }
+	    
+	Tag tag = tagRepo.getTag(aIdCode);
+	tag.setKeyword(aKeyword);
+	tag.setType(aType);
+	tag.setListing(aListing);
+	
+	tagRepo.updateTag(tag);
+	return tagRepo.getTag(aIdCode);
+	  }
+  
+  @Transactional
+  public boolean deleteTag(Tag tag) {
+
+    return tagRepo.deleteTag(tag.getIdCode());
+  }
+  
+  @Transactional
+  public boolean deleteTag(String aIdCode) {
+
+    return tagRepo.deleteTag(aIdCode);
   }
 }
