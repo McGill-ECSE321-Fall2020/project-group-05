@@ -45,7 +45,7 @@ public class ArtListingRestController {
       @RequestParam(value = "aTitle") String aTitle,
       ArtistDto ADTO) {
 
-    Artist a = servicea.createArtist(ADTO.getIdCode(), ADTO.getCustomer().getUser().getEmailAddress(), ADTO.getCustomer().getUser().getDisplayname(), ADTO.getCustomer().getUser().getUsername(), "password", ADTO.getCustomer().getUser().getProfilePicLink(), ADTO.getCustomer().getUser().getProfileDescription());
+    Artist a = servicea.createArtist(ADTO.getIdCode(), ADTO.getCustomer().getUser().getEmailAddress(), ADTO.getCustomer().getUser().getDisplayname(), ADTO.getCustomer().getUser().getUsername(), ADTO.getCustomer().getUser().getPassword(), ADTO.getCustomer().getUser().getProfilePicLink(), ADTO.getCustomer().getUser().getProfileDescription());
     return new ArtListingDto(service.createArtListing(aVisibility, aDescription, aTitle,
         aIdCode, a));
   }
