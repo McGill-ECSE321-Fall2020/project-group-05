@@ -130,12 +130,13 @@ public class CustomerService {
   }}
 
   public void addtickets(String aIdCode, String ticketIdCode) { // TODO: make this ticketIdCode
-    Customer customer = getCustomer(aIdCode, true, false); // TODO: make this true,false
-
+    Customer customer = getCustomer(aIdCode, true, false); 
+    if (ticketIdCode != null) {
     // TODO: check that the retrieved ticke is not null first
     customer.addBoughtTicket(ticketService.getTicket(ticketIdCode));
     customerRepo.updateCustomer(customer);
   }
+    }
 
   public void removetickets(String aIdCode, String ticketIdCode) { 
     Customer customer = getCustomer(aIdCode, true, false); 
