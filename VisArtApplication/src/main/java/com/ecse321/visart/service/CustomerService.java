@@ -51,16 +51,16 @@ public class CustomerService {
     
     String aIdCode = EntityRepository.getUniqueKey();
 
-    if (aIdCode == null || aIdCode == "") {
+  /*  if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("Customer id code cannot be empty!");
-    }
-    if (aEmailAddress == null) {
+    } */
+    if (aEmailAddress == null|| isValidEmail(aEmailAddress)==false) {
       throw new IllegalArgumentException("Email address cannot be empty!");
     }
     if (aDisplayname == null) {
       throw new IllegalArgumentException("Display name cannot be empty!");
     }
-    if (aDisplayname.length() > 25) {
+    if (aDisplayname.length() < 5||aDisplayname.length() > 25) {
       throw new IllegalArgumentException(
           "This Display Name is invalid, must be less than 25 characters!");
     }
