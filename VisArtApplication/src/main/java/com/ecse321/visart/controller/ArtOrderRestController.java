@@ -27,17 +27,20 @@ import com.ecse321.visart.service.ArtPieceService;
 public class ArtOrderRestController {
   @Autowired
   private ArtOrderService service;
-  private ArtPieceService servicep;
-  private ArtListingService servicel;
 
-  @GetMapping(value = { "/ArtOrders", "/ArtOrders/" })
+  @GetMapping(value = { "/artOrders", "/artOrders/" })
   public List<ArtOrderDto> getAllArtOrders() {
     return service.getAllArtOrders().stream().map(ao -> new ArtOrderDto(ao))
         .collect(Collectors.toList());
   }
 
-  @PostMapping(value = { "/ArtOrders/{aIdCode}", "/ArtOrders/{aIdCode}/" })
-  public ArtOrderDto createArtOrder(@PathVariable("aIdCode") String aIdCode,
+  @GetMapping(value = { "/get_artOrder", "/get_artorder/" })
+  public ArtOrderDto getArtOrder(@RequestParam("idCode") String aIdCode) {
+    return new ArtOrderDto(service.getArtOrder(aIdCode));
+  }
+
+  @PostMapping(value = { "/create_artOrders", "/create_artOrders/" })
+  public ArtOrderDto createArtOrder(
       @RequestParam(value = "aIsDelivered") String aIsDelivered,
       @RequestParam(value = "PieceLocation") String aTargetLocation,
       @RequestParam(value = "aTargetAddress") String aTargetAddress,
@@ -49,4 +52,26 @@ public class ArtOrderRestController {
     return new ArtOrderDto(service.createArtOrder(IsDelivered, TargetLocation, aTargetAddress,
         aDeliveryTracker, artPieceDto));
   }
+
+  @PostMapping(value = { "/update_artOrders/{aIdCode}", "/update_artOrders/{aIdCode}/" })
+  public ArtOrderDto updateArtOrder(@PathVariable("aIdCode") String aIdCode,
+      @RequestParam(value = "aIsDelivered") String aIsDelivered,
+      @RequestParam(value = "PieceLocation") String aTargetLocation,
+      @RequestParam(value = "aTargetAddress") String aTargetAddress,
+      @RequestParam(value = "aDeliveryTracker") String aDeliveryTracker,
+      @RequestParam(value = "ArtPieceDto") String artPieceDto) {
+
+    boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
+    PieceLocation TargetLocation = PieceLocation.valueOf(aTargetLocation);
+    return new ArtOrderDto(
+        service.updateArtOrder(aIdCode, IsDelivered, TargetLocation, aTargetAddress,
+            aDeliveryTracker, artPieceDto));
+
+  }
+
+  @PostMapping(value = { "/delete_artOrder/{id}", "/delete_artOrder/{id}/" })
+  public Boolean deleteArtOrder(@PathVariable("id") String idCode) {
+    return service.deleteArtOrder(idCode);
+  }
+
 }

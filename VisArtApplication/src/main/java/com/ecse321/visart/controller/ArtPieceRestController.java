@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecse321.visart.dto.ArtListingDto;
 import com.ecse321.visart.dto.ArtPieceDto;
+import com.ecse321.visart.dto.ManagerDto;
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
@@ -21,24 +22,43 @@ import com.ecse321.visart.service.ArtistService;
 public class ArtPieceRestController {
   @Autowired
   private ArtPieceService service;
-  private ArtListingService servicel;
-  private ArtistService servicea;
 
-  @GetMapping(value = { "/ArtPieces", "/ArtPieces/" })
+  @GetMapping(value = { "/artPieces", "/artPieces/" })
   public List<ArtPieceDto> getAllArtPiece() {
     return service.getAllArtPieces().stream().map(ap -> new ArtPieceDto(ap))
         .collect(Collectors.toList());
   }
 
-  @PostMapping(value = { "/ArtPieces/{aIdCode}", "/ArtPieces/{aIdCode}/" })
-  public ArtPieceDto createArtPiece(@PathVariable("aIdCode") String aIdCode,
+  @GetMapping(value = { "/get_artPiece", "/get_artPiece/" })
+  public ArtPieceDto getArtOrder(@RequestParam("idCode") String aIdCode) {
+    return new ArtPieceDto(service.getArtPiece(aIdCode));
+  }
+
+  @PostMapping(value = { "/create_artPieces/", "/create_artPieces/" })
+  public ArtPieceDto createArtPiece(
       @RequestParam(value = "pieceLocation") String aBasicLocation,
       @RequestParam(value = "aAddressLocation") String aAddressLocation,
       @RequestParam(value = "aArtListingId") String aArtListingId) {
 
-    
-    PieceLocation BasicLocation = PieceLocation.valueOf(aBasicLocation);
+    PieceLocation basicLocation = PieceLocation.valueOf(aBasicLocation);
     return new ArtPieceDto(
-        service.createArtPiece(BasicLocation, aAddressLocation, aArtListingId));
+        service.createArtPiece(basicLocation, aAddressLocation, aArtListingId));
   }
+
+  @PostMapping(value = { "/update_artPieces/{aIdCode}", "/update_artPieces/{aIdCode}/" })
+  public ArtPieceDto updateArtPiece(@PathVariable("aIdCode") String aIdCode,
+      @RequestParam(value = "pieceLocation") String aBasicLocation,
+      @RequestParam(value = "aAddressLocation") String aAddressLocation,
+      @RequestParam(value = "aArtListingId") String aArtListingId) {
+
+    PieceLocation basicLocation = PieceLocation.valueOf(aBasicLocation);
+    return new ArtPieceDto(
+        service.updateArtPiece(basicLocation, aAddressLocation, aIdCode, aArtListingId));
+  }
+
+  @PostMapping(value = { "/delete_artPiece/{id}", "/delete_artPiece/{id}/" })
+  public Boolean deleteArtPiece(@PathVariable("id") String idCode) {
+    return service.deleteArtPiece(idCode);
+  }
+
 }
