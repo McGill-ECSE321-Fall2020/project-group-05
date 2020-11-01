@@ -1,14 +1,17 @@
 package com.ecse321.visart.test.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,6 +43,7 @@ public class TestTagService {
   private TagService tagService;
   
   private static final String TAG_KEY = "MockTestForTag";
+  private static final String TAG_ID = "mockcode";
   private static final TagType TAG_TYPE = TagType.Material;
   private static final User aUser = new User("a","b","c","d","e","f","g");
   private static final Customer aCustomer = new Customer("customerCode", aUser);
@@ -56,7 +60,7 @@ public class TestTagService {
     lenient().when(tagRepo.getTag(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(TAG_KEY)) {
-            Tag myTag = new Tag(TAG_TYPE, TAG_KEY, TAG_KEY, TAG_LISTING);
+            Tag myTag = new Tag(TAG_TYPE, TAG_KEY, TAG_ID, TAG_LISTING);
             return myTag;
           } else {
             return null;
@@ -70,9 +74,10 @@ public class TestTagService {
     lenient().when(tagRepo.createTag(any(), anyString(), anyString(), 
     		any())).thenAnswer((InvocationOnMock invocation) -> {
           String id = invocation.getArgument(2);
+          String keyword = invocation.getArgument(1);
           TagType type = (TagType)invocation.getArgument(0);
           ArtListing listing = (ArtListing)invocation.getArgument(3);
-          Tag tag = new Tag(type, id, id, listing);
+          Tag tag = new Tag(type, keyword, id, listing);
           return tag;
         });
 
@@ -85,7 +90,7 @@ public class TestTagService {
   public void testCreateTag() {
     // assertEquals(0, service.getAllUsers().size());
 
-    String keyword = "key";
+    String keyword = "mockcode";
     TagType type = TagType.Category;
     User aUser = new User("a","b","c","d","e","f","g");
     Customer aCustomer = new Customer("customerCode", aUser);
@@ -183,8 +188,90 @@ public class TestTagService {
                                                           // validation.
   }
   
+  @Test
+  public void testCreateNullTagKeyword() {
+    String error = null;
+	String keyword = "";
+	String id = "mockcode";
+	TagType type = TagType.Topic;
+    Tag tag = null;
+    User aUser = new User("a","b","c","d","e","f","g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+  	      aArtist);
+    try {
+      tag = tagService.createTag(type, keyword, id, listing);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(tag);
+    assertEquals("Tag keyword cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+
+  @Test
+  public void testCreateNullTagKeywordLength() {
+    String error = null;
+	String keyword = "keykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykey";
+	String id = "mockcode";
+	TagType type = TagType.Topic;
+    Tag tag = null;
+    User aUser = new User("a","b","c","d","e","f","g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+  	      aArtist);
+    try {
+      tag = tagService.createTag(type, keyword, id, listing);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(tag);
+    assertEquals("Tag keyword is too long!", error); // expected error message for service data
+                                                          // validation.
+  }
   
+  @Test
+  public void testGetTag() {
+    Tag tag = null;
+   	String keyword = "keykey";
+   	String id = "mockcode";
+   	TagType type = TagType.Topic;
+   	User aUser = new User("a","b","c","d","e","f","g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing listing = new ArtListing(PostVisibility.Draft, "name", "listing", "mockcode",
+  	      aArtist);
+    try {
+      tag = tagService.createTag(type, keyword, TAG_ID, listing);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(tag);
+    assertEquals(id, tag.getIdCode());
+    
+    try {
+      tag = tagService.getTag(TAG_ID);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    System.out.println(tag.getIdCode());
+    assertNotNull(tag);
+    assertEquals(TAG_ID, tag.getIdCode());
+    
+  }
   
+ @Test
+  public void testDeleteManager() {
+    
+    //assertTrue(tagService.deleteTag(TAG_ID));
+    assertFalse(tagService.deleteTag(""));
+   // assertFalse(tagService.deleteTag(null));
+    
+  }
 
   
   

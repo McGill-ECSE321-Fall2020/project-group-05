@@ -9,14 +9,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.TagDto;
+import com.ecse321.visart.dto.UserDto;
 import com.ecse321.visart.model.Tag.TagType;
 import com.ecse321.visart.service.TagService;
 
@@ -51,5 +54,16 @@ public class TagRestController {
   public TagDto createTag(@PathVariable("aIdCode") String aIdCode) {
     return new TagDto(tagService.createTag(null, "", aIdCode, null));
   }
+  
+  @PostMapping(value = { "/tag_update/{aIdCode}", "/tag_update/{aIdCode}/" })
+  public TagDto updateTag(@PathVariable("aIdCode") String aIdCode) {
+	    return new TagDto(tagService.updateTag(null, "", aIdCode, null));
+  }
+  
+  @PostMapping(value = {"/delete_tag/{id}","delete_tag/{id}/"})
+  public Boolean deleteTag(@PathVariable("id") String idCode) {
+    return tagService.deleteTag(idCode);
+  }
+  
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecse321.visart.dto.TagDto;
 import com.ecse321.visart.dto.TicketDto;
 import com.ecse321.visart.service.TicketService;
 
@@ -32,6 +33,16 @@ public class TicketRestController {
   @PostMapping(value = { "/tickets/{aIdCode}", "/tickets/{aIdCode}/" })
   public TicketDto createTicket(@PathVariable("aIdCode") String aIdCode) {
     return new TicketDto(ticService.createTicket(false, 0.00, aIdCode, null, null, null));
+  }
+  
+  @PostMapping(value = { "/tag_update/{aIdCode}", "/tag_update/{aIdCode}/" })
+  public TicketDto updateTag(@PathVariable("aIdCode") String aIdCode) {
+	    return new TicketDto(ticService.updateTicket(false, 0.00, aIdCode, null, null, null));
+  }
+  
+  @PostMapping(value = {"/delete_tag/{id}","delete_tag/{id}/"})
+  public Boolean deleteTicket(@PathVariable("id") String idCode) {
+    return ticService.deleteTicket(idCode);
   }
 
 }

@@ -104,15 +104,18 @@ public class TagService {
 	return tagRepo.getTag(aIdCode);
 	  }
   
-  @Transactional
+  /*@Transactional
   public boolean deleteTag(Tag tag) {
 
     return tagRepo.deleteTag(tag.getIdCode());
-  }
+  }*/
   
   @Transactional
-  public boolean deleteTag(String aIdCode) {
-
-    return tagRepo.deleteTag(aIdCode);
+  public Boolean deleteTag(String aIdCode) {
+    if(aIdCode != null && !aIdCode.contentEquals("")) {
+      return tagRepo.deleteTag(aIdCode);
+    } else {
+      return false;
+    }
   }
 }
