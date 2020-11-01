@@ -122,7 +122,18 @@ public class UserService {
 
   }
 
-
+  @Transactional
+  public boolean loginUser(String aEmail, String aPassword) {
+    User user = entityRepo.findEntityByAttribute("email",User.class,aEmail).get(0);
+    if (user == null) {
+      throw new IllegalArgumentException("Email cannot be found");
+    }
+    if (user.getPassword() != aPassword) {
+      throw new IllegalArgumentException("Password does not match");
+    }
+    return true;
+  }
+  
   @Transactional
   public User getUser(String aIdCode) {
     return userRepo.getUser(aIdCode);
