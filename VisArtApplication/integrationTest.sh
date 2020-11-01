@@ -1,0 +1,1 @@
+curl -s -X GET https://www.google.com/search?q=adele+hello | grep -o Adele

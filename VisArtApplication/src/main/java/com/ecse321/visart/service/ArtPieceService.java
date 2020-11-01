@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtListing;
+import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.repositories.ArtPieceRepository;
@@ -30,7 +31,7 @@ public class ArtPieceService {
     }
 
     if (aBasicLocation == null) {
-      throw new IllegalArgumentException("Basic Location cannot be empty!");
+      throw new IllegalArgumentException("Piece Location cannot be empty!");
     }
 
     if (aAddressLocation == null || aAddressLocation == "") {
@@ -64,8 +65,33 @@ public class ArtPieceService {
    * @param ap the ArtPiece whose changes will be written to the database
    */
   @Transactional
-  public void updateArtPiece(ArtPiece ap) {
-    ArtPieceRepo.updateArtPiece(ap);
+  public ArtPiece updateArtPiece(PieceLocation aBasicLocation, String aAddressLocation,
+      String aIdCode, ArtListing aArtListing) {
+
+    if (aIdCode == null || aIdCode == "") {
+      throw new IllegalArgumentException("User id code cannot be empty!");
+    }
+
+    if (aBasicLocation == null) {
+      throw new IllegalArgumentException("Piece Location cannot be empty!");
+    }
+
+    if (aAddressLocation == null || aAddressLocation == "") {
+      throw new IllegalArgumentException("Address Location cannot be empty!");
+    }
+
+    if (aArtListing == null) {
+      throw new IllegalArgumentException("Art Listing cannot be empty!");
+    }
+
+    ArtPiece artPiece = ArtPieceRepo.getArtPiece(aIdCode);
+    artPiece.setAddressLocation(aAddressLocation);
+    artPiece.setArtListing(aArtListing);
+    artPiece.setBasicLocation(aBasicLocation);
+
+    ArtPieceRepo.updateArtPiece(artPiece);
+
+    return artPiece;
   }
 
   /**
