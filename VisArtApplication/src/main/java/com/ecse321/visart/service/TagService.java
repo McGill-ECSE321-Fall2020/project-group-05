@@ -29,7 +29,7 @@ public class TagService {
   @Transactional
   public Tag createTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
 	  
-    if (aIdCode == null || aIdCode == "") {
+    if (aIdCode == null || aIdCode.length()<1) {
       throw new IllegalArgumentException("Tag id code cannot be empty!");
     }
     
@@ -37,7 +37,7 @@ public class TagService {
         throw new IllegalArgumentException("Tag type cannot be empty!");
     }
     
-    else if (aKeyword == null || aKeyword == "") {
+    else if (aKeyword == null || aKeyword.length()<1) {
           throw new IllegalArgumentException("Tag keyword cannot be empty!");
     }
     
@@ -45,7 +45,7 @@ public class TagService {
           throw new IllegalArgumentException("Tag listing cannot be empty!");
     }
     
-    else if (aKeyword.length()>25) {
+    else if (aKeyword.length()>512) {
     	  throw new IllegalArgumentException("Tag keyword is too long!");
     }
     
@@ -75,7 +75,7 @@ public class TagService {
   @Transactional
   public Tag updateTag(TagType aType, String aKeyword, String aIdCode, ArtListing aListing) {
 	  
-    if (aIdCode == null || aIdCode == "") {
+	if (aIdCode == null || aIdCode.length()<1) {
 	      throw new IllegalArgumentException("Tag id code cannot be empty!");
 	    }
 	    
@@ -83,7 +83,7 @@ public class TagService {
 	        throw new IllegalArgumentException("Tag type cannot be empty!");
 	    }
 	    
-	else if (aKeyword == null || aKeyword == "") {
+	else if (aKeyword == null || aKeyword.length()<1) {
 	          throw new IllegalArgumentException("Tag keyword cannot be empty!");
 	    }
 	    
@@ -91,9 +91,10 @@ public class TagService {
 	          throw new IllegalArgumentException("Tag listing cannot be empty!");
 	    }
 	    
-	else if (aKeyword.length()>25) {
+	else if (aKeyword.length()>512) {
 	    	  throw new IllegalArgumentException("Tag keyword is too long!");
 	    }
+	    
 	    
 	Tag tag = tagRepo.getTag(aIdCode);
 	tag.setKeyword(aKeyword);

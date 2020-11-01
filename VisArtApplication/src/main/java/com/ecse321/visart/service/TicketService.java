@@ -102,7 +102,7 @@ public class TicketService {
   @Transactional
   public Ticket updateTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
       ArtOrder aOrder, Customer aCustomer, Artist aArtist) {
-    if (aIdCode == null || aIdCode == "") {
+    if (aIdCode == null || aIdCode.length()<1) {
       throw new IllegalArgumentException("Ticket id code cannot be empty!");
     }
     
@@ -122,11 +122,11 @@ public class TicketService {
     	throw new IllegalArgumentException("Ticket payment amount cannot be negative!");
     }
     
-    else if (aCustomer.getIdCode()==aArtist.getIdCode()) {
+    else if (aCustomer.equals(aArtist.getCustomer())) {
     	throw new IllegalArgumentException("Ticket customer and artist cannot be the same!");
     }
     
-    else if (aOrder.getArtPiece()==null) {
+    else if (aOrder.getArtPiece() == null) {
     	throw new IllegalArgumentException("Ticket has to be for an ArtPiece!");
     }
     Ticket ticket = ticketRepo.getTicket(aIdCode);
