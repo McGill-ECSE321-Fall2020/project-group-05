@@ -33,12 +33,12 @@ import com.ecse321.visart.service.CustomerService;
 public class TestCustomerService {
   
   private static String id = "123";
-  private static String email = "johndoe@gmail.com";
-  private static String displayname = "johndoe";
-  private static String username = "johndoe123";
+  private static String email = "mahinanw@gmail.com";
+  private static String displayname = "mahinanw";
+  private static String username = "mahinan123";
   private static String password = "password";
   private static String profilepic = "";
-  private static String profileDescription = "Hi I am John Doe";
+  private static String profileDescription = "Hi I am Mahin anw";
   
   @Mock
   private CustomerRepository customerRepo;
@@ -112,13 +112,14 @@ public class TestCustomerService {
 
     Customer customer = null;
     try {
-      customer = service.createCustomer(id, email, displayname, username, password, profilepic, profileDescription);
+      customer = service.createCustomer(email, displayname, username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       System.out.println(e.getMessage());
     }
     assertNotNull(customer);
-    assertEquals(id, customer.getIdCode());
+    id = customer.getIdCode();
+    assertEquals(email, customer.getUser().getEmailAddress());
   }
   
   @Test
@@ -127,7 +128,7 @@ public class TestCustomerService {
     String error = null;
     Customer customer = null;
     try {
-      customer = service.createCustomer(name, name, name, name, name, name, name);
+      customer = service.createCustomer( name, name, name, name, name, name);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -136,10 +137,59 @@ public class TestCustomerService {
   }
   
   @Test
+  public void testCreateBadEmailCustomer() {
+    // assertEquals(0, service.getAllUsers().size());
+    String error = null;
+    Customer customer = null;
+    try {
+      customer = service.createCustomer(email+"@.com", displayname, username, password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      error = e.getMessage();
+    }
+    assertNull(customer);
+    assertEquals("Email address is invalid", error);
+  }
+  
+  
+  @Test
+  public void testCreateInvalidUsernamenameCustomer() {
+    // assertEquals(0, service.getAllUsers().size());
+    String error = null;
+    Customer customer = null;
+    try {
+      customer = service.createCustomer(email, displayname, "hi", password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      error = e.getMessage();
+    }
+    assertNull(customer);
+    assertEquals("This User Name is invalid, must be between 5 and 25 characters!", error);
+  }
+  
+  
+  @Test
+  public void testCreateInvalidDisplaynameCustomer() {
+    // assertEquals(0, service.getAllUsers().size());
+    String error = null;
+    Customer customer = null;
+    try {
+      customer = service.createCustomer(email, "test", username, password, profilepic, profileDescription);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      error = e.getMessage();
+    }
+    assertNull(customer);
+    assertEquals("This Display Name is invalid, must be between 5 and 25 characters!", error);
+  }
+  
+ 
+  
+  @Test
   public void testGetCustomer() {
     Customer customer = null;
     try {
-      customer = service.createCustomer(id, email, displayname, username, password, profilepic, profileDescription);
+      customer = service.createCustomer(email, displayname, username, password, profilepic, profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
@@ -155,6 +205,15 @@ public class TestCustomerService {
     }
     assertNotNull(customer);
     assertEquals(id, customer.getIdCode());
+    
+  }
+  
+  @Test
+  public void testDeleteCustomer() {
+    
+    assertTrue(service.deleteCustomer(id));
+    assertFalse(service.deleteCustomer(""));
+    assertFalse(service.deleteCustomer(null));
     
   }
   

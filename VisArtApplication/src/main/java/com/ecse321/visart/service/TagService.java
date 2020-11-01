@@ -53,7 +53,7 @@ public class TagService {
     if (aType == null) {
       throw new IllegalArgumentException("Tag type must be a valid type!");
     }
-
+    
     if (aKeyword == null || aKeyword.length() < 1) {
       throw new IllegalArgumentException("Tag keyword cannot be empty!");
     }
@@ -143,8 +143,8 @@ public class TagService {
    * @return             the updated Tag
    */
   @Transactional
-  public Tag updateTag(String aIdCode, String aTypeString, String aKeyword, String aListingId) {
-
+  public Tag updateTag(String aTypeString, String aKeyword, String aListingId) {
+	String aIdCode = EntityRepository.getUniqueKey();
     if (aIdCode == null || aIdCode.length() < 1) {
       throw new IllegalArgumentException("Tag id code cannot be empty!");
     }
