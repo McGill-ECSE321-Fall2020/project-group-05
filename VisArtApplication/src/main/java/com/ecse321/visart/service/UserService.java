@@ -35,6 +35,11 @@ public class UserService {
   public User getUser(String aIdCode) {
     return userRepo.getUser(aIdCode);
   }
+  
+  @Transactional
+  public boolean LoginUser(String email) {
+    return userRepo.getUser(aIdCode);
+  }
 
   @Transactional
   public List<User> getAllUsers() {

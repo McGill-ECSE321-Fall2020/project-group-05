@@ -19,6 +19,9 @@ public class ManagerService {
 
   @Autowired
   EntityRepository entityRepo;
+  
+  @Autowired
+  ArtListingService artListingService;
 
   @Transactional
   public Manager createManager(String aIdCode, String aEmailAddress, String aDisplayname,
@@ -42,6 +45,22 @@ public class ManagerService {
   public Manager getManager(String aIdCode, Boolean promotedListings) {
     return managerRepo.getManager(aIdCode, promotedListings);
   }
+  
+  
+  @Transactional
+  public void addListing(String aIdCode ,String aListingIdCode) {
+    Manager manager = getManager(aIdCode, true);
+    manager.addPromotedListing(artListingService.getArtListing(aListingIdCode));
+    managerRepo.updateManager(manager);
+  }
+  
+  @Transactional
+  public void removeListing(String aIdCode, String aListingIdCode) {
+    Manager manager = getManager(aIdCode, true);
+    manager.removePromotedListing(artListingService.getArtListing(aListingIdCode));
+    managerRepo.updateManager(manager);
+  }
+
 
   @Transactional
   public List<Manager> getAllUsers() {
