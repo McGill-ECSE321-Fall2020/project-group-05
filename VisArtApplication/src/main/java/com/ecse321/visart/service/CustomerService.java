@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.CustomerRepository;
 
@@ -20,6 +22,14 @@ public class CustomerService {
 
   @Autowired
   EntityRepository entityRepo;
+  
+  @Autowired
+  ArtListingService artListingService;
+  
+  @Autowired
+  TicketService ticketService;
+  
+  
 
   /**
    * createCustomer method creates an instance of Customer that is persisted in
@@ -91,7 +101,43 @@ public class CustomerService {
         aProfilePicLink, aProfileDescription);
 
   }
+  
+  @Transactional
+  public Customer getCustomer(String aIdCode, boolean alsoBoughtTickets,
+      boolean alsoFavoriteListings) { 
+    return customerRepo.getCustomer(aIdCode, alsoBoughtTickets,alsoFavoriteListings);
+  }
+  /**
+   * addfavoriteList method adds 
+   * @param aIdCode
+   * @param aListingIdCode
+   */
+  @Transactional
+  public void addfavoriteList(String aIdCode ,String aListingIdCode) {
+    Customer customer = getCustomer(aIdCode, false, true);
+    customer.addFavoriteListing(artListingService.getArtListing(aListingIdCode));
+    customerRepo.updateCustomer(customer);
+  }
 
+  @Transactional
+  public void removefavoriteList(String aIdCode, String aListingIdCode) {
+    Customer customer = getCustomer(aIdCode, false,true);
+    customer.removeFavoriteListing(artListingService.getArtListing(aListingIdCode));
+    customerRepo.updateCustomer(customer);
+  }
+  
+  public void addtickets(String aIdCode ,String aListingIdCode) {
+    Customer customer = getCustomer(aIdCode, true, true);
+    customer.addBoughtTicket(ticketService.getTicket(aListingIdCode));
+    customerRepo.updateCustomer(customer);
+  }
+  
+  public void removetickets(String aIdCode ,String aListingIdCode) {
+    Customer customer = getCustomer(aIdCode, true, true);
+    customer.removeBoughtTicket(ticketService.getTicket(aListingIdCode));
+    customerRepo.updateCustomer(customer);
+  }
+  
   /**
    * Overloaded getCustomer method retrieves a Customer instance from the database
    * by primary key. Lazy loads all collections by default, and so boughtTickets
