@@ -60,7 +60,6 @@ public class UserService {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
-    String hashedPassword;
 
     return userRepo.createUser(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
@@ -107,7 +106,6 @@ public class UserService {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
-    String hashedPassword;
 
     user.setDisplayname(aDisplayname);
     user.setUsername(aUsername);

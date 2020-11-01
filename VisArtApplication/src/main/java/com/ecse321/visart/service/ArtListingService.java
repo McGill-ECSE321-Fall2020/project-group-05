@@ -30,13 +30,13 @@ public class ArtListingService {
    * @param  aVisibility       Visibility of post
    * @param  aDescription      Description of ArtListing
    * @param  aTitle            Title of ArtListing
-   * @param  aIdCode           the database primary key for the ArtListing
    * @param  aArtist           Artist who is posting the ArtListing
    * @return                   persisted ArtListing instance
    */
   @Transactional
   public ArtListing createArtListing(PostVisibility aVisibility, String aDescription, String aTitle,
-      String aIdCode, Artist aArtist) {
+       Artist aArtist) {
+    String aIdCode = EntityRepository.getUniqueKey();
 
     if (aVisibility == null) {
       throw new IllegalArgumentException("Post Visibility cannot be empty!");
