@@ -34,11 +34,11 @@ public class ArtPieceRestController {
   public ArtPieceDto createArtPiece(@PathVariable("aIdCode") String aIdCode,
       @RequestParam(value = "pieceLocation") String aBasicLocation,
       @RequestParam(value = "aAddressLocation") String aAddressLocation,
-      @RequestParam(value = "ArtListingDto") String ArtListingDto) {
+      @RequestParam(value = "aArtListingId") String aArtListingId) {
 
-    ArtListing artListing = servicel.getArtListing(ArtListingDto);
+    
     PieceLocation BasicLocation = PieceLocation.valueOf(aBasicLocation);
     return new ArtPieceDto(
-        service.createArtPiece(BasicLocation, aAddressLocation, aIdCode, artListing));
+        service.createArtPiece(BasicLocation, aAddressLocation, aArtListingId));
   }
 }
