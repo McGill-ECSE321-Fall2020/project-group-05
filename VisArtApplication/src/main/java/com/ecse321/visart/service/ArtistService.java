@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtListing;
+import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Ticket;
@@ -59,6 +60,7 @@ public class ArtistService {
     return artistRepo.createArtist(key, customer);
   }
 
+  // TODO: delete udpateArtist method
   /**
    * updateArtist method updates the given Artist instance's properties in the
    * database.
@@ -125,8 +127,9 @@ public class ArtistService {
       throw new IllegalArgumentException(
           "art listing id must be valid id of existing art listing belonging to artist!");
     }
+    Artist placeholder = new Artist("", new Customer());
     for (ArtListing listing : listings) {
-      artist.removePostedListing(listing);
+      placeholder.addPostedListing(listing);
     }
     artistRepo.updateArtist(artist);
   }

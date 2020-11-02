@@ -31,7 +31,7 @@ public class TicketRestController {
         .collect(Collectors.toList());
   }
 
-  @PostMapping(value = { "/tickets/{aIdCode}", "/tickets/{aIdCode}/" })
+  @PostMapping(value = { "/create_ticket/{aIdCode}", "/create_ticket/{aIdCode}/" })
   public TicketDto createTicket(@PathVariable("aIdCode") String aIdCode,
 		  @RequestParam(value = "aIsPaymentConfirmed") String aIsPaymentConfirmed,
 	      @RequestParam(value = "aPaymentAmount") String aPaymentAmount,
@@ -44,8 +44,8 @@ public class TicketRestController {
     		 aOrderDto, aCustomerDto, aArtistDto));
   }
   
-  @PostMapping(value = { "/tag_update/{aIdCode}", "/tag_update/{aIdCode}/" })
-  public TicketDto updateTag(@PathVariable("aIdCode") String aIdCode,	  
+  @PostMapping(value = { "/ticket_tag_update/{aIdCode}", "/ticket_tag_update/{aIdCode}/" })
+  public TicketDto updateTicketTag(@PathVariable("aIdCode") String aIdCode,	  
 		  @RequestParam(value = "aIsPaymentConfirmed") String aIsPaymentConfirmed,
 	      @RequestParam(value = "aPaymentAmount") String aPaymentAmount,
 	      @RequestParam(value = "aOrder") String aOrderDto,
@@ -58,7 +58,7 @@ public class TicketRestController {
   }
   
   
-  @PostMapping(value = {"/delete_tag/{id}","delete_tag/{id}/"})
+  @PostMapping(value = {"/delete_ticket_tag/{id}","delete_ticket_tag/{id}/"})
   public Boolean deleteTicket(@PathVariable("id") String idCode) {
     return ticService.deleteTicket(idCode);
   }

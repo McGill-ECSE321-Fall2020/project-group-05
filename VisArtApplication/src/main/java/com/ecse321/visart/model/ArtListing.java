@@ -7,6 +7,10 @@
 package com.ecse321.visart.model;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import java.util.*;
 
 @Entity
@@ -31,7 +35,7 @@ public class ArtListing {
   private String description;
   private String title;
 
-  @ElementCollection(fetch = FetchType.EAGER)
+  @ElementCollection
   private List<String> postingPicLink;
 
   // ArtListing Associations
@@ -191,7 +195,7 @@ public class ArtListing {
   private List<Customer> favoritedCustomer;
   @ManyToOne
   private Artist artist;
-  @ElementCollection(fetch = FetchType.EAGER)
+  @ElementCollection
   private List<Float> dimensions;
   @Id
   private String idCode;

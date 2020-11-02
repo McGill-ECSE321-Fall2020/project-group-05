@@ -79,6 +79,10 @@ public class ArtListingRepository {
   public ArtListing getArtListing(String aIdCode, boolean alsoArtPieces, boolean alsoTags,
       boolean alsoFavoritedCustomers) {
     ArtListing entity = entityManager.find(ArtListing.class, aIdCode);
+    if (entity != null) {
+      entity.getDimensions();
+      entity.getPostingPicLink();
+    }
     if (alsoArtPieces)
       entity.getPieces().size();
     if (alsoTags)

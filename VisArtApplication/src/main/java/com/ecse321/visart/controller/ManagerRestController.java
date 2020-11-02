@@ -51,7 +51,7 @@ public class ManagerRestController {
       return new ManagerDto(manager);
   }
   
-  @PostMapping(value = {"/managers/{listing}","/managers/{listing}"})
+  @PostMapping(value = {"/del_managers/{listing}","/del_managers/{listing}"})
   public ManagerDto deleteManagerListing(@RequestBody MultiValueMap<String, String> values) {
       Manager manager = service.getManager(values.getFirst("idCode"));
       manager.removePromotedListing(serviceal.getArtListing(values.getFirst("listingIdCode")));
