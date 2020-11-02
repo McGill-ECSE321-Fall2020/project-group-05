@@ -128,7 +128,7 @@ public class TestCustomerService {
     String error = null;
     Customer customer = null;
     try {
-      customer = service.createCustomer( name, name, name, name, name, name);
+      customer = service.createCustomer(name, name, name, name, name, name);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }

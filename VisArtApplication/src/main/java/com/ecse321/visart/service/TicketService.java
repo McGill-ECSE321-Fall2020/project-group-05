@@ -14,6 +14,9 @@ import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Ticket;
+import com.ecse321.visart.repositories.ArtOrderRepository;
+import com.ecse321.visart.repositories.ArtistRepository;
+import com.ecse321.visart.repositories.CustomerRepository;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TicketRepository;
 
@@ -25,6 +28,15 @@ public class TicketService {
 
   @Autowired
   EntityRepository entityRepo;
+  
+  @Autowired
+  ArtOrderRepository aoRepo;
+  
+  @Autowired
+  ArtistRepository artistRepo;
+  
+  @Autowired
+  CustomerRepository customerRepo;
 
   /**
    * 
@@ -37,8 +49,9 @@ public class TicketService {
    * @return new ticket with the parameters
    */
   @Transactional
-  public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
-      ArtOrder aOrder, Customer aCustomer, Artist aArtist) {
+  public Ticket createTicket(boolean aIsPaymentConfirmed, double aPaymentAmount,
+      String aOrder, String aCustomer, String aArtist) {
+	  String aIdCode = EntityRepository.getUniqueKey();
     if (aIdCode == null || aIdCode == "") {
       throw new IllegalArgumentException("Ticket id code cannot be empty!");
     }
@@ -59,15 +72,24 @@ public class TicketService {
     	throw new IllegalArgumentException("Ticket payment amount cannot be negative!");
     }
     
-    else if (aCustomer.getIdCode()==aArtist.getIdCode()) {
+    else if (aCustomer.equals(aArtist)) {
     	throw new IllegalArgumentException("Ticket customer and artist cannot be the same!");
     }
     
-    else if (aOrder.getArtPiece()==null) {
-    	throw new IllegalArgumentException("Ticket has to be for an ArtPiece!");
+    ArtOrder aOrderObj = aoRepo.getArtOrder(aOrder);
+    if(aOrderObj == null) {
+    	 throw new IllegalArgumentException("Ticket Order should exist!");
     }
-    return ticketRepo.createTicket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrder, aCustomer,
-        aArtist);
+    Artist aArtistObj = artistRepo.getArtist(aArtist);
+    if(aArtistObj == null) {
+   	 throw new IllegalArgumentException("Ticket Artist should exist!");
+   }
+    Customer aCustomerObj = customerRepo.getCustomer(aCustomer);
+    if(aCustomerObj == null) {
+   	 throw new IllegalArgumentException("Ticket Customer should exist!");
+   }
+    return ticketRepo.createTicket(aIsPaymentConfirmed, aPaymentAmount, aIdCode, aOrderObj, aCustomerObj,
+        aArtistObj);
   }
 
   /**
@@ -101,7 +123,7 @@ public class TicketService {
    */
   @Transactional
   public Ticket updateTicket(boolean aIsPaymentConfirmed, double aPaymentAmount, String aIdCode,
-      ArtOrder aOrder, Customer aCustomer, Artist aArtist) {
+      String aOrder, String aCustomer, String aArtist) {
     if (aIdCode == null || aIdCode.length()<1) {
       throw new IllegalArgumentException("Ticket id code cannot be empty!");
     }
@@ -122,18 +144,31 @@ public class TicketService {
     	throw new IllegalArgumentException("Ticket payment amount cannot be negative!");
     }
     
-    else if (aCustomer.equals(aArtist.getCustomer())) {
+    else if (aCustomer.equals(aArtist)) {
     	throw new IllegalArgumentException("Ticket customer and artist cannot be the same!");
     }
-    
-    else if (aOrder.getArtPiece() == null) {
-    	throw new IllegalArgumentException("Ticket has to be for an ArtPiece!");
-    }
     Ticket ticket = ticketRepo.getTicket(aIdCode);
-	ticket.setArtist(aArtist);
-	ticket.setCustomer(aCustomer);
+    if (ticket == null) {
+      throw new IllegalArgumentException("Tag id must be a valid id!");
+    }
+   
+    ArtOrder aOrderObj = aoRepo.getArtOrder(aOrder);
+    if(aOrderObj == null) {
+    	 throw new IllegalArgumentException("Ticket Order should exist!");
+    }
+    Artist aArtistObj = artistRepo.getArtist(aArtist);
+    if(aArtistObj == null) {
+   	 throw new IllegalArgumentException("Ticket Artist should exist!");
+   }
+    Customer aCustomerObj = customerRepo.getCustomer(aCustomer);
+    if(aCustomerObj == null) {
+   	 throw new IllegalArgumentException("Ticket Customer should exist!");
+   }
+    
+	ticket.setArtist(aArtistObj);
+	ticket.setCustomer(aCustomerObj);
 	ticket.setIsPaymentConfirmed(aIsPaymentConfirmed);
-	ticket.setOrder(aOrder);
+	ticket.setOrder(aOrderObj);
 	ticket.setPaymentAmount(aPaymentAmount);
 	
 	ticketRepo.updateTicket(ticket);

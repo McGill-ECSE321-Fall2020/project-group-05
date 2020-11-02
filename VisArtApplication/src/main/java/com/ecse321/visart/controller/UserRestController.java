@@ -36,7 +36,7 @@ public class UserRestController {
 
   @PostMapping(value = { "/users/{name}", "/users/{name}/" })
   public UserDto createUser(@RequestBody MultiValueMap<String, String> values) {
-    return new UserDto(service.createUser(values.getFirst("idCode"), 
+    return new UserDto(service.createUser( 
         values.getFirst("emailAddress"), values.getFirst("displayName"),
         values.getFirst("userName"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
