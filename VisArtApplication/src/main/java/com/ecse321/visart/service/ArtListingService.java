@@ -1,6 +1,8 @@
 package com.ecse321.visart.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Artist;
+import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.EntityRepository;
@@ -22,6 +26,12 @@ public class ArtListingService {
 
   @Autowired
   EntityRepository entityRepo;
+  
+  @Autowired
+  ArtPieceService apService;
+  
+  @Autowired
+  TagService tService;
   
   /**
    * 
@@ -66,14 +76,160 @@ public class ArtListingService {
    * updateArtListing method updates the given ArtListing instance's properties in the
    * database.
    * 
-   * @param ArtListing the ArtListing whose properties will be updated in the database
+   * @param  aIdCode           Id of post in db
+   * @param  aVisibility       Visibility of post
+   * @param  aDescription      Description of ArtListing
+   * @param  aTitle            Title of ArtListing
+   * 
    */
   @Transactional
-  public void updateArtListing(ArtListing aArtListing) {
-    ArtListingRepo.updateArtListing(aArtListing);
+  public ArtListing updateArtListing(String aIdCode, PostVisibility aVisibility, String aDescription, String aTitle) {
+    ArtListing al = ArtListingRepo.getArtListing(aIdCode);
+    if (al == null) {
+      throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
+    }
+    if (aVisibility!=null) {
+      al.setVisibility(aVisibility);
+    }
+    if (aDescription!=null) {
+      al.setDescription(aDescription);
+    }
+    if (aTitle!=null) {
+      al.setTitle(aTitle);
+    }
+    ArtListingRepo.updateArtListing(al);
+    return al;
   }
   
+  @Transactional
+  public ArtListing updateDimensions(String aIdCode, Float[] aDimensions) {
+    ArtListing al = ArtListingRepo.getArtListing(aIdCode);
+    if (al == null) {
+      throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
+    }
+    for (float d : al.getDimensions()) {
+      al.removeDimension(d);
+    }
+    for (float d : aDimensions) {
+      al.addDimension(d);
+    }
+
+    ArtListingRepo.updateArtListing(al);
+    return al;
+  }
   
+  @Transactional
+  public ArtListing updatePostImages(String aIdCode, String[] aPostImages) {
+    ArtListing al = ArtListingRepo.getArtListing(aIdCode);
+    if (al == null) {
+      throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
+    }
+    for (String s : al.getPostingPicLink()) {
+      al.removePostingPicLink(s);
+    }
+    for (String s : aPostImages) {
+      al.addPostingPicLink(s);
+    }
+
+    ArtListingRepo.updateArtListing(al);
+    return al;
+  }
+  
+  @Transactional
+  public ArtListing addArtPiece(String aIdCode, String apCode) {
+    ArtListing al = ArtListingRepo.getArtListing(aIdCode);
+    if (al == null) {
+      throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
+    }
+    ArtPiece ap = apService.getArtPiece(apCode);
+    if (ap==null) {
+      throw new IllegalArgumentException("ArtPiece cannot be resolved");
+    }
+    al.addPiece(ap);
+    return al;
+  }
+  
+   @Transactional
+   public ArtListing removeArtPiece(String aIdCode, String apCode) {
+     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
+     if (al == null) {
+       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
+     }
+     ArtPiece ap = apService.getArtPiece(apCode);
+     if (ap==null) {
+       throw new IllegalArgumentException("ArtPiece cannot be resolved");
+     }
+     if (!al.getPieces().contains(ap)) {
+       throw new IllegalArgumentException("ArtPiece is not stored in the ArtListing");
+     }
+     al.removePiece(ap);
+     return al;
+   }
+   
+   @Transactional
+   public List<Customer> getFavoritedCustomers(String aIdCode) {
+     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
+     if (al == null) {
+       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
+     }
+     return al.getFavoritedCustomer();
+   }
+  
+   @Transactional
+   public ArtListing addTag(String aIdCode, String tCode) {
+     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
+     if (al == null) {
+       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
+     }
+     Tag t = tService.getTag(tCode);
+     if (t == null) {
+       throw new IllegalArgumentException("Tag cannot be resolved with given id!");
+     }
+     al.addTag(t);
+     return al;
+   }
+   
+   @Transactional
+   public ArtListing removeTag(String aIdCode, String tCode) {
+     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
+     if (al == null) {
+       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
+     }
+     Tag t = tService.getTag(tCode);
+     if (t == null) {
+       throw new IllegalArgumentException("Tag cannot be resolved with given id!");
+     }
+     if (!al.getTags().contains(t)) {
+       throw new IllegalArgumentException("Tag is not contained in this Art Listing");
+     }
+     al.removeTag(t);
+     return al;
+   }
+   
+   @Transactional
+   public List<ArtListing> getUnsoldArtworks() {
+     List<ArtListing> allListings = entityRepo.getAllEntities(ArtListing.class);
+     List<ArtListing> unsoldListings = new ArrayList<ArtListing>();
+     for (ArtListing al : allListings) {
+       if (al.hasPieces()) {
+         unsoldListings.add(al); 
+       }
+     }
+     return unsoldListings;  
+   }
+   
+   @Transactional
+   public List<String> filterArtworkByTag(String[] keywords) {
+     List<Tag> listTagByKeywords = entityRepo.findEntityByAttribute("type", Tag.class, keywords);
+     return new ArrayList<String>(listTagByKeywords.stream()
+         .map((tag) -> tag.getListing().getIdCode()).collect(Collectors.toSet()));
+   }
+   
+   @Transactional
+   public List<ArtListing> filterArtworkByTagAsListings(String[] keywords){
+     return entityRepo.findEntityByAttribute("idCode", ArtListing.class, filterArtworkByTag(keywords));
+   }
+   
   /**
    * getArtListing method retrieves a persisted ArtListing instance from the database.
    * 

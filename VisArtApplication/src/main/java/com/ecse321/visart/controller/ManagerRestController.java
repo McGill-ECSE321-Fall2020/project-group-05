@@ -30,7 +30,7 @@ public class ManagerRestController {
   
   @GetMapping(value = { "/managers", "/managers/" })
   public List<ManagerDto> getAllManagers() {
-    return service.getAllUsers().stream().map(m -> new ManagerDto(m)).collect(Collectors.toList());
+    return service.getAllManagers().stream().map(m -> new ManagerDto(m)).collect(Collectors.toList());
   }
     
   @GetMapping(value = { "/get_manager", "/get_manager/" })

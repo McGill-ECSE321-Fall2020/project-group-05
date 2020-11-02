@@ -33,6 +33,8 @@ public class TestUserService {
 
   @Mock
   private EntityRepository entityRepo;
+  
+
 
   @InjectMocks
   private UserService service;
@@ -45,12 +47,15 @@ public class TestUserService {
   private static String profilepic = "";
   private static String profileDescription = "Hi I am John Doe";
   
+  
   private static User testUser;
 
   @BeforeEach
   public void setMockOutput() {
     // Mock the Repository methods, returning what we want to expect from the
     // database, instead of actually querying the database.
+    
+   
 
     lenient().when(userRepo.getUser(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {

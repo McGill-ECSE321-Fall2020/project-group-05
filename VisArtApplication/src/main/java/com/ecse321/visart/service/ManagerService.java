@@ -92,6 +92,12 @@ public class ManagerService {
 
   @Transactional
   public void addListing(String aIdCode ,String aListingIdCode) {
+    if (aIdCode == null || aIdCode.equals("")) {
+      throw new IllegalArgumentException("Cannot find manager");
+    }
+    if (aListingIdCode == null || aListingIdCode.equals("")) {
+      throw new IllegalArgumentException("Cannot find artListing");
+    }
     Manager manager = getManager(aIdCode, true);
     manager.addPromotedListing(artListingService.getArtListing(aListingIdCode));
     managerRepo.updateManager(manager);
@@ -99,6 +105,12 @@ public class ManagerService {
 
   @Transactional
   public void removeListing(String aIdCode, String aListingIdCode) {
+    if (aIdCode == null || aIdCode.equals("")) {
+      throw new IllegalArgumentException("Cannot find manager");
+    }
+    if (aListingIdCode == null || aListingIdCode.equals("")) {
+      throw new IllegalArgumentException("Cannot find artListing");
+    }
     Manager manager = getManager(aIdCode, true);
     manager.removePromotedListing(artListingService.getArtListing(aListingIdCode));
     managerRepo.updateManager(manager);
@@ -113,7 +125,7 @@ public class ManagerService {
     }
   }
   @Transactional
-  public List<Manager> getAllUsers() {
+  public List<Manager> getAllManagers() {
     return entityRepo.getAllEntities(Manager.class);
   }
 
