@@ -108,6 +108,8 @@ public class ArtPieceRepository {
     entityManager.remove(entityManager.merge(ape));
     return !entityManager.contains(ape);
   }
+  
+  
 
   /**
    * getAllKeys queries the database for all of the primary keys of the ArtPieces

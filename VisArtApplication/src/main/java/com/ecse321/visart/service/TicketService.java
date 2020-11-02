@@ -39,13 +39,15 @@ public class TicketService {
   CustomerRepository customerRepo;
 
   /**
-   * 
-   * @param aIsPaymentConfirmed
-   * @param aPaymentAmount
-   * @param aIdCode
-   * @param aOrder
-   * @param aCustomer
-   * @param aArtist
+   *  createTicket creates Ticket and attaches it to an ArtOrder (by given id), A customer and
+   *  An artist, also given by id. Input Strings cannot be null, keyword cannot be empty or longer 
+   *  than 1000 characters. In addition, the ids used must return an object
+   * @param aIsPaymentConfirmed boolean that checks if the payment is confirmed
+   * @param aPaymentAmount price of the artpiece linked to the order
+   * @param aIdCode id of the ticket
+   * @param aOrder order id linked to the ticket
+   * @param aCustomer customer id represents the buyer
+   * @param aArtist artist id that represents the seller
    * @return new ticket with the parameters
    */
   @Transactional
@@ -93,7 +95,7 @@ public class TicketService {
   }
 
   /**
-   * 
+   * getTicket retrieves a Ticket from the database by id.
    * @param aIdCode
    * @return Ticket with ID
    */
@@ -103,7 +105,7 @@ public class TicketService {
   }
   
   /**
-   * 
+   * getAllTickets gets all tickets from the database
    * @return list of all tickets
    */
   @Transactional
@@ -112,6 +114,11 @@ public class TicketService {
   }
   
   /**
+   * updateTicket updates a given ticket's attributes. aIdCode specifies the Ticket to
+   * update, and subsequent parameters update the Ticket's attributes, unless the
+   * given parameter is null, in which case the Ticket's attribute remains unchanged.
+   * aOrder, aArtist and aCustomer must be a valid id of an existing ArtOrder, Artist and 
+   * Customer
    * 
    * @param aIsPaymentConfirmed
    * @param aPaymentAmount
@@ -176,7 +183,7 @@ public class TicketService {
   }
   
   /**
-   * 
+   * deleteTicket deletes the ticket from the database given a ticket object
    * @param ticket
    * @return
    */
@@ -187,7 +194,7 @@ public class TicketService {
   }
   
   /**
-   * 
+   * deleteTicket deletes the ticket from the database given a ticket id
    * @param aIdCode
    * @return
    */

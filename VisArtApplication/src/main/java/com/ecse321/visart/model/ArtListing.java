@@ -23,7 +23,15 @@ public class ArtListing {
   // ------------------------
 
   public enum PostVisibility {
-    Public, Private, Unlisted, Draft
+    Public, Private, Unlisted, Draft;
+
+    public static PostVisibility fromString(String name) {
+      try {
+        return Enum.valueOf(PostVisibility.class, name);
+      } catch (IllegalArgumentException | NullPointerException e) {
+        return null;
+      }
+    }
   }
 
   // ------------------------

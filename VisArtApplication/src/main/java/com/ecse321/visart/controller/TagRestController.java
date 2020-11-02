@@ -51,13 +51,19 @@ public class TagRestController {
   }
 
   @PostMapping(value = { "/tags/{aIdCode}", "/tags/{aIdCode}/" })
-  public TagDto createTag(@PathVariable("aIdCode") String aIdCode) {
-    return new TagDto(tagService.createTag(null, null, null));
+  public TagDto createTag(@PathVariable("aIdCode") String aIdCode,
+		  @RequestParam(value = "aListing") String aListingDto,
+	      @RequestParam(value = "aKeyword") String keyword,
+	      @RequestParam(value = "aType") String type) {
+    return new TagDto(tagService.createTag(type, keyword, aListingDto));
   }
   
   @PostMapping(value = { "/tag_update/{aIdCode}", "/tag_update/{aIdCode}/" })
-  public TagDto updateTag(@PathVariable("aIdCode") String aIdCode) {
-	    return new TagDto(tagService.updateTag(null, null, null, null));
+  public TagDto updateTag(@PathVariable("aIdCode") String aIdCode,
+		  @RequestParam(value = "aListing") String aListingDto,
+	      @RequestParam(value = "aKeyword") String keyword,
+	      @RequestParam(value = "aType") String type) {
+	    return new TagDto(tagService.updateTag(type, keyword, aIdCode, aListingDto));
   }
   
   @PostMapping(value = {"/delete_tag/{id}","delete_tag/{id}/"})

@@ -21,6 +21,9 @@ public class ArtOrderService {
 
   @Autowired
   ArtPieceRepository artPieceRepo;
+  
+  @Autowired
+  TicketService ticketService;
 
   @Autowired
   EntityRepository entityRepo;
@@ -142,6 +145,20 @@ public class ArtOrderService {
     artOrderRepo.updateArtOrder(artOrder);
 
     return artOrder;
+  }
+  
+  
+  @Transactional
+  public void addTicket(String aIdCode ,String aTicketIdCode) {
+    if (aIdCode == null || aIdCode.equals("")) {
+      throw new IllegalArgumentException("Cannot find artOrder");
+    }
+    if (aTicketIdCode == null || aTicketIdCode.equals("")) {
+      throw new IllegalArgumentException("Cannot find ticket");
+    }
+    ArtOrder artOrder = getArtOrder(aIdCode);
+    artOrder.setTicket(ticketService.getTicket(aTicketIdCode));
+    artOrderRepo.updateArtOrder(artOrder);
   }
 
   /**
