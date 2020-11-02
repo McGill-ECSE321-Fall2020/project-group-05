@@ -21,8 +21,13 @@ import org.mockito.stubbing.Answer;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.Ticket;
+import com.ecse321.visart.repositories.ArtListingRepository;
+import com.ecse321.visart.repositories.ArtOrderRepository;
+import com.ecse321.visart.repositories.ArtistRepository;
+import com.ecse321.visart.repositories.CustomerRepository;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TicketRepository;
 import com.ecse321.visart.service.TicketService;
@@ -35,6 +40,15 @@ public class TestTicketService {
 
   @Mock
   private EntityRepository entityRepo;
+  
+  @Mock
+  private ArtOrderRepository aoRepo;
+  
+  @Mock
+  private ArtistRepository aRepo;
+  
+  @Mock
+  private CustomerRepository cRepo;
 
   @InjectMocks
   private TicketService ticketService;
@@ -68,6 +82,21 @@ public class TestTicketService {
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
     };
+    
+    lenient().when(aoRepo.getArtOrder(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+    	String id = invocation.getArgument(0);
+    	return TICKET_ORDER;
+    });
+    
+    lenient().when(aRepo.getArtist(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+    	String id = invocation.getArgument(0);
+    	return TICKET_ARTIST;
+    });
+    
+    lenient().when(cRepo.getCustomer(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+    	String id = invocation.getArgument(0);
+    	return TICKET_CUSTOMER;
+    });
 
     lenient().when(ticketRepo.createTicket(anyBoolean(), anyDouble(), anyString(),any(),
     		any(),any())).thenAnswer((InvocationOnMock invocation) -> {
@@ -77,7 +106,7 @@ public class TestTicketService {
           ArtOrder order = (ArtOrder)invocation.getArgument(3);
           Customer customer = (Customer)invocation.getArgument(4);
           Artist artist = (Artist)invocation.getArgument(5);
-          Ticket ticket = new Ticket(payment, paymentPrice, id, order, customer, artist);
+          Ticket ticket = new Ticket(payment, paymentPrice, TICKET_ID, order, customer, artist);
           return ticket;
         });
     
@@ -104,19 +133,15 @@ public class TestTicketService {
   public void testCreateTicket() {
     // assertEquals(0, service.getAllUsers().size());
 
-    String id = "id";
+    String id = TICKET_ID;
     boolean payment = false;
     double paymentPrice = 420.0;
-    User aUser = new User("a","b","c","d","e","f","g");
-    User aUser2 = new User("h","i","j","k","l","m","n");
-    Customer aCustomer = new Customer("customerCode", aUser);
-    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
-    Artist aArtist = new Artist("artistCode", aCustomer2);
-    ArtOrder aOrder = new ArtOrder();
-    
+    String aOrder = "ordercode";
+    String aArtist = "artistcode";
+    String aCustomer = "customercode";
     Ticket ticket = null;
     try {
-      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+      ticket = ticketService.createTicket(payment, paymentPrice, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
@@ -125,44 +150,20 @@ public class TestTicketService {
     assertEquals(id, ticket.getIdCode());
   }
 
-  @Test
-  public void testCreateNullTicketID() {
-    String error = null;
-    Ticket ticket = null;
-    boolean payment = true;
-    double paymentPrice = 120;
-    String id = null;
-    ArtOrder aOrder = new ArtOrder();
-    User aUser = new User("a","b","c","d","e","f","g");
-    User aUser2 = new User("h","i","j","k","l","m","n");
-    Customer aCustomer = new Customer("customerCode", aUser);
-    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
-    Artist aArtist = new Artist("artistCode", aCustomer2);
-    try {
-      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(ticket);
-    assertEquals("Ticket id code cannot be empty!", error); // expected error message for service data
-                                                          // validation.
-  }
+ 
+ 
   
   @Test
   public void testCreateNullTicketOrder() {
-    String error = null;
-    Ticket ticket = null;
-    boolean payment = true;
-    double paymentPrice = 120;
-    String id = "mockcode";
-    ArtOrder aOrder = null;
-    User aUser = new User("a","b","c","d","e","f","g");
-    User aUser2 = new User("h","i","j","k","l","m","n");
-    Customer aCustomer = new Customer("customerCode", aUser);
-    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
-    Artist aArtist = new Artist("artistCode", aCustomer2);
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = null;
+	 String aArtist = "artistcode";
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
     try {
-      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+      ticket = ticketService.createTicket(payment, paymentPrice, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -173,19 +174,15 @@ public class TestTicketService {
   
   @Test
   public void testCreateNullTicketCustomer() {
-    String error = null;
-    Ticket ticket = null;
-    boolean payment = true;
-    double paymentPrice = 120;
-    String id = "mockcode";
-    ArtOrder aOrder = new ArtOrder();
-    //User aUser = new User("a","b","c","d","e","f","g");
-    User aUser2 = new User("h","i","j","k","l","m","n");
-    Customer aCustomer = null;
-    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
-    Artist aArtist = new Artist("artistCode", aCustomer2);
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = "artistcode";
+	 String aCustomer = null;
+	 Ticket ticket = null;
+	 String error = null;
     try {
-      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+      ticket = ticketService.createTicket(payment, paymentPrice, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -196,19 +193,15 @@ public class TestTicketService {
   
   @Test
   public void testCreateNullTicketArtist() {
-    String error = null;
-    Ticket ticket = null;
-    boolean payment = true;
-    double paymentPrice = 120;
-    String id = "mockcode";
-    ArtOrder aOrder = new ArtOrder();
-    User aUser = new User("a","b","c","d","e","f","g");
-    //User aUser2 = new User("h","i","j","k","l","m","n");
-    Customer aCustomer = new Customer("customerCode", aUser);
-    //Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
-    Artist aArtist = null;
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = null;
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
     try {
-      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+      ticket = ticketService.createTicket(payment, paymentPrice, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -219,19 +212,15 @@ public class TestTicketService {
   
   @Test
   public void testCreateNullTicketPaymentNegative() {
-    String error = null;
-    Ticket ticket = null;
-    boolean payment = true;
-    double paymentPrice = -120;
-    String id = "mockcode";
-    ArtOrder aOrder = new ArtOrder();
-    User aUser = new User("a","b","c","d","e","f","g");
-    User aUser2 = new User("h","i","j","k","l","m","n");
-    Customer aCustomer = new Customer("customerCode", aUser);
-    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
-    Artist aArtist = new Artist("artistCode", aCustomer2);
+	 boolean payment = false;
+	 double paymentPrice = -420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = "artistcode";
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
     try {
-      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+      ticket = ticketService.createTicket(payment, paymentPrice, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -242,19 +231,15 @@ public class TestTicketService {
   
   @Test
   public void testCreateNullTicketSameArtistCustomer() {
-    String error = null;
-    Ticket ticket = null;
-    boolean payment = true;
-    double paymentPrice = -120;
-    String id = "mockcode";
-    ArtOrder aOrder = new ArtOrder();
-    User aUser = new User("a","b","c","d","e","f","g");
-    User aUser2 = new User("h","i","j","k","l","m","n");
-    Customer aCustomer = new Customer("customerCode", aUser);
-    Customer aCustomer2 = new Customer("artistcustomerCode", aUser2);
-    Artist aArtist = new Artist("artistCode", aCustomer);
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = "customercode";
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
     try {
-      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+      ticket = ticketService.createTicket(payment, paymentPrice, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -265,22 +250,56 @@ public class TestTicketService {
   
   @Test
   public void testCreateNullTicketAll() {
-    String error = null;
-    Ticket ticket = null;
-    boolean payment = false;
-    double paymentPrice = 0;
-    String id = null;
-    ArtOrder aOrder = null;
-    Customer aCustomer = null;
-    Artist aArtist = null;
+	 boolean payment = false;
+	 double paymentPrice = 0;
+	 String aOrder = null;
+	 String aArtist = null;
+	 String aCustomer = null;
+	 Ticket ticket = null;
+	 String error = null;
     try {
-      ticket = ticketService.createTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+      ticket = ticketService.createTicket(payment, paymentPrice, aOrder, aCustomer, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertNull(ticket);
     //assertEquals("Ticket id code cannot be empty!", error); // expected error message for service data
                                                           // validation.
+  }
+  
+  @Test
+  public void testUpdateTicket() {
+	  
+  }
+  
+  @Test
+  public void testGetTicket() {
+    boolean payment = false;
+	double paymentPrice = 420.0;
+	String aOrder = "ordercode2";
+    String aArtist = "artistcode";
+    String aCustomer = "customercode";
+	Ticket ticket = null;
+	Ticket ticket2 = null;
+	String id = null;
+    try {
+      ticket = ticketService.createTicket(payment, paymentPrice, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(ticket);
+    id = ticket.getIdCode();
+    
+    try {
+      ticket2 = ticketService.getTicket(id);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(ticket2);
+    assertEquals(id, ticket2.getIdCode());
+    
   }
   
 }

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.CustomerDto;
-import com.ecse321.visart.dto.ManagerDto;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.service.CustomerService;
+import com.ecse321.visart.service.ArtListingService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -25,6 +25,9 @@ public class CustomerRestController {
   @Autowired
   private CustomerService service;
 
+  @Autowired
+  private ArtListingService alservice;
+  
   @GetMapping(value = { "/customers", "/customers/" })
   public List<CustomerDto> getAllCustomers() {
     return service.getAllCustomers().stream().map(u -> new CustomerDto(u)).collect(Collectors.toList());
@@ -40,6 +43,22 @@ public class CustomerRestController {
      CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode,false,true));
      return customer.getFavoriteListings();
   }
+  
+  @PostMapping(value = {"/customers/{favorite listing}","/customers/{favoritelisting}"})
+  public CustomerDto addCustomerFavListing(@RequestBody MultiValueMap<String, String> values) {
+      Customer customer = service.getCustomer(values.getFirst("idCode"));
+      customer.addFavoriteListing(alservice.getArtListing(values.getFirst("listingIdCode")));
+      return new CustomerDto(customer);
+  }
+  
+  @PostMapping(value = {"/customers/{favorite listing}","/customers/{favorite listing}"})
+  public CustomerDto deleteCustomerFavListing(@RequestBody MultiValueMap<String, String> values) {
+     Customer customer = service.getCustomer(values.getFirst("idCode"));
+      customer.removeFavoriteListing(alservice.getArtListing(values.getFirst("listingIdCode")));
+      return new CustomerDto(customer);
+  }
+  
+  
   
   @GetMapping(value = { "/bought_tickets", "/bought_tickets" })
   public  List<String> getboughtTicketsList(@RequestParam("idCode" )String aIdCode) {

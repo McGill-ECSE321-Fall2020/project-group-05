@@ -23,7 +23,7 @@ public class UserService {
   EntityRepository entityRepo;
 
   /**
-   * 
+   *
    * @param  aEmailAddress
    * @param  aDisplayname
    * @param  aUsername
@@ -71,13 +71,14 @@ public class UserService {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
+
     return userRepo.createUser(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
 
   }
 
   /**
-   * 
+   *
    * @param  aIdCode
    * @param  aEmailAddress
    * @param  aDisplayname

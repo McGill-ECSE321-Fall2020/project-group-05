@@ -53,19 +53,16 @@ public class CustomerService {
       throw new IllegalArgumentException("Customer id code cannot be empty!");
 <<<<<<< HEAD
     } */
-    if (aEmailAddress == null|| isValidEmail(aEmailAddress)==false) {
-=======
+   
+    if (aEmailAddress == null|| aEmailAddress.length()<0) { 
+      throw new IllegalArgumentException("Email address cannot be empty and less than 0!");
     }
-    if (aEmailAddress == null) { // TODO: check string length is not 0
->>>>>>> 3524b8e857d873cb196949e103cccd08c18f41fa
-      throw new IllegalArgumentException("Email address cannot be empty!");
-    }
-    if (aDisplayname == null) { // TODO: check string length is not 0
+    if (aDisplayname == null||aDisplayname.length()<0) { 
       throw new IllegalArgumentException("Display name cannot be empty!");
     }
     if (aDisplayname.length() < 5||aDisplayname.length() > 25) {
       throw new IllegalArgumentException(
-          "This Display Name is invalid, must be less than 25 characters!");
+          "This Display Name is invalid, must be greater than 5 and less than 25 characters!");
     }
     List<User> l1 = entityRepo.findEntityByAttribute("displayname", User.class, aDisplayname);
     if (l1 != null && l1.size() > 0) {
@@ -92,27 +89,15 @@ public class CustomerService {
       throw new IllegalArgumentException(
           "Password must have atleast 8 characters and less than 40 ");
     }
-    if (aProfilePicLink == null) {
-      throw new IllegalArgumentException("Profile picture link cannot be empty!"); // TODO: check
-                                                                                   // length of
-                                                                                   // picLink string
-                                                                                   // as well
+    if (aProfilePicLink == null||aProfilePicLink.length()<0) {
+      throw new IllegalArgumentException("Profile picture link cannot be empty!");
     }
-    if (aProfileDescription == null) { // TODO: check string length is not 0
-      throw new IllegalArgumentException("Profile description cannot be empty!");
+    if(aProfileDescription == null || aProfileDescription.length()>1000||aProfileDescription.length()<0) {
+      throw new IllegalArgumentException("Description must be less than 255 characters");
     }
-    if (aProfileDescription.length() > 255) {
-      throw new IllegalArgumentException("Profile description cannot exceed 255 characters!"); // TODO:
-                                                                                               // change
-                                                                                               // it
-                                                                                               // to
-                                                                                               // 1000
-                                                                                               // maximum
-    }
-
     return customerRepo.createCustomer(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
-  }
+    }
 
   @Transactional
   public Customer getCustomer(String aIdCode, boolean alsoBoughtTickets,
@@ -129,35 +114,37 @@ public class CustomerService {
   @Transactional
   public void addfavoriteList(String aIdCode, String aListingIdCode) {
     Customer customer = getCustomer(aIdCode, false, true);
+    if(aListingIdCode!= null) {
     // TODO: check that artListing retrieved is not null before setting it
     customer.addFavoriteListing(artListingService.getArtListing(aListingIdCode));
     customerRepo.updateCustomer(customer);
-  }
+  }}
 
   @Transactional
   public void removefavoriteList(String aIdCode, String aListingIdCode) {
     Customer customer = getCustomer(aIdCode, false, true);
-    // TODO: check that artListing retrieved is not null before removing it
+    if(aListingIdCode!= null) {
     // TODO: check that artListing is a member of artListing before removing it
     customer.removeFavoriteListing(artListingService.getArtListing(aListingIdCode));
     customerRepo.updateCustomer(customer);
-  }
+  }}
 
-  public void addtickets(String aIdCode, String aListingIdCode) { // TODO: make this ticketIdCode
-    Customer customer = getCustomer(aIdCode, true, true); // TODO: make this true,false
-
+  public void addtickets(String aIdCode, String ticketIdCode) { // TODO: make this ticketIdCode
+    Customer customer = getCustomer(aIdCode, true, false); 
+    if (ticketIdCode != null) {
     // TODO: check that the retrieved ticke is not null first
-    customer.addBoughtTicket(ticketService.getTicket(aListingIdCode));
+    customer.addBoughtTicket(ticketService.getTicket(ticketIdCode));
     customerRepo.updateCustomer(customer);
   }
+    }
 
-  public void removetickets(String aIdCode, String aListingIdCode) { // TODO: make this ticketIdCode
-    Customer customer = getCustomer(aIdCode, true, true); // TODO: make this true,false
-
-    // TODO: check that the retrieved ticke is not null first
+  public void removetickets(String aIdCode, String ticketIdCode) { 
+    Customer customer = getCustomer(aIdCode, true, false); 
+    if (ticketIdCode != null) {
     // TODO: check that the retrieved ticket is connected to the Customer object
-    customer.removeBoughtTicket(ticketService.getTicket(aListingIdCode));
+    customer.removeBoughtTicket(ticketService.getTicket(ticketIdCode));
     customerRepo.updateCustomer(customer);
+    }
   }
 
   /**
