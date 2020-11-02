@@ -22,10 +22,15 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
+import com.ecse321.visart.model.ArtListing;
+import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.EntityRepository;
+import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.CustomerRepository;
+import com.ecse321.visart.service.ArtListingService;
 import com.ecse321.visart.service.CustomerService;
 
 
@@ -48,6 +53,14 @@ public class TestCustomerService {
   
   @InjectMocks
   private CustomerService service;
+  
+  @Mock
+  private ArtListingRepository artlistingRepo;
+  
+  @Mock
+  private ArtListingService artListingService;
+  
+  Customer c= null;
   
   @BeforeEach
   public void setMockOutput() {
@@ -153,7 +166,7 @@ public class TestCustomerService {
   
   
   @Test
-  public void testCreateInvalidUsernamenameCustomer() {
+  public void testCreateInvalidUsernameCustomer() {
     // assertEquals(0, service.getAllUsers().size());
     String error = null;
     Customer customer = null;
@@ -217,5 +230,38 @@ public class TestCustomerService {
     
   }
   
+  @Test
+  public void testAddArtListing() {
+    Customer customer = null;
+    try {
+      customer = service.createCustomer(email, displayname, username, password, profilepic, profileDescription);
+      service.addfavoriteList(customer.getIdCode(), "123");
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(c);
+    assertNotNull(c.getFavoriteListings());
+    assertEquals(c.getFavoriteListings().size(), 1);
+   
+    
+  }
+  
+  @Test
+  public void testRemoveArtListing() {
+    Customer customer = null;
+    try {
+      customer = service.createCustomer(email, displayname, username, password, profilepic, profileDescription);
+      service.removefavoriteList(customer.getIdCode(), "123");
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(c);
+    assertNotNull(c.getFavoriteListings());
+    assertEquals(c.getFavoriteListings().size(), 0);
+   
+    
+  }
 
 }
