@@ -10,18 +10,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecse321.visart.dto.ArtListingDto;
+import com.ecse321.visart.dto.ArtOrderDto;
 import com.ecse321.visart.dto.ArtPieceDto;
 import com.ecse321.visart.dto.ManagerDto;
 import com.ecse321.visart.model.ArtListing;
+import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.service.ArtListingService;
+import com.ecse321.visart.service.ArtOrderService;
 import com.ecse321.visart.service.ArtPieceService;
 import com.ecse321.visart.service.ArtistService;
 
 public class ArtPieceRestController {
   @Autowired
   private ArtPieceService service;
+  
+  @Autowired
+  private ArtOrderService serviceO;
 
   @GetMapping(value = { "/artPieces", "/artPieces/" })
   public List<ArtPieceDto> getAllArtPiece() {
@@ -54,6 +60,17 @@ public class ArtPieceRestController {
     PieceLocation basicLocation = PieceLocation.valueOf(aBasicLocation);
     return new ArtPieceDto(
         service.updateArtPiece(basicLocation, aAddressLocation, aIdCode, aArtListingId));
+  }
+  
+  
+  @PostMapping(value = { "/artPiece_addOrder/{artOrdertId}", "/artPiece_addOrder/{artOrderId}" })
+  public ArtPieceDto addArtOrder(@PathVariable("artOrderId") String artOrderId,
+      @RequestParam(value = "artPieceId") String artPieceId) {
+    ArtPiece artPiece = service.getArtPiece(artPieceId);
+    artPiece.setArtOrder((serviceO.getArtOrder(artOrderId)));
+    return new ArtPieceDto(artPiece);
+
+  
   }
 
   @PostMapping(value = { "/delete_artPiece/{id}", "/delete_artPiece/{id}/" })

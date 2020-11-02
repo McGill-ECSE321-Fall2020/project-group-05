@@ -13,6 +13,7 @@ import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.CustomerRepository;
+import com.ecse321.visart.repositories.TicketRepository;
 
 @Service
 public class CustomerService {
@@ -48,19 +49,15 @@ public class CustomerService {
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
 
     String aIdCode = EntityRepository.getUniqueKey();
-
-  /*  if (aIdCode == null || aIdCode == "") {
-      throw new IllegalArgumentException("Customer id code cannot be empty!");
-<<<<<<< HEAD
-    } */
+    
+    if (aIdCode == null || aIdCode.length() < 1) {
+      throw new IllegalArgumentException("Tag id code cannot be empty!");
+    }
    
     if (aEmailAddress == null|| aEmailAddress.length()<0) { 
       throw new IllegalArgumentException("Email address cannot be empty and less than 0!");
     }
-    if (aDisplayname == null||aDisplayname.length()<0) { 
-      throw new IllegalArgumentException("Display name cannot be empty!");
-    }
-    if (aDisplayname.length() < 5||aDisplayname.length() > 25) {
+    if (aDisplayname.length()<0||aDisplayname == null||aDisplayname.length() < 5||aDisplayname.length() > 25) {
       throw new IllegalArgumentException(
           "This Display Name is invalid, must be greater than 5 and less than 25 characters!");
     }
@@ -69,12 +66,9 @@ public class CustomerService {
       throw new IllegalArgumentException("This Display Name is already taken!");
     }
 
-    if (aUsername == null) {
-      throw new IllegalArgumentException("User name cannot be empty!");
-    }
-    if (aUsername.length() < 6 || aUsername.length() > 30) {
+    if (aUsername == null|| aUsername.length() < 5 || aUsername.length() > 25) {
       throw new IllegalArgumentException(
-          "This User Name is invalid, must be between 6 and 30 characters!");
+          "This User Name is invalid, must be between 5 and 25 characters!");
     }
 
     List<User> l2 = entityRepo.findEntityByAttribute("username", User.class, aUsername);
@@ -92,12 +86,13 @@ public class CustomerService {
     if (aProfilePicLink == null||aProfilePicLink.length()<0) {
       throw new IllegalArgumentException("Profile picture link cannot be empty!");
     }
-    if(aProfileDescription == null || aProfileDescription.length()>1000||aProfileDescription.length()<0) {
+    if(aProfileDescription == null || aProfileDescription.length()>255||aProfileDescription.length()<0) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
     return customerRepo.createCustomer(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
     }
+
 
   @Transactional
   public Customer getCustomer(String aIdCode, boolean alsoBoughtTickets,
@@ -115,7 +110,6 @@ public class CustomerService {
   public void addfavoriteList(String aIdCode, String aListingIdCode) {
     Customer customer = getCustomer(aIdCode, false, true);
     if(aListingIdCode!= null) {
-    // TODO: check that artListing retrieved is not null before setting it
     customer.addFavoriteListing(artListingService.getArtListing(aListingIdCode));
     customerRepo.updateCustomer(customer);
   }}
@@ -124,7 +118,6 @@ public class CustomerService {
   public void removefavoriteList(String aIdCode, String aListingIdCode) {
     Customer customer = getCustomer(aIdCode, false, true);
     if(aListingIdCode!= null) {
-    // TODO: check that artListing is a member of artListing before removing it
     customer.removeFavoriteListing(artListingService.getArtListing(aListingIdCode));
     customerRepo.updateCustomer(customer);
   }}
@@ -132,7 +125,6 @@ public class CustomerService {
   public void addtickets(String aIdCode, String ticketIdCode) { // TODO: make this ticketIdCode
     Customer customer = getCustomer(aIdCode, true, false); 
     if (ticketIdCode != null) {
-    // TODO: check that the retrieved ticke is not null first
     customer.addBoughtTicket(ticketService.getTicket(ticketIdCode));
     customerRepo.updateCustomer(customer);
   }
@@ -141,7 +133,6 @@ public class CustomerService {
   public void removetickets(String aIdCode, String ticketIdCode) { 
     Customer customer = getCustomer(aIdCode, true, false); 
     if (ticketIdCode != null) {
-    // TODO: check that the retrieved ticket is connected to the Customer object
     customer.removeBoughtTicket(ticketService.getTicket(ticketIdCode));
     customerRepo.updateCustomer(customer);
     }
@@ -187,7 +178,7 @@ public class CustomerService {
     return entityRepo.getAllEntities(Customer.class);
   }
 
-  public static boolean isValidEmail(String email) { // TODO: use the isValidEmail from UserService class
+  public static boolean isValidEmail(String email) { 
     String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
         "[a-zA-Z0-9_+&*-]+)*@" +
         "(?:[a-zA-Z0-9-]+\\.)+[a-z" +

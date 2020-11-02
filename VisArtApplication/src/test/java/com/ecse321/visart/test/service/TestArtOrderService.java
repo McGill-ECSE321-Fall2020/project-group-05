@@ -223,7 +223,7 @@ public class TestArtOrderService {
   } // validation.
 
   @Test
-  public void testCreateArtOrderNullPiece() {
+  public void testCreateArtOrderInvalidPiece() {
 
     Boolean delivery = true;
     PieceLocation pieceLocation = PieceLocation.AtGallery;
