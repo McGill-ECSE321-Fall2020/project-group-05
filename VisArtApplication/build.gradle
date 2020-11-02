@@ -85,18 +85,18 @@ tasks.register("compileUmple") {
         }
     }
 }
-
+/*
 task integrationTest(type: Exec) {
 	dependsOn 'bootJar'
-	dependsOn ':JavaHttpRequests:jar'
+	// dependsOn ':JavaHttpRequests:jar'
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
         // on windows
-        commandLine 'cmd','/c','integrationTest.bat'
+        // commandLine 'cmd','/c','integrationTest.bat'
     } else {
         // on linux
-        commandLine './integrationTest.sh'
+        // commandLine './integrationTest.sh'
     }
-}
+}*/
 
 jacocoTestCoverageVerification {
 	violationRules {
