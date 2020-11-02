@@ -172,7 +172,7 @@ public class TicketService {
 	ticket.setPaymentAmount(aPaymentAmount);
 	
 	ticketRepo.updateTicket(ticket);
-	return ticketRepo.getTicket(aIdCode);
+	return ticket;
   }
   
   /**

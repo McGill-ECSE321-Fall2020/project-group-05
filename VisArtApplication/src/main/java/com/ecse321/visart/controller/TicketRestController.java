@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.TagDto;
@@ -31,14 +32,31 @@ public class TicketRestController {
   }
 
   @PostMapping(value = { "/tickets/{aIdCode}", "/tickets/{aIdCode}/" })
-  public TicketDto createTicket(@PathVariable("aIdCode") String aIdCode) {
-    return new TicketDto(ticService.createTicket(false, 0.00, aIdCode, null, null, null));
+  public TicketDto createTicket(@PathVariable("aIdCode") String aIdCode,
+		  @RequestParam(value = "aIsPaymentConfirmed") String aIsPaymentConfirmed,
+	      @RequestParam(value = "aPaymentAmount") String aPaymentAmount,
+	      @RequestParam(value = "aOrder") String aOrderDto,
+	      @RequestParam(value = "aCustomer") String aCustomerDto,
+	      @RequestParam(value = "aArtist") String aArtistDto){
+	boolean aIsPaymentConfirmedBool = Boolean.parseBoolean(aIsPaymentConfirmed);
+	double aPaymentAmountDbl = Double.parseDouble(aPaymentAmount);
+    return new TicketDto(ticService.createTicket(aIsPaymentConfirmedBool, aPaymentAmountDbl, 
+    		 aOrderDto, aCustomerDto, aArtistDto));
   }
   
   @PostMapping(value = { "/tag_update/{aIdCode}", "/tag_update/{aIdCode}/" })
-  public TicketDto updateTag(@PathVariable("aIdCode") String aIdCode) {
-	    return new TicketDto(ticService.updateTicket(false, 0.00, aIdCode, null, null, null));
+  public TicketDto updateTag(@PathVariable("aIdCode") String aIdCode,	  
+		  @RequestParam(value = "aIsPaymentConfirmed") String aIsPaymentConfirmed,
+	      @RequestParam(value = "aPaymentAmount") String aPaymentAmount,
+	      @RequestParam(value = "aOrder") String aOrderDto,
+	      @RequestParam(value = "aCustomer") String aCustomerDto,
+	      @RequestParam(value = "aArtist") String aArtistDto){
+	boolean aIsPaymentConfirmedBool = Boolean.parseBoolean(aIsPaymentConfirmed);
+	double aPaymentAmountDbl = Double.parseDouble(aPaymentAmount);
+    return new TicketDto(ticService.updateTicket(aIsPaymentConfirmedBool, aPaymentAmountDbl, 
+    		 aIdCode, aOrderDto, aCustomerDto, aArtistDto));
   }
+  
   
   @PostMapping(value = {"/delete_tag/{id}","delete_tag/{id}/"})
   public Boolean deleteTicket(@PathVariable("id") String idCode) {
