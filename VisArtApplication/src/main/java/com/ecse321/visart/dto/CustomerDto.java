@@ -19,7 +19,8 @@ public class CustomerDto {
         .collect(Collectors.toList());
     favoriteListingIds = customer.getFavoriteListings().stream().map((l) -> l.getIdCode())
         .collect(Collectors.toList());
-    artistId = customer.getArtist().getIdCode();
+    if (customer.getArtist() != null)
+      artistId = customer.getArtist().getIdCode();
     idCode = customer.getIdCode();
   }
 

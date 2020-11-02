@@ -25,6 +25,8 @@ import com.ecse321.visart.service.ArtistService;
 public class ArtListingRestController {
   @Autowired
   private ArtListingService artListingService;
+  
+  @Autowired
   private ArtistService artistService;
 
   /**
@@ -60,10 +62,10 @@ public class ArtListingRestController {
     PostVisibility aVisibility = PostVisibility.fromString(map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
-    Artist artistId = artistService.getArtist(map.getFirst("artistId"));
+    Artist artist = artistService.getArtist(map.getFirst("artistId"));
 
     return new ArtListingDto(artListingService.createArtListing(aVisibility, aDescription, aTitle,
-        artistId));
+        artist));
   }
 
   /**
