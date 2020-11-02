@@ -1,7 +1,6 @@
 package com.ecse321.visart.test.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -110,7 +109,6 @@ public class TestTagService {
 
   @Test
   public void testCreateTag() {
-    // assertEquals(0, service.getAllUsers().size());
 
     String keyword = "mockcode";
     String type = "Topic";
