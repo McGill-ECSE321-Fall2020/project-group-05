@@ -54,7 +54,7 @@ public class ArtListingRestController {
    * @param  aIdCode
    * @return
    */
-  @GetMapping(value = { "/artlisting/{idCode}", "/artlisting/{idCode}" })
+  @GetMapping(value = { "/artlisting/get/{idCode}", "/artlisting/get/{idCode}" })
   public ArtListingDto getArtListing(@PathVariable("idCode") String aIdCode) {
     return new ArtListingDto(artListingService.getArtListing(aIdCode));
   }

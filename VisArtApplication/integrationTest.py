@@ -54,6 +54,17 @@ artlisting_ids = pget("artlisting/get_all", func=lambda c: [i['idCode'] for i in
 tags_ids = pget("tags/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
 tickets_ids = pget("tickets/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
 artorder_ids = pget("artorder/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+users_ids = pget("users/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+
+print("individual get customers",[pget("customers/get/"+id_code) for id_code in customers_ids])
+print("individual get artists",[pget("artists/get/"+id_code) for id_code in artists_ids]) #404
+print("individual get managers",[pget("managers/get/"+id_code) for id_code in managers_ids])
+print("individual get artpiece",[pget("artpiece/get/"+id_code) for id_code in artpiece_ids])
+print("individual get artlisting",[pget("artlisting/get/"+id_code) for id_code in artlisting_ids]) #404
+print("individual get tags",[pget("tags/get/"+id_code) for id_code in tags_ids])
+print("individual get tickets",[pget("tickets/get/"+id_code) for id_code in tickets_ids]) #404
+print("individual get artorder",[pget("artorder/get/"+id_code) for id_code in artorder_ids])
+print("individual get users",[pget("users/get/"+id_code) for id_code in users_ids])
 
 print("delete tickets",     [ppost("tickets/delete/{}".format(id_code)) for id_code in tickets_ids])
 print("delete artorder",    [ppost("artorder/delete/{}".format(id_code)) for id_code in artorder_ids])
