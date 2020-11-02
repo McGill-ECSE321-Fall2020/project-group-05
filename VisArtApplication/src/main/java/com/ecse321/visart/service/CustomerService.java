@@ -54,8 +54,8 @@ public class CustomerService {
       throw new IllegalArgumentException("Tag id code cannot be empty!");
     }
    
-    if (aEmailAddress == null|| aEmailAddress.length()<0) { 
-      throw new IllegalArgumentException("Email address cannot be empty and less than 0!");
+    if (aEmailAddress == null|| aEmailAddress.length()<0 || !isValidEmail(aEmailAddress)) { 
+      throw new IllegalArgumentException("Email address is invalid");
     }
     if (aDisplayname.length()<0||aDisplayname == null||aDisplayname.length() < 5||aDisplayname.length() > 25) {
       throw new IllegalArgumentException("This Display Name is invalid, must be greater than 5 and less than 25 characters!");

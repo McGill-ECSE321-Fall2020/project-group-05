@@ -169,7 +169,7 @@ public class TestCustomerService {
       error = e.getMessage();
     }
     assertNull(customer);
-    assertEquals("Customer id code cannot be empty!", error); 
+
   }
   
   @Test
@@ -216,7 +216,7 @@ public class TestCustomerService {
       error = e.getMessage();
     }
     assertNull(customer);
-    assertEquals("This Display Name is invalid, must be between 5 and 25 characters!", error);
+    assertEquals("This Display Name is invalid, must be greater than 5 and less than 25 characters!", error);
   }
   
  
@@ -224,14 +224,7 @@ public class TestCustomerService {
   @Test
   public void testGetCustomer() {
     Customer customer = null;
-    try {
-      customer = service.createCustomer(email, displayname, username, password, profilepic, profileDescription);
-    } catch (IllegalArgumentException e) {
-      // Check that no error occurred
-      fail();
-    }
-    assertNotNull(customer);
-    assertEquals(id, customer.getIdCode());
+    
     
     try {
       customer = service.getCustomer(id);
