@@ -23,9 +23,6 @@ public class ArtistRepository {
   @Autowired
   EntityManager entityManager;
 
-  @Autowired
-  CustomerRepository customerRepo;
-
   /**
    * 
    * This method creates an Artist instance that is persisted in the database.
@@ -134,7 +131,8 @@ public class ArtistRepository {
       Customer customer = entityManager.find(Customer.class, entity.getCustomer().getIdCode());
       if (customer != null && customer.getArtist() != null)
         customer.getArtist().delete(); // Remove artist from association
-      customerRepo.updateCustomer(customer);
+      entityManager.merge(customer.getUser());
+      entityManager.merge(customer);
     }
 
     entityManager.remove(entityManager.merge(entity));

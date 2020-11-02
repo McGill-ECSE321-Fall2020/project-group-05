@@ -30,9 +30,6 @@ public class TicketRepository {
   @Autowired
   EntityManager entityManager;
 
-  @Autowired
-  ArtOrderRepository artOrderRepo;
-
   /**
    * createTicket method creates a Ticket instance for an ArtOrder.
    * 
@@ -105,10 +102,10 @@ public class TicketRepository {
       return true;
     }
     if (entity.getOrder() != null) { // Remove association to ArtOrder
-      ArtOrder ao = artOrderRepo.getArtOrder(entity.getOrder().getIdCode());
+      ArtOrder ao = entityManager.find(ArtOrder.class, entity.getOrder().getIdCode());
       if (ao != null && ao.getTicket() != null)
         ao.getTicket().delete();
-      artOrderRepo.updateArtOrder(ao);
+      entityManager.merge(ao);
     }
     entityManager.remove(entityManager.merge(entity));
     return !entityManager.contains(entity);
