@@ -26,7 +26,11 @@ public class ArtListingRepository {
 
   @Autowired
   EntityManager entityManager;
+  
+  @Autowired
   ArtPieceRepository apRepository;
+  
+  @Autowired
   TagRepository tRepository;
 
   /**

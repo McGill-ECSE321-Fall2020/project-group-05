@@ -28,6 +28,16 @@ public class ArtListingRestController {
   
   @Autowired
   private ArtistService artistService;
+  
+  /**
+   * 
+   * @param idCode
+   * @return
+   */
+  @PostMapping(value = {"/artlisting/delete/{idCode}","/artlisting/delete/{idCode}/"})
+  public boolean deleteArtListing(@PathVariable("idCode") String idCode) {
+    return artListingService.deleteArtListing(idCode);
+  }
 
   /**
    * 

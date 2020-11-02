@@ -65,7 +65,7 @@ public class ArtOrderRestController {
     String aTargetLocation = map.getFirst("pieceLocation");
     String aTargetAddress = map.getFirst("aTargetAddress");
     String aDeliveryTracker = map.getFirst("aDeliveryTracker");
-    String artPieceDto = map.getFirst("artPieceDto");
+    String artPieceDto = map.getFirst("artPieceId");
 
     Boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
     PieceLocation TargetLocation = PieceLocation.valueOf(aTargetLocation);
@@ -86,7 +86,7 @@ public class ArtOrderRestController {
     String aTargetLocation = map.getFirst("pieceLocation");
     String aTargetAddress = map.getFirst("aTargetAddress");
     String aDeliveryTracker = map.getFirst("aDeliveryTracker");
-    String artPieceDto = map.getFirst("artPieceDto");
+    String artPieceDto = map.getFirst("artPieceId");
 
     Boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
     PieceLocation TargetLocation = PieceLocation.valueOf(aTargetLocation);
