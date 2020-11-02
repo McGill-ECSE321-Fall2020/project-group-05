@@ -571,32 +571,33 @@ public class TestArtOrderService {
     // assertFalse(serviceAo.deleteArtOrder(null));
 
   }
-  
+
   /**
-  @Test
-  public void testAddTicket() {
-    ArtOrder artOrder = null;
-    Boolean delivery = true;
-    PieceLocation pieceLocation = PieceLocation.AtGallery;
-    String target = "123";
-    String tracker = "111122223333";
-    String id = AO_KEY;
-    String idP = AP_KEY;
-    try {
-      artOrder = serviceAo.createArtOrder(delivery, pieceLocation,
-          target, tracker, idP);
-      serviceAo.addTicket(, );
-    } catch (IllegalArgumentException e) {
-      // Check that no error occurred
-      fail();
-    }
-    assertNotNull(artOrder);
-    assertNotNull(artOrder.getTicket());
- 
-    //assertEquals(manager.getPromotedListing(0).getDescription(), "testpost");
-    
-  }
-  
-  **/
+   * @Test
+   *       public void testAddTicket() {
+   *       ArtOrder artOrder = null;
+   *       Boolean delivery = true;
+   *       PieceLocation pieceLocation = PieceLocation.AtGallery;
+   *       String target = "123";
+   *       String tracker = "111122223333";
+   *       String id = AO_KEY;
+   *       String idP = AP_KEY;
+   *       try {
+   *       artOrder = serviceAo.createArtOrder(delivery, pieceLocation,
+   *       target, tracker, idP);
+   *       serviceAo.addTicket(, );
+   *       } catch (IllegalArgumentException e) {
+   *       // Check that no error occurred
+   *       fail();
+   *       }
+   *       assertNotNull(artOrder);
+   *       assertNotNull(artOrder.getTicket());
+   * 
+   *       //assertEquals(manager.getPromotedListing(0).getDescription(),
+   *       "testpost");
+   * 
+   *       }
+   * 
+   **/
 
 }

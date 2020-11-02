@@ -19,6 +19,7 @@ public class ArtPiece {
 
   public enum PieceLocation {
     AtGallery, Offsite;
+
     public static PieceLocation fromString(String name) {
       try {
         return Enum.valueOf(PieceLocation.class, name);

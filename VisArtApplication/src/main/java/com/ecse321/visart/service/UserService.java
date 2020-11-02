@@ -69,7 +69,6 @@ public class UserService {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
-
     return userRepo.createUser(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
 
@@ -132,15 +131,15 @@ public class UserService {
 
     if (aDisplayname != null)
       user.setDisplayname(aDisplayname);
-    if(aUsername != null)
+    if (aUsername != null)
       user.setUsername(aUsername);
-    if(aEmailAddress != null)
+    if (aEmailAddress != null)
       user.setEmailAddress(aEmailAddress);
-    if(aPassword !=null)
+    if (aPassword != null)
       user.setPassword(aPassword);
-    if(aProfilePicLink!= null)
+    if (aProfilePicLink != null)
       user.setProfilePicLink(aProfilePicLink);
-    if(aProfileDescription!=null)
+    if (aProfileDescription != null)
       user.setProfileDescription(aProfileDescription);
 
     userRepo.updateUser(user);

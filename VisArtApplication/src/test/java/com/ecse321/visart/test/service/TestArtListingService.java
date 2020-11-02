@@ -88,13 +88,14 @@ public class TestArtListingService {
       return artListingTest;
     }).when(alRepo).updateArtListing(any());
 
-    lenient().when(alRepo.deleteArtListing(anyString())).thenAnswer((InvocationOnMock invocation) -> {
-      if (invocation.getArgument(0).equals(AL_KEY)) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    lenient().when(alRepo.deleteArtListing(anyString()))
+        .thenAnswer((InvocationOnMock invocation) -> {
+          if (invocation.getArgument(0).equals(AL_KEY)) {
+            return true;
+          } else {
+            return false;
+          }
+        });
 
     // In the tests below, test the Service class's DATA VALIDATION on the
     // parameters that are given to it.
@@ -135,7 +136,6 @@ public class TestArtListingService {
     ArtListing artListing = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
@@ -159,7 +159,6 @@ public class TestArtListingService {
     ArtListing artListing = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
@@ -167,7 +166,7 @@ public class TestArtListingService {
     }
     assertNull(artListing);
     assertEquals("Description cannot be empty!", error); // expected error message for service
-                                                             // data
+                                                         // data
     // validation.
   }
 
@@ -183,7 +182,6 @@ public class TestArtListingService {
     ArtListing artListing = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
@@ -191,8 +189,8 @@ public class TestArtListingService {
     }
     assertNull(artListing);
     assertEquals("Title cannot be empty!", error); // expected error message for service
-                                                             // data
-    // validation.                                         // data
+                                                   // data
+    // validation. // data
   } // validation.
 
   @Test
@@ -205,7 +203,6 @@ public class TestArtListingService {
     ArtListing artListing = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
@@ -213,8 +210,8 @@ public class TestArtListingService {
     }
     assertNull(artListing);
     assertEquals("Artist cannot be empty!", error); // expected error message for service
-                                                             // data
-    // validation.                                                         // service data
+                                                    // data
+    // validation. // service data
   }
 
   @Test
@@ -229,13 +226,12 @@ public class TestArtListingService {
     ArtListing artListing2 = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
       fail();
-    }                                                      // data
+    } // data
     try {
       artListing2 = serviceAl.getArtListing(AL_KEY);
     } catch (IllegalArgumentException e) {
@@ -244,7 +240,6 @@ public class TestArtListingService {
     }
 
     assertNotNull(artListing2);
-
 
   }
 
@@ -260,13 +255,12 @@ public class TestArtListingService {
     String error = null;
     String idFake = "fake";
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-                                                  // data
+    // data
     // validation.
 
     try {

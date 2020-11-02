@@ -78,7 +78,7 @@ public class ArtListingRestController {
   @PostMapping(value = { "/artlisting/update/{aIdCode}", "/artlisting/update/{aIdCode}/" })
   public ArtListingDto updateArtListing(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
-    
+
     String aVisibility = (map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
@@ -89,61 +89,65 @@ public class ArtListingRestController {
 
   /**
    * 
-   * @param aIdCode
-   * @param aDimensions
+   * @param  aIdCode
+   * @param  aDimensions
    * @return
    */
   @PostMapping(value = {
       "/artlisting/update_dimensions/{aIdCode}",
       "/artlisting/update_dimensions/{aIdCode}/" })
-  public ArtListingDto updateDimensions(@PathVariable("aIdCode") String aIdCode, @RequestBody List<Float> aDimensions) { 
-    return new ArtListingDto(artListingService.updateDimensions(aIdCode, (Float[])aDimensions.toArray()));
+  public ArtListingDto updateDimensions(@PathVariable("aIdCode") String aIdCode,
+      @RequestBody List<Float> aDimensions) {
+    return new ArtListingDto(
+        artListingService.updateDimensions(aIdCode, (Float[]) aDimensions.toArray()));
   }
 
   /**
    * 
-   * @param aIdCode
-   * @param aPostImages
+   * @param  aIdCode
+   * @param  aPostImages
    * @return
    */
   @PostMapping(value = {
       "/artlisting/update_post_images/{aIdCode}",
       "/artlisting/update_post_images/{aIdCode}/" })
-  public ArtListingDto updatePostImages(@PathVariable("aIdCode") String aIdCode, @RequestBody List<String> aPostImages) {
-    return new ArtListingDto(artListingService.updatePostImages(aIdCode, (String[])aPostImages.toArray()));
+  public ArtListingDto updatePostImages(@PathVariable("aIdCode") String aIdCode,
+      @RequestBody List<String> aPostImages) {
+    return new ArtListingDto(
+        artListingService.updatePostImages(aIdCode, (String[]) aPostImages.toArray()));
   }
 
   /**
    * 
-   * @param aIdCode
-   * @param apCode
+   * @param  aIdCode
+   * @param  apCode
    * @return
    */
   @PostMapping(value = { "/artlisting/add_piece/{aIdCode}", "/artlisting/add_piece/{aIdCode}/" })
   public ArtListingDto addArtPiece(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody MultiValueMap<String,String> map) {
+      @RequestBody MultiValueMap<String, String> map) {
     String apCode = map.getFirst("artPieceId");
     return new ArtListingDto(artListingService.addArtPiece(aIdCode, apCode));
   }
 
   /**
    * 
-   * @param aIdCode
-   * @param map
+   * @param  aIdCode
+   * @param  map
    * @return
    */
   @PostMapping(value = {
       "/artlisting/remove_piece/{aIdCode}",
       "/artlisting/remove_piece/{aIdCode}/" })
   public ArtListingDto removeArtPiece(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody MultiValueMap<String,String> map) {
+      @RequestBody MultiValueMap<String, String> map) {
     String apCode = map.getFirst("artPieceId");
     return new ArtListingDto(artListingService.removeArtPiece(aIdCode, apCode));
   }
 
   /**
    * 
-   * @param aIdCode
+   * @param  aIdCode
    * @return
    */
   @GetMapping(value = {
@@ -156,26 +160,26 @@ public class ArtListingRestController {
 
   /**
    * 
-   * @param aIdCode
-   * @param map
+   * @param  aIdCode
+   * @param  map
    * @return
    */
   @PostMapping(value = { "/artlisting/add_tag/{aIdCode}", "/artlisting/add_tag/{aIdCode}/" })
   public ArtListingDto addTag(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody MultiValueMap<String,String> map) {
+      @RequestBody MultiValueMap<String, String> map) {
     String tCode = map.getFirst("tagCode");
     return new ArtListingDto(artListingService.addTag(aIdCode, tCode));
   }
 
   /**
    * 
-   * @param aIdCode
-   * @param tCode
+   * @param  aIdCode
+   * @param  tCode
    * @return
    */
   @PostMapping(value = { "/artlisting/remove_tag/{aIdCode}", "/artlisting/remove_tag/{aIdCode}/" })
   public ArtListingDto removeTag(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody MultiValueMap<String,String> map) {
+      @RequestBody MultiValueMap<String, String> map) {
     String tCode = map.getFirst("tagCode");
     return new ArtListingDto(artListingService.removeTag(aIdCode, tCode));
   }
@@ -190,7 +194,9 @@ public class ArtListingRestController {
         .collect(Collectors.toList());
   }
 
-  @GetMapping(value = { "/artlisting/get_artwork_by_keyword", "/artlisting/get_artwork_by_keyword/" })
+  @GetMapping(value = {
+      "/artlisting/get_artwork_by_keyword",
+      "/artlisting/get_artwork_by_keyword/" })
   public List<ArtListingDto> filterArtworkByTagAsListings(
       @RequestParam(value = "keywords") String keywords) {
     String[] keywordsList = keywords.split(",");

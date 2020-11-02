@@ -86,7 +86,7 @@ public class TestArtistService {
       ArtListing al = new ArtListing();
       al.setIdCode(id);
       return al;
-    }).collect(Collectors.toMap(al->al.getIdCode(), al->al));
+    }).collect(Collectors.toMap(al -> al.getIdCode(), al -> al));
 
     lenient().when(customerRepo.getCustomer(anyString()))
         .thenAnswer((InvocationOnMock invocation) -> {
@@ -110,7 +110,7 @@ public class TestArtistService {
             return null;
           }
         });
-    lenient().when(artListingRepo.getArtListing(anyString())).thenAnswer((InvocationOnMock in)->{
+    lenient().when(artListingRepo.getArtListing(anyString())).thenAnswer((InvocationOnMock in) -> {
       return listings.get(in.getArgument(0));
     });
 
@@ -153,12 +153,12 @@ public class TestArtistService {
   void testAddRemoveArtListing() {
     Artist a1 = service.createArtist(CUSTOMER_ID);
     service.addListings(a1.getIdCode(), Arrays.asList(listingIds));
-    assertEquals(3,artist.getPostedListings().size());
+    assertEquals(3, artist.getPostedListings().size());
   }
 
   @Test
   void testAddRemoveSoldTickets() {
-    
+
   }
 
   @Test

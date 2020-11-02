@@ -98,7 +98,7 @@ public class ArtPieceRestController {
 
   /**
    * 
-   * @param idCode
+   * @param  idCode
    * @return
    */
   @PostMapping(value = { "/artpiece/delete/{id}", "/artpiece/delete/{id}/" })

@@ -46,23 +46,25 @@ public class CustomerService {
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
 
     String aIdCode = EntityRepository.getUniqueKey();
-    
+
     if (aIdCode == null || aIdCode.length() < 1) {
       throw new IllegalArgumentException("Tag id code cannot be empty!");
     }
-   
-    if (aEmailAddress == null|| aEmailAddress.length()<0 || !isValidEmail(aEmailAddress)) { 
+
+    if (aEmailAddress == null || aEmailAddress.length() < 0 || !isValidEmail(aEmailAddress)) {
       throw new IllegalArgumentException("Email address is invalid");
     }
-    if (aDisplayname.length()<0||aDisplayname == null||aDisplayname.length() < 5||aDisplayname.length() > 25) {
-      throw new IllegalArgumentException("This Display Name is invalid, must be greater than 5 and less than 25 characters!");
+    if (aDisplayname.length() < 0 || aDisplayname == null || aDisplayname.length() < 5
+        || aDisplayname.length() > 25) {
+      throw new IllegalArgumentException(
+          "This Display Name is invalid, must be greater than 5 and less than 25 characters!");
     }
     List<User> l1 = entityRepo.findEntityByAttribute("displayname", User.class, aDisplayname);
     if (l1 != null && l1.size() > 0) {
       throw new IllegalArgumentException("This Display Name is already taken!");
     }
 
-    if (aUsername == null|| aUsername.length() < 5 || aUsername.length() > 25) {
+    if (aUsername == null || aUsername.length() < 5 || aUsername.length() > 25) {
       throw new IllegalArgumentException(
           "This User Name is invalid, must be between 5 and 25 characters!");
     }
@@ -79,16 +81,16 @@ public class CustomerService {
       throw new IllegalArgumentException(
           "Password must have atleast 8 characters and less than 40 ");
     }
-    if (aProfilePicLink == null||aProfilePicLink.length()<0) {
+    if (aProfilePicLink == null || aProfilePicLink.length() < 0) {
       throw new IllegalArgumentException("Profile picture link cannot be empty!");
     }
-    if(aProfileDescription == null || aProfileDescription.length()>255||aProfileDescription.length()<0) {
+    if (aProfileDescription == null || aProfileDescription.length() > 255
+        || aProfileDescription.length() < 0) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
     return customerRepo.createCustomer(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
-    }
-
+  }
 
   @Transactional
   public Customer getCustomer(String aIdCode, boolean alsoBoughtTickets,
@@ -105,32 +107,34 @@ public class CustomerService {
   @Transactional
   public void addfavoriteList(String aIdCode, String aListingIdCode) {
     Customer customer = getCustomer(aIdCode, false, true);
-    if(aListingIdCode!= null) {
-    customer.addFavoriteListing(artListingService.getArtListing(aListingIdCode));
-    customerRepo.updateCustomer(customer);
-  }}
+    if (aListingIdCode != null) {
+      customer.addFavoriteListing(artListingService.getArtListing(aListingIdCode));
+      customerRepo.updateCustomer(customer);
+    }
+  }
 
   @Transactional
   public void removefavoriteList(String aIdCode, String aListingIdCode) {
     Customer customer = getCustomer(aIdCode, false, true);
-    if(aListingIdCode!= null) {
-    customer.removeFavoriteListing(artListingService.getArtListing(aListingIdCode));
-    customerRepo.updateCustomer(customer);
-  }}
+    if (aListingIdCode != null) {
+      customer.removeFavoriteListing(artListingService.getArtListing(aListingIdCode));
+      customerRepo.updateCustomer(customer);
+    }
+  }
 
   public void addtickets(String aIdCode, String ticketIdCode) { // TODO: make this ticketIdCode
-    Customer customer = getCustomer(aIdCode, true, false); 
+    Customer customer = getCustomer(aIdCode, true, false);
     if (ticketIdCode != null) {
-    customer.addBoughtTicket(ticketService.getTicket(ticketIdCode));
-    customerRepo.updateCustomer(customer);
-  }
+      customer.addBoughtTicket(ticketService.getTicket(ticketIdCode));
+      customerRepo.updateCustomer(customer);
     }
+  }
 
-  public void removetickets(String aIdCode, String ticketIdCode) { 
-    Customer customer = getCustomer(aIdCode, true, false); 
+  public void removetickets(String aIdCode, String ticketIdCode) {
+    Customer customer = getCustomer(aIdCode, true, false);
     if (ticketIdCode != null) {
-    customer.removeBoughtTicket(ticketService.getTicket(ticketIdCode));
-    customerRepo.updateCustomer(customer);
+      customer.removeBoughtTicket(ticketService.getTicket(ticketIdCode));
+      customerRepo.updateCustomer(customer);
     }
   }
 
@@ -174,7 +178,7 @@ public class CustomerService {
     return entityRepo.getAllEntities(Customer.class);
   }
 
-  public static boolean isValidEmail(String email) { 
+  public static boolean isValidEmail(String email) {
     String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
         "[a-zA-Z0-9_+&*-]+)*@" +
         "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
