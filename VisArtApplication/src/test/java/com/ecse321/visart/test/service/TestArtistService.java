@@ -1,5 +1,8 @@
 package com.ecse321.visart.test.service;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,6 +18,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.lenient;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -110,8 +114,27 @@ public class TestArtistService {
             return null;
           }
         });
+    lenient().when(artistRepo.getArtist(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+      if (invocation.getArgument(0).equals(placeholderArtist.getIdCode())) {
+        return  placeholderArtist;
+      } else {
+        return null;
+      }
+    });
     lenient().when(artListingRepo.getArtListing(anyString())).thenAnswer((InvocationOnMock in) -> {
       return listings.get(in.getArgument(0));
+    });
+    lenient().when(artistRepo.deleteArtist(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+      
+      if(invocation.getArgument(0).equals(CUSTOMER_ID)) return true;
+      else return false;
+      
+    });
+    
+    lenient().when(entityRepo.getAllEntities(any())).thenAnswer((InvocationOnMock in) -> {
+      ArrayList<Artist> artists = new ArrayList<Artist>();
+      artists.add(artist);
+      return artists;
     });
 
   }
@@ -163,16 +186,24 @@ public class TestArtistService {
 
   @Test
   void testGetArtist() {
-
+    Artist artist = null;
+    try {
+      artist = service.getArtist("phArtist");
+    } catch (IllegalArgumentException e) {
+      fail();
+    }
+    assertNotNull(artist);
   }
 
   @Test
   void deleteArtist() {
-
+    assertTrue(service.deleteArtist(CUSTOMER_ID));
+    assertFalse(service.deleteArtist(""));
+    
   }
 
   @Test
   void getAllArtists() {
-
+     assertNotNull(service.getAllArtists());
   }
 }

@@ -1,6 +1,6 @@
 import requests as r
 import json
-url = "https://vis-art-application.herokuapp.com/"
+url = "https://vis-art-application.herokuapp.com/" # development server
 result = 0
 def get(endpoint,params=None,data=None):
     return r.get(url+endpoint,params=params,data=data)
@@ -79,8 +79,19 @@ try:
     print("individual get tickets",[pget("tickets/get/"+id_code) for id_code in tickets_ids])
     print("individual get artorder",[pget("artorder/get/"+id_code) for id_code in artorder_ids])
     print("individual get users",[pget("users/get/"+id_code) for id_code in users_ids])
+
+    # Update methods
+    """Artist API"""
+    artist1 = artists_create[0].json()['idCode']
+    pget("/artists/get_all_keys")
+    ppost("/artists/remove_listing/{idCode}/{listingId}".format(idCode=artist1,listingId=artlisting_create[0].json()['idCode']))
+    ppost("/artists/add_listing/{idCode}/{listingId}".format(idCode=artist1,listingId=artlisting_create[0].json()['idCode']))
+
+
 except:
     result = 1
+
+print("Cleaning Up...")
 # Delete All entities
 customers_ids = pget("customers/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
 artists_ids = pget("artists/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
