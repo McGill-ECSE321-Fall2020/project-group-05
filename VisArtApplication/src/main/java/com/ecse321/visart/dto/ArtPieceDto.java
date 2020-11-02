@@ -23,8 +23,10 @@ public class ArtPieceDto {
   public ArtPieceDto(ArtPiece artPiece) {
     basicLocation = artPiece.getBasicLocation();
     addressLocation = artPiece.getAddressLocation();
-    artListingId = artPiece.getArtListing().getIdCode();
-    artOrderId = artPiece.getArtOrder().getIdCode();
+    if (artPiece.getArtListing() != null)
+      artListingId = artPiece.getArtListing().getIdCode();
+    if (artPiece.getArtOrder() != null)
+      artOrderId = artPiece.getArtOrder().getIdCode();
     idCode = artPiece.getIdCode();
   }
 

@@ -60,7 +60,7 @@ public class ArtPieceRestController {
     String aAddressLocation = map.getFirst("aAddressLocation");
     String aArtListingId = map.getFirst("aArtListingId");
 
-    PieceLocation basicLocation = PieceLocation.valueOf(aBasicLocation);
+    PieceLocation basicLocation = PieceLocation.fromString(aBasicLocation);
     return new ArtPieceDto(
         service.createArtPiece(basicLocation, aAddressLocation, aArtListingId));
   }
