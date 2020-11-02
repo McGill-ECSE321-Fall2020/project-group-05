@@ -1,5 +1,6 @@
 lanugage: java
 python: 3.8.0
+dist: xenial
 script:
 - ./gradlew build
 - ./gradlew integrationTest
