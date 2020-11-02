@@ -91,7 +91,7 @@ public class ArtListingRestController {
   public ArtListingDto updateArtListing(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
 
-    String aVisibility = (map.getFirst("aVisibility"));
+    PostVisibility aVisibility = PostVisibility.fromString(map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
 
