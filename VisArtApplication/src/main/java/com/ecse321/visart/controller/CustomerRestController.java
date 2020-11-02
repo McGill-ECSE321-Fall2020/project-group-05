@@ -92,9 +92,9 @@ public class CustomerRestController {
    * @param  aIdCode
    * @return
    */
-  @GetMapping(value = { "/customers/{idCode}", "/customers/{idCode}/" })
+  @GetMapping(value = { "/customers/get_tickets/{idCode}", "/customers/get_tickets/{idCode}/" })
   public List<String> getboughtTicketsList(@PathVariable("idCode") String aIdCode) {
-    CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode, true, true));
+    CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode, true, false));
     return customer.getBoughtTickets();
   }
 
@@ -106,8 +106,8 @@ public class CustomerRestController {
   @PostMapping(value = { "/customers/create", "/customers/create/" })
   public CustomerDto createCustomer(@RequestBody MultiValueMap<String, String> values) {
     return new CustomerDto(service.createCustomer(
-        values.getFirst("emailAddress"), values.getFirst("displayName"),
-        values.getFirst("userName"), values.getFirst("password"),
+        values.getFirst("emailAddress"), values.getFirst("displayname"),
+        values.getFirst("username"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
 
@@ -117,7 +117,7 @@ public class CustomerRestController {
    * @return
    */
   @PostMapping(value = { "/customers/delete/{idCode}", "/customers/delete/{idCode}/" })
-  public Boolean deleteCustomer(@PathVariable("id") String idCode) {
+  public Boolean deleteCustomer(@PathVariable("idCode") String idCode) {
     return service.deleteCustomer(idCode);
   }
 

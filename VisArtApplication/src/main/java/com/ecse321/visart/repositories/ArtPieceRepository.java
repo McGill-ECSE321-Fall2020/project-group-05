@@ -28,6 +28,8 @@ public class ArtPieceRepository {
 
   @Autowired
   EntityManager entityManager;
+  
+  @Autowired
   ArtOrderRepository aoRepository;
 
   /**

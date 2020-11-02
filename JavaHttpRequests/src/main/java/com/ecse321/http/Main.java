@@ -10,7 +10,7 @@ import com.sendgrid.Response;
 
 public class Main {
   public static void main(String[] args) {
-    System.out.println(Arrays.toString(args));
+    System.err.println(Arrays.toString(args));
 
     Method method = getMethodType(args[0]);
 
@@ -18,6 +18,8 @@ public class Main {
     request.setBaseUri(args[1]);
     request.setMethod(method);
     request.setEndpoint(args[2]);
+    
+    request.addHeader("Content-Type", "application/json");
 
     if (method == Method.POST) {
       request.setBody(args[3]);
@@ -27,7 +29,7 @@ public class Main {
     try {
       Response response = client.api(request);
       System.out.print("<" + response.getStatusCode() + "> ");
-      System.out.print(response.getHeaders() + ":");
+      // System.out.print(response.getHeaders() + ":");
       System.out.println(response.getBody());
       System.exit(0);
     } catch (IOException ex) {

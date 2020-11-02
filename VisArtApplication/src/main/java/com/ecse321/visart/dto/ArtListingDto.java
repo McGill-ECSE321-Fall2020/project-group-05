@@ -15,8 +15,9 @@ public class ArtListingDto {
   private Float[] dimensions;
   private String idCode;
   private List<String> artPieceIds;
-  private List<String> favortiedCustomerIds;
+  private List<String> favoritedCustomerIds;
   private List<String> tagIds;
+  private String managerId;
   private String artistId;
 
   public ArtListingDto(ArtListing listing) {
@@ -25,13 +26,18 @@ public class ArtListingDto {
     title = listing.getTitle();
     visibility = listing.getVisibility();
     dimensions = listing.getDimensions();
-    idCode = listing.getManager().getIdCode();
-    artPieceIds = listing.getPieces().stream().map((piece) -> piece.getIdCode())
+    idCode = listing.getIdCode();
+    if (listing.getManager() != null)
+      managerId = listing.getManager().getIdCode();
+    if (listing.getPieces() != null)
+      artPieceIds = listing.getPieces().stream().map((piece) -> piece.getIdCode())
         .collect(Collectors.toList());
-    favortiedCustomerIds = listing.getFavoritedCustomer().stream()
+    favoritedCustomerIds = listing.getFavoritedCustomer().stream()
         .map((customer) -> customer.getIdCode()).collect(Collectors.toList());
-    tagIds = listing.getTags().stream().map((t) -> t.getIdCode()).collect(Collectors.toList());
-    artistId = listing.getArtist().getIdCode();
+    if (listing.getTags() != null)
+      tagIds = listing.getTags().stream().map((t) -> t.getIdCode()).collect(Collectors.toList());
+    if (listing.getArtist() != null)
+      artistId = listing.getArtist().getIdCode();
   }
 
   public ArtListingDto(String description, String[] postImages, String title,
@@ -45,7 +51,7 @@ public class ArtListingDto {
     this.dimensions = dimensions;
     this.idCode = idCode;
     this.artPieceIds = artPieceIds;
-    this.favortiedCustomerIds = favortiedCustomerIds;
+    this.favoritedCustomerIds = favortiedCustomerIds;
     this.tagIds = tagIds;
     this.artistId = artistId;
   }
@@ -107,11 +113,11 @@ public class ArtListingDto {
   }
 
   public List<String> getFavortiedCustomers() {
-    return favortiedCustomerIds;
+    return favoritedCustomerIds;
   }
 
   public void setFavortiedCustomers(List<String> favortiedCustomers) {
-    this.favortiedCustomerIds = favortiedCustomers;
+    this.favoritedCustomerIds = favortiedCustomers;
   }
 
   public List<String> getTags() {

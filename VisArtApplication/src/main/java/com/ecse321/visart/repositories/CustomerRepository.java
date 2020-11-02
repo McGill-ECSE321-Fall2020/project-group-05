@@ -27,6 +27,8 @@ public class CustomerRepository {
 
   @Autowired
   EntityManager entityManager;
+  
+  @Autowired
   ArtistRepository aRepository;
 
   /**

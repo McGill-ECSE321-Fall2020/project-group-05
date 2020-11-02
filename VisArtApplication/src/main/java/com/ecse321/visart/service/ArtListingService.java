@@ -93,15 +93,14 @@ public class ArtListingService {
    * 
    */
   @Transactional
-  public ArtListing updateArtListing(String aIdCode, String aVisibilityString, String aDescription,
+  public ArtListing updateArtListing(String aIdCode, PostVisibility aVisibility, String aDescription,
       String aTitle) {
     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
     if (al == null) {
       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
     }
 
-    PostVisibility aVisibility = PostVisibility.fromString(aVisibilityString);
-    if (aVisibility != null) { // TODO: check string values, and length
+    if (aVisibility != null) {
       al.setVisibility(aVisibility);
     }
     if (aDescription != null) {

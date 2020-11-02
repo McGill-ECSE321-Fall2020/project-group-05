@@ -42,8 +42,7 @@ public class TicketRestController {
    * @return
    */
   @PostMapping(value = { "/tickets/create", "/tickets/create/" })
-  public TicketDto createTicket(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody MultiValueMap<String, String> map) {
+  public TicketDto createTicket(@RequestBody MultiValueMap<String, String> map) {
     String aIsPaymentConfirmed = map.getFirst("aIsPaymentConfirmed");
     String aPaymentAmount = map.getFirst("aPaymentAmount");
     String aOrderDto = map.getFirst("aOrder");
@@ -83,6 +82,14 @@ public class TicketRestController {
   @PostMapping(value = { "/tickets/delete/{id}", "/tickets/delete/{id}/" })
   public Boolean deleteTicket(@PathVariable("id") String idCode) {
     return ticService.deleteTicket(idCode);
+  } /**
+   * 
+   * @param  idCode
+   * @return
+   */
+  @GetMapping(value = { "/tickets/get/{id}", "/tickets/get/{id}/" })
+  public TicketDto getTicket(@PathVariable("id") String idCode) {
+    return new TicketDto(ticService.getTicket(idCode));
   }
 
 }

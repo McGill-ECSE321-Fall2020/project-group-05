@@ -25,7 +25,19 @@ import com.ecse321.visart.service.ArtistService;
 public class ArtListingRestController {
   @Autowired
   private ArtListingService artListingService;
+  
+  @Autowired
   private ArtistService artistService;
+  
+  /**
+   * 
+   * @param idCode
+   * @return
+   */
+  @PostMapping(value = {"/artlisting/delete/{idCode}","/artlisting/delete/{idCode}/"})
+  public boolean deleteArtListing(@PathVariable("idCode") String idCode) {
+    return artListingService.deleteArtListing(idCode);
+  }
 
   /**
    * 
@@ -42,7 +54,7 @@ public class ArtListingRestController {
    * @param  aIdCode
    * @return
    */
-  @GetMapping(value = { "/artlisting/{idCode}", "/artlisting/{idCode}" })
+  @GetMapping(value = { "/artlisting/get/{idCode}", "/artlisting/get/{idCode}" })
   public ArtListingDto getArtListing(@PathVariable("idCode") String aIdCode) {
     return new ArtListingDto(artListingService.getArtListing(aIdCode));
   }
@@ -55,15 +67,15 @@ public class ArtListingRestController {
    * @param  artistId
    * @return
    */
-  @PostMapping(value = { "/artlisting/new", "/artlisting/new/" })
+  @PostMapping(value = { "/artlisting/create", "/artlisting/create/" })
   public ArtListingDto createArtListing(@RequestBody MultiValueMap<String, String> map) {
     PostVisibility aVisibility = PostVisibility.fromString(map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
-    Artist artistId = artistService.getArtist(map.getFirst("artistId"));
+    Artist artist = artistService.getArtist(map.getFirst("artistId"));
 
     return new ArtListingDto(artListingService.createArtListing(aVisibility, aDescription, aTitle,
-        artistId));
+        artist));
   }
 
   /**
@@ -79,7 +91,7 @@ public class ArtListingRestController {
   public ArtListingDto updateArtListing(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
 
-    String aVisibility = (map.getFirst("aVisibility"));
+    PostVisibility aVisibility = PostVisibility.fromString(map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
 

@@ -264,5 +264,77 @@ public class TestArtListingService {
     assertNull(artListing);
 
   }
+  
+  @Test
+  public void testUpdateArtListing() {
+    PostVisibility Postvisibility = PostVisibility.Public;
+    String aDescription = "123";
+    String aTitle = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing artListing = null;
+    String error = null;
+    String newTitle = "new";
+    String newDescription = "newdesc";
+    PostVisibility newPostvisibility = PostVisibility.Private;
+
+    try {
+      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(error);
+    // data
+    // validation.
+
+    try {
+      artListing = serviceAl.updateArtListing(AL_KEY, newPostvisibility, newDescription, newTitle);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+
+    assertEquals(artListing.getDescription(), newDescription);
+    assertEquals(artListing.getTitle(), newTitle);
+    assertEquals(artListing.getVisibility(), newPostvisibility);
+
+  }
+  
+  @Test
+  public void testDeleteArtListing() {
+    PostVisibility Postvisibility = PostVisibility.Public;
+    String aDescription = "123";
+    String aTitle = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing artListing = null;
+    String error = null;
+    String newTitle = "new";
+    String newDescription = "newdesc";
+    PostVisibility newPostvisibility = PostVisibility.Private;
+
+    try {
+      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(error);
+    // data
+    // validation.
+
+    try {
+      artListing = serviceAl.updateArtListing(AL_KEY, newPostvisibility, newDescription, newTitle);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+
+    assertEquals(artListing.getDescription(), newDescription);
+    assertEquals(artListing.getTitle(), newTitle);
+    assertEquals(artListing.getVisibility(), newPostvisibility);
+
+  }
 
 }

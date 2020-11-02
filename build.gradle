@@ -5,13 +5,16 @@ task stage() {
 task integrationTest(type: Exec) {
 	dependsOn ':VisArtApplication:bootJar'
 	dependsOn ':JavaHttpRequests:jar'
-	//dependsOn 'startWebApp'
-	//finalizedBy 'stopWebApp'
+	
+    commandLine 'python','--version'
+    commandLine 'pip','install','-r','requirements.txt'
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
         // on windows
-        commandLine 'cmd','/c','VisArtApplication\\integrationTest.bat'
+        commandLine 'python','VisArtApplication\\integrationTest.py'
+        // commandLine 'cmd','/c','VisArtApplication\\integrationTest.bat'
     } else {
         // on linux
-        commandLine './VisArtApplication/integrationTest.sh'
+        commandLine 'python','VisArtApplication/integrationTest.py'
+        // commandLine './VisArtApplication/integrationTest.sh'
     }
 }
