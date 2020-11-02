@@ -1,4 +1,4 @@
- 
+
 /**
  * @author Riad El Mahmoudy
  */
@@ -30,46 +30,83 @@ public class TagRestController {
   @Autowired
   private TagService tagService;
 
-  @GetMapping(value = { "/tags", "/tags/" })
+  /**
+   * 
+   * @return
+   */
+  @GetMapping(value = { "/tags/get_all", "/tags/get_all/" })
   public List<TagDto> getAllTags() {
     return tagService.getAllTags().stream().map(u -> new TagDto(u)).collect(Collectors.toList());
   }
-  
-  @GetMapping(value = { "/get_tag", "/get_tag/" })
-  public TagDto getManager(@RequestParam("idCode" )String aIdCode) {
+
+  /**
+   * 
+   * @param  aIdCode
+   * @return
+   */
+  @GetMapping(value = { "/tags/get/{idCode}", "/tags/get/{idCode}/" })
+  public TagDto getManager(@PathVariable("idCode") String aIdCode) {
     return new TagDto(tagService.getTag(aIdCode));
   }
-  
-  @GetMapping(value = { "/tags/{type}", "/tags/{type}/" })
-  public List<TagDto> getTagsByType(@PathVariable("type") TagType type) {
-    return tagService.getTagByType(type).stream().map(u -> new TagDto(u)).collect(Collectors.toList());
-  }
-  
-  @GetMapping(value = { "/tags/{keyword}", "/tags/{keyword}/" })
-  public List<TagDto> getTagsByKeyword(@PathVariable("type") String keyword) {
-    return tagService.getTagByKeyword(keyword).stream().map(u -> new TagDto(u)).collect(Collectors.toList());
+
+  /**
+   * 
+   * @param  typeString
+   * @return
+   */
+  @GetMapping(value = { "/tags/get_by_type/{type}", "/tags/get_by_type/{type}/" })
+  public List<TagDto> getTagsByType(@PathVariable("type") String typeString) {
+    TagType type = TagType.fromString(typeString);
+    return tagService.getTagByType(type).stream().map(u -> new TagDto(u))
+        .collect(Collectors.toList());
   }
 
-  @PostMapping(value = { "/tags/{aIdCode}", "/tags/{aIdCode}/" })
+  /**
+   * 
+   * @param  keyword
+   * @return
+   */
+  @GetMapping(value = { "/tags/get_by_keyword/{keyword}", "/tags/get_by_keyword/{keyword}/" })
+  public List<TagDto> getTagsByKeyword(@PathVariable("type") String keyword) {
+    return tagService.getTagByKeyword(keyword).stream().map(u -> new TagDto(u))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * 
+   * @param  aIdCode
+   * @param  aListingDto
+   * @param  keyword
+   * @param  type
+   * @return
+   */
+  @PostMapping(value = { "/tags/create", "/tags/create/" })
   public TagDto createTag(@PathVariable("aIdCode") String aIdCode,
-		  @RequestParam(value = "aListing") String aListingDto,
-	      @RequestParam(value = "aKeyword") String keyword,
-	      @RequestParam(value = "aType") String type) {
+      @RequestBody MultiValueMap<String, String> map) {
+    String aListingDto = map.getFirst("aListing");
+    String keyword = map.getFirst("aKeyword");
+    String type = map.getFirst("aType");
     return new TagDto(tagService.createTag(type, keyword, aListingDto));
   }
-  
-  @PostMapping(value = { "/tag_update/{aIdCode}", "/tag_update/{aIdCode}/" })
+
+  /**
+   * 
+   * @param  aIdCode
+   * @param  map
+   * @return
+   */
+  @PostMapping(value = { "/tags/update/{aIdCode}", "/tags/update/{aIdCode}/" })
   public TagDto updateTag(@PathVariable("aIdCode") String aIdCode,
-		  @RequestParam(value = "aListing") String aListingDto,
-	      @RequestParam(value = "aKeyword") String keyword,
-	      @RequestParam(value = "aType") String type) {
-	    return new TagDto(tagService.updateTag(type, keyword, aIdCode, aListingDto));
+      @RequestBody MultiValueMap<String, String> map) {
+    String aListingDto = map.getFirst("aListing");
+    String keyword = map.getFirst("aKeyword");
+    String type = map.getFirst("aType");
+    return new TagDto(tagService.updateTag(type, keyword, aIdCode, aListingDto));
   }
-  
-  @PostMapping(value = {"/delete_tag/{id}","delete_tag/{id}/"})
+
+  @PostMapping(value = { "/tags/delete/{id}", "/tags/delete/{id}/" })
   public Boolean deleteTag(@PathVariable("id") String idCode) {
     return tagService.deleteTag(idCode);
   }
-  
 
 }
