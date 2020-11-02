@@ -59,10 +59,10 @@ public class ArtListingRestController {
    */
   @PostMapping(value = { "/artlisting/new", "/artlisting/new/" })
   public ArtListingDto createArtListing(@RequestBody MultiValueMap<String, String> map) {
-    String aVisibility = (map.getFirst("aVisibility"));
+    PostVisibility aVisibility = PostVisibility.fromString(map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
-    String artistId = map.getFirst("artistId");
+    Artist artistId = artistService.getArtist(map.getFirst("artistId"));
 
     return new ArtListingDto(artListingService.createArtListing(aVisibility, aDescription, aTitle,
         artistId));
