@@ -105,7 +105,12 @@ public class ArtPieceRestController {
 
   }
 
-  @PostMapping(value = { "/delete_artPiece/{id}", "/delete_artPiece/{id}/" })
+  /**
+   * 
+   * @param idCode
+   * @return
+   */
+  @PostMapping(value = { "/artpiece/delete/{id}", "/artpiece/delete/{id}/" })
   public Boolean deleteArtPiece(@PathVariable("id") String idCode) {
     return service.deleteArtPiece(idCode);
   }
