@@ -1,8 +1,10 @@
 package com.ecse321.visart.test.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -132,6 +134,11 @@ public class TestTicketService {
     	String id = invocation.getArgument(0);
     	if(id.equals("artistcode")) {
     		return TICKET_ARTIST;
+    	}else if(id.equals("artistcode2")){
+    		User aUser2 = new User("t", "b", "w", "d", "t", "f", "g");
+        	Customer aCustomer2 = new Customer("customercode2", aUser2);
+        	Artist aArtist2 = new Artist("artistcode2", aCustomer2);
+        	return aArtist2;
     	}else {
     		return null;
     	}
@@ -142,6 +149,10 @@ public class TestTicketService {
     	String id = invocation.getArgument(0);
     	if(id.equals("customercode")) {
     		return TICKET_CUSTOMER;
+    	}else if(id.equals("customercode2")){
+    		User aUser2 = new User("t", "b", "w", "d", "t", "f", "g");
+        	Customer aCustomer2 = new Customer("customercode2", aUser2);
+    		return aCustomer2;
     	}else {
     		return null;
     	}
@@ -396,45 +407,247 @@ public class TestTicketService {
  }
   
 
-@Test
-  public void testUpdateTicketAmount() {
+  @Test
+    public void testUpdateTicketAmount() {
+	  boolean payment = false;
+	  double paymentPrice = 444.0;
+      String aOrder = "ordercode";
+	  String aArtist = "artistcode";
+      String aCustomer = "customercode";
+	  Ticket ticket = null;
+	  String error = null;
+	  String id = TICKET_ID;
+     try {
+       ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+     } catch (IllegalArgumentException e) {
+       error = e.getMessage();
+     }
+     assertNull(error);
+     assertEquals(ticket.getPaymentAmount(),paymentPrice,0.1); // expected error message for service data
+                                                         // validation.
+  }
+
+  @Test
+  public void testUpdateTicketOrder() {
 	boolean payment = false;
 	double paymentPrice = 444.0;
-    String aOrder = "ordercode";
+    String aOrder = "ordercode2";
 	String aArtist = "artistcode";
     String aCustomer = "customercode";
 	Ticket ticket = null;
 	String error = null;
 	String id = TICKET_ID;
    try {
-     ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
-   } catch (IllegalArgumentException e) {
-     error = e.getMessage();
-   }
-   assertNull(error);
-   assertEquals(ticket.getPaymentAmount(),paymentPrice,0.1); // expected error message for service data
-                                                         // validation.
- }
-
-@Test
-public void testUpdateTicketOrder() {
+    ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+  } catch (IllegalArgumentException e) {
+    error = e.getMessage();
+  }
+  assertNull(error);
+  assertEquals(ticket.getOrder().getIdCode(),aOrder); // expected error message for service data
+                                                       // validation.
+  }
+  
+  @Test
+  public void testUpdateTicketArtist() {
 	boolean payment = false;
 	double paymentPrice = 444.0;
-  String aOrder = "ordercode2";
-	String aArtist = "artistcode";
-  String aCustomer = "customercode";
+    String aOrder = "ordercode";
+	String aArtist = "artistcode2";
+    String aCustomer = "customercode";
 	Ticket ticket = null;
 	String error = null;
 	String id = TICKET_ID;
- try {
-   ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
- } catch (IllegalArgumentException e) {
-   error = e.getMessage();
- }
- assertNull(error);
- assertEquals(ticket.getOrder().getIdCode(),aOrder); // expected error message for service data
+   try {
+    ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+  } catch (IllegalArgumentException e) {
+    error = e.getMessage();
+  }
+  assertNull(error);
+  assertEquals(ticket.getArtist().getIdCode(),aArtist); // expected error message for service data
                                                        // validation.
-}
+  }
+  
+  @Test
+  public void testUpdateTicketCustomer() {
+	boolean payment = false;
+	double paymentPrice = 444.0;
+    String aOrder = "ordercode";
+	String aArtist = "artistcode";
+    String aCustomer = "customercode2";
+	Ticket ticket = null;
+	String error = null;
+	String id = TICKET_ID;
+   try {
+    ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+  } catch (IllegalArgumentException e) {
+    error = e.getMessage();
+  }
+  assertNull(error);
+  assertEquals(ticket.getCustomer().getIdCode(),aCustomer); // expected error message for service data
+                                                       // validation.
+  }
+  
+  
+  @Test
+  public void testupdateNullTicketOrder() {
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = null;
+	 String aArtist = "artistcode";
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
+	 String id = TICKET_ID;
+    try {
+      ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket order cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testupdateBadTicketOrder() {
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercodefake";
+	 String aArtist = "artistcode";
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
+	 String id = TICKET_ID;
+    try {
+      ticket = ticketService.updateTicket(payment, paymentPrice,id,  aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket Order should exist!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testupdateNullTicketCustomer() {
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = "artistcode";
+	 String aCustomer = null;
+	 Ticket ticket = null;
+	 String error = null;
+	 String id = TICKET_ID;
+    try {
+      ticket = ticketService.updateTicket(payment, paymentPrice,id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket customer cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testupdateBadTicketArtist() {
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = "artistcodefake";
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
+	 String id = TICKET_ID;
+    try {
+      ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket Artist should exist!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  
+  @Test
+  public void testupdateBadTicketCustomer() {
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = "artistcode";
+	 String aCustomer = "customercodefake";
+	 Ticket ticket = null;
+	 String error = null;
+	 String id = TICKET_ID;
+    try {
+      ticket = ticketService.updateTicket(payment, paymentPrice, id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket Customer should exist!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testupdateNullTicketArtist() {
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = null;
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
+	 String id = TICKET_ID;
+    try {
+      ticket = ticketService.updateTicket(payment, paymentPrice,id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket artist cannot be empty!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testupdateNullTicketPaymentNegative() {
+	 boolean payment = false;
+	 double paymentPrice = -420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = "artistcode";
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
+	 String id = TICKET_ID;
+    try {
+      ticket = ticketService.updateTicket(payment, paymentPrice,id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket payment amount cannot be negative!", error); // expected error message for service data
+                                                          // validation.
+  }
+  
+  @Test
+  public void testNullTicketSameArtistCustomer() {
+	 boolean payment = false;
+	 double paymentPrice = 420.0;
+	 String aOrder = "ordercode";
+	 String aArtist = "customercode";
+	 String aCustomer = "customercode";
+	 Ticket ticket = null;
+	 String error = null;
+	 String id = TICKET_ID;
+    try {
+      ticket = ticketService.updateTicket(payment, paymentPrice,id, aOrder, aCustomer, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(ticket);
+    assertEquals("Ticket customer and artist cannot be the same!", error); // expected error message for service data
+                                                          // validation.
+  }
   
   @Test
   public void testGetTicket() {
@@ -466,8 +679,15 @@ public void testUpdateTicketOrder() {
     
   }
   
+@Test
+public void testDeleteTicket() {
+
+  assertTrue(ticketService.deleteTicket(TICKET_ID));
+  assertFalse(ticketService.deleteTicket(""));
+  // assertFalse(serviceAo.deleteArtOrder(null));
+
 }
-
-
+  
+}
 
 
