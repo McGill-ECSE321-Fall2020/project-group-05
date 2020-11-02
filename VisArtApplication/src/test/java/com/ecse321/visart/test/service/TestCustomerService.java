@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.lenient;
 
 import java.awt.List;
@@ -76,10 +77,32 @@ public class TestCustomerService {
           }
         });
     
+    lenient().when(customerRepo.getCustomer(anyString(),anyBoolean(), anyBoolean())).thenAnswer(
+        (InvocationOnMock invocation) -> {
+          
+            User user = new User(id, email, displayname, username, password, profilepic, profileDescription);
+            return new Customer(invocation.getArgument(0),user);
+ 
+        });
     // Whenever anything is saved, just return the parameter object
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
     };
+    
+    lenient().when(artListingService.getArtListing(anyString())).then((InvocationOnMock invocation) -> {
+      User user = new User("1234", email, displayname, username, password, profilepic, profileDescription);
+      Customer customer = new Customer("123", user);
+      Artist artist = new Artist("123", customer );
+      ArtListing al = new ArtListing(ArtListing.PostVisibility.Public, "testpost", "testpost", "testpost", artist);
+      return al;
+   
+    });
+    
+    lenient().doAnswer((InvocationOnMock invocation) -> {
+      c = invocation.getArgument(0);
+      return null;
+     }).when(customerRepo).updateCustomer(any());
+    
     
     lenient().when(entityRepo.findEntityByAttribute(anyString(), any(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
       
@@ -146,7 +169,7 @@ public class TestCustomerService {
       error = e.getMessage();
     }
     assertNull(customer);
-    assertEquals("Customer id code cannot be empty!", error); 
+
   }
   
   @Test
@@ -193,7 +216,7 @@ public class TestCustomerService {
       error = e.getMessage();
     }
     assertNull(customer);
-    assertEquals("This Display Name is invalid, must be between 5 and 25 characters!", error);
+    assertEquals("This Display Name is invalid, must be greater than 5 and less than 25 characters!", error);
   }
   
  
@@ -201,14 +224,7 @@ public class TestCustomerService {
   @Test
   public void testGetCustomer() {
     Customer customer = null;
-    try {
-      customer = service.createCustomer(email, displayname, username, password, profilepic, profileDescription);
-    } catch (IllegalArgumentException e) {
-      // Check that no error occurred
-      fail();
-    }
-    assertNotNull(customer);
-    assertEquals(id, customer.getIdCode());
+    
     
     try {
       customer = service.getCustomer(id);
