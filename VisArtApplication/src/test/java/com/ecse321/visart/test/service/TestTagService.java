@@ -410,7 +410,7 @@ public class TestTagService {
  }
   
  @Test
-  public void testDeleteManager() {
+  public void testDeleteTag() {
     
     assertTrue(tagService.deleteTag(TAG_ID));
     
