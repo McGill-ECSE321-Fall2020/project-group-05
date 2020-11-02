@@ -8,6 +8,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,11 +22,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
+import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.service.ArtListingService;
+import com.ecse321.visart.service.ArtPieceService;
+import com.ecse321.visart.service.TagService;
 
 @ExtendWith(MockitoExtension.class)
 public class TestArtListingService {
@@ -33,7 +40,13 @@ public class TestArtListingService {
 
   @Mock
   private EntityRepository entityRepo;
+  
+  @Mock
+  private ArtPieceService serviceAp;
 
+  @Mock
+  private TagService serviceT;
+  
   @InjectMocks
   private ArtListingService serviceAl;
 
@@ -51,6 +64,29 @@ public class TestArtListingService {
     // Mock the Repository methods, returning what we want to expect from the
     // database, instead of actually querying the database.
 
+    
+    lenient().when(serviceAp.getArtPiece(anyString())).thenAnswer(
+        (InvocationOnMock invocation) -> {
+          if (invocation.getArgument(0).equals("1")) {
+            ArtPiece artPiece1 = new ArtPiece();
+            return artPiece1;
+          } else {
+
+            return null;
+          }
+        });
+    
+    lenient().when(serviceT.getTag(anyString())).thenAnswer(
+        (InvocationOnMock invocation) -> {
+          if (invocation.getArgument(0).equals("1")) {
+            Tag tag1 = new Tag();
+            return tag1;
+          } else {
+
+            return null;
+          }
+        });
+    
     lenient().when(alRepo.getArtListing(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(AL_KEY)) {
@@ -311,9 +347,7 @@ public class TestArtListingService {
     Artist aArtist = new Artist("artistCode", aCustomer);
     ArtListing artListing = null;
     String error = null;
-    String newTitle = "new";
-    String newDescription = "newdesc";
-    PostVisibility newPostvisibility = PostVisibility.Private;
+    Boolean success = false;
 
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
@@ -321,20 +355,242 @@ public class TestArtListingService {
       error = e.getMessage();
     }
     assertNull(error);
+    assertNotNull(artListing);
     // data
     // validation.
 
     try {
-      artListing = serviceAl.updateArtListing(AL_KEY, newPostvisibility, newDescription, newTitle);
+      success = serviceAl.deleteArtListing(AL_KEY);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
     }
+    
 
-    assertEquals(artListing.getDescription(), newDescription);
-    assertEquals(artListing.getTitle(), newTitle);
-    assertEquals(artListing.getVisibility(), newPostvisibility);
+    assertEquals(success, true);
+
+  }
+  
+  @Test
+  public void testUpdateDimensions() {
+    PostVisibility Postvisibility = PostVisibility.Public;
+    String aDescription = "123";
+    String aTitle = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing artListing = null;
+    String error = null;
+    Float[] dimensions = {(float)10,(float) 10,(float)10};
+
+    try {
+      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(error);
+    assertNotNull(artListing);
+    // data
+    // validation.
+
+    try {
+      artListing = serviceAl.updateDimensions(AL_KEY, dimensions);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    
+
+    assertEquals(artListing.getDimension(0), dimensions[0]);
+
+  }
+  
+  @Test
+  public void testUpdatePostImages() {
+    PostVisibility Postvisibility = PostVisibility.Public;
+    String aDescription = "123";
+    String aTitle = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing artListing = null;
+    String error = null;
+    String[] postimages = {"1","2","3"};
+
+    try {
+      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(error);
+    assertNotNull(artListing);
+    // data
+    // validation.
+
+    try {
+      artListing = serviceAl.updatePostImages(AL_KEY, postimages);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    
+
+    assertEquals(artListing.getPostingPicLink(0), postimages[0]);
 
   }
 
+
+  @Test
+  public void testGetUnsoldArtWorks() {
+    PostVisibility Postvisibility = PostVisibility.Public;
+    String aDescription = "123";
+    String aTitle = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing artListing = null;
+    String error = null;
+    List<ArtListing> unsold = new ArrayList<ArtListing>();
+    
+    try {
+      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(error);
+    assertNotNull(artListing);
+    // data
+    // validation.
+
+    try {
+      unsold = serviceAl.getUnsoldArtworks();
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    
+
+    assertEquals(unsold.size(), 0);
+
+  }
+  
+  @Test
+  public void testGetFavoritedCustomers() {
+    PostVisibility Postvisibility = PostVisibility.Public;
+    String aDescription = "123";
+    String aTitle = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing artListing = null;
+    String error = null;
+    List<Customer> customers = new ArrayList<Customer>();
+    
+    try {
+      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(error);
+    assertNotNull(artListing);
+    // data
+    // validation.
+
+    try {
+      customers = serviceAl.getFavoritedCustomers(AL_KEY);
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    
+
+    assertEquals(customers.size(), 0);
+
+  }
+  
+  @Test
+  public void testAddArtPiece() {
+    PostVisibility Postvisibility = PostVisibility.Public;
+    String aDescription = "123";
+    String aTitle = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing artListing = null;
+    String error = null;
+    ArtPiece artPiece = null;
+
+    try {
+      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(error);
+    assertNull(artPiece);
+    assertNotNull(artListing);
+    // data
+    // validation.
+
+    try {
+      artPiece = serviceAp.getArtPiece("1");
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    } 
+    
+    try {
+      artListing = serviceAl.addArtPiece(AL_KEY, "1");
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    
+
+    assertNotNull(artListing.getPiece(0));
+
+  }    
+  
+  
+  @Test
+  public void testAddTag() {
+    PostVisibility Postvisibility = PostVisibility.Public;
+    String aDescription = "123";
+    String aTitle = "111122223333";
+    User aUser = new User("a", "b", "c", "d", "e", "f", "g");
+    Customer aCustomer = new Customer("customerCode", aUser);
+    Artist aArtist = new Artist("artistCode", aCustomer);
+    ArtListing artListing = null;
+    String error = null;
+    Tag tag = null;
+
+    try {
+      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+    } catch (IllegalArgumentException e) {
+      error = e.getMessage();
+    }
+    assertNull(error);
+    assertNull(tag);
+    assertNotNull(artListing);
+    // data
+    // validation.
+
+    try {
+      tag = serviceT.getTag("1");
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    } 
+    
+    try {
+      artListing = serviceAl.addTag(AL_KEY, "1");
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    
+
+    assertNotNull(artListing.getTag(0));
+
+  } 
+  
 }
