@@ -234,6 +234,7 @@ public class TestArtListingService {
     Customer aCustomer = new Customer("customerCode", aUser);
     Artist aArtist = new Artist("artistCode", aCustomer);
     ArtListing artListing = null;
+    ArtListing artListing2 = null;
     String error = null;
 
 
@@ -241,16 +242,16 @@ public class TestArtListingService {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
+      fail();
     }                                                      // data
-
     try {
-      artListing = serviceAl.getArtListing(artListing.getIdCode());
+      artListing2 = serviceAl.getArtListing(AL_KEY);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
     }
 
-    assertNotNull(artListing);
+    assertNotNull(artListing2);
 
 
   }
@@ -258,7 +259,7 @@ public class TestArtListingService {
   @Test
   public void testGetNonExistingArtListing() {
     PostVisibility Postvisibility = PostVisibility.Public;
-    String aDescription = "";
+    String aDescription = "123";
     String aTitle = "111122223333";
     User aUser = new User("a", "b", "c", "d", "e", "f", "g");
     Customer aCustomer = new Customer("customerCode", aUser);
