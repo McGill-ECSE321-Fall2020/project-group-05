@@ -101,7 +101,7 @@ public class ArtListingService {
     }
 
     PostVisibility aVisibility = PostVisibility.fromString(aVisibilityString);
-    if (aVisibility != null) { // TODO: check string values, and length
+    if (aVisibility != null) {
       al.setVisibility(aVisibility);
     }
     if (aDescription != null) {

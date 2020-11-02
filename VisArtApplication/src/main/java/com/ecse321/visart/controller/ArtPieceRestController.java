@@ -5,16 +5,21 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ecse321.visart.dto.ArtPieceDto;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.service.ArtOrderService;
 import com.ecse321.visart.service.ArtPieceService;
 
+@CrossOrigin(origins = "*")
+@RestController
 public class ArtPieceRestController {
   @Autowired
   private ArtPieceService service;

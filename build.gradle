@@ -5,8 +5,7 @@ task stage() {
 task integrationTest(type: Exec) {
 	dependsOn ':VisArtApplication:bootJar'
 	dependsOn ':JavaHttpRequests:jar'
-	//dependsOn 'startWebApp'
-	//finalizedBy 'stopWebApp'
+	
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
         // on windows
         commandLine 'cmd','/c','VisArtApplication\\integrationTest.bat'

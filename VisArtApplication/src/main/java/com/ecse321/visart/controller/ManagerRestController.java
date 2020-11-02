@@ -96,8 +96,8 @@ public class ManagerRestController {
   @PostMapping(value = { "/managers/create", "/managers/create/" })
   public ManagerDto createManager(@RequestBody MultiValueMap<String, String> values) {
     return new ManagerDto(service.createManager(
-        values.getFirst("emailAddress"), values.getFirst("displayName"),
-        values.getFirst("userName"), values.getFirst("password"),
+        values.getFirst("emailAddress"), values.getFirst("displayname"),
+        values.getFirst("username"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
 

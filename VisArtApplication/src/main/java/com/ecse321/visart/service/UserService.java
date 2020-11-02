@@ -42,7 +42,7 @@ public class UserService {
 
     if (aDisplayname == null || aDisplayname.length() < 5 || aDisplayname.length() > 25) {
       throw new IllegalArgumentException(
-          "This Display Name is invalid, must be between 5 and 25 characters!");
+          "This Display Name is invalid, must be between 5 and 25 characters!" + aDisplayname);
     }
 
     List<User> l1 = entityRepo.findEntityByAttribute("displayname", User.class, aDisplayname);
