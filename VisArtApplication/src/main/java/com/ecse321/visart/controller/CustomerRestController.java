@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.CustomerDto;
-import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.service.CustomerService;
 import com.ecse321.visart.service.ArtListingService;
 

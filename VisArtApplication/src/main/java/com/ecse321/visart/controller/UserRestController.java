@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecse321.visart.dto.ManagerDto;
 import com.ecse321.visart.dto.UserDto;
 import com.ecse321.visart.service.UserService;
 

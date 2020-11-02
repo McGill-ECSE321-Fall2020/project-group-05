@@ -2,11 +2,7 @@ package com.ecse321.visart.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

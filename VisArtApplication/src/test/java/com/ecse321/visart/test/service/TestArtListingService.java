@@ -1,10 +1,8 @@
 package com.ecse321.visart.test.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -21,18 +19,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
-import com.ecse321.visart.model.ArtPiece.PieceLocation;
-import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.EntityRepository;
-import com.ecse321.visart.service.ArtListingService;
 import com.ecse321.visart.service.ArtListingService;
 
 @ExtendWith(MockitoExtension.class)

@@ -13,11 +13,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtOrder;
-import com.ecse321.visart.model.ArtPiece;
-import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.Ticket;
 
 /**

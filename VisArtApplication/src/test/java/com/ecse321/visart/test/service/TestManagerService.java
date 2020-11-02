@@ -11,7 +11,6 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
-import java.awt.List;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;

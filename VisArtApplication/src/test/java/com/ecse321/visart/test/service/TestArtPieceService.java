@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
@@ -29,10 +28,8 @@ import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.repositories.ArtListingRepository;
-import com.ecse321.visart.repositories.ArtOrderRepository;
 import com.ecse321.visart.repositories.ArtPieceRepository;
 import com.ecse321.visart.repositories.EntityRepository;
-import com.ecse321.visart.service.ArtOrderService;
 import com.ecse321.visart.service.ArtPieceService;
 
 @ExtendWith(MockitoExtension.class)

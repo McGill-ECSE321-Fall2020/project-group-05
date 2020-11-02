@@ -21,7 +21,6 @@ import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Manager;
-import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Ticket;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.ArtListingRepository;

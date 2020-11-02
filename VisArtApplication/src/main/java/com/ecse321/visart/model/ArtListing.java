@@ -8,9 +8,6 @@ package com.ecse321.visart.model;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import java.util.*;
 
 @Entity

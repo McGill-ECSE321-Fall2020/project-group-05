@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.dto.ArtListingDto;
-import com.ecse321.visart.dto.ArtistDto;
-import com.ecse321.visart.dto.CustomerDto;
 import com.ecse321.visart.service.ArtListingService;
 import com.ecse321.visart.service.ArtistService;
 

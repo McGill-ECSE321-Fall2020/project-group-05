@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Tag;
 import com.ecse321.visart.model.Ticket;
 import com.ecse321.visart.repositories.ArtOrderRepository;
 import com.ecse321.visart.repositories.ArtistRepository;

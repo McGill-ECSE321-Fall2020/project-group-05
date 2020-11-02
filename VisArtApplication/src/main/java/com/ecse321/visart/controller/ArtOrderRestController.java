@@ -10,21 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.model.ArtOrder;
-import com.ecse321.visart.model.ArtPiece;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 import com.ecse321.visart.dto.ArtOrderDto;
-import com.ecse321.visart.dto.ArtPieceDto;
-import com.ecse321.visart.dto.ManagerDto;
-import com.ecse321.visart.model.ArtPiece.PieceLocation;
-import com.ecse321.visart.service.ArtListingService;
 import com.ecse321.visart.service.ArtOrderService;
-import com.ecse321.visart.service.ArtPieceService;
 import com.ecse321.visart.service.TicketService;
 
 @CrossOrigin(origins = "*")

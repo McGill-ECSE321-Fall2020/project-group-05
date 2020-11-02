@@ -16,8 +16,6 @@ import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TagRepository;
 
-import javassist.compiler.ast.Keyword;
-
 @Service
 public class TagService {
 
