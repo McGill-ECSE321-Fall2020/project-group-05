@@ -238,7 +238,7 @@ public class ArtListingService {
 
   @Transactional
   public List<String> filterArtworkByTag(String[] keywords) {
-    List<Tag> listTagByKeywords = entityRepo.findEntityByAttribute("type", Tag.class, keywords);
+    List<Tag> listTagByKeywords = entityRepo.findEntityByAttribute("keyword", Tag.class, keywords);
     return new ArrayList<String>(listTagByKeywords.stream()
         .map((tag) -> tag.getListing().getIdCode()).collect(Collectors.toSet()));
   }

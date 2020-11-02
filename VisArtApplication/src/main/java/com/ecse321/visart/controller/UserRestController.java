@@ -64,7 +64,7 @@ public class UserRestController {
   public UserDto updateUser(@RequestBody MultiValueMap<String, String> values,
       @PathVariable("idCode") String idCode) {
     return new UserDto(service.updateUser(idCode,
-        values.getFirst("emailAddress"), values.getFirst("displayName"),
+        values.getFirst("emailAddress"), values.getFirst("displayname"),
         values.getFirst("userName"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }

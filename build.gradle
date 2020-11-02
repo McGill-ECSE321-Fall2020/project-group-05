@@ -1,20 +1,3 @@
 task stage() {
     dependsOn ':VisArtApplication:assemble'
 }
-
-task integrationTest(type: Exec) {
-	dependsOn ':VisArtApplication:bootJar'
-	dependsOn ':JavaHttpRequests:jar'
-	
-    commandLine 'python','--version'
-    commandLine 'pip','install','-r','requirements.txt'
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        // on windows
-        commandLine 'python','VisArtApplication\\integrationTest.py'
-        // commandLine 'cmd','/c','VisArtApplication\\integrationTest.bat'
-    } else {
-        // on linux
-        commandLine 'python','VisArtApplication/integrationTest.py'
-        // commandLine './VisArtApplication/integrationTest.sh'
-    }
-}

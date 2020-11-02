@@ -51,7 +51,7 @@ public class CustomerRestController {
   @GetMapping(value = {
       "/customers/get_favorite_listings/{idCode}",
       "/customers/get_favorite_listings/{idCode}" })
-  public List<String> getCustomerFavoriteListings(@RequestParam("idCode") String aIdCode) {
+  public List<String> getCustomerFavoriteListings(@PathVariable("idCode") String aIdCode) {
     CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode, false, true));
     return customer.getFavoriteListings();
   }

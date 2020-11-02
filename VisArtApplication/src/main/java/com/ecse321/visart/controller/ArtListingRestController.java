@@ -1,5 +1,6 @@
 package com.ecse321.visart.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,16 +26,16 @@ import com.ecse321.visart.service.ArtistService;
 public class ArtListingRestController {
   @Autowired
   private ArtListingService artListingService;
-  
+
   @Autowired
   private ArtistService artistService;
-  
+
   /**
    * 
-   * @param idCode
+   * @param  idCode
    * @return
    */
-  @PostMapping(value = {"/artlisting/delete/{idCode}","/artlisting/delete/{idCode}/"})
+  @PostMapping(value = { "/artlisting/delete/{idCode}", "/artlisting/delete/{idCode}/" })
   public boolean deleteArtListing(@PathVariable("idCode") String idCode) {
     return artListingService.deleteArtListing(idCode);
   }
@@ -109,9 +110,16 @@ public class ArtListingRestController {
       "/artlisting/update_dimensions/{aIdCode}",
       "/artlisting/update_dimensions/{aIdCode}/" })
   public ArtListingDto updateDimensions(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody List<Float> aDimensions) {
-    return new ArtListingDto(
-        artListingService.updateDimensions(aIdCode, (Float[]) aDimensions.toArray()));
+      @RequestBody MultiValueMap<String, String> map) {
+    List<String> dimensions = Arrays
+        .asList(map.getFirst("dimensions").split("\\[")[1].split("\\]")[0].split(","));
+    List<Float> aDimensions = dimensions.stream().map(v -> Float.valueOf((String) v))
+        .collect(Collectors.toList());
+    Float[] arr = new Float[aDimensions.size()];
+    for (int i = 0; i < aDimensions.size(); i++) {
+      arr[i] = aDimensions.get(i);
+    }
+    return new ArtListingDto(artListingService.updateDimensions(aIdCode, arr));
   }
 
   /**
@@ -124,9 +132,9 @@ public class ArtListingRestController {
       "/artlisting/update_post_images/{aIdCode}",
       "/artlisting/update_post_images/{aIdCode}/" })
   public ArtListingDto updatePostImages(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody List<String> aPostImages) {
+      @RequestBody MultiValueMap<String,String> map) {
     return new ArtListingDto(
-        artListingService.updatePostImages(aIdCode, (String[]) aPostImages.toArray()));
+        artListingService.updatePostImages(aIdCode, map.getFirst("images").split("\\[")[1].split("\\]")[0].split(",")));
   }
 
   /**
