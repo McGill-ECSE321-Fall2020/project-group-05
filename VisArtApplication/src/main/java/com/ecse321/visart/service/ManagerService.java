@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.EntityRepository;
@@ -15,6 +14,10 @@ import com.ecse321.visart.repositories.ManagerRepository;
 
 @Service
 public class ManagerService {
+  /**
+  *
+  * @author danielbucci
+  */
 
   @Autowired
   ManagerRepository managerRepo;
@@ -25,6 +28,16 @@ public class ManagerService {
   @Autowired
   ArtListingService artListingService;
 
+  /**
+  *
+  * @param  aEmailAddress
+  * @param  aDisplayname
+  * @param  aUsername
+  * @param  aPassword
+  * @param  aProfilePicLink
+  * @param  aProfileDescription
+  * @return
+  */
   @Transactional
   public Manager createManager(String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
@@ -61,35 +74,37 @@ public class ManagerService {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
-    String hashedPassword;
-
     return managerRepo.createManager(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
 
   }
 
-//  @Transactional
-//  public Manager addManagerListing(String aIdCode, ArtListing artListing) {
-//    Manager manager = managerRepo.getManager(aIdCode, true);
-//    if(artListing != null) {
-//      manager.addPromotedListing(artListing);
-//    } else {
-//      throw new IllegalArgumentException("Cannot add a null art listing");
-//    }
-//    return manager;
-//  }
-
+  /**
+  * return manager given an id from db
+  * @param  aIdCode
+  * @return Manager 
+  */
   @Transactional
   public Manager getManager(String aIdCode) {
     return managerRepo.getManager(aIdCode);
   }
-
+  
+  /**
+   * return manager with the listings given an id from db
+   * @param  aIdCode
+   * @param  promotedListing
+   * @return Manager 
+   */
   @Transactional
   public Manager getManager(String aIdCode, Boolean promotedListings) {
     return managerRepo.getManager(aIdCode, promotedListings);
   }
 
-
+  /**
+   * adds listing to a managers db
+   * @param  aIdCode
+   * @param  aListingCode
+   */
   @Transactional
   public void addListing(String aIdCode ,String aListingIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
@@ -103,6 +118,11 @@ public class ManagerService {
     managerRepo.updateManager(manager);
   }
 
+  /**
+   * removes a listing to a managers db
+   * @param  aIdCode
+   * @param  aListingCode
+   */
   @Transactional
   public void removeListing(String aIdCode, String aListingIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
@@ -116,6 +136,10 @@ public class ManagerService {
     managerRepo.updateManager(manager);
   }
 
+  /**
+   * deletes a manager from a db
+   * @param  aIdCode
+   */
   @Transactional
   public Boolean deleteManager(String aIdCode) {
     if(aIdCode != null && !aIdCode.contentEquals("")) {
@@ -124,12 +148,21 @@ public class ManagerService {
       return false;
     }
   }
+  
+  /**
+   * @return List<Manager> all the managers in the db
+   */
   @Transactional
   public List<Manager> getAllManagers() {
     return entityRepo.getAllEntities(Manager.class);
   }
 
-  //https://www.geeksforgeeks.org/check-email-address-valid-not-java/
+  /**
+   * https://www.geeksforgeeks.org/check-email-address-valid-not-java/
+   * checks if an email is valid
+   * @param  String email
+   * @return Boolean isValid
+   */
   public static boolean isValidEmail(String email) {
       String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
                           "[a-zA-Z0-9_+&*-]+)*@" +
