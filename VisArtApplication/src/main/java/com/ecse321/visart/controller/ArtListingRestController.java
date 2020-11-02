@@ -55,7 +55,7 @@ public class ArtListingRestController {
    * @param  artistId
    * @return
    */
-  @PostMapping(value = { "/artlisting/new", "/artlisting/new/" })
+  @PostMapping(value = { "/artlisting/create", "/artlisting/create/" })
   public ArtListingDto createArtListing(@RequestBody MultiValueMap<String, String> map) {
     PostVisibility aVisibility = PostVisibility.fromString(map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");

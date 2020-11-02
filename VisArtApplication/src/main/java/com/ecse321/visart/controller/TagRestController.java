@@ -79,8 +79,7 @@ public class TagRestController {
    * @return
    */
   @PostMapping(value = { "/tags/create", "/tags/create/" })
-  public TagDto createTag(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody MultiValueMap<String, String> map) {
+  public TagDto createTag(@RequestBody MultiValueMap<String, String> map) {
     String aListingDto = map.getFirst("aListing");
     String keyword = map.getFirst("aKeyword");
     String type = map.getFirst("aType");
