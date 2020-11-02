@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,103 +26,180 @@ import com.ecse321.visart.service.ArtistService;
 
 public class ArtListingRestController {
   @Autowired
-  private ArtListingService service;
-  private ArtistService servicea;
+  private ArtListingService artListingService;
+  private ArtistService artistService;
 
-
-  @GetMapping(value = { "/ArtListings", "/ArtListings/" })
+  /**
+   * 
+   * @return
+   */
+  @GetMapping(value = { "/artlisting/get_all", "/artlisting/get_all/" })
   public List<ArtListingDto> getAllArtListings() {
-    return service.getAllArtListings().stream().map(al -> new ArtListingDto(al))
+    return artListingService.getAllArtListings().stream().map(al -> new ArtListingDto(al))
         .collect(Collectors.toList());
   }
-  
-  @GetMapping(value = { "/get_artlisting", "/get_artlisting/" })
-  public ArtListingDto getCustomer(@RequestParam("idCode") String aIdCode) {
-    return new ArtListingDto(service.getArtListing(aIdCode));
+
+  /**
+   * 
+   * @param  aIdCode
+   * @return
+   */
+  @GetMapping(value = { "/artlisting/{idCode}", "/artlisting/{idCode}" })
+  public ArtListingDto getArtListing(@PathVariable("idCode") String aIdCode) {
+    return new ArtListingDto(artListingService.getArtListing(aIdCode));
   }
 
-  @PostMapping(value = { "/ArtListings/new", "/ArtListings/new/" })
-  public ArtListingDto createArtListing(
-      @RequestParam(value = "aVisibility") PostVisibility aVisibility,
-      @RequestParam(value = "aDescription") String aDescription,
-      @RequestParam(value = "aTitle") String aTitle,
-      ArtistDto ADTO) {
+  /**
+   * 
+   * @param  aVisibility
+   * @param  aDescription
+   * @param  aTitle
+   * @param  artistId
+   * @return
+   */
+  @PostMapping(value = { "/artlisting/new", "/artlisting/new/" })
+  public ArtListingDto createArtListing(@RequestBody MultiValueMap<String, String> map) {
+    String aVisibility = (map.getFirst("aVisibility"));
+    String aDescription = map.getFirst("aDescription");
+    String aTitle = map.getFirst("aTitle");
+    String artistId = map.getFirst("artistId");
 
-    Artist a = servicea.createArtist(ADTO.getCustomer().getIdCode());
-    return new ArtListingDto(service.createArtListing(aVisibility, aDescription, aTitle,
-        a));
+    return new ArtListingDto(artListingService.createArtListing(aVisibility, aDescription, aTitle,
+        artistId));
   }
-  
-  @PostMapping(value = { "/ArtListings/{aIdCode}", "/ArtListings/{aIdCode}/" })
-  public ArtListingDto updateArtListing( @PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "aVisibility") PostVisibility aVisibility,
-      @RequestParam(value = "aDescription") String aDescription,
-      @RequestParam(value = "aTitle") String aTitle,
-      ArtistDto ADTO) {
 
-    return new ArtListingDto(service.updateArtListing(aIdCode, aVisibility, aDescription, aTitle));
-  }
-  
-  @PostMapping(value = { "/update_artlisting_dimensions/{aIdCode}", "/update_artlisting_dimensions/{aIdCode}/" })
-  public ArtListingDto updateDimensions( @PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "aDimensions") Float[] aDimensions) {
+  /**
+   * 
+   * @param  aIdCode
+   * @param  aVisibility
+   * @param  aDescription
+   * @param  aTitle
+   * @param  artistId
+   * @return
+   */
+  @PostMapping(value = { "/artlisting/update/{aIdCode}", "/artlisting/update/{aIdCode}/" })
+  public ArtListingDto updateArtListing(@PathVariable("aIdCode") String aIdCode,
+      @RequestBody MultiValueMap<String, String> map) {
+    
+    String aVisibility = (map.getFirst("aVisibility"));
+    String aDescription = map.getFirst("aDescription");
+    String aTitle = map.getFirst("aTitle");
 
-    return new ArtListingDto(service.updateDimensions(aIdCode, aDimensions));
+    return new ArtListingDto(
+        artListingService.updateArtListing(aIdCode, aVisibility, aDescription, aTitle));
   }
-  
-  @PostMapping(value = { "/update_artlisting_postimages/{aIdCode}", "/update_artlisting_postimages/{aIdCode}/" })
-  public ArtListingDto updatePostImages( @PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "aPostImages") String[] aPostImages) {
 
-    return new ArtListingDto(service.updatePostImages(aIdCode, aPostImages));
+  /**
+   * 
+   * @param aIdCode
+   * @param aDimensions
+   * @return
+   */
+  @PostMapping(value = {
+      "/artlisting/update_dimensions/{aIdCode}",
+      "/artlisting/update_dimensions/{aIdCode}/" })
+  public ArtListingDto updateDimensions(@PathVariable("aIdCode") String aIdCode, @RequestBody List<Float> aDimensions) { 
+    return new ArtListingDto(artListingService.updateDimensions(aIdCode, (Float[])aDimensions.toArray()));
   }
-  
-  @PostMapping(value = { "/artlisting_addpiece/{aIdCode}", "/artlisting_addpiece/{aIdCode}/" })
-  public ArtListingDto addArtPiece( @PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "apCode") String apCode) {
 
-    return new ArtListingDto(service.addArtPiece(aIdCode, apCode));
+  /**
+   * 
+   * @param aIdCode
+   * @param aPostImages
+   * @return
+   */
+  @PostMapping(value = {
+      "/artlisting/update_post_images/{aIdCode}",
+      "/artlisting/update_post_images/{aIdCode}/" })
+  public ArtListingDto updatePostImages(@PathVariable("aIdCode") String aIdCode, @RequestBody List<String> aPostImages) {
+    return new ArtListingDto(artListingService.updatePostImages(aIdCode, (String[])aPostImages.toArray()));
   }
-  
-  @PostMapping(value = { "/artlisting_removepiece/{aIdCode}", "/artlisting_removepiece/{aIdCode}/" })
-  public ArtListingDto removeArtPiece( @PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "apCode") String apCode) {
 
-    return new ArtListingDto(service.removeArtPiece(aIdCode, apCode));
+  /**
+   * 
+   * @param aIdCode
+   * @param apCode
+   * @return
+   */
+  @PostMapping(value = { "/artlisting/add_piece/{aIdCode}", "/artlisting/add_piece/{aIdCode}/" })
+  public ArtListingDto addArtPiece(@PathVariable("aIdCode") String aIdCode,
+      @RequestBody MultiValueMap<String,String> map) {
+    String apCode = map.getFirst("artPieceId");
+    return new ArtListingDto(artListingService.addArtPiece(aIdCode, apCode));
   }
-  
-  @PostMapping(value = { "/artlisting_getfavoritedcustomers/{aIdCode}", "/artlisting_getfavoritedcustomers/{aIdCode}/" })
-  public List<CustomerDto> getFavoritedCustomers( @PathVariable("aIdCode") String aIdCode) {
-    return service.getFavoritedCustomers(aIdCode).stream().map(c -> new CustomerDto(c))
+
+  /**
+   * 
+   * @param aIdCode
+   * @param map
+   * @return
+   */
+  @PostMapping(value = {
+      "/artlisting/remove_piece/{aIdCode}",
+      "/artlisting/remove_piece/{aIdCode}/" })
+  public ArtListingDto removeArtPiece(@PathVariable("aIdCode") String aIdCode,
+      @RequestBody MultiValueMap<String,String> map) {
+    String apCode = map.getFirst("artPieceId");
+    return new ArtListingDto(artListingService.removeArtPiece(aIdCode, apCode));
+  }
+
+  /**
+   * 
+   * @param aIdCode
+   * @return
+   */
+  @GetMapping(value = {
+      "/artlisting/get_favorited_customers/{aIdCode}",
+      "/artlisting/get_favorited_customers/{aIdCode}/" })
+  public List<String> getFavoritedCustomers(@PathVariable("aIdCode") String aIdCode) {
+    return artListingService.getFavoritedCustomers(aIdCode).stream().map(c -> c.getIdCode())
         .collect(Collectors.toList());
   }
-  
-  @PostMapping(value = { "/artlisting_addtag/{aIdCode}", "/artlisting_addtag/{aIdCode}/" })
-  public ArtListingDto addTag( @PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "tCode") String tCode) {
 
-    return new ArtListingDto(service.addTag(aIdCode, tCode));
+  /**
+   * 
+   * @param aIdCode
+   * @param map
+   * @return
+   */
+  @PostMapping(value = { "/artlisting/add_tag/{aIdCode}", "/artlisting/add_tag/{aIdCode}/" })
+  public ArtListingDto addTag(@PathVariable("aIdCode") String aIdCode,
+      @RequestBody MultiValueMap<String,String> map) {
+    String tCode = map.getFirst("tagCode");
+    return new ArtListingDto(artListingService.addTag(aIdCode, tCode));
   }
-  
-  @PostMapping(value = { "/artlisting_removetag/{aIdCode}", "/artlisting_removetag/{aIdCode}/" })
-  public ArtListingDto removeTag( @PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "tCode") String tCode) {
 
-    return new ArtListingDto(service.removeTag(aIdCode, tCode));
+  /**
+   * 
+   * @param aIdCode
+   * @param tCode
+   * @return
+   */
+  @PostMapping(value = { "/artlisting/remove_tag/{aIdCode}", "/artlisting/remove_tag/{aIdCode}/" })
+  public ArtListingDto removeTag(@PathVariable("aIdCode") String aIdCode,
+      @RequestBody MultiValueMap<String,String> map) {
+    String tCode = map.getFirst("tagCode");
+    return new ArtListingDto(artListingService.removeTag(aIdCode, tCode));
   }
-  
-  @PostMapping(value = { "/artlisting_getunsoldartworks", "/artlisting_getunsoldartworks/" })
+
+  /**
+   * 
+   * @return
+   */
+  @GetMapping(value = { "/artlisting/get_unsold_art", "/artlisting/get_unsold_art/" })
   public List<ArtListingDto> getUnsoldArtworks() {
-
-    return service.getUnsoldArtworks().stream().map(al -> new ArtListingDto(al))
+    return artListingService.getUnsoldArtworks().stream().map(al -> new ArtListingDto(al))
         .collect(Collectors.toList());
   }
-  
-  @PostMapping(value = { "/artlisting_filterartworksbytag", "/artlisting_filterartworksbytag/" })
-  public List<ArtListingDto> filterArtworkByTagAsListings(@RequestParam(value = "keywords") String[] keywords) {
 
-    return service.filterArtworkByTagAsListings(keywords).stream().map(al -> new ArtListingDto(al))
+  @GetMapping(value = { "/artlisting/get_artwork_by_keyword", "/artlisting/get_artwork_by_keyword/" })
+  public List<ArtListingDto> filterArtworkByTagAsListings(
+      @RequestParam(value = "keywords") String keywords) {
+    String[] keywordsList = keywords.split(",");
+
+    return artListingService.filterArtworkByTagAsListings(keywordsList).stream()
+        .map(al -> new ArtListingDto(al))
         .collect(Collectors.toList());
   }
-  
+
 }
