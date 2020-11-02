@@ -44,33 +44,35 @@ public class ManagerService {
 
     String aIdCode = EntityRepository.getUniqueKey();
 
-    if(aEmailAddress == null||isValidEmail(aEmailAddress)==false) {
+    if (aEmailAddress == null || isValidEmail(aEmailAddress) == false) {
       throw new IllegalArgumentException("Email address is invalid");
     }
 
-    if(aDisplayname == null||aDisplayname.length()<5 || aDisplayname.length()>25) {
-      throw new IllegalArgumentException("This Display Name is invalid, must be between 5 and 25 characters!");
+    if (aDisplayname == null || aDisplayname.length() < 5 || aDisplayname.length() > 25) {
+      throw new IllegalArgumentException(
+          "This Display Name is invalid, must be between 5 and 25 characters!");
     }
 
-    List<User> l1 = entityRepo.findEntityByAttribute("displayname",User.class,aDisplayname);
+    List<User> l1 = entityRepo.findEntityByAttribute("displayname", User.class, aDisplayname);
     if (l1 != null && l1.size() > 0) {
-        throw new IllegalArgumentException("This Display Name is already taken!");
+      throw new IllegalArgumentException("This Display Name is already taken!");
     }
 
-    if(aUsername == null||aUsername.length()<5 || aUsername.length()>25 ) {
-      throw new IllegalArgumentException("This User Name is invalid, must be between 5 and 25 characters!");
+    if (aUsername == null || aUsername.length() < 5 || aUsername.length() > 25) {
+      throw new IllegalArgumentException(
+          "This User Name is invalid, must be between 5 and 25 characters!");
     }
 
-    List<User> l2 = entityRepo.findEntityByAttribute("username",User.class,aUsername);
+    List<User> l2 = entityRepo.findEntityByAttribute("username", User.class, aUsername);
     if (l2 != null && l2.size() > 0) {
-        throw new IllegalArgumentException("This Username is already taken!");
+      throw new IllegalArgumentException("This Username is already taken!");
     }
 
-    if(aPassword == null || aPassword.length()<8 || aPassword.length()>40) {
+    if (aPassword == null || aPassword.length() < 8 || aPassword.length() > 40) {
       throw new IllegalArgumentException("Password must be between 8 and 40 characters");
     }
 
-    if(aProfileDescription == null || aProfileDescription.length()>255) {
+    if (aProfileDescription == null || aProfileDescription.length() > 255) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
@@ -79,11 +81,25 @@ public class ManagerService {
 
   }
 
+
   /**
   * return manager given an id from db
   * @param  aIdCode
   * @return Manager 
   */
+
+  // @Transactional
+  // public Manager addManagerListing(String aIdCode, ArtListing artListing) {
+  // Manager manager = managerRepo.getManager(aIdCode, true);
+  // if(artListing != null) {
+  // manager.addPromotedListing(artListing);
+  // } else {
+  // throw new IllegalArgumentException("Cannot add a null art listing");
+  // }
+  // return manager;
+  // }
+
+
   @Transactional
   public Manager getManager(String aIdCode) {
     return managerRepo.getManager(aIdCode);
@@ -106,7 +122,7 @@ public class ManagerService {
    * @param  aListingCode
    */
   @Transactional
-  public void addListing(String aIdCode ,String aListingIdCode) {
+  public void addListing(String aIdCode, String aListingIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
       throw new IllegalArgumentException("Cannot find manager");
     }
@@ -142,12 +158,13 @@ public class ManagerService {
    */
   @Transactional
   public Boolean deleteManager(String aIdCode) {
-    if(aIdCode != null && !aIdCode.contentEquals("")) {
+    if (aIdCode != null && !aIdCode.contentEquals("")) {
       return managerRepo.deleteManager(aIdCode);
     } else {
       return false;
     }
   }
+
   
   /**
    * @return List<Manager> all the managers in the db
@@ -157,22 +174,24 @@ public class ManagerService {
     return entityRepo.getAllEntities(Manager.class);
   }
 
+
   /**
    * https://www.geeksforgeeks.org/check-email-address-valid-not-java/
    * checks if an email is valid
    * @param  String email
    * @return Boolean isValid
    */
+  // https://www.geeksforgeeks.org/check-email-address-valid-not-java/
   public static boolean isValidEmail(String email) {
-      String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                          "[a-zA-Z0-9_+&*-]+)*@" +
-                          "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                          "A-Z]{2,7}$";
+    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+        "[a-zA-Z0-9_+&*-]+)*@" +
+        "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+        "A-Z]{2,7}$";
 
-      Pattern pat = Pattern.compile(emailRegex);
-      if (email == null)
-          return false;
-      return pat.matcher(email).matches();
+    Pattern pat = Pattern.compile(emailRegex);
+    if (email == null)
+      return false;
+    return pat.matcher(email).matches();
   }
 
 }

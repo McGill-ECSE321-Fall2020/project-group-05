@@ -18,14 +18,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
@@ -80,10 +77,6 @@ public class TestArtOrderService {
             return null;
           }
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(apRepo.getArtPiece(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
@@ -370,6 +363,7 @@ public class TestArtOrderService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(artOrder);
     assertEquals(pieceLocationOld, artOrder.getTargetLocation()); // expected error message for
                                                                   // service
@@ -396,6 +390,7 @@ public class TestArtOrderService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(artOrder);
     assertEquals(targetOld, artOrder.getTargetAddress()); // expected error message for service
                                                           // data
@@ -421,6 +416,7 @@ public class TestArtOrderService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(artOrder);
     assertEquals(trackerOld, artOrder.getDeliveryTracker()); // expected error message for service
                                                              // data
@@ -445,6 +441,7 @@ public class TestArtOrderService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(artOrder);
     assertEquals(idPOld, artOrder.getArtPiece().getIdCode()); // expected error message for service
                                                               // data
@@ -572,32 +569,33 @@ public class TestArtOrderService {
     // assertFalse(serviceAo.deleteArtOrder(null));
 
   }
-  
+
   /**
-  @Test
-  public void testAddTicket() {
-    ArtOrder artOrder = null;
-    Boolean delivery = true;
-    PieceLocation pieceLocation = PieceLocation.AtGallery;
-    String target = "123";
-    String tracker = "111122223333";
-    String id = AO_KEY;
-    String idP = AP_KEY;
-    try {
-      artOrder = serviceAo.createArtOrder(delivery, pieceLocation,
-          target, tracker, idP);
-      serviceAo.addTicket(, );
-    } catch (IllegalArgumentException e) {
-      // Check that no error occurred
-      fail();
-    }
-    assertNotNull(artOrder);
-    assertNotNull(artOrder.getTicket());
- 
-    //assertEquals(manager.getPromotedListing(0).getDescription(), "testpost");
-    
-  }
-  
-  **/
+   * @Test
+   *       public void testAddTicket() {
+   *       ArtOrder artOrder = null;
+   *       Boolean delivery = true;
+   *       PieceLocation pieceLocation = PieceLocation.AtGallery;
+   *       String target = "123";
+   *       String tracker = "111122223333";
+   *       String id = AO_KEY;
+   *       String idP = AP_KEY;
+   *       try {
+   *       artOrder = serviceAo.createArtOrder(delivery, pieceLocation,
+   *       target, tracker, idP);
+   *       serviceAo.addTicket(, );
+   *       } catch (IllegalArgumentException e) {
+   *       // Check that no error occurred
+   *       fail();
+   *       }
+   *       assertNotNull(artOrder);
+   *       assertNotNull(artOrder.getTicket());
+   * 
+   *       //assertEquals(manager.getPromotedListing(0).getDescription(),
+   *       "testpost");
+   * 
+   *       }
+   * 
+   **/
 
 }

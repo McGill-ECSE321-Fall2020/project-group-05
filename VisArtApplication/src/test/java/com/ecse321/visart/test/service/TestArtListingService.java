@@ -1,10 +1,8 @@
 package com.ecse321.visart.test.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -18,21 +16,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
-import com.ecse321.visart.model.ArtPiece.PieceLocation;
-import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.EntityRepository;
-import com.ecse321.visart.service.ArtListingService;
 import com.ecse321.visart.service.ArtListingService;
 
 @ExtendWith(MockitoExtension.class)
@@ -72,10 +62,6 @@ public class TestArtListingService {
             return null;
           }
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(alRepo.createArtListing(Mockito.any(PostVisibility.class), anyString(),
         anyString(), anyString(), Mockito.any(Artist.class)))
@@ -96,13 +82,14 @@ public class TestArtListingService {
       return artListingTest;
     }).when(alRepo).updateArtListing(any());
 
-    lenient().when(alRepo.deleteArtListing(anyString())).thenAnswer((InvocationOnMock invocation) -> {
-      if (invocation.getArgument(0).equals(AL_KEY)) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    lenient().when(alRepo.deleteArtListing(anyString()))
+        .thenAnswer((InvocationOnMock invocation) -> {
+          if (invocation.getArgument(0).equals(AL_KEY)) {
+            return true;
+          } else {
+            return false;
+          }
+        });
 
     // In the tests below, test the Service class's DATA VALIDATION on the
     // parameters that are given to it.
@@ -115,7 +102,6 @@ public class TestArtListingService {
     PostVisibility postVisibility = PostVisibility.Public;
     String description = "123";
     String title = "111122223333";
-    String id = "1234";
     User aUser = new User("a", "b", "c", "d", "e", "f", "g");
     Customer aCustomer = new Customer("customerCode", aUser);
     Artist aArtist = new Artist("artistCode", aCustomer);
@@ -143,7 +129,6 @@ public class TestArtListingService {
     ArtListing artListing = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
@@ -167,7 +152,6 @@ public class TestArtListingService {
     ArtListing artListing = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
@@ -175,7 +159,7 @@ public class TestArtListingService {
     }
     assertNull(artListing);
     assertEquals("Description cannot be empty!", error); // expected error message for service
-                                                             // data
+                                                         // data
     // validation.
   }
 
@@ -191,7 +175,6 @@ public class TestArtListingService {
     ArtListing artListing = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
@@ -199,8 +182,8 @@ public class TestArtListingService {
     }
     assertNull(artListing);
     assertEquals("Title cannot be empty!", error); // expected error message for service
-                                                             // data
-    // validation.                                         // data
+                                                   // data
+    // validation. // data
   } // validation.
 
   @Test
@@ -213,7 +196,6 @@ public class TestArtListingService {
     ArtListing artListing = null;
     String error = null;
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
@@ -221,8 +203,8 @@ public class TestArtListingService {
     }
     assertNull(artListing);
     assertEquals("Artist cannot be empty!", error); // expected error message for service
-                                                             // data
-    // validation.                                                         // service data
+                                                    // data
+    // validation. // service data
   }
 
   @Test
@@ -233,17 +215,13 @@ public class TestArtListingService {
     User aUser = new User("a", "b", "c", "d", "e", "f", "g");
     Customer aCustomer = new Customer("customerCode", aUser);
     Artist aArtist = new Artist("artistCode", aCustomer);
-    ArtListing artListing = null;
     ArtListing artListing2 = null;
-    String error = null;
-
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
-      error = e.getMessage();
       fail();
-    }                                                      // data
+    } // data
     try {
       artListing2 = serviceAl.getArtListing(AL_KEY);
     } catch (IllegalArgumentException e) {
@@ -252,7 +230,6 @@ public class TestArtListingService {
     }
 
     assertNotNull(artListing2);
-
 
   }
 
@@ -268,13 +245,13 @@ public class TestArtListingService {
     String error = null;
     String idFake = "fake";
 
-
     try {
       artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-                                                  // data
+    assertNull(error);
+    // data
     // validation.
 
     try {

@@ -21,7 +21,7 @@ public class ArtOrderService {
 
   @Autowired
   ArtPieceRepository artPieceRepo;
-  
+
   @Autowired
   TicketService ticketService;
 
@@ -146,10 +146,9 @@ public class ArtOrderService {
 
     return artOrder;
   }
-  
-  
+
   @Transactional
-  public void addTicket(String aIdCode ,String aTicketIdCode) {
+  public void addTicket(String aIdCode, String aTicketIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
       throw new IllegalArgumentException("Cannot find artOrder");
     }

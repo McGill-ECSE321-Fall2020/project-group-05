@@ -18,10 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
@@ -29,10 +26,8 @@ import com.ecse321.visart.model.User;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.repositories.ArtListingRepository;
-import com.ecse321.visart.repositories.ArtOrderRepository;
 import com.ecse321.visart.repositories.ArtPieceRepository;
 import com.ecse321.visart.repositories.EntityRepository;
-import com.ecse321.visart.service.ArtOrderService;
 import com.ecse321.visart.service.ArtPieceService;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,10 +72,6 @@ public class TestArtPieceService {
             return null;
           }
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(alRepo.getArtListing(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
@@ -132,7 +123,6 @@ public class TestArtPieceService {
     ArtPiece artPiece = null;
     PieceLocation pieceLocation = PieceLocation.AtGallery;
     String target = "123";
-    String id = AP_KEY;
     String idL = AL_KEY;
 
     try {
@@ -154,7 +144,6 @@ public class TestArtPieceService {
     String error = null;
     PieceLocation pieceLocation = null;
     String target = "123";
-    String id = AP_KEY;
     String idL = AL_KEY;
 
     try {
@@ -176,7 +165,6 @@ public class TestArtPieceService {
     String error = null;
     PieceLocation pieceLocation = PieceLocation.AtGallery;
     String target = null;
-    String id = AP_KEY;
     String idL = AL_KEY;
 
     try {
@@ -198,7 +186,6 @@ public class TestArtPieceService {
     String error = null;
     PieceLocation pieceLocation = PieceLocation.AtGallery;
     String target = "4433";
-    String id = AP_KEY;
     String idL = null;
 
     try {
@@ -247,7 +234,6 @@ public class TestArtPieceService {
 
     PieceLocation pieceLocation = PieceLocation.AtGallery;
     String target = "123";
-    String id = AP_KEY;
     String idFake = "fake";
     String idL = AL_KEY;
     ArtPiece artPiece = null;
@@ -289,7 +275,7 @@ public class TestArtPieceService {
       error = e.getMessage();
 
     }
-
+    assertNull(error);
     assertNotNull(artPiece);
     assertEquals(pieceLocationOld, artPiece.getBasicLocation());
 
@@ -312,7 +298,7 @@ public class TestArtPieceService {
       error = e.getMessage();
 
     }
-
+    assertNull(error);
     assertNotNull(artPiece);
     assertEquals(targetOld, artPiece.getAddressLocation());
 
@@ -335,7 +321,7 @@ public class TestArtPieceService {
       error = e.getMessage();
 
     }
-
+    assertNull(error);
     assertNotNull(artPiece);
     assertEquals(artListingOld, artPiece.getArtListing().getIdCode());
 
@@ -358,7 +344,7 @@ public class TestArtPieceService {
       error = e.getMessage();
 
     }
-
+    assertNull(error);
     assertNotNull(artPiece);
     assertEquals(artPiece.getBasicLocation(), pieceLocation);
 
@@ -380,7 +366,7 @@ public class TestArtPieceService {
       error = e.getMessage();
 
     }
-
+    assertNull(error);
     assertNotNull(artPiece);
     assertEquals(artPiece.getAddressLocation(), target);
 

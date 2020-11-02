@@ -7,7 +7,6 @@
 package com.ecse321.visart.model;
 
 import javax.persistence.*;
-import com.ecse321.visart.model.ArtPiece.PieceLocation;
 
 @Entity
 @Table(name = "tickets")

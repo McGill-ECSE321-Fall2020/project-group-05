@@ -10,16 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.lenient;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -90,7 +86,7 @@ public class TestArtistService {
       ArtListing al = new ArtListing();
       al.setIdCode(id);
       return al;
-    }).collect(Collectors.toMap(al->al.getIdCode(), al->al));
+    }).collect(Collectors.toMap(al -> al.getIdCode(), al -> al));
 
     lenient().when(customerRepo.getCustomer(anyString()))
         .thenAnswer((InvocationOnMock invocation) -> {
@@ -114,7 +110,7 @@ public class TestArtistService {
             return null;
           }
         });
-    lenient().when(artListingRepo.getArtListing(anyString())).thenAnswer((InvocationOnMock in)->{
+    lenient().when(artListingRepo.getArtListing(anyString())).thenAnswer((InvocationOnMock in) -> {
       return listings.get(in.getArgument(0));
     });
 
@@ -124,21 +120,21 @@ public class TestArtistService {
   void testCreateArtistCustomer() {
     String error = "";
     try {
-      Artist a0 = service.createArtist(null);
+      service.createArtist(null);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertEquals("Customer id code cannot be empty!", error);
 
     try {
-      Artist a0 = service.createArtist("");
+      service.createArtist("");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertEquals("Customer id code cannot be empty!", error);
 
     try {
-      Artist a1 = service.createArtist("not a real id");
+      service.createArtist("not a real id");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -157,12 +153,12 @@ public class TestArtistService {
   void testAddRemoveArtListing() {
     Artist a1 = service.createArtist(CUSTOMER_ID);
     service.addListings(a1.getIdCode(), Arrays.asList(listingIds));
-    assertEquals(3,artist.getPostedListings().size());
+    assertEquals(3, artist.getPostedListings().size());
   }
 
   @Test
   void testAddRemoveSoldTickets() {
-    
+
   }
 
   @Test

@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecse321.visart.dto.ManagerDto;
 import com.ecse321.visart.dto.UserDto;
 import com.ecse321.visart.service.UserService;
 
@@ -24,37 +22,61 @@ public class UserRestController {
   @Autowired
   private UserService service;
 
-  @GetMapping(value = { "/users", "/users/" })
+  /**
+   * 
+   * @return
+   */
+  @GetMapping(value = { "/users/get_all", "/users/get_all/" })
   public List<UserDto> getAllUsers() {
     return service.getAllUsers().stream().map(u -> new UserDto(u)).collect(Collectors.toList());
   }
-  
-  @GetMapping(value = { "/get_user", "/get_user/" })
-  public UserDto getUser(@RequestParam("idCode") String aIdCode) {
+
+  /**
+   * 
+   * @param  aIdCode
+   * @return
+   */
+  @GetMapping(value = { "/users/get/{idCode}", "/users/get/{idCode}/" })
+  public UserDto getUser(@PathVariable("idCode") String aIdCode) {
     return new UserDto(service.getUser(aIdCode));
   }
 
-  @PostMapping(value = { "/users/{name}", "/users/{name}/" })
+  /**
+   * 
+   * @param  values
+   * @return
+   */
+  @PostMapping(value = { "/users/create", "/users/create/" })
   public UserDto createUser(@RequestBody MultiValueMap<String, String> values) {
-    return new UserDto(service.createUser( 
+    return new UserDto(service.createUser(
         values.getFirst("emailAddress"), values.getFirst("displayName"),
         values.getFirst("userName"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
-  
-  @PostMapping(value = { "/users_update/{name}", "/users_update/{name}/" })
-  public UserDto updateUser(@RequestBody MultiValueMap<String, String> values) {
-    return new UserDto(service.updateUser(values.getFirst("idCode"), 
+
+  /**
+   * 
+   * @param  values
+   * @param  idCode
+   * @return
+   */
+  @PostMapping(value = { "/users/update/{idCode}", "/users/update/{idCode}/" })
+  public UserDto updateUser(@RequestBody MultiValueMap<String, String> values,
+      @PathVariable("idCode") String idCode) {
+    return new UserDto(service.updateUser(idCode,
         values.getFirst("emailAddress"), values.getFirst("displayName"),
         values.getFirst("userName"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
-  
-  @PostMapping(value = {"/delete_user/{id}","delete_user/{id}/"})
+
+  /**
+   * 
+   * @param  idCode
+   * @return
+   */
+  @PostMapping(value = { "/users/delete/{id}", "/users/delete/{id}/" })
   public Boolean deleteUser(@PathVariable("id") String idCode) {
     return service.deleteUser(idCode);
   }
-  
-  
-  
+
 }

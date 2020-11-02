@@ -88,9 +88,9 @@ tasks.register("compileUmple") {
 
 task integrationTest(type: Exec) {
 	dependsOn 'bootJar'
+	dependsOn ':JavaHttpRequests:jar'
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
         // on windows
-        commandLine 'start', 'cmd', '/k', 'java','-jar','build/libs/VisArtApplication-0.0.1-SNAPSHOT.jar'
         commandLine 'cmd','/c','integrationTest.bat'
     } else {
         // on linux

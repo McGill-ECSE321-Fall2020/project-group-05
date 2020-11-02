@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.ArtPieceRepository;
@@ -20,7 +18,7 @@ public class ArtPieceService {
 
   @Autowired
   ArtPieceRepository artPieceRepo;
-  
+
   @Autowired
   ArtOrderService artOrderService;
 
@@ -104,9 +102,9 @@ public class ArtPieceService {
 
     return artPiece;
   }
-  
+
   @Transactional
-  public void addArtOrder(String aIdCode ,String aArtOrderIdCode) {
+  public void addArtOrder(String aIdCode, String aArtOrderIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
       throw new IllegalArgumentException("Cannot find artPiece");
     }
@@ -117,8 +115,6 @@ public class ArtPieceService {
     artPiece.setArtOrder(artOrderService.getArtOrder(aArtOrderIdCode));
     artPieceRepo.updateArtPiece(artPiece);
   }
-
- 
 
   /**
    * Overloaded deleteArtPiece method that removes the given ArtPiece instance

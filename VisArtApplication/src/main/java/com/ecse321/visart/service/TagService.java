@@ -16,8 +16,6 @@ import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.TagRepository;
 
-import javassist.compiler.ast.Keyword;
-
 @Service
 public class TagService {
 
@@ -53,7 +51,7 @@ public class TagService {
     if (aType == null) {
       throw new IllegalArgumentException("Tag type must be a valid type!");
     }
-    
+
     if (aKeyword == null || aKeyword.length() < 1) {
       throw new IllegalArgumentException("Tag keyword cannot be empty!");
     }
@@ -155,8 +153,8 @@ public class TagService {
     TagType aType = TagType.fromString(aTypeString);
     if (aType != null) {
       tag.setType(aType);
-    }else {
-    	 throw new IllegalArgumentException("Tag type cannot be empty!");
+    } else {
+      throw new IllegalArgumentException("Tag type cannot be empty!");
     }
 
     if (aKeyword != null) {

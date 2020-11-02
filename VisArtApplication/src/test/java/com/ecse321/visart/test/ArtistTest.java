@@ -2,11 +2,6 @@ package com.ecse321.visart.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -22,7 +17,6 @@ import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.ArtistRepository;
 import com.ecse321.visart.repositories.CustomerRepository;
 import com.ecse321.visart.repositories.EntityRepository;
-import com.ecse321.visart.repositories.UserRepository;
 
 @TestMethodOrder(OrderAnnotation.class)
 @ExtendWith(SpringExtension.class)
@@ -34,9 +28,6 @@ public class ArtistTest {
 
   @Autowired
   private CustomerRepository cRepo;
-
-  @Autowired
-  private UserRepository uRepo;
 
   @Autowired
   private EntityRepository eRepo;
@@ -98,8 +89,6 @@ public class ArtistTest {
     assertEquals(aPassword, testArtist2.getCustomer().getUser().getPassword());
     assertEquals(aUsername, testArtist2.getCustomer().getUser().getUsername());
     assertEquals(aDisplayname, testArtist2.getCustomer().getUser().getDisplayname());
-
-    List<String> keys = eRepo.getAllFromColumn("idCode", User.class, String.class);
 
     User user = eRepo.findEntityByAttribute("emailAddress", User.class, aEmailAddress).get(0);
     assertEquals(aEmailAddress, user.getEmailAddress());

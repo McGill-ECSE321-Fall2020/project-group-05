@@ -11,7 +11,6 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
-import java.awt.List;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
@@ -36,7 +33,7 @@ import com.ecse321.visart.service.ManagerService;
 
 @ExtendWith(MockitoExtension.class)
 public class TestManagerService {
-  
+
   private static String id = "123";
   private static String email = "johndoe@gmail.com";
   private static String displayname = "johndoe";
@@ -44,26 +41,24 @@ public class TestManagerService {
   private static String password = "password";
   private static String profilepic = "";
   private static String profileDescription = "Hi I am John Doe";
-  
+
   @Mock
   private ManagerRepository managerRepo;
-  
+
   @Mock
   private EntityRepository entityRepo;
-  
+
   @Mock
   private ArtListingRepository artlistingRepo;
-  
+
   @Mock
   private ArtListingService artListingService;
-  
+
   @InjectMocks
   private ManagerService service;
-  
-  
+
   Manager m = null;
- 
-  
+
   @BeforeEach
   public void setMockOutput() {
     // Mock the Repository methods, returning what we want to expect from the
@@ -71,61 +66,62 @@ public class TestManagerService {
     lenient().when(managerRepo.getManager(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(id)) {
-            User user = new User(id, email, displayname, username, password, profilepic, profileDescription);
-            return new Manager(invocation.getArgument(0),user);
+            User user = new User(id, email, displayname, username, password, profilepic,
+                profileDescription);
+            return new Manager(invocation.getArgument(0), user);
           } else {
             return null;
           }
         });
     lenient().when(managerRepo.getManager(anyString(), anyBoolean())).thenAnswer(
         (InvocationOnMock invocation) -> {
-          
-            User user = new User(id, email, displayname, username, password, profilepic, profileDescription);
-            return new Manager(invocation.getArgument(0),user);
- 
+
+          User user = new User(id, email, displayname, username, password, profilepic,
+              profileDescription);
+          return new Manager(invocation.getArgument(0), user);
+
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
-    
-    lenient().when(artListingService.getArtListing(anyString())).then((InvocationOnMock invocation) -> {
-      User user = new User("1234", email, displayname, username, password, profilepic, profileDescription);
-      Customer customer = new Customer("123", user);
-      Artist artist = new Artist("123", customer );
-      ArtListing al = new ArtListing(ArtListing.PostVisibility.Public, "testpost", "testpost", "testpost", artist);
-      return al;
-   
-    });
-    
+
+    lenient().when(artListingService.getArtListing(anyString()))
+        .then((InvocationOnMock invocation) -> {
+          User user = new User("1234", email, displayname, username, password, profilepic,
+              profileDescription);
+          Customer customer = new Customer("123", user);
+          Artist artist = new Artist("123", customer);
+          ArtListing al = new ArtListing(ArtListing.PostVisibility.Public, "testpost", "testpost",
+              "testpost", artist);
+          return al;
+
+        });
+
     lenient().doAnswer((InvocationOnMock invocation) -> {
-     m = invocation.getArgument(0);
-     return null;
+      m = invocation.getArgument(0);
+      return null;
     }).when(managerRepo).updateManager(any());
-   
-    
-    lenient().when(entityRepo.findEntityByAttribute(anyString(), any(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
-      
-      String name = invocation.getArgument(2); //get the display name
-      
-      if(name.equals(displayname)||name.equals(username)) {
-        return new ArrayList<Manager>();
-      } else {
-       ArrayList<Manager> managersWithName = new ArrayList<Manager>();
-       managersWithName.add(new Manager());
-       return managersWithName;
-      }
-      
-     
-    });
-    
-    lenient().when(managerRepo.deleteManager(anyString())).thenAnswer((InvocationOnMock invocation) -> {
-      if (invocation.getArgument(0) == id) {
+
+    lenient().when(entityRepo.findEntityByAttribute(anyString(), any(), anyString()))
+        .thenAnswer((InvocationOnMock invocation) -> {
+
+          String name = invocation.getArgument(2); // get the display name
+
+          if (name.equals(displayname) || name.equals(username)) {
+            return new ArrayList<Manager>();
+          } else {
+            ArrayList<Manager> managersWithName = new ArrayList<Manager>();
+            managersWithName.add(new Manager());
+            return managersWithName;
+          }
+
+        });
+
+    lenient().when(managerRepo.deleteManager(anyString()))
+        .thenAnswer((InvocationOnMock invocation) -> {
+          if (invocation.getArgument(0) == id) {
             return true;
-      } else {
-        return false;
-      }
-    });
+          } else {
+            return false;
+          }
+        });
 
     lenient().when(managerRepo.createManager(anyString(), anyString(), anyString(), anyString(),
         anyString(), anyString(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
@@ -136,7 +132,8 @@ public class TestManagerService {
           String password = invocation.getArgument(4);
           String profilepic = invocation.getArgument(5);
           String profileDescription = invocation.getArgument(6);
-          User user = new User(id, email, displayname, username, password, profilepic, profileDescription);
+          User user = new User(id, email, displayname, username, password, profilepic,
+              profileDescription);
           Manager manager = new Manager(id, user);
           return manager;
         });
@@ -144,14 +141,15 @@ public class TestManagerService {
     // In the tests below, test the Service class's DATA VALIDATION on the
     // parameters that are given to it.
   }
-  
+
   @Test
   public void testCreateManager() {
     // assertEquals(0, service.getAllUsers().size());
 
     Manager manager = null;
     try {
-      manager = service.createManager(email, displayname, username, password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, username, password, profilepic,
+          profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       System.out.println(e.getMessage());
@@ -160,7 +158,7 @@ public class TestManagerService {
     id = manager.getIdCode();
     assertEquals(email, manager.getUser().getEmailAddress());
   }
-  
+
   @Test
   public void testCreateNullManager() {
     String name = null;
@@ -173,16 +171,17 @@ public class TestManagerService {
     }
     assertNull(manager);
     assertEquals("Email address is invalid", error); // expected error message for service data
-                                                          // validation.
+                                                     // validation.
   }
-  
+
   @Test
   public void testCreateBadEmailManager() {
     // assertEquals(0, service.getAllUsers().size());
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(email+"@.com", displayname, username, password, profilepic, profileDescription);
+      manager = service.createManager(email + "@.com", displayname, username, password, profilepic,
+          profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -190,15 +189,15 @@ public class TestManagerService {
     assertNull(manager);
     assertEquals("Email address is invalid", error);
   }
-  
-  
+
   @Test
   public void testCreateInvalidUsernameManager() {
     // assertEquals(0, service.getAllUsers().size());
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(email, displayname, "hi", password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, "hi", password, profilepic,
+          profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -206,15 +205,15 @@ public class TestManagerService {
     assertNull(manager);
     assertEquals("This User Name is invalid, must be between 5 and 25 characters!", error);
   }
-  
-  
+
   @Test
   public void testCreateInvalidDisplaynameManager() {
     // assertEquals(0, service.getAllUsers().size());
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(email, "test", username, password, profilepic, profileDescription);
+      manager = service.createManager(email, "test", username, password, profilepic,
+          profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -222,14 +221,15 @@ public class TestManagerService {
     assertNull(manager);
     assertEquals("This Display Name is invalid, must be between 5 and 25 characters!", error);
   }
-  
+
   @Test
   public void testCreateDuplicateDisplaynameManager() {
     // assertEquals(0, service.getAllUsers().size());
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager( email, displayname+"1", username, password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname + "1", username, password, profilepic,
+          profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -244,7 +244,8 @@ public class TestManagerService {
     String error = null;
     Manager manager = null;
     try {
-      manager = service.createManager(email, displayname, username+"1", password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, username + "1", password, profilepic,
+          profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
@@ -252,21 +253,20 @@ public class TestManagerService {
     assertNull(manager);
     assertEquals("This Username is already taken!", error);
   }
-  
-  
-  
+
   @Test
   public void testGetManager() {
     Manager manager = null;
     try {
-      manager = service.createManager(email, displayname, username, password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, username, password, profilepic,
+          profileDescription);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
     }
     assertNotNull(manager);
     assertEquals(id, manager.getIdCode());
-    
+
     try {
       manager = service.getManager(id);
     } catch (IllegalArgumentException e) {
@@ -275,23 +275,24 @@ public class TestManagerService {
     }
     assertNotNull(manager);
     assertEquals(id, manager.getIdCode());
-    
+
   }
-  
+
   @Test
   public void testDeleteManager() {
-    
+
     assertTrue(service.deleteManager(id));
     assertFalse(service.deleteManager(""));
     assertFalse(service.deleteManager(null));
-    
+
   }
-  
+
   @Test
   public void testAddArtListing() {
     Manager manager = null;
     try {
-      manager = service.createManager(email, displayname, username, password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, username, password, profilepic,
+          profileDescription);
       service.addListing(manager.getIdCode(), "123");
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
@@ -300,15 +301,16 @@ public class TestManagerService {
     assertNotNull(m);
     assertNotNull(m.getPromotedListings());
     assertEquals(m.getPromotedListings().size(), 1);
-    //assertEquals(manager.getPromotedListing(0).getDescription(), "testpost");
-    
+    // assertEquals(manager.getPromotedListing(0).getDescription(), "testpost");
+
   }
-  
+
   @Test
   public void testRemoveArtListing() {
     Manager manager = null;
     try {
-      manager = service.createManager(email, displayname, username, password, profilepic, profileDescription);
+      manager = service.createManager(email, displayname, username, password, profilepic,
+          profileDescription);
       service.removeListing(manager.getIdCode(), "123");
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
@@ -317,9 +319,8 @@ public class TestManagerService {
     assertNotNull(m);
     assertNotNull(m.getPromotedListings());
     assertEquals(m.getPromotedListings().size(), 0);
-    //assertEquals(manager.getPromotedListing(0).getDescription(), "testpost");
-    
+    // assertEquals(manager.getPromotedListing(0).getDescription(), "testpost");
+
   }
-  
 
 }

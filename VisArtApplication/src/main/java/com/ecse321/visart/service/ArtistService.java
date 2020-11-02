@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtListing.PostVisibility;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Ticket;
@@ -248,6 +247,10 @@ public class ArtistService {
   @Transactional
   public List<String> getAllKeys() {
     return artistRepo.getAllKeys();
+  }
+
+  public List<Artist> getAllArtists() {
+    return entityRepo.getAllEntities(Artist.class);
   }
 
 }
