@@ -60,19 +60,6 @@ public class ArtistService {
     return artistRepo.createArtist(key, customer);
   }
 
-  // TODO: delete udpateArtist method
-  /**
-   * updateArtist method updates the given Artist instance's properties in the
-   * database.
-   * 
-   * @param artist the artist whose properties will be updated in the database
-   */
-  @Transactional
-  public void updateArtist(String artistId) {
-    Artist artist = artistRepo.getArtist(artistId);
-    artistRepo.updateArtist(artist);
-  }
-
   /**
    * addListings adds a list of ArtListings to an Artist. The list must not be
    * empty or null, and the ids must all be of valid, existing objects in the

@@ -162,7 +162,7 @@ public class TestArtistService {
 
   @Test
   void testAddRemoveSoldTickets() {
-
+    
   }
 
   @Test
@@ -179,6 +179,4 @@ public class TestArtistService {
   void getAllArtists() {
 
   }
-
-  // untested: updateArtist
 }

@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.lenient;
 
 import java.awt.List;
@@ -76,10 +77,32 @@ public class TestCustomerService {
           }
         });
     
+    lenient().when(customerRepo.getCustomer(anyString(),anyBoolean(), anyBoolean())).thenAnswer(
+        (InvocationOnMock invocation) -> {
+          
+            User user = new User(id, email, displayname, username, password, profilepic, profileDescription);
+            return new Customer(invocation.getArgument(0),user);
+ 
+        });
     // Whenever anything is saved, just return the parameter object
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
     };
+    
+    lenient().when(artListingService.getArtListing(anyString())).then((InvocationOnMock invocation) -> {
+      User user = new User("1234", email, displayname, username, password, profilepic, profileDescription);
+      Customer customer = new Customer("123", user);
+      Artist artist = new Artist("123", customer );
+      ArtListing al = new ArtListing(ArtListing.PostVisibility.Public, "testpost", "testpost", "testpost", artist);
+      return al;
+   
+    });
+    
+    lenient().doAnswer((InvocationOnMock invocation) -> {
+      c = invocation.getArgument(0);
+      return null;
+     }).when(customerRepo).updateCustomer(any());
+    
     
     lenient().when(entityRepo.findEntityByAttribute(anyString(), any(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
       
