@@ -36,42 +36,67 @@ public class ArtOrderRestController {
 
   @Autowired
   private TicketService servicet;
-    
-    
-  @GetMapping(value = { "/artOrders", "/artOrders/" })
+
+  /**
+   * 
+   * @return
+   */
+  @GetMapping(value = { "/artorder/get_all", "/artorder/get_all/" })
   public List<ArtOrderDto> getAllArtOrders() {
     return service.getAllArtOrders().stream().map(ao -> new ArtOrderDto(ao))
         .collect(Collectors.toList());
   }
 
-  @GetMapping(value = { "/get_artOrder", "/get_artorder/" })
-  public ArtOrderDto getArtOrder(@RequestParam("idCode") String aIdCode) {
+  /**
+   * 
+   * @param  aIdCode
+   * @return
+   */
+  @GetMapping(value = { "/artorder/get/{idCode}", "/artorder/get/{idCode}/" })
+  public ArtOrderDto getArtOrder(@PathVariable("idCode") String aIdCode) {
     return new ArtOrderDto(service.getArtOrder(aIdCode));
   }
 
-  @PostMapping(value = { "/create_artOrder", "/create_artOrder/" })
-  public ArtOrderDto createArtOrder(
-      @RequestParam(value = "aIsDelivered") String aIsDelivered,
-      @RequestParam(value = "pieceLocation") String aTargetLocation,
-      @RequestParam(value = "aTargetAddress") String aTargetAddress,
-      @RequestParam(value = "aDeliveryTracker") String aDeliveryTracker,
-      @RequestParam(value = "artPieceDto") String artPieceDto) {
+  /**
+   * 
+   * @param  aIsDelivered
+   * @param  aTargetLocation
+   * @param  aTargetAddress
+   * @param  aDeliveryTracker
+   * @param  artPieceDto
+   * @return
+   */
+  @PostMapping(value = { "/artorder/create", "/artorder/create/" })
+  public ArtOrderDto createArtOrder(@RequestBody MultiValueMap<String, String> map) {
 
-    boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
+    String aIsDelivered = map.getFirst("aIsDelivered");
+    String aTargetLocation = map.getFirst("pieceLocation");
+    String aTargetAddress = map.getFirst("aTargetAddress");
+    String aDeliveryTracker = map.getFirst("aDeliveryTracker");
+    String artPieceDto = map.getFirst("artPieceDto");
+
+    Boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
     PieceLocation TargetLocation = PieceLocation.valueOf(aTargetLocation);
     return new ArtOrderDto(service.createArtOrder(IsDelivered, TargetLocation, aTargetAddress,
         aDeliveryTracker, artPieceDto));
   }
 
-  @PostMapping(value = { "/update_artOrder/{aIdCode}", "/update_artOrder/{aIdCode}/" })
+  /**
+   * 
+   * @param  aIdCode
+   * @param  map
+   * @return
+   */
+  @PostMapping(value = { "/artorder/update/{aIdCode}", "/artorder/update/{aIdCode}/" })
   public ArtOrderDto updateArtOrder(@PathVariable("aIdCode") String aIdCode,
-      @RequestParam(value = "aIsDelivered") String aIsDelivered,
-      @RequestParam(value = "pieceLocation") String aTargetLocation,
-      @RequestParam(value = "aTargetAddress") String aTargetAddress,
-      @RequestParam(value = "aDeliveryTracker") String aDeliveryTracker,
-      @RequestParam(value = "artPieceDto") String artPieceDto) {
+      @RequestBody MultiValueMap<String, String> map) {
+    String aIsDelivered = map.getFirst("aIsDelivered");
+    String aTargetLocation = map.getFirst("pieceLocation");
+    String aTargetAddress = map.getFirst("aTargetAddress");
+    String aDeliveryTracker = map.getFirst("aDeliveryTracker");
+    String artPieceDto = map.getFirst("artPieceDto");
 
-    boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
+    Boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
     PieceLocation TargetLocation = PieceLocation.valueOf(aTargetLocation);
     return new ArtOrderDto(
         service.updateArtOrder(aIdCode, IsDelivered, TargetLocation, aTargetAddress,
@@ -79,18 +104,29 @@ public class ArtOrderRestController {
 
   }
 
-  @PostMapping(value = { "/artOrder_addTicket/{ticketId}", "/artOrder_addTicket/{ticketId}" })
-  public ArtOrderDto addTicket(@RequestParam(value = "artOrderId") String artOrderId,
-      @PathVariable("ticketId") String ticketId) {
+  /**
+   * 
+   * @param  artOrderId
+   * @param  ticketId
+   * @return
+   */
+  @PostMapping(value = {
+      "/artorder/add_ticket/{artOrderId}/{ticketId}",
+      "/artorder/add_ticket/{artOrderId}/{ticketId}/" })
+  public ArtOrderDto addTicket(@PathVariable(value = "artOrderId") String artOrderId,
+      @PathVariable("ticketId") String ticketId) { // TODO: deal with request body?
     ArtOrder artOrder = service.getArtOrder(artOrderId);
     artOrder.setTicket(servicet.getTicket(ticketId));
     return new ArtOrderDto(artOrder);
 
-  
   }
-  
 
-  @PostMapping(value = { "/delete_artOrder/{id}", "/delete_artOrder/{id}/" })
+  /**
+   * 
+   * @param  idCode
+   * @return
+   */
+  @PostMapping(value = { "/artorder/delete/{id}", "/artorder/delete/{id}/" })
   public Boolean deleteArtOrder(@PathVariable("id") String idCode) {
     return service.deleteArtOrder(idCode);
   }
