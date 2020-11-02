@@ -65,7 +65,7 @@ public class TagRestController {
    * @return
    */
   @GetMapping(value = { "/tags/get_by_keyword/{keyword}", "/tags/get_by_keyword/{keyword}/" })
-  public List<TagDto> getTagsByKeyword(@PathVariable("type") String keyword) {
+  public List<TagDto> getTagsByKeyword(@PathVariable("keyword") String keyword) {
     return tagService.getTagByKeyword(keyword).stream().map(u -> new TagDto(u))
         .collect(Collectors.toList());
   }
