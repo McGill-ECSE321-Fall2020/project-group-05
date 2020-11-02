@@ -18,8 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.UserRepository;
@@ -61,10 +59,6 @@ public class TestUserService {
             return null;
           }
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(userRepo.deleteUser(anyString())).thenAnswer((InvocationOnMock invocation) -> {
       if (invocation.getArgument(0) == id) {
@@ -250,6 +244,7 @@ public class TestUserService {
       // Check that no error occurred
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(user);
     assertEquals("email123@gmail.com", user.getEmailAddress());
 
@@ -267,6 +262,7 @@ public class TestUserService {
       // Check that no error occurred
       error = e.getMessage();
     }
+    assertNull(error);
     displayname = "johndoe";
     assertNotNull(user);
     assertEquals("newdp", user.getDisplayname());
@@ -285,6 +281,7 @@ public class TestUserService {
       // Check that no error occurred
       error = e.getMessage();
     }
+    assertNull(error);
     username = "johndoe123";
     assertNotNull(user);
     assertEquals("username", user.getUsername());
@@ -302,6 +299,7 @@ public class TestUserService {
       // Check that no error occurred
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(user);
     assertEquals("newPassword", user.getPassword());
 
@@ -318,6 +316,7 @@ public class TestUserService {
       // Check that no error occurred
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(user);
     assertEquals("profile desc", user.getProfileDescription());
 

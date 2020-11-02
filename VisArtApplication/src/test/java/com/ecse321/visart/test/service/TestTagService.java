@@ -16,8 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Tag;
@@ -69,18 +67,12 @@ public class TestTagService {
             return null;
           }
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(alRepo.getArtListing(anyString())).thenAnswer((InvocationOnMock invocation) -> {
-      String id = invocation.getArgument(0);
       return TAG_LISTING;
     });
     lenient().when(tagRepo.createTag(any(), anyString(), anyString(),
         any())).thenAnswer((InvocationOnMock invocation) -> {
-          String id = invocation.getArgument(2);
           String keyword = invocation.getArgument(1);
           TagType type = invocation.getArgument(0);
           ArtListing listing = invocation.getArgument(3);
@@ -146,7 +138,6 @@ public class TestTagService {
   public void testCreateNullTagType() {
     String error = null;
     String keyword = "keyword";
-    String id = "mockcode";
     String type = null;
     Tag tag = null;
     String listing = "listingcode";
@@ -231,7 +222,6 @@ public class TestTagService {
 
   @Test
   public void testGetTag() {
-    String error = null;
     String keyword = "keyword";
     String type = "Topic";
     String listing = "listingcode";
@@ -244,6 +234,7 @@ public class TestTagService {
       // Check that no error occurred
       fail();
     }
+
     assertNotNull(tag);
     id = tag.getIdCode();
 
@@ -264,11 +255,10 @@ public class TestTagService {
     String keyword = "renaissance";
     String id = null;
     String type = "Topic";
-    Tag tag = null;
     String listing = "listingcode";
     try {
 
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tagService.updateTag(type, keyword, id, listing);
 
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -283,10 +273,9 @@ public class TestTagService {
     String keyword = "renaissance";
     String id = "mockcode";
     String type = null;
-    Tag tag = null;
     String listing = "listingcode";
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tagService.updateTag(type, keyword, id, listing);
 
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -301,10 +290,9 @@ public class TestTagService {
     String keyword = "renaissance";
     String id = TAG_ID;
     String type = "Topic";
-    Tag tag = null;
     String listing = null;
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tagService.updateTag(type, keyword, id, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -318,10 +306,9 @@ public class TestTagService {
     String keyword = "";
     String id = TAG_ID;
     String type = "Topic";
-    Tag tag = null;
     String listing = "listingcode";
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tagService.updateTag(type, keyword, id, listing);
 
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
@@ -350,10 +337,9 @@ public class TestTagService {
         + "keykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykey";
     String id = TAG_ID;
     String type = "Topic";
-    Tag tag = null;
     String listing = "listingcode";
     try {
-      tag = tagService.updateTag(type, keyword, id, listing);
+      tagService.updateTag(type, keyword, id, listing);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -374,6 +360,7 @@ public class TestTagService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertEquals(tag.getKeyword(), keyword); // expected error message for service data
                                              // validation.
   }
@@ -391,6 +378,7 @@ public class TestTagService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertEquals(tag.getType().toString(), type); // expected error message for service data
                                                   // validation.
   }
@@ -408,7 +396,7 @@ public class TestTagService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-
+    assertNull(error);
     assertEquals(tag.getListing().getIdCode(), listing); // expected error message for service data
                                                          // validation.
   }

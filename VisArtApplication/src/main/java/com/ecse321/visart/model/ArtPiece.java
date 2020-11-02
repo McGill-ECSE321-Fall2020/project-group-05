@@ -171,7 +171,6 @@ public class ArtPiece {
 
   // line 199 "../../../../../resources/visart.ump"
   public ArtPiece() {
-    String note;
   }
 
   public String toString() {

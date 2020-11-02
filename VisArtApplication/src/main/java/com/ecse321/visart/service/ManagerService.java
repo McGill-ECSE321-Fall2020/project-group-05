@@ -62,8 +62,6 @@ public class ManagerService {
       throw new IllegalArgumentException("Description must be less than 255 characters");
     }
 
-    String hashedPassword;
-
     return managerRepo.createManager(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
         aProfilePicLink, aProfileDescription);
 

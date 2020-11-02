@@ -195,9 +195,11 @@ public class ArtListingRestController {
   }
 
   /**
-   * example: https://heroku.com/artlisting/get_artwork_by_keyword?keywords=bob%20burgers,hello,dingaling
+   * example:
+   * https://heroku.com/artlisting/get_artwork_by_keyword?keywords=bob%20burgers,hello,dingaling
    * keywords -> ["bob burgers", "hello", "dingaling"]
-   * @param keywords
+   * 
+   * @param  keywords
    * @return
    */
   @GetMapping(value = {

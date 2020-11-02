@@ -120,21 +120,21 @@ public class TestArtistService {
   void testCreateArtistCustomer() {
     String error = "";
     try {
-      Artist a0 = service.createArtist(null);
+      service.createArtist(null);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertEquals("Customer id code cannot be empty!", error);
 
     try {
-      Artist a0 = service.createArtist("");
+      service.createArtist("");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
     assertEquals("Customer id code cannot be empty!", error);
 
     try {
-      Artist a1 = service.createArtist("not a real id");
+      service.createArtist("not a real id");
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }

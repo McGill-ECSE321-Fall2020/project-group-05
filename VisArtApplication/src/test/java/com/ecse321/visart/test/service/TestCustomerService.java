@@ -20,8 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
@@ -83,10 +81,6 @@ public class TestCustomerService {
           return new Customer(invocation.getArgument(0), user);
 
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(artListingService.getArtListing(anyString()))
         .then((InvocationOnMock invocation) -> {
@@ -172,6 +166,7 @@ public class TestCustomerService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNotNull(error);
     assertNull(customer);
 
   }

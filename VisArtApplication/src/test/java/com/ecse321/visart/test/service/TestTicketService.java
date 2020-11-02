@@ -19,8 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
@@ -96,10 +94,6 @@ public class TestTicketService {
             return null;
           }
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(aoRepo.getArtOrder(anyString())).thenAnswer((InvocationOnMock invocation) -> {
       String id = invocation.getArgument(0);
@@ -167,7 +161,6 @@ public class TestTicketService {
         any(), any())).thenAnswer((InvocationOnMock invocation) -> {
           boolean payment = (boolean) invocation.getArgument(0);
           double paymentPrice = (double) invocation.getArgument(1);
-          String id = (String) invocation.getArgument(2);
           ArtOrder order = (ArtOrder) invocation.getArgument(3);
           Customer customer = (Customer) invocation.getArgument(4);
           Artist artist = (Artist) invocation.getArgument(5);
@@ -385,6 +378,7 @@ public class TestTicketService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNotNull(error);
     assertNull(ticket);
     // assertEquals("Ticket id code cannot be empty!", error); // expected error
     // message for service data
@@ -406,7 +400,7 @@ public class TestTicketService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-
+    assertNull(error);
     assertEquals(ticket.getIsPaymentConfirmed(), payment); // expected error message for service
                                                            // data
                                                            // validation.

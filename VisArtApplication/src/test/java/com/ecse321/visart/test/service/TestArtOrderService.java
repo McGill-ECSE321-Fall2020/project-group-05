@@ -18,8 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
@@ -79,10 +77,6 @@ public class TestArtOrderService {
             return null;
           }
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(apRepo.getArtPiece(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
@@ -369,6 +363,7 @@ public class TestArtOrderService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(artOrder);
     assertEquals(pieceLocationOld, artOrder.getTargetLocation()); // expected error message for
                                                                   // service
@@ -395,6 +390,7 @@ public class TestArtOrderService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(artOrder);
     assertEquals(targetOld, artOrder.getTargetAddress()); // expected error message for service
                                                           // data
@@ -420,6 +416,7 @@ public class TestArtOrderService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(artOrder);
     assertEquals(trackerOld, artOrder.getDeliveryTracker()); // expected error message for service
                                                              // data
@@ -444,6 +441,7 @@ public class TestArtOrderService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     assertNotNull(artOrder);
     assertEquals(idPOld, artOrder.getArtPiece().getIdCode()); // expected error message for service
                                                               // data

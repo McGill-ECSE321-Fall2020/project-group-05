@@ -16,8 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
@@ -64,10 +62,6 @@ public class TestArtListingService {
             return null;
           }
         });
-    // Whenever anything is saved, just return the parameter object
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
 
     lenient().when(alRepo.createArtListing(Mockito.any(PostVisibility.class), anyString(),
         anyString(), anyString(), Mockito.any(Artist.class)))
@@ -108,7 +102,6 @@ public class TestArtListingService {
     PostVisibility postVisibility = PostVisibility.Public;
     String description = "123";
     String title = "111122223333";
-    String id = "1234";
     User aUser = new User("a", "b", "c", "d", "e", "f", "g");
     Customer aCustomer = new Customer("customerCode", aUser);
     Artist aArtist = new Artist("artistCode", aCustomer);
@@ -222,14 +215,11 @@ public class TestArtListingService {
     User aUser = new User("a", "b", "c", "d", "e", "f", "g");
     Customer aCustomer = new Customer("customerCode", aUser);
     Artist aArtist = new Artist("artistCode", aCustomer);
-    ArtListing artListing = null;
     ArtListing artListing2 = null;
-    String error = null;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
-      error = e.getMessage();
       fail();
     } // data
     try {
@@ -260,6 +250,7 @@ public class TestArtListingService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
+    assertNull(error);
     // data
     // validation.
 

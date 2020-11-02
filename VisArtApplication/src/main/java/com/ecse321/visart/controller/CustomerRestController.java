@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.CustomerDto;
 import com.ecse321.visart.service.CustomerService;
-import com.ecse321.visart.service.ArtListingService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -23,9 +22,6 @@ public class CustomerRestController {
 
   @Autowired
   private CustomerService service;
-
-  @Autowired
-  private ArtListingService alservice;
 
   /**
    * 
