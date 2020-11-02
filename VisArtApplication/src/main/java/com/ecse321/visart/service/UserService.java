@@ -1,5 +1,6 @@
 package com.ecse321.visart.service;
 
+
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -148,6 +149,12 @@ public class UserService {
 
   }
 
+  /**
+  * logs in the user
+  * @param  aEmailAddress
+  * @param  aPassword
+  * @return isLoggedIn
+  */
   @Transactional
   public boolean loginUser(String aEmail, String aPassword) {
     User user = entityRepo.findEntityByAttribute("email", User.class, aEmail).get(0);
@@ -161,11 +168,23 @@ public class UserService {
     return true;
   }
 
+  /**
+   * gets a specific user from the db
+   * @param  aIdCode
+   * @param user
+   * @return isLoggedIn
+   */
   @Transactional
   public User getUser(String aIdCode) {
     return userRepo.getUser(aIdCode);
   }
 
+  /**
+   * delete a specific user from the db
+   * @param  aIdCode
+   * @param user
+   * @return isDeleted
+   */
   @Transactional
   public Boolean deleteUser(String aIdCode) {
     if (aIdCode != null && !aIdCode.contentEquals("")) {
@@ -175,6 +194,10 @@ public class UserService {
     }
   }
 
+  /**
+   * get all users from the db
+   * @return allUsers
+   */
   @Transactional
   public List<User> getAllUsers() {
     return entityRepo.getAllEntities(User.class);
