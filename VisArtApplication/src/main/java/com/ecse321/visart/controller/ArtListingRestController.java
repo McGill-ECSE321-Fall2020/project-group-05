@@ -194,6 +194,12 @@ public class ArtListingRestController {
         .collect(Collectors.toList());
   }
 
+  /**
+   * example: https://heroku.com/artlisting/get_artwork_by_keyword?keywords=bob%20burgers,hello,dingaling
+   * keywords -> ["bob burgers", "hello", "dingaling"]
+   * @param keywords
+   * @return
+   */
   @GetMapping(value = {
       "/artlisting/get_artwork_by_keyword",
       "/artlisting/get_artwork_by_keyword/" })
