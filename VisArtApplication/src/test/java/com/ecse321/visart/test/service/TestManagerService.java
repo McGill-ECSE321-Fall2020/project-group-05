@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
@@ -22,10 +23,15 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
+import com.ecse321.visart.model.ArtListing;
+import com.ecse321.visart.model.Artist;
+import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
+import com.ecse321.visart.repositories.ArtListingRepository;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.ManagerRepository;
+import com.ecse321.visart.service.ArtListingService;
 import com.ecse321.visart.service.ManagerService;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,9 +51,17 @@ public class TestManagerService {
   @Mock
   private EntityRepository entityRepo;
   
+  @Mock
+  private ArtListingRepository artlistingRepo;
+  
+  @Mock
+  private ArtListingService artListingService;
+  
   @InjectMocks
   private ManagerService service;
   
+  
+  Manager m = null;
  
   
   @BeforeEach
@@ -63,10 +77,32 @@ public class TestManagerService {
             return null;
           }
         });
+    lenient().when(managerRepo.getManager(anyString(), anyBoolean())).thenAnswer(
+        (InvocationOnMock invocation) -> {
+          
+            User user = new User(id, email, displayname, username, password, profilepic, profileDescription);
+            return new Manager(invocation.getArgument(0),user);
+ 
+        });
     // Whenever anything is saved, just return the parameter object
     Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
       return invocation.getArgument(0);
     };
+    
+    lenient().when(artListingService.getArtListing(anyString())).then((InvocationOnMock invocation) -> {
+      User user = new User("1234", email, displayname, username, password, profilepic, profileDescription);
+      Customer customer = new Customer("123", user);
+      Artist artist = new Artist("123", customer );
+      ArtListing al = new ArtListing(ArtListing.PostVisibility.Public, "testpost", "testpost", "testpost", artist);
+      return al;
+   
+    });
+    
+    lenient().doAnswer((InvocationOnMock invocation) -> {
+     m = invocation.getArgument(0);
+     return null;
+    }).when(managerRepo).updateManager(any());
+   
     
     lenient().when(entityRepo.findEntityByAttribute(anyString(), any(), anyString())).thenAnswer((InvocationOnMock invocation) -> {
       
@@ -248,6 +284,40 @@ public class TestManagerService {
     assertTrue(service.deleteManager(id));
     assertFalse(service.deleteManager(""));
     assertFalse(service.deleteManager(null));
+    
+  }
+  
+  @Test
+  public void testAddArtListing() {
+    Manager manager = null;
+    try {
+      manager = service.createManager(email, displayname, username, password, profilepic, profileDescription);
+      service.addListing(manager.getIdCode(), "123");
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(m);
+    assertNotNull(m.getPromotedListings());
+    assertEquals(m.getPromotedListings().size(), 1);
+    //assertEquals(manager.getPromotedListing(0).getDescription(), "testpost");
+    
+  }
+  
+  @Test
+  public void testRemoveArtListing() {
+    Manager manager = null;
+    try {
+      manager = service.createManager(email, displayname, username, password, profilepic, profileDescription);
+      service.removeListing(manager.getIdCode(), "123");
+    } catch (IllegalArgumentException e) {
+      // Check that no error occurred
+      fail();
+    }
+    assertNotNull(m);
+    assertNotNull(m.getPromotedListings());
+    assertEquals(m.getPromotedListings().size(), 0);
+    //assertEquals(manager.getPromotedListing(0).getDescription(), "testpost");
     
   }
   
