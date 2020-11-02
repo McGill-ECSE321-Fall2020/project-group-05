@@ -44,14 +44,14 @@ public class CustomerRestController {
      return customer.getFavoriteListings();
   }
   
-  @PostMapping(value = {"/customers/{favorite listing}","/customers/{favoritelisting}"})
+  @PostMapping(value = {"/customers/{favorite_listing}","/customers/{favoritelisting}"})
   public CustomerDto addCustomerFavListing(@RequestBody MultiValueMap<String, String> values) {
       Customer customer = service.getCustomer(values.getFirst("idCode"));
       customer.addFavoriteListing(alservice.getArtListing(values.getFirst("listingIdCode")));
       return new CustomerDto(customer);
   }
   
-  @PostMapping(value = {"/customers/{favorite listing}","/customers/{favorite listing}"})
+  @PostMapping(value = {"/del_customers/{favorite listing}","/del_customers/{favorite listing}"})
   public CustomerDto deleteCustomerFavListing(@RequestBody MultiValueMap<String, String> values) {
      Customer customer = service.getCustomer(values.getFirst("idCode"));
       customer.removeFavoriteListing(alservice.getArtListing(values.getFirst("listingIdCode")));
@@ -75,7 +75,7 @@ public class CustomerRestController {
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
   
-  @PostMapping(value = {"/delete_managers/{id}","delete_manager/{id}/"})
+  @PostMapping(value = {"/delete_customer/{id}","delete_customer/{id}/"})
   public Boolean deleteCustomer(@PathVariable("id") String idCode) {
     return service.deleteCustomer(idCode);
   }
