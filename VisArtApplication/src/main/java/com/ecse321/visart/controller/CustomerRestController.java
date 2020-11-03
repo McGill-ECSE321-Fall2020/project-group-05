@@ -13,7 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.CustomerDto;
+import com.ecse321.visart.model.ArtOrder;
+import com.ecse321.visart.model.ArtPiece;
+import com.ecse321.visart.model.ArtPiece.PieceLocation;
+import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Ticket;
+import com.ecse321.visart.service.ArtOrderService;
 import com.ecse321.visart.service.CustomerService;
+import com.ecse321.visart.service.TicketService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -21,6 +28,12 @@ public class CustomerRestController {
 
   @Autowired
   private CustomerService service;
+  
+  @Autowired
+  private TicketService ticketService;
+  
+  @Autowired 
+  private ArtOrderService orderService;
 
   /**
    * 
@@ -69,6 +82,29 @@ public class CustomerRestController {
     String listingId = values.getFirst("listingIdCode");
     service.addfavoriteList(idCode, listingId);
     return new CustomerDto(service.getCustomer(idCode));
+  }
+  
+  /**
+   * 
+   * @param  idCode
+   * @param  values
+   * @return
+   */
+  @PostMapping(value = {
+      "/customers/purchase_artpiece/{idCode}",
+      "/customers/purchase_artpiece/{idCode}/" })
+  public CustomerDto purchaseArtwork(@PathVariable("idCode") String idCustomerCode, 
+      @PathVariable("idCode") String idArtPieceCode,
+      @RequestBody MultiValueMap<String, String> values) {
+    
+    Customer customer = service.getCustomer(idCustomerCode);
+    
+    ArtOrder order = orderService.createArtOrder(false, PieceLocation.fromString(values.getFirst("targetLocation")), values.getFirst("targetAddress"), 
+        values.getFirst("deliveryTracker"), idArtPieceCode);
+    
+    Ticket ticket = ticketService.createTicket(false, 0.0, order.getIdCode(), idCustomerCode, order.getArtPiece().getArtListing().getArtist().getIdCode());
+    
+    return new CustomerDto(customer);
   }
 
   /**

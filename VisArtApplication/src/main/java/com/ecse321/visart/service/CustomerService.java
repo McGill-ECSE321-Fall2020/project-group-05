@@ -8,8 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.User;
+import com.ecse321.visart.model.ArtPiece.PieceLocation;
+import com.ecse321.visart.model.ArtOrder;
+import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Ticket;
 import com.ecse321.visart.repositories.EntityRepository;
+import com.ecse321.visart.repositories.ArtPieceRepository;
 import com.ecse321.visart.repositories.CustomerRepository;
 
 @Service
@@ -20,6 +25,12 @@ public class CustomerService {
 
   @Autowired
   EntityRepository entityRepo;
+  
+  @Autowired
+  ArtPieceRepository artPieceRepo;
+  
+  @Autowired
+  ArtOrderService artOrderService;
 
   @Autowired
   ArtListingService artListingService;
@@ -122,6 +133,7 @@ public class CustomerService {
     }
   }
 
+  @Transactional
   public void addtickets(String aIdCode, String ticketIdCode) { // TODO: make this ticketIdCode
     Customer customer = getCustomer(aIdCode, true, false);
     if (ticketIdCode != null) {
@@ -130,6 +142,7 @@ public class CustomerService {
     }
   }
 
+  @Transactional
   public void removetickets(String aIdCode, String ticketIdCode) {
     Customer customer = getCustomer(aIdCode, true, false);
     if (ticketIdCode != null) {
@@ -137,6 +150,7 @@ public class CustomerService {
       customerRepo.updateCustomer(customer);
     }
   }
+  
 
   /**
    * Overloaded getCustomer method retrieves a Customer instance from the database
