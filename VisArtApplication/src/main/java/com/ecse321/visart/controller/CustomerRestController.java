@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.CustomerDto;
 import com.ecse321.visart.model.ArtOrder;
-import com.ecse321.visart.model.ArtPiece;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Ticket;
@@ -102,7 +101,7 @@ public class CustomerRestController {
     ArtOrder order = orderService.createArtOrder(false, PieceLocation.fromString(values.getFirst("targetLocation")), values.getFirst("targetAddress"), 
         values.getFirst("deliveryTracker"), idArtPieceCode);
     
-    Ticket ticket = ticketService.createTicket(false, 0.0, order.getIdCode(), idCustomerCode, order.getArtPiece().getArtListing().getArtist().getIdCode());
+    ticketService.createTicket(false, 0.0, order.getIdCode(), idCustomerCode, order.getArtPiece().getArtListing().getArtist().getIdCode());
     
     return new CustomerDto(customer);
   }

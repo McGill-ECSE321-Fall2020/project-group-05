@@ -1,8 +1,8 @@
 import requests as r
 import json
 import sys
-# url = "https://vis-art-application.herokuapp.com/" # development server
-url = "http://localhost:8080/"
+url = "https://vis-art-application.herokuapp.com/" # development server
+# url = "http://localhost:8080/"
 result = 0
 def get(endpoint,params=None,data=None):
     return r.get(url+endpoint,params=params,data=data)
