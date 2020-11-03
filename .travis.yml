@@ -1,12 +1,6 @@
 lanugage: java
 python: 3.8.0
 dist: xenial
-env:
-- DATABASE_URL=postgres://ujosysdilonyjy:8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8@ec2-34-200-106-49.compute-1.amazonaws.com:5432/d1fa9t0eht8kmf
-- JDBC_DATABASE_URL=jdbc:postgresql://ec2-34-200-106-49.compute-1.amazonaws.com:5432/d1fa9t0eht8kmf?password=8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8&sslmode=require&user=ujosysdilonyjy
-- SPRING_DATASORUCE_URL=jdbc:postgresql://ec2-34-200-106-49.compute-1.amazonaws.com:5432/d1fa9t0eht8kmf?password=8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8&sslmode=require&user=ujosysdilonyjy
-- SPRING_DATASOURCE_USERNAME=ujosysdilonyjy
-- SPRING_DATASOURCE_PASSWORD=8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8
 script:
 - ./gradlew build
 - ./gradlew integrationTest
