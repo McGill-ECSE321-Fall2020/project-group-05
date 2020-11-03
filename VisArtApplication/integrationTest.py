@@ -11,14 +11,14 @@ def post(endpoint,params=None,data=None):
 
 def pget(endpoint,params=None,data=None,func=None):
     c = get(endpoint,params=params,data=data)
-    print(">>>",c.url,c,file=sys.stderr)
+    sys.stderr.write(">>> "+str(c)+' '+str(c.url)+'\n')
     if func is None:
         return c,c.content
     else:
         return c,c.content,func(c)
 def ppost(endpoint,params=None,data=None,func=None):
     c = post(endpoint,params=params,data=data)
-    print(">>>",c.url,c,file=sys.stderr)
+    sys.stderr.write(">>> "+str(c)+' '+str(c.url)+'\n')
     if func is None:
         return c,c.content
     else:
@@ -213,7 +213,8 @@ try:
     }))
     
 except Exception as e:
-    print(e,file=sys.stderr)
+    sys.stderr.write(e)
+    sys.stderr.write('\n')
     result = 1
 print()
 print("Cleaning Up...")
