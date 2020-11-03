@@ -28,7 +28,7 @@ public class ArtListingDto {
     dimensions = listing.getDimensions();
     idCode = listing.getIdCode();
     if (listing.getManager() != null)
-      managerId = listing.getManager().getIdCode();
+      setManagerId(listing.getManager().getIdCode());
     if (listing.getPieces() != null)
       artPieceIds = listing.getPieces().stream().map((piece) -> piece.getIdCode())
         .collect(Collectors.toList());
@@ -134,5 +134,13 @@ public class ArtListingDto {
 
   public void setArtist(String artist) {
     this.artistId = artist;
+  }
+
+  public String getManagerId() {
+    return managerId;
+  }
+
+  public void setManagerId(String managerId) {
+    this.managerId = managerId;
   }
 }

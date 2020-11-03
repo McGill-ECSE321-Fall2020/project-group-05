@@ -89,7 +89,7 @@ public class ArtOrderRestController {
     String artPieceDto = map.getFirst("artPieceId");
 
     Boolean IsDelivered = Boolean.parseBoolean(aIsDelivered);
-    PieceLocation TargetLocation = PieceLocation.valueOf(aTargetLocation);
+    PieceLocation TargetLocation = PieceLocation.fromString(aTargetLocation);
     return new ArtOrderDto(
         service.updateArtOrder(aIdCode, IsDelivered, TargetLocation, aTargetAddress,
             aDeliveryTracker, artPieceDto));

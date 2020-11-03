@@ -4,6 +4,7 @@
 package com.ecse321.visart.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,7 +88,7 @@ public class TagService {
    */
   @Transactional
   public List<Tag> getTagByType(TagType type) {
-    return entityRepo.findEntityByAttribute("type", Tag.class, "" + type.ordinal());
+    return entityRepo.getAllEntities(Tag.class).stream().filter(t->t.getType() == (type)).collect(Collectors.toList());
   }
 
   /**
@@ -100,7 +101,7 @@ public class TagService {
    */
   @Transactional
   public List<Tag> getTagByType(String type) {
-    return getTagByType(TagType.fromString(type));
+    return entityRepo.getAllEntities(Tag.class).stream().filter(t->t.getType() == TagType.fromString(type)).collect(Collectors.toList());
   }
 
   /**
@@ -154,7 +155,6 @@ public class TagService {
     if (aType != null) {
       tag.setType(aType);
     } else {
-      throw new IllegalArgumentException("Tag type cannot be empty!");
     }
 
     if (aKeyword != null) {
@@ -166,13 +166,14 @@ public class TagService {
         tag.setKeyword(aKeyword);
       }
     }
+    if (aListingId != null && aListingId.length() > 0) {
 
-    ArtListing aListing = artListingRepo.getArtListing(aListingId);
-    if (aListing == null) {
-      throw new IllegalArgumentException("Tag listing cannot be empty!");
+      ArtListing aListing = artListingRepo.getArtListing(aListingId);
+      if (aListing == null) {
+        throw new IllegalArgumentException("Tag listing cannot be empty!");
+      }
+      tag.setListing(aListing);
     }
-
-    tag.setListing(aListing);
 
     tagRepo.updateTag(tag);
     return tag;

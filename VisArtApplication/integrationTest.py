@@ -177,19 +177,40 @@ try:
     """Tag API"""
     print()
     print('---Other Tag Rest Controller methods---')
+    print(pget("/tags/get_by_type/{type}".format(type="Other")))
+    print(pget("/tags/get_by_keyword/{keyword}".format(keyword="bob")))
+    tag1 = tags_create[0].json()['idCode']
+    print(ppost("/tags/update/{idCode}".format(idCode=tag1),data={
+        'aKeyword':'hello'
+    }))
 
     """ArtPiece API"""
     print()
     print('---Other ArtPiece Rest Controller methods---')
+    piece1 = piece1 # from earlier
+    print(ppost("/artpiece/update/{idCode}".format(idCode=piece1),data={
+        'pieceLocation': 'AtGallery'
+    }))
+    order1 = artorder_create[0].json()['idCode']
+    print(ppost("/artpiece/add_order/{idCode}".format(idCode=piece1),data={
+        'artOrderId':order1
+    }))
 
     """ArtOrder API"""
     print()
     print('---Other ArtOrder Rest Controller methods---')
+    print(ppost("/artorder/update/{idCode}".format(idCode=order1),data={
+        'aIsDelivered':'true'
+    }))
+    ticket1 = tickets_create[0].json()['idCode']
+    print(ppost("/artorder/add_ticket/{idCode}/{ticketId}".format(idCode=order1,ticketId=ticket1)))
 
     """Ticket API"""
     print()
     print('---Other Ticket Rest Controller methods---')
-    
+    print(ppost("/tickets/update/{idCode}".format(idCode=ticket1),data={
+        'aPaymentAmount':'69.00'
+    }))
     
 except Exception as e:
     print(e,file=sys.stderr)

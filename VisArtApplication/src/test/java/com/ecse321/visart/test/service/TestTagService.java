@@ -280,7 +280,7 @@ public class TestTagService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertEquals("Tag type cannot be empty!", error); // expected error message for service data
+    assertNull(error); // expected error message for service data
                                                       // validation.
   }
 
@@ -296,7 +296,7 @@ public class TestTagService {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-    assertEquals("Tag listing cannot be empty!", error); // expected error message for service data
+    assertNull(error); // expected error message for service data
                                                          // validation.
   }
 
