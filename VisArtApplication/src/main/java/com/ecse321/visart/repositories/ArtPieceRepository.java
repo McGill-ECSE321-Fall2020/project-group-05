@@ -4,6 +4,8 @@
 
 package com.ecse321.visart.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtPiece;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.ArtListing;
-import com.ecse321.visart.model.ArtOrder;
-import com.ecse321.visart.model.Ticket;
-import com.ecse321.visart.model.User;
 
 /**
  * CRUD Repository operations for an ArtPiece.
@@ -30,6 +28,8 @@ public class ArtPieceRepository {
 
   @Autowired
   EntityManager entityManager;
+  
+  @Autowired
   ArtOrderRepository aoRepository;
 
   /**
@@ -97,15 +97,24 @@ public class ArtPieceRepository {
   @Transactional
   public boolean deleteArtPiece(String id) {
     ArtPiece ape = entityManager.find(ArtPiece.class, id);
-    if (entityManager.contains(ape)) {
-      entityManager.remove(entityManager.merge(ape));
-    } else {
-      entityManager.remove(ape);
+    if (ape == null) {
+      return true;
     }
     if (ape.getArtOrder() != null) {
       aoRepository.deleteArtOrder(ape.getArtOrder());
     }
+    entityManager.remove(entityManager.merge(ape));
     return !entityManager.contains(ape);
   }
 
+  /**
+   * getAllKeys queries the database for all of the primary keys of the ArtPieces
+   * instances.
+   * 
+   * @return list of primary keys for ArtPieces
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM ArtPiece", String.class).getResultList();
+  }
 }

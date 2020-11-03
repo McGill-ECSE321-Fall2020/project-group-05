@@ -12,6 +12,7 @@ plugins {
     id 'org.springframework.boot' version '2.3.4.RELEASE' // Spring-Boot
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'// Spring-Boot
     id 'java'// Spring-Boot
+    id 'jacoco'
 }
 
 sourceCompatibility = '1.8'
@@ -43,12 +44,24 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	
+	testImplementation 'org.mockito:mockito-core:2.+'
+	testImplementation 'org.mockito:mockito-junit-jupiter:2.18.3'
+	
+	//testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+	//testImplementation 'org.junit.platform:junit-platform-launcher:1.4.1'
 }
 
 test {
     useJUnitPlatform()
-}
 
+    environment "JDBC_DATABASE_URL","jdbc:postgresql://ec2-34-200-106-49.compute-1.amazonaws.com:5432/d1fa9t0eht8kmf?password=8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8&sslmode=require&user=ujosysdilonyjy"
+    environment "DATABASE_URL","postgres://ujosysdilonyjy:8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8@ec2-34-200-106-49.compute-1.amazonaws.com:5432/d1fa9t0eht8kmf"
+    environment "SPRING_DATASOURCE_URL","jdbc:postgresql://ec2-34-200-106-49.compute-1.amazonaws.com:5432/d1fa9t0eht8kmf?password=8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8&sslmode=require&user=ujosysdilonyjy"
+    environment "SPRING_DATASOURCE_USERNAME","ujosysdilonyjy"
+    environment "SPRING_DATASOURCE_PASSWORD","8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8"
+    systemProperty "spring.datasource.url", "jdbc:postgresql://ec2-34-200-106-49.compute-1.amazonaws.com:5432/d1fa9t0eht8kmf?password=8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8&sslmode=require&user=ujosysdilonyjy"
+}
 springBoot {
     mainClassName = 'com.ecse321.visart.DemoApplication'
 
@@ -77,4 +90,30 @@ tasks.register("compileUmple") {
             ]
         }
     }
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.3
+			}
+		}
+	}
+}
+
+task integrationTest(type: Exec) {
+	dependsOn 'bootJar'
+	
+    commandLine 'python','--version'
+    commandLine 'pip','install','-r','requirements.txt'
+    commandLine 'python','integrationTest.py'
+    // if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        // on windows
+        // commandLine 'cmd','/c','VisArtApplication\\integrationTest.bat'
+    // } else {
+        // on linux
+        // commandLine 'python','integrationTest.py'
+        // commandLine './VisArtApplication/integrationTest.sh'
+    // }
 }

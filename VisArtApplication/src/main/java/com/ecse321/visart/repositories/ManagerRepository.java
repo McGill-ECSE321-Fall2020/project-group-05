@@ -1,16 +1,15 @@
 package com.ecse321.visart.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ecse321.visart.model.Gallery;
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
-import com.ecse321.visart.model.UserRole;
 
 /**
  * 
@@ -112,16 +111,23 @@ public class ManagerRepository {
   @Transactional
   public boolean deleteManager(String id) {
     Manager entity = entityManager.find(Manager.class, id);
-    User usr = entityManager.find(User.class, entity.getUser().getIdCode());
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-      entityManager.remove(entityManager.merge(usr));
-    } else {
-      entityManager.remove(entity);
-      entityManager.remove(usr);
+    if (entity == null) {
+      return true;
     }
-
+    User usr = entityManager.find(User.class, entity.getUser().getIdCode());
+    entityManager.remove(entityManager.merge(entity));
+    entityManager.remove(entityManager.merge(usr));
     return !entityManager.contains(entity) && !entityManager.contains(usr);
   }
 
+  /**
+   * getAllKeys queries the database for all of the primary keys of the Managers
+   * instances.
+   * 
+   * @return list of primary keys for Managers
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM Manager", String.class).getResultList();
+  }
 }

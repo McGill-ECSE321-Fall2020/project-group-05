@@ -4,6 +4,8 @@
 
 package com.ecse321.visart.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,13 +92,21 @@ public class TagRepository {
   @Transactional
   public boolean deleteTag(String id) {
     Tag entity = entityManager.find(Tag.class, id);
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-    } else {
-      entityManager.remove(entity);
+    if (entity == null) {
+      return true;
     }
-
+    entityManager.remove(entityManager.merge(entity));
     return (!entityManager.contains(entity));
   }
 
+  /**
+   * getAllKeys queries the database for all of the primary keys of the Tags
+   * instances.
+   * 
+   * @return list of primary keys for Tags
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM Tag", String.class).getResultList();
+  }
 }

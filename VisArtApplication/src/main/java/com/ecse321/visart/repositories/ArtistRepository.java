@@ -1,7 +1,8 @@
 package com.ecse321.visart.repositories;
 
-import javax.persistence.EntityManager;
+import java.util.List;
 
+import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +22,6 @@ public class ArtistRepository {
 
   @Autowired
   EntityManager entityManager;
-
-  @Autowired
-  CustomerRepository customerRepo;
 
   /**
    * 
@@ -126,16 +124,18 @@ public class ArtistRepository {
   @Transactional
   public boolean deleteArtist(String id) {
     Artist entity = entityManager.find(Artist.class, id);
-    Customer customer = entityManager.find(Customer.class, entity.getCustomer().getIdCode());
-    if (customer != null && customer.getArtist() != null)
-      customer.getArtist().delete();
-    customerRepo.updateCustomer(customer);
-
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-    } else {
-      entityManager.remove(entity);
+    if (entity == null) {
+      return true;
     }
+    if (entity.getCustomer() != null) { // Artist has a customer, that may have association
+      Customer customer = entityManager.find(Customer.class, entity.getCustomer().getIdCode());
+      if (customer != null && customer.getArtist() != null)
+        customer.getArtist().delete(); // Remove artist from association
+      entityManager.merge(customer.getUser());
+      entityManager.merge(customer);
+    }
+
+    entityManager.remove(entityManager.merge(entity));
     return !entityManager.contains(entity);
   }
 
@@ -149,5 +149,16 @@ public class ArtistRepository {
   @Transactional
   public boolean deleteArtist(Artist artist) {
     return deleteArtist(artist.getIdCode());
+  }
+
+  /**
+   * getAllKeys queries the database for all of the primary keys of the Artists
+   * instances.
+   * 
+   * @return list of primary keys for Artists
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM Artist", String.class).getResultList();
   }
 }

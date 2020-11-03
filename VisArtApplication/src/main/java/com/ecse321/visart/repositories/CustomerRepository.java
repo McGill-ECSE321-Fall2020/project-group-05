@@ -4,6 +4,8 @@
 
 package com.ecse321.visart.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Gallery;
 import com.ecse321.visart.model.User;
-import com.ecse321.visart.model.UserRole;
 
 /**
  * CRUD Repository operation for a Customer
@@ -27,6 +27,8 @@ public class CustomerRepository {
 
   @Autowired
   EntityManager entityManager;
+  
+  @Autowired
   ArtistRepository aRepository;
 
   /**
@@ -123,20 +125,28 @@ public class CustomerRepository {
   @Transactional
   public boolean deleteCustomer(String id) {
     Customer entity = entityManager.find(Customer.class, id);
-    User usr = entityManager.find(User.class, entity.getIdCode());
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-      entityManager.remove(entityManager.merge(usr));
-    } else {
-      entityManager.remove(entity);
-      entityManager.remove(usr);
+    if (entity == null) {
+      return true;
     }
+    entityManager.remove(entityManager.merge(entity));
+    User usr = entityManager.find(User.class, entity.getIdCode());
+    if (usr != null)
+      entityManager.remove(entityManager.merge(usr));
     if (entity.getArtist() != null) {
       aRepository.deleteArtist(entity.getArtist());
     }
     return (!entityManager.contains(entity) && !entityManager.contains(entity.getArtist())
         && !entityManager.contains(usr));
-
   }
 
+  /**
+   * getAllKeys queries the database for all of the primary keys of the Customers
+   * instances.
+   * 
+   * @return list of primary keys for Customers
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM Customer", String.class).getResultList();
+  }
 }

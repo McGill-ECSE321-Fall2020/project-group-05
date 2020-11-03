@@ -4,6 +4,8 @@
 
 package com.ecse321.visart.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecse321.visart.model.ArtOrder;
-import com.ecse321.visart.model.ArtPiece;
-import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.model.Customer;
-import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.Ticket;
 
 /**
@@ -30,9 +29,6 @@ public class TicketRepository {
 
   @Autowired
   EntityManager entityManager;
-
-  @Autowired
-  ArtOrderRepository artOrderRepo;
 
   /**
    * createTicket method creates a Ticket instance for an ArtOrder.
@@ -102,17 +98,27 @@ public class TicketRepository {
   @Transactional
   public boolean deleteTicket(String id) {
     Ticket entity = entityManager.find(Ticket.class, id);
-    ArtOrder ao = artOrderRepo.getArtOrder(entity.getOrder().getIdCode());
-    if (ao != null && ao.getTicket() != null)
-      ao.getTicket().delete();
-    artOrderRepo.updateArtOrder(ao);
-
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-    } else {
-      entityManager.remove(entity);
+    if (entity == null) {
+      return true;
     }
+    if (entity.getOrder() != null) { // Remove association to ArtOrder
+      ArtOrder ao = entityManager.find(ArtOrder.class, entity.getOrder().getIdCode());
+      if (ao != null && ao.getTicket() != null)
+        ao.getTicket().delete();
+      entityManager.merge(ao);
+    }
+    entityManager.remove(entityManager.merge(entity));
     return !entityManager.contains(entity);
   }
 
+  /**
+   * getAllKeys queries the database for all of the primary keys of the Tickets
+   * instances.
+   * 
+   * @return list of primary keys for Tickets
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM Ticket", String.class).getResultList();
+  }
 }

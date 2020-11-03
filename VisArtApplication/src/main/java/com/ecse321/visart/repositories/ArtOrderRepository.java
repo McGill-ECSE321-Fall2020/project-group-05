@@ -4,19 +4,17 @@
 
 package com.ecse321.visart.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece;
-import com.ecse321.visart.model.Artist;
-import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
-import com.ecse321.visart.model.Ticket;
 
 /**
  * CRUD Repository operations for an ArtOrder
@@ -30,6 +28,8 @@ public class ArtOrderRepository {
 
   @Autowired
   EntityManager entityManager;
+  
+  @Autowired
   TicketRepository tRepository;
 
   /**
@@ -100,18 +100,30 @@ public class ArtOrderRepository {
   @Transactional
   public boolean deleteArtOrder(String id) {
     ArtOrder entity = entityManager.find(ArtOrder.class, id);
-    ArtPiece p = entityManager.find(ArtPiece.class, entity.getArtPiece().getIdCode());
-    if (p != null && p.getArtOrder() != null)
-      p.getArtOrder().delete();
-    entityManager.merge(p);
-    if (entityManager.contains(entity)) {
-      entityManager.remove(entityManager.merge(entity));
-    } else {
-      entityManager.remove(entity);
+    if (entity == null) {
+      return true;
     }
+    if (entity.getArtPiece() != null) { // Remove ArtPiece association
+      ArtPiece p = entityManager.find(ArtPiece.class, entity.getArtPiece().getIdCode());
+      if (p != null && p.getArtOrder() != null)
+        p.getArtOrder().delete(); // delete if associated
+      entityManager.merge(p);
+    }
+    entityManager.remove(entityManager.merge(entity));
     if (entity.getTicket() != null) {
       tRepository.deleteTicket(entity.getTicket());
     }
     return (!entityManager.contains(entity) && !entityManager.contains(entity.getTicket()));
+  }
+
+  /**
+   * getAllKeys queries the database for all of the primary keys of the ArtOrders
+   * instances.
+   * 
+   * @return list of primary keys for ArtOrders
+   */
+  @Transactional
+  public List<String> getAllKeys() {
+    return entityManager.createQuery("SELECT idCode FROM ArtOrder", String.class).getResultList();
   }
 }
