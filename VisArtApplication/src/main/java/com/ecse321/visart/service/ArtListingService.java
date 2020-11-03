@@ -229,8 +229,14 @@ public class ArtListingService {
     List<ArtListing> allListings = entityRepo.getAllEntities(ArtListing.class);
     List<ArtListing> unsoldListings = new ArrayList<ArtListing>();
     for (ArtListing al : allListings) {
-      if (al.hasPieces()) {
-        unsoldListings.add(al);
+      if (!al.hasPieces()) {
+        continue;
+      }
+      for (ArtPiece p : al.getPieces()) {
+        if (!p.hasArtOrder()) {
+          unsoldListings.add(al);
+          break;
+        }
       }
     }
     return unsoldListings;
