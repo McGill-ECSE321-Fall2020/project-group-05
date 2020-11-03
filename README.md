@@ -31,5 +31,5 @@ I am a U3 Computer Engineering major at McGill university.I've been passionate a
 | Daniel Bucci          | 25 hours: Domain Model, Repository Classes, JPA Annotations, Documentation, Unit Tests, Project Report, Use case scenario  | 20 hours: Created Dto classes, services and controllers for Manager and User as well as worked on tests for Artist and Cutomer. Worked on quality Assurance report and controller documentation. |   |   |
 | Ryan Au               | 27 hours: Domain Model, Hibernate Annotations, Repository, Gradle/Spring Setup, Travis CI, Heroku Database, Database Tests, Use case scenario|   |   |   |
 | Yuta Youness Bellali  | 21 hours: Domain Model, Requirements, Unit Tests, documentation, Use case scenario, use case diagram   |   |   |   |
-|  Riad El Mahmoudy     | 20 hours: Requirements, domain model, unit test classes, documentation, Use case scenario |   |   |   |
+|  Riad El Mahmoudy     | 20 hours: Requirements, domain model, unit test classes, documentation, Use case scenario |  26 hours: Created dto classes, services and controllers for Tag and Ticket classes. I also wrote all of the tests for these two classes and worked on the quality assurance documentation and controller documentation. |   |   |
 |  Mahin Anwar          | 15 hours: Requirements model, User case scenario,Domain model,Javadoc, Database tests, Documentation |   |   |   |
