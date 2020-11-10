@@ -40,6 +40,17 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import axios from 'axios'
+var config = require('../../config')
+
+var frontendUrl = config.site
+var backendUrl = config.backend.site
+
+var AXIOS = axios.create({
+  baseURL: backendUrl,
+  headers: { 'Access-Control-Allow-Origin': frontendUrl }
+})
+
 export default {
   name: 'UserPage',
   Component: {
@@ -71,7 +82,24 @@ export default {
     }
   },
   created: function () {
-
+    console.log(config.site)
+    AXIOS.post('/managers/create',{
+      'emailAddress':'auryan898@gmail.com', 
+      'displayname':'dingdong2', 
+      'username':'hiIAmBilly2', 
+      'password':'password', 
+      'profilePicLink':'',
+      'profileDescription':'' 
+      }).then(response => {
+      console.log(response.data)
+    }).catch(error => {
+      console.log(error)
+    })
+    AXIOS.get('/managers/get_all').then(response => {
+      console.log(response.data)
+    }).catch(e => {
+      console.log(e)
+    })
   }
 }
 </script>
