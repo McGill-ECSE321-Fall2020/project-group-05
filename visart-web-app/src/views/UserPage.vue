@@ -1,3 +1,4 @@
+
 <template>
 <div>
      <div class="container">
@@ -39,16 +40,17 @@
 
 <script>
 // @ is an alias to /src
+/* eslint-disable */
 import HelloWorld from '@/components/HelloWorld.vue'
 import axios from 'axios'
 var config = require('../../config')
 
 var frontendUrl = config.site
-var backendUrl = config.backend.site
+var backendUrl = config.backend.site 
 
 var AXIOS = axios.create({
   baseURL: backendUrl,
-  headers: { 'Access-Control-Allow-Origin': frontendUrl }
+  headers: { 'Access-Control-Allow-Origin': frontendUrl, 'Content-Type':'raw', 'Data-Type':'raw' }
 })
 
 export default {
