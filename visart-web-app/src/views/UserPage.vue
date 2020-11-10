@@ -1,15 +1,77 @@
 <template>
-    <div class="container">
+<div>
+     <div class="container">
         <div class="row">
             <div class="col-xl">
-                One of three columns
+                 <b-button v-on:click="showPublishedArt">Published Art</b-button>
         </div>
             <div class="col-xl">
-                One of three columns
+                 <b-button v-on:click="showPurchasedArt">PurchasedArt</b-button>
         </div>
             <div class="col-xl">
-                One of three columns
+                <b-button v-on:click="showSoldArt">Sold Art</b-button>
         </div>
         </div>
     </div>
+    <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4" v-for="(person, index) in people" :key="index">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src="../assets/logo.png" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text">{{person.title}}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Go to listing</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                    </div>
+                    <small class="text-muted">{{person.price}}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+   </div>
 </template>
+
+<script>
+// @ is an alias to /src
+import HelloWorld from '@/components/HelloWorld.vue'
+export default {
+  name: 'UserPage',
+  Component: {
+    HelloWorld
+  },
+  data: function () {
+    return {
+      count: 0,
+      people: [
+        { title: 'published', price: '9$' },
+        { title: 'purchased', price: '1$' },
+        { title: 'sold', price: '10$' },
+        { title: 'sold2', price: '8$' }
+      ]
+    }
+  },
+  props: [],
+  methods: {
+    showPublishedArt: function () {
+      this.count++
+      console.log(this.count)
+    },
+    showPurchasedArt: function () {
+      this.people = []
+    },
+    showSoldArt: function () {
+      this.count++
+      console.log(this.count)
+    }
+  },
+  created: function () {
+
+  }
+}
+</script>
