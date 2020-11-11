@@ -169,10 +169,10 @@ public class UserService {
    * @return               isLoggedIn
    */
   @Transactional
-  public boolean loginUser(String aEmail, String aPassword) {
-    User user = entityRepo.findEntityByAttribute("emailAddress", User.class, aEmail).get(0);
+  public boolean loginUser(String username, String aPassword) {
+    User user = entityRepo.findEntityByAttribute("username", User.class, username).get(0);
     if (user == null) {
-      throw new IllegalArgumentException("Email cannot be found");
+      throw new IllegalArgumentException("Username cannot be found");
     }
     if (!user.getPassword().equals(aPassword)) { // TODO: return false instead of exception, true for
                                            // success, false for wrong password

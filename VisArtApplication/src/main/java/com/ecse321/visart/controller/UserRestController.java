@@ -87,10 +87,10 @@ public class UserRestController {
 
   @PostMapping(value = { "/users/login", "/users/login/" })
   public CredentialsDto loginUser(@RequestBody MultiValueMap<String, String> values) {
-    String aEmail = values.getFirst("emailAddress");
+    String username = values.getFirst("username");
     String aPassword = values.getFirst("password");
-    if (service.loginUser(aEmail, aPassword)) {
-      List<User> users = entityRepo.findEntityByAttribute("emailAddress", User.class, aEmail);
+    if (service.loginUser(username, aPassword)) {
+      List<User> users = entityRepo.findEntityByAttribute("username", User.class, username);
       String id = users.get(0).getIdCode();
       return service.generateCredentials(id);
     }
