@@ -17,17 +17,17 @@
     <div class="album py-5 bg-light">
         <div class="container">
           <div class="row">
-            <div class="col-md-4" v-for="(person, index) in people" :key="index">
+            <div class="col-md-4" v-for="(artlisting, index) in artListings" :key="index">
               <div class="card mb-4 box-shadow">
                 <img class="card-img-top" src="../assets/logo.png" alt="Card image cap">
                 <div class="card-body">
-                  <p class="card-text">{{person.title}}</p>
+                  <p class="card-text">{{artlisting.title}}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-secondary">Go to listing</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
                     </div>
-                    <small class="text-muted">{{person.price}}</small>
+                    <small class="text-muted">{{artlisting.price}}</small>
                   </div>
                 </div>
               </div>
@@ -47,7 +47,10 @@ var config = require('../../config')
 var backend = require('@/tools/backend')
 
 var frontendUrl = config.site
+
 var backendUrl = config.backend.site 
+
+const pathName = window.location.pathname;
 
 var AXIOS = axios.create({
   baseURL: backendUrl,
@@ -62,34 +65,63 @@ export default {
   data: function () {
     return {
       count: 0,
-      people: [
-        { title: 'published', price: '9$' },
-        { title: 'purchased', price: '1$' },
-        { title: 'sold', price: '10$' },
-        { title: 'sold2', price: '8$' }
-      ],
-      artListings: []
+      purchasedArt: [],
+      artListings: [],
+      artistId: '',
     }
   },
   props: [],
   methods: {
-    showPublishedArt: function () {
-      this.count++
-      console.log(this.count)
-    },
     showPurchasedArt: function () {
-      AXIOS.get('/artlisting/get_unsold_art').then(response => {
-      console.log(response.data)
-    }).catch(e => {
-      console.log(e)
-    })
+      backend
+      .get("/customers/user/"+ this.$route.params.id)
+      .then(response => {
+        console.log(response.data);
+        var tickets = JSON.parse(response.data).boughtTickets;
+        
+        for (ticket in tickets){
+           //get the ArtOrder corresponding to each ticket
+           backend
+            .get("/artorder/get/"+ticket.ticketOrder)
+            .then(response => {
+               //get the ArtPiece corresponding to each order
+               
+               backend
+                .get("/artorder/get/"+JSON.parse(response.data).artPieceId)
+                .then(response => {
+                    //get the artlisting attached to each ArtPiece
+                    backend
+                        .get("/artorder/get/"+JSON.parse(response.data).artListingId)
+                        .then(response => {
+                        
+                            //PUSH the ArtListing to the array in data
+                            this.artListings.push(JSON.parse(response.data));    
+                            
+                        }).catch(e => {
+                            console.log(e);
+                        }); 
+                    
+                }).catch(e => {
+                    console.log(e);
+                }); 
+      
+            }).catch(e => {
+                console.log(e);
+            }); 
+        }
+        
+      }).catch(e => {
+        console.log(e);
+      });
+    },
+    showPublishedArt: function () {
+
     },
     showSoldArt: function () {
       this.count++
       console.log(this.count)
-    }
-  },
-  created: function () {
+    },
+    created: function () {
     console.log(config.site)
     AXIOS.post('/managers/create',{
       'emailAddress':'auryan898@gmail.com', 
@@ -108,6 +140,7 @@ export default {
     }).catch(e => {
       console.log(e)
     })
+  }
   }
 }
 </script>
