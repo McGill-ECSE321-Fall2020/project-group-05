@@ -3,6 +3,9 @@ package com.ecse321.visart;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
+
+import com.google.firebase.FirebaseApp;
+
 import org.springframework.stereotype.*;
 
 /**
@@ -25,6 +28,7 @@ public class DemoApplication {
   }
 
   public static void main(String[] args) {
+    FirebaseApp.initializeApp();
     SpringApplication.run(DemoApplication.class, args);
   }
 }

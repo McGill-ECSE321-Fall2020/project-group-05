@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
 
@@ -43,6 +44,13 @@ public class ManagerRepository {
         aProfileDescription);
     Manager manager = new Manager(aIdCode, usr);
     entityManager.persist(usr);
+    entityManager.persist(manager);
+    return manager;
+  }
+  
+  public Manager createManager(String userIdCode) {
+    User user = entityManager.find(User.class, userIdCode);
+    Manager manager = new Manager(userIdCode, user);
     entityManager.persist(manager);
     return manager;
   }
