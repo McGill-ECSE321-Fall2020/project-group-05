@@ -74,8 +74,9 @@ public class ArtListingRestController {
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
     Artist artist = artistService.getArtist(map.getFirst("artistId"));
+    Double price = Double.valueOf(map.getFirst("price"));
 
-    return new ArtListingDto(artListingService.createArtListing(aVisibility, aDescription, aTitle,
+    return new ArtListingDto(artListingService.createArtListing(price, aVisibility, aDescription, aTitle,
         artist));
   }
 

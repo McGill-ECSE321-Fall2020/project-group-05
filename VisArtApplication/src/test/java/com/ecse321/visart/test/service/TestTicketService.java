@@ -79,7 +79,7 @@ public class TestTicketService {
             User aUser2 = new User("a", "b", "c", "d", "e", "f", "g");
             Customer aCustomer2 = new Customer("customercode", aUser2);
             Artist aArtist2 = new Artist("artistcode", aCustomer2);
-            ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+            ArtListing TEST_LISTING = new ArtListing(0.0,PostVisibility.Draft, "name",
                 "listing", "mockcode",
                 aArtist2);
             ArtPiece APTEST = new ArtPiece(PieceLocation.AtGallery, "locationtest",
@@ -101,7 +101,7 @@ public class TestTicketService {
         User aUser2 = new User("a", "b", "c", "d", "e", "f", "g");
         Customer aCustomer2 = new Customer("customercode", aUser2);
         Artist aArtist2 = new Artist("artistCode", aCustomer2);
-        ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+        ArtListing TEST_LISTING = new ArtListing(0.0,PostVisibility.Draft, "name",
             "listing", "mockcode",
             aArtist2);
         ArtPiece APTEST = new ArtPiece(PieceLocation.AtGallery, "locationtest",
@@ -113,7 +113,7 @@ public class TestTicketService {
         User aUser3 = new User("a", "b", "c", "d", "e", "f", "g");
         Customer aCustomer3 = new Customer("customerCode2", aUser3);
         Artist aArtist3 = new Artist("artistCode2", aCustomer3);
-        ArtListing TEST_LISTING2 = new ArtListing(PostVisibility.Draft, "name",
+        ArtListing TEST_LISTING2 = new ArtListing(0.0,PostVisibility.Draft, "name",
             "listing", "mockcode",
             aArtist3);
         ArtPiece APTEST2 = new ArtPiece(PieceLocation.AtGallery, "locationtest",

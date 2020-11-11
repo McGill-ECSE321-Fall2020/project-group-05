@@ -45,9 +45,9 @@ public class ArtListingRepository {
    * @return              a persisted instance of ArtListing
    */
   @Transactional
-  public ArtListing createArtListing(PostVisibility aVisibility, String aDescription, String aTitle,
+  public ArtListing createArtListing(Double price, PostVisibility aVisibility, String aDescription, String aTitle,
       String aIdCode, Artist aArtist) {
-    ArtListing al = new ArtListing(aVisibility, aDescription, aTitle, aIdCode, aArtist);
+    ArtListing al = new ArtListing(price, aVisibility, aDescription, aTitle, aIdCode, aArtist);
     entityManager.persist(al);
     entityManager.merge(aArtist);
     return al;

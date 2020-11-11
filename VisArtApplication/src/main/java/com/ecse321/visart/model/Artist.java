@@ -194,9 +194,9 @@ public class Artist {
   }
 
   /* Code from template association_AddManyToOne */
-  public ArtListing addPostedListing(ArtListing.PostVisibility aVisibility, String aDescription,
+  public ArtListing addPostedListing(Double price, ArtListing.PostVisibility aVisibility, String aDescription,
       String aTitle, String aIdCode) {
-    return new ArtListing(aVisibility, aDescription, aTitle, aIdCode, this);
+    return new ArtListing(price, aVisibility, aDescription, aTitle, aIdCode, this);
   }
 
   public boolean addPostedListing(ArtListing aPostedListing) {

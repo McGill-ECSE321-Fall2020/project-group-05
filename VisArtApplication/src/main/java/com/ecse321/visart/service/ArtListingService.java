@@ -47,7 +47,7 @@ public class ArtListingService {
    * @return              persisted ArtListing instance
    */
   @Transactional
-  public ArtListing createArtListing(PostVisibility aVisibility, String aDescription, String aTitle,
+  public ArtListing createArtListing(Double price, PostVisibility aVisibility, String aDescription, String aTitle,
       Artist aArtist) {
     String aIdCode = EntityRepository.getUniqueKey();
 
@@ -78,7 +78,7 @@ public class ArtListingService {
       throw new IllegalArgumentException("Artist cannot be empty!");
     }
 
-    return ArtListingRepo.createArtListing(aVisibility, aDescription, aTitle, aIdCode, aArtist);
+    return ArtListingRepo.createArtListing(price, aVisibility, aDescription, aTitle, aIdCode, aArtist);
   }
 
   /**

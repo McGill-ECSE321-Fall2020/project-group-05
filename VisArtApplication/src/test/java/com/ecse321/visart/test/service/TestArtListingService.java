@@ -90,7 +90,7 @@ public class TestArtListingService {
     lenient().when(alRepo.getArtListing(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(AL_KEY)) {
-            ArtListing artListing1 = new ArtListing(postVisibility, aDescription, aTitle,
+            ArtListing artListing1 = new ArtListing(0.0,postVisibility, aDescription, aTitle,
                 AL_KEY, aArtist);
             return artListing1;
           } else {
@@ -99,15 +99,15 @@ public class TestArtListingService {
           }
         });
 
-    lenient().when(alRepo.createArtListing(Mockito.any(PostVisibility.class), anyString(),
+    lenient().when(alRepo.createArtListing(any(),Mockito.any(PostVisibility.class), anyString(),
         anyString(), anyString(), Mockito.any(Artist.class)))
         .thenAnswer((InvocationOnMock invocation) -> {
-          PostVisibility postVisibility = invocation.getArgument(0);
-          String description = invocation.getArgument(1);
-          String title = invocation.getArgument(2);
-          String id = invocation.getArgument(3);
-          Artist artist = invocation.getArgument(4);
-          ArtListing artListing2 = new ArtListing(postVisibility, description, title, id,
+          PostVisibility postVisibility = invocation.getArgument(1);
+          String description = invocation.getArgument(2);
+          String title = invocation.getArgument(3);
+          String id = invocation.getArgument(4);
+          Artist artist = invocation.getArgument(5);
+          ArtListing artListing2 = new ArtListing(0.0,postVisibility, description, title, id,
               artist);
           ;
           return artListing2;
@@ -143,7 +143,7 @@ public class TestArtListingService {
     Artist aArtist = new Artist("artistCode", aCustomer);
 
     try {
-      artListing = serviceAl.createArtListing(postVisibility, description,
+      artListing = serviceAl.createArtListing(0.0,postVisibility, description,
           title, aArtist);
     } catch (IllegalArgumentException e) {
 
@@ -166,7 +166,7 @@ public class TestArtListingService {
     String error = null;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -189,7 +189,7 @@ public class TestArtListingService {
     String error = null;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -212,7 +212,7 @@ public class TestArtListingService {
     String error = null;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -233,7 +233,7 @@ public class TestArtListingService {
     String error = null;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -254,7 +254,7 @@ public class TestArtListingService {
     ArtListing artListing2 = null;
 
     try {
-      serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      serviceAl.createArtListing(0.0, Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       fail();
     } // data
@@ -282,7 +282,7 @@ public class TestArtListingService {
     String idFake = "fake";
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -316,7 +316,7 @@ public class TestArtListingService {
     PostVisibility newPostvisibility = PostVisibility.Private;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -350,7 +350,7 @@ public class TestArtListingService {
     Boolean success = false;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -384,7 +384,7 @@ public class TestArtListingService {
     Float[] dimensions = {(float)10,(float) 10,(float)10};
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -418,7 +418,7 @@ public class TestArtListingService {
     String[] postimages = {"1","2","3"};
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -453,7 +453,7 @@ public class TestArtListingService {
     List<ArtListing> unsold = new ArrayList<ArtListing>();
     
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -487,7 +487,7 @@ public class TestArtListingService {
     List<Customer> customers = new ArrayList<Customer>();
     
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -521,7 +521,7 @@ public class TestArtListingService {
     ArtPiece artPiece = null;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
@@ -564,7 +564,7 @@ public class TestArtListingService {
     Tag tag = null;
 
     try {
-      artListing = serviceAl.createArtListing(Postvisibility, aDescription, aTitle, aArtist);
+      artListing = serviceAl.createArtListing(0.0,Postvisibility, aDescription, aTitle, aArtist);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }

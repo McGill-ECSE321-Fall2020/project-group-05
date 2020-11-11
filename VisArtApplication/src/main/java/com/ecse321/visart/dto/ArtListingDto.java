@@ -21,11 +21,13 @@ public class ArtListingDto {
   private List<String> tagIds;
   private String managerId;
   private String artistId;
+  private double price;
 
   private List<ArtPieceDto> artPieces;
   private List<TagDto> tags;
 
   public ArtListingDto(ArtListing listing) {
+    price = listing.getPrice();
     description = listing.getDescription();
     postImages = listing.getPostingPicLink();
     title = listing.getTitle();
@@ -148,5 +150,13 @@ public class ArtListingDto {
   public void setTags(List<Tag> tags) {
     this.tags = tags.stream().map(t -> new TagDto(t)).collect(Collectors.toList());
     this.tagIds = tags.stream().map((t) -> t.getIdCode()).collect(Collectors.toList());
+  }
+
+  public double getPrice() {
+    return price;
+  }
+
+  public void setPrice(double price) {
+    this.price = price;
   }
 }
