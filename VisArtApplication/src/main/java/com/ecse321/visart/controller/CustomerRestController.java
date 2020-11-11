@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecse321.visart.dto.ArtListingDto;
 import com.ecse321.visart.dto.CustomerDto;
+import com.ecse321.visart.dto.TicketDto;
 import com.ecse321.visart.model.ArtOrder;
 import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.Customer;
@@ -27,11 +29,11 @@ public class CustomerRestController {
 
   @Autowired
   private CustomerService service;
-  
+
   @Autowired
   private TicketService ticketService;
-  
-  @Autowired 
+
+  @Autowired
   private ArtOrderService orderService;
 
   /**
@@ -51,7 +53,7 @@ public class CustomerRestController {
    */
   @GetMapping(value = { "/customers/get/{idCode}", "/customers/get/{idCode}/" })
   public CustomerDto getCustomer(@PathVariable("idCode") String aIdCode) {
-    return new CustomerDto(service.getCustomer(aIdCode));
+    return new CustomerDto(service.getCustomer(aIdCode, true, true));
   }
 
   /**
@@ -63,6 +65,20 @@ public class CustomerRestController {
       "/customers/get_favorite_listings/{idCode}",
       "/customers/get_favorite_listings/{idCode}" })
   public List<String> getCustomerFavoriteListings(@PathVariable("idCode") String aIdCode) {
+    CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode, false, true));
+    return customer.getFavoriteListingIds();
+  }
+
+  /**
+   * 
+   * @param  aIdCode
+   * @return
+   */
+  @GetMapping(value = {
+      "/customers/get_favorite_listings_obj/{idCode}",
+      "/customers/get_favorite_listings_obj/{idCode}" })
+  public List<ArtListingDto> getCustomerFavoriteListingObjects(
+      @PathVariable("idCode") String aIdCode) {
     CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode, false, true));
     return customer.getFavoriteListings();
   }
@@ -82,7 +98,7 @@ public class CustomerRestController {
     service.addfavoriteList(idCode, listingId);
     return new CustomerDto(service.getCustomer(idCode));
   }
-  
+
   /**
    * 
    * @param  idCode
@@ -92,17 +108,20 @@ public class CustomerRestController {
   @PostMapping(value = {
       "/customers/purchase_artpiece/{idCode}",
       "/customers/purchase_artpiece/{idCode}/" })
-  public CustomerDto purchaseArtwork(@PathVariable("idCode") String idCustomerCode, 
+  public CustomerDto purchaseArtwork(@PathVariable("idCode") String idCustomerCode,
       @PathVariable("idCode") String idArtPieceCode,
       @RequestBody MultiValueMap<String, String> values) {
-    
+
     Customer customer = service.getCustomer(idCustomerCode);
-    
-    ArtOrder order = orderService.createArtOrder(false, PieceLocation.fromString(values.getFirst("targetLocation")), values.getFirst("targetAddress"), 
+
+    ArtOrder order = orderService.createArtOrder(false,
+        PieceLocation.fromString(values.getFirst("targetLocation")),
+        values.getFirst("targetAddress"),
         values.getFirst("deliveryTracker"), idArtPieceCode);
-    
-    ticketService.createTicket(false, 0.0, order.getIdCode(), idCustomerCode, order.getArtPiece().getArtListing().getArtist().getIdCode());
-    
+
+    ticketService.createTicket(false, 0.0, order.getIdCode(), idCustomerCode,
+        order.getArtPiece().getArtListing().getArtist().getIdCode());
+
     return new CustomerDto(customer);
   }
 
@@ -128,6 +147,14 @@ public class CustomerRestController {
    */
   @GetMapping(value = { "/customers/get_tickets/{idCode}", "/customers/get_tickets/{idCode}/" })
   public List<String> getboughtTicketsList(@PathVariable("idCode") String aIdCode) {
+    CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode, true, false));
+    return customer.getBoughtTicketIds();
+  }
+
+  @GetMapping(value = {
+      "/customers/get_tickets_obj/{idCode}",
+      "/customers/get_tickets_obj/{idCode}/" })
+  public List<TicketDto> getboughtTickets(@PathVariable("idCode") String aIdCode) {
     CustomerDto customer = new CustomerDto(service.getCustomer(aIdCode, true, false));
     return customer.getBoughtTickets();
   }

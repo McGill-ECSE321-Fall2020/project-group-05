@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ecse321.visart.model.Customer;
 import com.ecse321.visart.model.Manager;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.EntityRepository;
@@ -18,6 +19,8 @@ public class ManagerService {
   *
   * @author danielbucci
   */
+  @Autowired
+  UserService userService;
 
   @Autowired
   ManagerRepository managerRepo;
@@ -27,7 +30,15 @@ public class ManagerService {
 
   @Autowired
   ArtListingService artListingService;
+  
+  @Transactional
+  public Manager createManagerUnified(String aEmailAddress, String aDisplayname,
+      String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
 
+    User user = userService.createUser(aEmailAddress, aDisplayname, aUsername, aPassword,
+        aProfilePicLink, aProfileDescription);
+    return managerRepo.createManager(user.getIdCode());
+  }
   /**
   *
   * @param  aEmailAddress

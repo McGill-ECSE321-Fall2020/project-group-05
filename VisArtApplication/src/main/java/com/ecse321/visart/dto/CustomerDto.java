@@ -3,7 +3,9 @@ package com.ecse321.visart.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Customer;
+import com.ecse321.visart.model.Ticket;
 
 public class CustomerDto {
 
@@ -12,15 +14,15 @@ public class CustomerDto {
   private List<String> favoriteListingIds;
   private String artistId;
   private String idCode;
+  private List<TicketDto> boughtTickets;
+  private List<ArtListingDto> favoriteListings;
 
   public CustomerDto(Customer customer) {
     setUser(new UserDto(customer.getUser()));
-    boughtTicketIds = customer.getBoughtTickets().stream().map((t) -> t.getIdCode())
-        .collect(Collectors.toList());
-    favoriteListingIds = customer.getFavoriteListings().stream().map((l) -> l.getIdCode())
-        .collect(Collectors.toList());
+    setBoughtTicketIds(customer.getBoughtTickets());
+    setFavoriteListingIds(customer.getFavoriteListings());
     if (customer.getArtist() != null)
-      artistId = customer.getArtist().getIdCode();
+      setArtistId(customer.getArtist().getIdCode());
     idCode = customer.getIdCode();
   }
 
@@ -28,9 +30,9 @@ public class CustomerDto {
       String artist, String idCode) {
     super();
     this.user = user;
-    this.boughtTicketIds = boughtTickets;
-    this.favoriteListingIds = favoriteListings;
-    this.artistId = artist;
+    this.boughtTicketIds = (boughtTickets);
+    this.favoriteListingIds = (favoriteListings);
+    this.setArtistId(artist);
     this.idCode = idCode;
   }
 
@@ -47,36 +49,48 @@ public class CustomerDto {
     this.user = user;
   }
 
-  public List<String> getBoughtTickets() {
-    return boughtTicketIds;
-  }
-
-  public void setBoughtTickets(List<String> boughtTickets) {
-    this.boughtTicketIds = boughtTickets;
-  }
-
-  public List<String> getFavoriteListings() {
-    return favoriteListingIds;
-  }
-
-  public void setFavoriteListings(List<String> favoriteListings) {
-    this.favoriteListingIds = favoriteListings;
-  }
-
-  public String getArtist() {
-    return artistId;
-  }
-
-  public void setArtist(String artist) {
-    this.artistId = artist;
-  }
-
   public String getIdCode() {
     return idCode;
   }
 
   public void setIdCode(String idCode) {
     this.idCode = idCode;
+  }
+
+  public List<String> getFavoriteListingIds() {
+    return favoriteListingIds;
+  }
+
+  public void setFavoriteListingIds(List<ArtListing> list) {
+    this.favoriteListingIds = list.stream().map((l) -> l.getIdCode())
+        .collect(Collectors.toList());
+    this.favoriteListings = list.stream().map(l -> new ArtListingDto(l)).collect(Collectors.toList());
+  }
+
+  public String getArtistId() {
+    return artistId;
+  }
+
+  public void setArtistId(String artistId) {
+    this.artistId = artistId;
+  }
+
+  public List<String> getBoughtTicketIds() {
+    return boughtTicketIds;
+  }
+
+  public void setBoughtTicketIds(List<Ticket> boughtTickets) {
+    this.boughtTickets = boughtTickets.stream().map(t->new TicketDto(t)).collect(Collectors.toList());
+    this.boughtTicketIds = boughtTickets.stream().map((t) -> t.getIdCode())
+        .collect(Collectors.toList());
+  }
+
+  public List<TicketDto> getBoughtTickets() {
+    return boughtTickets;
+  }
+
+  public List<ArtListingDto> getFavoriteListings() {
+    return favoriteListings;
   }
 
 }

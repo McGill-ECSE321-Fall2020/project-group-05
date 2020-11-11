@@ -27,7 +27,7 @@ public class CustomerRepository {
 
   @Autowired
   EntityManager entityManager;
-  
+
   @Autowired
   ArtistRepository aRepository;
 
@@ -51,6 +51,13 @@ public class CustomerRepository {
         aProfileDescription);
     Customer customer = new Customer(aIdCode, usr);
     entityManager.persist(usr);
+    entityManager.persist(customer);
+    return customer;
+  }
+
+  public Customer createCustomer(String userIdCode) {
+    User user = entityManager.find(User.class, userIdCode);
+    Customer customer = new Customer(user.getIdCode(), user);
     entityManager.persist(customer);
     return customer;
   }

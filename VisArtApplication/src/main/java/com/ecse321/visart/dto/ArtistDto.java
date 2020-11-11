@@ -3,13 +3,17 @@ package com.ecse321.visart.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.Artist;
+import com.ecse321.visart.model.Ticket;
 
 public class ArtistDto {
   private CustomerDto customer;
   private List<String> listingIds;
   private List<String> soldTicketIds;
   private String idCode;
+  private List<ArtListingDto> listings;
+  private List<TicketDto> soldTickets;
 
   public CustomerDto getCustomer() {
     return customer;
@@ -21,10 +25,8 @@ public class ArtistDto {
 
   public ArtistDto(Artist artist) {
     customer = new CustomerDto(artist.getCustomer());
-    setListings(
-        artist.getPostedListings().stream().map((l) -> l.getIdCode()).collect(Collectors.toList()));
-    setSoldTickets(
-        artist.getSoldTickets().stream().map((t) -> t.getIdCode()).collect(Collectors.toList()));
+    setListings(artist.getPostedListings());
+    setSoldTickets(artist.getSoldTickets());
     idCode = artist.getIdCode();
   }
 
@@ -41,16 +43,19 @@ public class ArtistDto {
     return listingIds;
   }
 
-  public void setListings(List<String> listings) {
-    this.listingIds = listings;
+  public void setListings(List<ArtListing> listings) {
+    this.listings = listings.stream().map(l -> new ArtListingDto(l)).collect(Collectors.toList());
+    this.listingIds = listings.stream().map((l) -> l.getIdCode()).collect(Collectors.toList());
   }
 
   public List<String> getSoldTickets() {
     return soldTicketIds;
   }
 
-  public void setSoldTickets(List<String> soldTickets) {
-    this.soldTicketIds = soldTickets;
+  public void setSoldTickets(List<Ticket> soldTickets) {
+    this.soldTickets = soldTickets.stream().map(l -> new TicketDto(l)).collect(Collectors.toList());
+    this.soldTicketIds = soldTickets.stream().map((t) -> t.getIdCode())
+        .collect(Collectors.toList());
   }
 
   public String getIdCode() {
