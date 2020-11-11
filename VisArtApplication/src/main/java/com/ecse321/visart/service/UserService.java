@@ -170,7 +170,8 @@ public class UserService {
    */
   @Transactional
   public boolean loginUser(String username, String aPassword) {
-    User user = entityRepo.findEntityByAttribute("username", User.class, username).get(0);
+    List<User> users = entityRepo.findEntityByAttribute("username", User.class, username);
+    User user = users.size() > 0 ? users.get(0) : null; 
     if (user == null) {
       throw new IllegalArgumentException("Username cannot be found");
     }

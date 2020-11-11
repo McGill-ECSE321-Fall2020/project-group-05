@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
+import com.ecse321.visart.model.ArtPiece;
+import com.ecse321.visart.model.Tag;
 
 public class ArtListingDto {
 
@@ -20,6 +22,9 @@ public class ArtListingDto {
   private String managerId;
   private String artistId;
 
+  private List<ArtPieceDto> artPieces;
+  private List<TagDto> tags;
+
   public ArtListingDto(ArtListing listing) {
     description = listing.getDescription();
     postImages = listing.getPostingPicLink();
@@ -30,12 +35,11 @@ public class ArtListingDto {
     if (listing.getManager() != null)
       setManagerId(listing.getManager().getIdCode());
     if (listing.getPieces() != null)
-      artPieceIds = listing.getPieces().stream().map((piece) -> piece.getIdCode())
-        .collect(Collectors.toList());
-    favoritedCustomerIds = listing.getFavoritedCustomer().stream()
-        .map((customer) -> customer.getIdCode()).collect(Collectors.toList());
+      setArtPieces(listing.getPieces());
+    setFavoritedCustomerIds(listing.getFavoritedCustomer().stream()
+        .map((customer) -> customer.getIdCode()).collect(Collectors.toList()));
     if (listing.getTags() != null)
-      tagIds = listing.getTags().stream().map((t) -> t.getIdCode()).collect(Collectors.toList());
+      setTags(listing.getTags());
     if (listing.getArtist() != null)
       artistId = listing.getArtist().getIdCode();
   }
@@ -51,7 +55,7 @@ public class ArtListingDto {
     this.dimensions = dimensions;
     this.idCode = idCode;
     this.artPieceIds = artPieceIds;
-    this.favoritedCustomerIds = favortiedCustomerIds;
+    this.setFavoritedCustomerIds(favortiedCustomerIds);
     this.tagIds = tagIds;
     this.artistId = artistId;
   }
@@ -104,30 +108,6 @@ public class ArtListingDto {
     this.idCode = idCode;
   }
 
-  public List<String> getArtPieces() {
-    return artPieceIds;
-  }
-
-  public void setArtPieces(List<String> artPieces) {
-    this.artPieceIds = artPieces;
-  }
-
-  public List<String> getFavortiedCustomers() {
-    return favoritedCustomerIds;
-  }
-
-  public void setFavortiedCustomers(List<String> favortiedCustomers) {
-    this.favoritedCustomerIds = favortiedCustomers;
-  }
-
-  public List<String> getTags() {
-    return tagIds;
-  }
-
-  public void setTags(List<String> tags) {
-    this.tagIds = tags;
-  }
-
   public String getArtist() {
     return artistId;
   }
@@ -142,5 +122,31 @@ public class ArtListingDto {
 
   public void setManagerId(String managerId) {
     this.managerId = managerId;
+  }
+
+  public List<String> getFavoritedCustomerIds() {
+    return favoritedCustomerIds;
+  }
+
+  public void setFavoritedCustomerIds(List<String> favoritedCustomerIds) {
+    this.favoritedCustomerIds = favoritedCustomerIds;
+  }
+
+  public List<ArtPieceDto> getArtPieces() {
+    return artPieces;
+  }
+
+  public void setArtPieces(List<ArtPiece> artPieces) {
+    this.artPieces = artPieces.stream().map(p->new ArtPieceDto(p)).collect(Collectors.toList());
+    this.artPieceIds = artPieces.stream().map((piece) -> piece.getIdCode()).collect(Collectors.toList());
+  }
+
+  public List<TagDto> getTags() {
+    return tags;
+  }
+
+  public void setTags(List<Tag> tags) {
+    this.tags = tags.stream().map(t -> new TagDto(t)).collect(Collectors.toList());
+    this.tagIds = tags.stream().map((t) -> t.getIdCode()).collect(Collectors.toList());
   }
 }
