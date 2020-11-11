@@ -26,14 +26,29 @@
 </template>
 
 <script>
+// backend.js has on it: backend.get(path,params), backend.post(path,data), backend.parse(json) => post data
+var backend = require('@/tools/backend')
 export default {
   data: function () {
     return {
-      title: 'Art Piece Title',
-      artistName: 'Insert artist name',
-      description: 'Insert art piece description',
-      price: 'Insert price'
+      title: '',
+      artistName: '',
+      description: '',
+      price: ''
     }
+  },
+  created: function () {
+    backend
+      .get('/artlisting/get_all')
+      .then(function (response) {
+        this.title = JSON.parse(response.data).title
+        this.artistName = JSON.parse(response.data).artistName
+        this.description = JSON.parse(response.data).description
+        this.price = JSON.parse(response.data).price
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 </script>
