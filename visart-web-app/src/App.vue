@@ -46,7 +46,7 @@
     font-size: 170px;
     top: 50%;
 }
-#sectionContentListing{
+.sectionContentListing{
     color:rgb(78, 71, 61);
     font-size:50px;
     top: 30%;
@@ -99,6 +99,19 @@
 .card{
   width:350px !important;
   margin:30px !important;
+}
+h4{
+float:left;
+}
+h5{
+float:right;
+}
+p{
+float:right;
+padding-bottom:10%;
+}
+.cardHeader{
+display:inline;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
