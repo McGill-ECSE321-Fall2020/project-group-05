@@ -1,8 +1,10 @@
 /* eslint-disable */
 import axios from 'axios'
+import formurlencoded from 'form-urlencoded'
+
 var config = require('../../config')
 var frontendUrl = config.site
-var backendUrl = config.backend.site
+var backendUrl = 'http://localhost:8080/'//config.backend.site
 
 var axPost = axios.create({
     baseURL: backendUrl,
@@ -16,3 +18,9 @@ var axGet = axios.create({
 
 export let get = axGet.get
 export let post = axPost.post
+export let parse = function (obj) {
+    return formurlencoded(obj, {
+        ignorenull: true,
+        sorted: true
+    })
+}
