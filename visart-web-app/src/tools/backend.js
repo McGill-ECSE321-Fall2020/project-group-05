@@ -4,7 +4,7 @@ import formurlencoded from 'form-urlencoded'
 
 var config = require('../../config')
 var frontendUrl = config.site
-var backendUrl = 'http://localhost:8080/'//config.backend.site
+var backendUrl = config.backend.site
 
 var axPost = axios.create({
     baseURL: backendUrl,
