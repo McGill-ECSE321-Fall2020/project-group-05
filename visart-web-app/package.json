@@ -13,6 +13,7 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.19.0",
     "core-js": "^3.6.5",
+    "firebase": "^8.0.1",
     "form-urlencoded": "^4.2.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
