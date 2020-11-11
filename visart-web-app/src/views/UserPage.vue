@@ -44,6 +44,7 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 import axios from 'axios'
 var config = require('../../config')
+var backend = require('@/tools/backend')
 
 var frontendUrl = config.site
 var backendUrl = config.backend.site 
@@ -52,7 +53,7 @@ var AXIOS = axios.create({
   baseURL: backendUrl,
   headers: { 'Access-Control-Allow-Origin': frontendUrl, 'Content-Type':'raw', 'Data-Type':'raw' }
 })
-
+/* eslint-disable */
 export default {
   name: 'UserPage',
   Component: {
@@ -66,7 +67,8 @@ export default {
         { title: 'purchased', price: '1$' },
         { title: 'sold', price: '10$' },
         { title: 'sold2', price: '8$' }
-      ]
+      ],
+      artListings: []
     }
   },
   props: [],
@@ -76,7 +78,11 @@ export default {
       console.log(this.count)
     },
     showPurchasedArt: function () {
-      this.people = []
+      AXIOS.get('/artlisting/get_unsold_art').then(response => {
+      console.log(response.data)
+    }).catch(e => {
+      console.log(e)
+    })
     },
     showSoldArt: function () {
       this.count++
