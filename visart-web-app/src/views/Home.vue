@@ -3,7 +3,7 @@
   <div class="home">
   <button type="button" class="btn btn-primary" id="fixedbutton">+</button>
   <section id="mainArtSection">
-    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="70000" itemsToShow="1">
+    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="2000" itemsToShow="1">
     <slide>
       <div class="sectionImage" id="mainHomeArt1"></div>
     </slide>
@@ -58,58 +58,13 @@
     <div class="listingContainer">
       <h1> – Featured Art – </h1>
       <div class="card-columns">
-  <div class="card shadow-sm ">
+  <div class="card shadow-sm" v-for="(artlisting, index) in artListings" :key="index">
     <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">Title of Painting</div>
+    <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
     <div class="card-body">
       <h4 class="card-title"><a href="/artists">Picasso</a></h4>
-      <h5 class="card-title">$10000</h5>
-      <p class="card-text">This is a description of the painting. The painting is described by this description. The description describes the painting</p>
-    </div>
-  </div>
-  <div class="card shadow-sm">
-    <img class="card-img-top cardImg" src="../assets/cardTrial0.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">Title of Painting</div>
-    <div class="card-body">
-      <h4 class="card-title"><a href="/artists">Picasso</a></h4>
-      <h5 class="card-title">$4000</h5>
-      <p class="card-text">This is a description of the painting. The painting is described by this description. The description describes the painting</p>
-    </div>
-  </div>
-  <div class="card shadow-sm">
-    <img class="card-img-top cardImg" src="../assets/cardTrial3.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">Title of Painting</div>
-    <div class="card-body">
-      <h4 class="card-title"><a href="/artists">Picasso</a></h4>
-      <h5 class="card-title">$15000</h5>
-      <p class="card-text">This is a description of the painting. The painting is described by this description. The description describes the painting</p>
-    </div>
-  </div>
-  <div class="card shadow-sm">
-    <img class="card-img-top cardImg" src="../assets/cardTrial2.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">Title of Painting</div>
-    <div class="card-body">
-      <h4 class="card-title"><a href="/artists">Picasso</a></h4>
-      <h5 class="card-title">$55000</h5>
-      <p class="card-text">This is a description of the painting. The painting is described by this description. The description describes the painting</p>
-    </div>
-  </div>
-  <div class="card shadow-sm">
-    <img class="card-img-top cardImg" src="../assets/cardTrial1.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">Title of Painting</div>
-    <div class="card-body">
-      <h4 class="card-title"><a href="/artists">Picasso</a></h4>
-      <h5 class="card-title">$7999</h5>
-      <p class="card-text">This is a description of the painting. The painting is described by this description. The description describes the painting</p>
-    </div>
-  </div>
-  <div class="card shadow-sm">
-    <img class="card-img-top cardImg" src="../assets/cardTrial4.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">Title of Painting</div>
-    <div class="card-body">
-      <h4 class="card-title"><a href="/artists">Picasso</a></h4>
-      <h5 class="card-title">$900</h5>
-      <p class="card-text">This is a description of the painting. The painting is described by this description. The description describes the painting</p>
+      <h5 class="card-title">$ {{artlisting.price}}</h5>
+      <p class="card-text">{{artlisting.description}}</p>
     </div>
   </div>
 </div>
@@ -123,6 +78,16 @@
 //  bar scroll
 import { Hooper, Slide } from 'hooper'
 import 'hooper/dist/hooper.css'
+import axios from 'axios'
+var config = require('../../config')
+var backend = require('@/tools/backend')
+var frontendUrl = config.site
+var backendUrl = config.backend.site
+
+var AXIOS = axios.create({
+  baseURL: backendUrl,
+  headers: { 'Access-Control-Allow-Origin': frontendUrl, 'Content-Type': 'raw', 'Data-Type': 'raw' }
+})
 export default {
   name: 'Home',
   components: {
@@ -131,6 +96,11 @@ export default {
   },
   data () {
     return {
+      tag: {
+        keyword: '',
+        type: ''
+      },
+      artListing: [],
       hooperSettings: {
         itemsToShow: 8,
         centerMode: true,
@@ -140,6 +110,14 @@ export default {
         pagination: 'no'
       }
     }
+  },
+  created: function () {
+    backend
+    AXIOS.get('/artListing/get_all').then(response => {
+      console.log(response.data)
+    }).catch(e => {
+      console.log(e)
+    })
   }
 }
 </script>
