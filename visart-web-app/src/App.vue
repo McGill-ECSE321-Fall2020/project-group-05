@@ -1,7 +1,7 @@
 
   <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light">
   <a class="navbar-brand" href="#"><img id="navlogo" src="./assets/navlogo0.png" alt="nav"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -10,36 +10,47 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
+        <a class="nav-link" href="/about">About</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
+    <form class="form-inline my-2 my-lg-0" id="searchForm">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <button class="btn my-2 my-sm-0" type="submit"><img id="searchIcon" src="./assets/loupe.png" alt="Search"></button>
     </form>
+    <ul class="navbar-nav ml-auto" id="loginUl">
+        <li class="nav-item loginDiv">
+        <a class="nav-link" href="/about">Login</a>
+      </li>
+      <li class="nav-item loginDiv">
+        <a class="nav-link" href="/about">Sign Up</a>
+      </li>
+    </ul>
   </div>
 </nav>
     <router-view />
   </div>
 </template>
   <style>
+  /*
+  Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+*/
+#hooperContainer{
+  width:100%;
+  height:100%;
+}
+.navbar{
+background-color:#fff !important;
+  position:fixed !important; /* fixing the position takes it out of html flow - knows
+                   nothing about where to locate itself except by browser
+                   coordinates */
+  left:0 !important;           /* top left corner should start at leftmost spot */
+  top:0 !important;            /* top left corner should start at topmost spot */
+  width:100vw !important;      /* take up the full browser width */
+  z-index:200 !important;  /* high z index so other content scrolls underneath */
+}
 .mainArtContainer{
   height: 532px;
 }
@@ -55,7 +66,7 @@
   color:#fff;
 }
 #tagSection{
-  background:rgb(146, 142, 131);
+  background:rgb(202, 193, 176);
   position:relative;
   margin: auto;
   height:60px;
@@ -78,10 +89,16 @@
     top: 50%;
 }
 .sectionContentListing{
-    color:rgb(78, 71, 61);
+    color:rgb(117, 106, 91);
     font-size:50px;
     top: 30%;
     font-weight:400;
+}
+#tagContainer{
+  width: 98%;
+  overflow-x: scroll;
+  white-space: nowrap;
+  margin:auto
 }
 .cardImg{
   opacity: 0.4;
@@ -103,8 +120,17 @@
     width: 70px;
     border-width: 0px;
 }
-#mainHomeArt{
+#mainHomeArt1{
   background-image: url(https://www.slantmagazine.com/wp-content/uploads/2010/05/picassoandbraquegotothemovies.jpg);
+}
+#mainHomeArt2{
+  background-image: url(https://media.architecturaldigest.com/photos/5ab021fad91fc303af543aa3/16:9/w_2560%2Cc_limit/56797527.jpg);
+}
+#mainHomeArt3{
+  background-image: url(https://thisiscolossal.com/wp-content/uploads/2011/01/odani-5.jpg);
+}
+#mainHomeArt4{
+  background-image: url(https://static01.nyt.com/images/2011/04/05/opinion/editorial_tooker/editorial_tooker-jumbo.jpg);
 }
 #navLogo{
   height: auto;
@@ -120,9 +146,9 @@
   padding:0px;
   height:40px;
   width:150px;
-  border-color:rgb(189, 175, 154) !important;
-  background-color:rgb(226, 226, 220) !important;
-  color: rgb(153, 153, 131) !important;
+  border-color:rgb(231, 215, 191) !important;
+  background-color:#fff !important;
+  color: rgb(146, 135, 113) !important;
 }
 .tagBtn:hover{
   background-color:rgb(153, 153, 131) !important;
@@ -131,7 +157,7 @@
 }
 .listingContainer{
   padding:75px;
-  background-color:rgb(226, 226, 220);
+  background-color:#fff;
 }
 .card{
   width:350px !important;
@@ -149,6 +175,18 @@ padding-bottom:10%;
 }
 .cardHeader{
 display:inline;
+}
+#searchForm{
+position: absolute;
+left: 50%;
+transform: translatex(-50%);
+}
+#searchIcon{
+  transform:scale(0.9,0.9);
+  padding: 0px;
+  margin: 0px;
+  max-height: 30px;
+  max-width: 30px;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
