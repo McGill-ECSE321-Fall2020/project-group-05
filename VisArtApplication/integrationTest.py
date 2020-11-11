@@ -6,6 +6,7 @@ url = "https://vis-art-application.herokuapp.com/" # development server
 result = 0
 def get(endpoint,params=None,data=None):
     return r.get(url+endpoint,params=params,data=data)
+
 def post(endpoint,params=None,data=None):
     return r.post(url+endpoint,params=params,data=data)
 
@@ -16,6 +17,7 @@ def pget(endpoint,params=None,data=None,func=None):
         return c,c.content
     else:
         return c,c.content,func(c)
+
 def ppost(endpoint,params=None,data=None,func=None):
     c = post(endpoint,params=params,data=data)
     sys.stderr.write(">>> "+str(c)+' '+str(c.url)+'\n')
@@ -213,7 +215,7 @@ try:
     }))
     
 except Exception as e:
-    sys.stderr.write(e)
+    sys.stderr.write(str(e))
     sys.stderr.write('\n')
     result = 1
 print()

@@ -24,3 +24,7 @@ export let parse = function (obj) {
         sorted: true
     })
 }
+
+export function authenticate(username, password) {
+
+}

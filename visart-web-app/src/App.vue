@@ -20,7 +20,7 @@
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn my-2 my-sm-0" type="submit"><img id="searchIcon" src="./assets/loupe.png" alt="Search"></button>
     </form>
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto" id="loginUl">
         <li class="nav-item loginDiv">
         <a class="nav-link" href="/about">Login</a>
       </li>
@@ -37,11 +37,19 @@
   /*
   Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 */
-.loginDiv{
-
+#hooperContainer{
+  width:100%;
+  height:100%;
 }
 .navbar{
-background-color: rgb(226, 226, 220) !important;
+background-color:#fff !important;
+  position:fixed !important; /* fixing the position takes it out of html flow - knows
+                   nothing about where to locate itself except by browser
+                   coordinates */
+  left:0 !important;           /* top left corner should start at leftmost spot */
+  top:0 !important;            /* top left corner should start at topmost spot */
+  width:100vw !important;      /* take up the full browser width */
+  z-index:200 !important;  /* high z index so other content scrolls underneath */
 }
 .mainArtContainer{
   height: 532px;
@@ -58,7 +66,7 @@ background-color: rgb(226, 226, 220) !important;
   color:#fff;
 }
 #tagSection{
-  background:rgb(146, 142, 131);
+  background:rgb(202, 193, 176);
   position:relative;
   margin: auto;
   height:60px;
@@ -81,10 +89,16 @@ background-color: rgb(226, 226, 220) !important;
     top: 50%;
 }
 .sectionContentListing{
-    color:rgb(78, 71, 61);
+    color:rgb(117, 106, 91);
     font-size:50px;
     top: 30%;
     font-weight:400;
+}
+#tagContainer{
+  width: 98%;
+  overflow-x: scroll;
+  white-space: nowrap;
+  margin:auto
 }
 .cardImg{
   opacity: 0.4;
@@ -106,8 +120,17 @@ background-color: rgb(226, 226, 220) !important;
     width: 70px;
     border-width: 0px;
 }
-#mainHomeArt{
+#mainHomeArt1{
   background-image: url(https://www.slantmagazine.com/wp-content/uploads/2010/05/picassoandbraquegotothemovies.jpg);
+}
+#mainHomeArt2{
+  background-image: url(https://media.architecturaldigest.com/photos/5ab021fad91fc303af543aa3/16:9/w_2560%2Cc_limit/56797527.jpg);
+}
+#mainHomeArt3{
+  background-image: url(https://thisiscolossal.com/wp-content/uploads/2011/01/odani-5.jpg);
+}
+#mainHomeArt4{
+  background-image: url(https://static01.nyt.com/images/2011/04/05/opinion/editorial_tooker/editorial_tooker-jumbo.jpg);
 }
 #navLogo{
   height: auto;
@@ -123,9 +146,9 @@ background-color: rgb(226, 226, 220) !important;
   padding:0px;
   height:40px;
   width:150px;
-  border-color:rgb(189, 175, 154) !important;
-  background-color:rgb(226, 226, 220) !important;
-  color: rgb(153, 153, 131) !important;
+  border-color:rgb(231, 215, 191) !important;
+  background-color:#fff !important;
+  color: rgb(146, 135, 113) !important;
 }
 .tagBtn:hover{
   background-color:rgb(153, 153, 131) !important;
@@ -134,7 +157,7 @@ background-color: rgb(226, 226, 220) !important;
 }
 .listingContainer{
   padding:75px;
-  background-color:rgb(226, 226, 220);
+  background-color:#fff;
 }
 .card{
   width:350px !important;

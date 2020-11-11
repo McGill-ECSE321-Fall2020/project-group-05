@@ -1,6 +1,5 @@
 package com.ecse321.visart.service;
 
-
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -9,9 +8,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ecse321.visart.dto.CredentialsDto;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.UserRepository;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 @Service
 public class UserService {
@@ -38,7 +41,7 @@ public class UserService {
     String aIdCode = EntityRepository.getUniqueKey();
 
     if (aEmailAddress == null || isValidEmail(aEmailAddress) == false) {
-      throw new IllegalArgumentException("Email address is invalid");
+      throw new IllegalArgumentException("This Email address is invalid");
     }
 
     if (aDisplayname == null || aDisplayname.length() < 5 || aDisplayname.length() > 25) {
@@ -65,9 +68,13 @@ public class UserService {
       throw new IllegalArgumentException("Password must be between 8 and 40 characters");
     }
 
-    if (aProfileDescription == null || aProfileDescription.length() > 255) { // TODO: max length
-                                                                             // 1000 could be better
+    if (aProfileDescription == null || aProfileDescription.length() > 1000) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
+    }
+
+    List<User> l0 = entityRepo.findEntityByAttribute("emailAddress", User.class, aEmailAddress);
+    if (l0 != null && l0.size() > 0) {
+      throw new IllegalArgumentException("This Email Address is already taken!");
     }
 
     return userRepo.createUser(aIdCode, aEmailAddress, aDisplayname, aUsername, aPassword,
@@ -99,7 +106,7 @@ public class UserService {
     User user = userRepo.getUser(aIdCode); // TODO: must check that user is not null
 
     if (aEmailAddress != null && isValidEmail(aEmailAddress) == false) {
-      throw new IllegalArgumentException("Email address is invalid");
+      throw new IllegalArgumentException("This Email address is invalid");
     }
 
     if (aDisplayname != null && (aDisplayname.length() < 5 || aDisplayname.length() > 25)) {
@@ -126,8 +133,13 @@ public class UserService {
       throw new IllegalArgumentException("Password must be between 8 and 40 characters");
     }
 
-    if (aProfileDescription != null && aProfileDescription.length() > 255) {
+    if (aProfileDescription != null && aProfileDescription.length() > 1000) {
       throw new IllegalArgumentException("Description must be less than 255 characters");
+    }
+
+    List<User> l0 = entityRepo.findEntityByAttribute("emailAddress", User.class, aEmailAddress);
+    if (l0 != null && l0.size() > 0) {
+      throw new IllegalArgumentException("This Email Address is already taken!");
     }
 
     if (aDisplayname != null)
@@ -150,18 +162,20 @@ public class UserService {
   }
 
   /**
-  * logs in the user
-  * @param  aEmailAddress
-  * @param  aPassword
-  * @return isLoggedIn
-  */
+   * logs in the user
+   * 
+   * @param  aEmailAddress
+   * @param  aPassword
+   * @return               isLoggedIn
+   */
   @Transactional
-  public boolean loginUser(String aEmail, String aPassword) {
-    User user = entityRepo.findEntityByAttribute("email", User.class, aEmail).get(0);
+  public boolean loginUser(String username, String aPassword) {
+    List<User> users = entityRepo.findEntityByAttribute("username", User.class, username);
+    User user = users.size() > 0 ? users.get(0) : null; 
     if (user == null) {
-      throw new IllegalArgumentException("Email cannot be found");
+      throw new IllegalArgumentException("Username cannot be found");
     }
-    if (user.getPassword() != aPassword) { // TODO: return false instead of exception, true for
+    if (!user.getPassword().equals(aPassword)) { // TODO: return false instead of exception, true for
                                            // success, false for wrong password
       throw new IllegalArgumentException("Password does not match");
     }
@@ -170,9 +184,10 @@ public class UserService {
 
   /**
    * gets a specific user from the db
+   * 
    * @param  aIdCode
-   * @param user
-   * @return isLoggedIn
+   * @param  user
+   * @return         isLoggedIn
    */
   @Transactional
   public User getUser(String aIdCode) {
@@ -181,9 +196,10 @@ public class UserService {
 
   /**
    * delete a specific user from the db
+   * 
    * @param  aIdCode
-   * @param user
-   * @return isDeleted
+   * @param  user
+   * @return         isDeleted
    */
   @Transactional
   public Boolean deleteUser(String aIdCode) {
@@ -196,6 +212,7 @@ public class UserService {
 
   /**
    * get all users from the db
+   * 
    * @return allUsers
    */
   @Transactional
@@ -214,6 +231,19 @@ public class UserService {
     if (email == null)
       return false;
     return pat.matcher(email).matches();
+  }
+
+  @Transactional
+  public CredentialsDto generateCredentials(String id) {
+    CredentialsDto creds = new CredentialsDto();
+    
+    try {
+      creds.setFirebaseJWT(FirebaseAuth.getInstance().createCustomToken(id));
+    } catch (FirebaseAuthException e) {
+      e.printStackTrace();
+    }
+    
+    return creds;
   }
 
 }

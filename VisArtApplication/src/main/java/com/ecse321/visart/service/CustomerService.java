@@ -33,6 +33,18 @@ public class CustomerService {
 
   @Autowired
   TicketService ticketService;
+  
+  @Autowired
+  UserService userService;
+  
+  @Transactional
+  public Customer createCustomerUnified(String aEmailAddress, String aDisplayname,
+      String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
+
+    User user = userService.createUser(aEmailAddress, aDisplayname, aUsername, aPassword,
+        aProfilePicLink, aProfileDescription);
+    return customerRepo.createCustomer(user.getIdCode());
+  }
 
   /**
    * createCustomer method creates an instance of Customer that is persisted in

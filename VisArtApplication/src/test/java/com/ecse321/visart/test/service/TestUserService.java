@@ -86,7 +86,7 @@ public class TestUserService {
 
           String name = invocation.getArgument(2); // get the display name
 
-          if (name.equals(displayname) || name.equals(username)) {
+          if (name.equals(displayname) || name.equals(username) || name.equals(email)) {
             return new ArrayList<User>();
           } else {
             ArrayList<User> UsersWithName = new ArrayList<User>();
@@ -135,7 +135,7 @@ public class TestUserService {
       error = e.getMessage();
     }
     assertNull(user);
-    assertEquals("Email address is invalid", error); // expected error message for service data
+    assertEquals("This Email address is invalid", error); // expected error message for service data
                                                      // validation.
   }
 
@@ -152,7 +152,7 @@ public class TestUserService {
       error = e.getMessage();
     }
     assertNull(User);
-    assertEquals("Email address is invalid", error);
+    assertEquals("This Email address is invalid", error);
   }
 
   @Test
@@ -234,7 +234,7 @@ public class TestUserService {
   }
 
   @Test
-  public void testupdateValidUserEmail() {
+  public void testupdateDuplicateUserEmail() {
     String error = null;
     User user = null;
     try {
@@ -244,9 +244,7 @@ public class TestUserService {
       // Check that no error occurred
       error = e.getMessage();
     }
-    assertNull(error);
-    assertNotNull(user);
-    assertEquals("email123@gmail.com", user.getEmailAddress());
+    assertEquals("This Email Address is already taken!",error);
 
   }
 
@@ -319,7 +317,6 @@ public class TestUserService {
     assertNull(error);
     assertNotNull(user);
     assertEquals("profile desc", user.getProfileDescription());
-
   }
 
   @Test

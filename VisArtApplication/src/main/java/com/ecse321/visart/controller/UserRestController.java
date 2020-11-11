@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecse321.visart.dto.CredentialsDto;
 import com.ecse321.visart.dto.UserDto;
+import com.ecse321.visart.model.User;
+import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.service.UserService;
 
 @CrossOrigin(origins = "*")
@@ -21,6 +24,9 @@ public class UserRestController {
 
   @Autowired
   private UserService service;
+
+  @Autowired
+  private EntityRepository entityRepo;
 
   /**
    * 
@@ -79,4 +85,16 @@ public class UserRestController {
     return service.deleteUser(idCode);
   }
 
+  @PostMapping(value = { "/users/login", "/users/login/" })
+  public CredentialsDto loginUser(@RequestBody MultiValueMap<String, String> values) {
+    String username = values.getFirst("username");
+    String aPassword = values.getFirst("password");
+    if (service.loginUser(username, aPassword)) {
+      List<User> users = entityRepo.findEntityByAttribute("username", User.class, username);
+      String id = users.get(0).getIdCode();
+      return service.generateCredentials(id);
+    }
+    return new CredentialsDto();
+
+  }
 }
