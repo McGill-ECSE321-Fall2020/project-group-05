@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col-sm">
-      <ul class="list-group">
+      <ul class="list-group card-space">
         <li class="list-group-item list-group-item-secondary">Artist:</li>
         <li class="list-group-item">{{artistName}}</li>
         <li class="list-group-item list-group-item-secondary">Description:</li>
@@ -37,18 +37,20 @@ export default {
       price: ''
     }
   },
-  created: function () {
-    backend
-      .get('/artlisting/get_all')
-      .then(function (response) {
-        this.title = JSON.parse(response.data).title
-        this.artistName = JSON.parse(response.data).artistName
-        this.description = JSON.parse(response.data).description
-        this.price = JSON.parse(response.data).price
-      })
-      .catch(e => {
-        console.log(e)
-      })
+  methods: {
+    getArt: function () {
+      backend
+        .get('/artlisting/get/778e0c0f-32fa-42b9-83d1-34e06e2c99c8')
+        .then(function (response) {
+          this.title = (response.data).title
+          this.artistName = (response.data).artistName
+          this.description = (response.data).description
+          this.price = (response.data).price
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
   }
 }
 </script>
@@ -59,6 +61,10 @@ export default {
 }
 
 .container-space {
-  margin-top: 35px;
+  margin-top: 100px;
+}
+
+.card-space {
+  margin-top: 25px;
 }
 </style>
