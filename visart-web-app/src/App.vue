@@ -2,7 +2,7 @@
   <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" href="#"><img id="navlogo" src="./assets/navlogo0.png" alt="nav"></a>
+  <a class="navbar-brand" href="/"><img id="navlogo" src="./assets/navlogo0.png" alt="nav"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -16,8 +16,8 @@
         <a class="nav-link" href="/about">About</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0" id="searchForm">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <form method="get" action="/search/" class="form-inline my-2 my-lg-0" id="searchForm">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="keywords">
       <button class="btn my-2 my-sm-0" type="submit"><img id="searchIcon" src="./assets/loupe.png" alt="Search"></button>
     </form>
     <ul class="navbar-nav ml-auto" id="loginUl">
@@ -155,6 +155,14 @@ background-color:#fff !important;
     width: auto;
     max-height: 72px;
     max-width: 250px;
+}
+.toggleBtnHome{
+  border:0px;
+  background-color: #fff;
+  color: rgb(148, 126, 98);
+}
+.toggleBtnHome:hover{
+  color:rgb(43, 38, 32);
 }
 .tagBtn{
   margin-top:10px;
@@ -302,3 +310,8 @@ card scaling
     }
 }
 </style>
+<script>
+export default {
+
+}
+</script>

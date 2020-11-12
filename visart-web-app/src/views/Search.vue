@@ -1,25 +1,6 @@
 <template>
-
-  <div class="home">
+  <div class="search">
   <button type="button" class="btn btn-primary" id="fixedbutton">+</button>
-  <section id="mainArtSection">
-    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="7000" :itemsToShow="1" :infiniteScroll="true">
-    <slide>
-      <div class="sectionImage" id="mainHomeArt1"></div>
-    </slide>
-    <slide>
-      <div class="sectionImage" id="mainHomeArt2"></div>
-    </slide>
-    <slide>
-      <div class="sectionImage" id="mainHomeArt3"></div>
-    </slide>
-    <slide>
-      <div class="sectionImage" id="mainHomeArt4"></div>
-    </slide>
-    <hooper-navigation id="tagNavigation" slot="hooper-addons"></hooper-navigation>
-    </hooper>
-  <div class="sectionContent" id="sectionContentTitle">Vis Art</div>
-</section>
 <section id="tagSection">
 <div id="tagContainer">
  <hooper id="hooperContainerTags" :settings="hooperSettings">
@@ -60,25 +41,12 @@
     <div class="listingContainer">
       <label for="toggle_button">
         <h1 v-if="isActive" id="listingsTitle"> – Featured Art – </h1>
-        <h1 v-if="! isActive" id="listingsTitle"> – Full Collection – </h1>
+        <h1 v-if="! isActive" id="listingsTitle"> –  – </h1>
         <button class="toggleBtnHome" @click="isActive = !isActive">{{isActive ? 'View Full Collection' : 'View Featured Art'}}</button>
         <span class="toggle__switch"></span>
     </label>
       <div v-if="! isActive" class="card-columns card-columns-home">
-  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFull" :key="index">
-    <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
-    <div class="card-body">
-      <h4 class="card-title cardArtist"><a href="/artists">Picasso</a></h4>
-      <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
-      <div class="descriptionContainer">
-        <p class="card-text cardDesc">{{artlisting.description}}</p>
-      </div>
-    </div>
-  </div>
-</div>
-<div v-if="isActive" class="card-columns card-columns-home">
-  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFeatured" :key="index">
+  <div class="card shadow homeCard" v-for="(artlisting,index) in artListings" :key="index">
     <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
     <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
     <div class="card-body">
@@ -104,6 +72,7 @@ import axios from 'axios'
 var config = require('../../config')
 var frontendUrl = config.site
 var backendUrl = config.backend.site
+var backend = require('@/tools/backend')
 
 var AXIOS = axios.create({
   baseURL: backendUrl,
@@ -111,7 +80,7 @@ var AXIOS = axios.create({
 })
 console.log('im here')
 export default {
-  name: 'Home',
+  name: 'Search',
   components: {
     Hooper,
     Slide,
@@ -121,8 +90,7 @@ export default {
     return {
       isActive: false,
       tags: [],
-      artListingsFull: [],
-      artListingsFeatured: [],
+      artListings: [],
       hooperSettings: {
         itemsToShow: 7,
         centerMode: true,
@@ -136,10 +104,12 @@ export default {
     }
   },
   created: function () {
-    AXIOS.get('/artlisting/get_all').then(response => {
+    //    make array of keyword parsed by space
+    backend.get('/artlisting/get_artwork_by_keyword/' + this.$route.params.keywords).then(response => {
       console.log(response.data)
+      console.log('listing by keyword')
       for (const artListing of (response.data)) {
-        this.artListingsFull.push(artListing)
+        this.artListings.push(artListing)
       }
     }).catch(e => {
       console.log(e)
