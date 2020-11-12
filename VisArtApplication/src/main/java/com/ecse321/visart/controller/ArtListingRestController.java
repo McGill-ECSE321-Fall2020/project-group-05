@@ -76,8 +76,9 @@ public class ArtListingRestController {
     Artist artist = artistService.getArtist(map.getFirst("artistId"));
     Double price = Double.valueOf(map.getFirst("price"));
 
-    return new ArtListingDto(artListingService.createArtListing(price, aVisibility, aDescription, aTitle,
-        artist));
+    return new ArtListingDto(
+        artListingService.createArtListing(price, aVisibility, aDescription, aTitle,
+            artist));
   }
 
   /**
@@ -133,9 +134,10 @@ public class ArtListingRestController {
       "/artlisting/update_post_images/{aIdCode}",
       "/artlisting/update_post_images/{aIdCode}/" })
   public ArtListingDto updatePostImages(@PathVariable("aIdCode") String aIdCode,
-      @RequestBody MultiValueMap<String,String> map) {
+      @RequestBody MultiValueMap<String, String> map) {
     return new ArtListingDto(
-        artListingService.updatePostImages(aIdCode, map.getFirst("images").split("\\[")[1].split("\\]")[0].split(",")));
+        artListingService.updatePostImages(aIdCode,
+            map.getFirst("images").split("\\[")[1].split("\\]")[0].split(",")));
   }
 
   /**

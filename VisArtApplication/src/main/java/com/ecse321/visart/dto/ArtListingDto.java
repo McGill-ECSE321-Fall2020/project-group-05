@@ -139,8 +139,9 @@ public class ArtListingDto {
   }
 
   public void setArtPieces(List<ArtPiece> artPieces) {
-    this.artPieces = artPieces.stream().map(p->new ArtPieceDto(p)).collect(Collectors.toList());
-    this.artPieceIds = artPieces.stream().map((piece) -> piece.getIdCode()).collect(Collectors.toList());
+    this.artPieces = artPieces.stream().map(p -> new ArtPieceDto(p)).collect(Collectors.toList());
+    this.artPieceIds = artPieces.stream().map((piece) -> piece.getIdCode())
+        .collect(Collectors.toList());
   }
 
   public List<TagDto> getTags() {

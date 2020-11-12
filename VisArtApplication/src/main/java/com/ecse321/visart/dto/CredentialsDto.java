@@ -3,10 +3,12 @@ package com.ecse321.visart.dto;
 public class CredentialsDto {
   private String firebaseJWT;
   private String springJWT;
+
   public CredentialsDto() {
     this.firebaseJWT = "";
     this.springJWT = "";
   }
+
   public CredentialsDto(String firebaseJWT, String springJWT) {
     super();
     this.firebaseJWT = firebaseJWT;
@@ -28,6 +30,5 @@ public class CredentialsDto {
   public void setSpringJWT(String springJWT) {
     this.springJWT = springJWT;
   }
-  
-  
+
 }

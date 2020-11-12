@@ -82,7 +82,9 @@ public class TicketRestController {
   @PostMapping(value = { "/tickets/delete/{id}", "/tickets/delete/{id}/" })
   public Boolean deleteTicket(@PathVariable("id") String idCode) {
     return ticService.deleteTicket(idCode);
-  } /**
+  }
+
+  /**
    * 
    * @param  idCode
    * @return

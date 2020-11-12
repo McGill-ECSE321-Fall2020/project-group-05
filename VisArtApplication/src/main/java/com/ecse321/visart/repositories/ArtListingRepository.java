@@ -26,10 +26,10 @@ public class ArtListingRepository {
 
   @Autowired
   EntityManager entityManager;
-  
+
   @Autowired
   ArtPieceRepository apRepository;
-  
+
   @Autowired
   TagRepository tRepository;
 
@@ -45,7 +45,8 @@ public class ArtListingRepository {
    * @return              a persisted instance of ArtListing
    */
   @Transactional
-  public ArtListing createArtListing(Double price, PostVisibility aVisibility, String aDescription, String aTitle,
+  public ArtListing createArtListing(Double price, PostVisibility aVisibility, String aDescription,
+      String aTitle,
       String aIdCode, Artist aArtist) {
     ArtListing al = new ArtListing(price, aVisibility, aDescription, aTitle, aIdCode, aArtist);
     entityManager.persist(al);

@@ -6,7 +6,6 @@ public class UserDto {
   private String emailAddress;
   private String displayname;
   private String username;
-  private String password;
   private String profilePicLink;
   private String profileDescription;
   private String idCode;
@@ -25,7 +24,6 @@ public class UserDto {
     this.emailAddress = emailAddress;
     this.displayname = displayname;
     this.username = username;
-    this.password = password;
     this.profilePicLink = profilePicLink;
     this.profileDescription = profileDescription;
     this.idCode = idCode;
@@ -53,14 +51,6 @@ public class UserDto {
 
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
   public String getProfilePicLink() {
