@@ -26,5 +26,5 @@ export let parse = function (obj) {
 }
 
 export function authenticate(username, password) {
-
+    post('/users/login',parse({'username':username,'password':password}))
 }

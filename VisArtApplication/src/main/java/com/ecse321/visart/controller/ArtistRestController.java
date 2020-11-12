@@ -29,7 +29,7 @@ public class ArtistRestController {
    */
   @GetMapping(value = { "/artists/get/{idCode}", "/artists/get/{idCode}/" })
   public ArtistDto getArtist(@PathVariable("idCode") String idCode) {
-    return new ArtistDto(artistService.getArtist(idCode,true,true));
+    return new ArtistDto(artistService.getArtist(idCode, true, true));
   }
 
   /**

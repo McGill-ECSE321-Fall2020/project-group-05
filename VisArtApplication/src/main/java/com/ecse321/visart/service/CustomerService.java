@@ -21,10 +21,10 @@ public class CustomerService {
 
   @Autowired
   EntityRepository entityRepo;
-  
+
   @Autowired
   ArtPieceRepository artPieceRepo;
-  
+
   @Autowired
   ArtOrderService artOrderService;
 
@@ -33,10 +33,10 @@ public class CustomerService {
 
   @Autowired
   TicketService ticketService;
-  
+
   @Autowired
   UserService userService;
-  
+
   @Transactional
   public Customer createCustomerUnified(String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
@@ -158,7 +158,6 @@ public class CustomerService {
       customerRepo.updateCustomer(customer);
     }
   }
-  
 
   /**
    * Overloaded getCustomer method retrieves a Customer instance from the database

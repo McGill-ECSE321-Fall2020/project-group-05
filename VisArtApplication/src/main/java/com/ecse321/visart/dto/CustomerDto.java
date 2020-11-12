@@ -64,7 +64,8 @@ public class CustomerDto {
   public void setFavoriteListingIds(List<ArtListing> list) {
     this.favoriteListingIds = list.stream().map((l) -> l.getIdCode())
         .collect(Collectors.toList());
-    this.favoriteListings = list.stream().map(l -> new ArtListingDto(l)).collect(Collectors.toList());
+    this.favoriteListings = list.stream().map(l -> new ArtListingDto(l))
+        .collect(Collectors.toList());
   }
 
   public String getArtistId() {
@@ -80,7 +81,8 @@ public class CustomerDto {
   }
 
   public void setBoughtTicketIds(List<Ticket> boughtTickets) {
-    this.boughtTickets = boughtTickets.stream().map(t->new TicketDto(t)).collect(Collectors.toList());
+    this.boughtTickets = boughtTickets.stream().map(t -> new TicketDto(t))
+        .collect(Collectors.toList());
     this.boughtTicketIds = boughtTickets.stream().map((t) -> t.getIdCode())
         .collect(Collectors.toList());
   }

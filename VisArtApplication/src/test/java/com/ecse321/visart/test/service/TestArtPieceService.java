@@ -61,7 +61,7 @@ public class TestArtPieceService {
     lenient().when(apRepo.getArtPiece(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(AP_KEY)) {
-            ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+            ArtListing TEST_LISTING = new ArtListing(0.0,PostVisibility.Draft, "name",
                 "listing", "mockcode",
                 aArtist);
             ArtPiece artPiece = new ArtPiece(pieceLocation, AP_KEY, AP_KEY,
@@ -76,7 +76,7 @@ public class TestArtPieceService {
     lenient().when(alRepo.getArtListing(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(AL_KEY)) {
-            ArtListing artListing = new ArtListing(PostVisibility.Draft, "name",
+            ArtListing artListing = new ArtListing(0.0,PostVisibility.Draft, "name",
                 "listing", AL_KEY,
                 aArtist);
 

@@ -113,7 +113,7 @@ public class TicketTest {
     aManager = managerRepo.createManager(id + "3", email + "manager", displayName + "manager",
         username + "manager",
         password + "manager", profilePic + "manager", profileDesc + "manager");
-    aListing = artlistingRepo.createArtListing(ArtListing.PostVisibility.Public, listingDesc, title,
+    aListing = artlistingRepo.createArtListing(0.0,ArtListing.PostVisibility.Public, listingDesc, title,
         id + "4",
         anArtist);
     anArtPiece = artpieceRepo.createArtPiece(ArtPiece.PieceLocation.AtGallery, "UniversityStreet",
