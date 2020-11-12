@@ -23,7 +23,8 @@
 <div id="tagContainer">
  <hooper id="hooperContainerTags" :settings="hooperSettings">
     <slide v-for="(tag, index) in tags" :key="index">
-    <button type="button" class="btn btn-primary tagBtn">{{tag.keyword}}</button>
+    <router-link to="/search" tag="button"><button type="button" class="btn btn-primary tagBtn" >{{tag.keyword}}</button>
+    </router-link>
     </slide>
     <slide>
     <button type="button" class="btn btn-primary tagBtn">Sculpture</button>

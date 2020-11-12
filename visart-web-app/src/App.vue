@@ -143,8 +143,6 @@ background-color:#fff !important;
   -webkit-transition-duration: 0.5s;
   transition-duration: 0.5s;
 }
-.hvr-bounce-in {
-}
 #fixedbutton:hover, #fixedbutton:focus, #fixedbutton:active {
   -webkit-transform: scale(1.2) !important;
   transform: scale(1.2) !important;

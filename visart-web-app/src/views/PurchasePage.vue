@@ -85,23 +85,24 @@ export default {
         })
     },
     addFavorite: function () {
-      let userId = backend.retrieveCurrentUser().uid
+      const userId = backend.retrieveCurrentUser().uid
       if (userId == null) {
-          this.$alert("Sign in to add Artwork to your Favorites!")
+        this.$alert('Sign in to add Artwork to your Favorites!')
       } else {
-          // User id is therefore valid
-          let artlistingId = this.$route.params.id
-          backend.get('/customers/get/' + userId).then(function (response) {
-              // This function will run if the id is for a customer
-              return backend.post('/customers/add_favorite_listing/'+userId, {
-                  'listingIdCode' : artlistingId
-              })
-          }).then(function(response){
-              // response.data is the newly updated CustomerDto object, if you need it
-          }).catch(function (error){
-              // This function will run if the id is not a valid customer,
-              // or just something goes wrong
+        // User id is therefore valid
+        const artlistingId = this.$route.params.id
+        backend.get('/customers/get/' + userId).then(function (response) {
+          // This function will run if the id is for a customer
+          return backend.post('/customers/add_favorite_listing/' + userId, {
+            listingIdCode: artlistingId
           })
+        }).then(function (response) {
+          // response.data is the newly updated CustomerDto object, if you need it
+        }).catch(function (error) {
+          // This function will run if the id is not a valid customer,
+          // or just something goes wrong
+          console.log(error)
+        })
       }
     }
   },
