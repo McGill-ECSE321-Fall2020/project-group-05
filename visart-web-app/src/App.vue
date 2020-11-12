@@ -37,6 +37,12 @@
   /*
   Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 */
+.descriptionContainer{
+  margin-top:5%;
+  max-height: 300px;
+  position: relative;
+  overflow: hidden;
+}
 #hooperContainer{
   width:100%;
   height:100%;
@@ -68,10 +74,14 @@ background-color:#fff !important;
 #tagSection{
   background:rgb(202, 193, 176);
   position:relative;
-  margin: auto;
+  margin:0;
+  padding:0;
   height:60px;
   width:100%;
   color:#fff;
+}
+#hooperContainerTags{
+  height:60px;
 }
 .sectionImage{
   width: 100%;
@@ -89,16 +99,21 @@ background-color:#fff !important;
     top: 50%;
 }
 .sectionContentListing{
-    color:rgb(117, 106, 91);
-    font-size:50px;
-    top: 30%;
+    color:rgb(43, 38, 32);
+    font-size:200%;
+    top: 40%;
     font-weight:400;
 }
+#listingsTitle{
+  color:rgb(43, 38, 32);
+  margin:auto;
+}
 #tagContainer{
-  width: 98%;
+  width: 1078px;
+  margin:auto;
   overflow-x: scroll;
   white-space: nowrap;
-  margin:auto
+  padding:0;
 }
 .cardImg{
   opacity: 0.4;
@@ -106,6 +121,9 @@ background-color:#fff !important;
 }
 .cardImg:hover{
   opacity: 1;
+}
+.cardImg:hover ~ .sectionContentListing{
+  opacity: 0;
 }
 #fixedbutton {
     position: fixed;
@@ -158,19 +176,53 @@ background-color:#fff !important;
 .listingContainer{
   padding:75px;
   background-color:#fff;
+    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 2s; /* Firefox < 16 */
+        -ms-animation: fadein 2s; /* Internet Explorer */
+         -o-animation: fadein 2s; /* Opera < 12.1 */
+            animation: fadein 2s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 .homeCard{
-  width:350px !important;
+  width:90% !important;
   margin:30px !important;
+}
+.card-columns-home{
+  margin:auto !important;
 }
 .cardArtist{
 float:left;
+font-size: 120%;
 }
 .cardPrice{
 float:right;
+font-size: 120%;
 }
 .cardDesc{
 float:left;
+font-size: 100%;
 padding-top:10%;
 padding-bottom:5%;
 }
@@ -195,6 +247,7 @@ transform: translatex(-50%);
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin-top:65px;
 }
 
 #nav {
@@ -208,5 +261,44 @@ transform: translatex(-50%);
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+/*
+card scaling
+*/
+@media (min-width: 36em) {
+    .card-columns {
+        -webkit-column-count: 1 !important;
+        -moz-column-count: 1 !important;
+        column-count: 1 !important;
+    }
+}
+@media (min-width: 50em) {
+    .card-columns {
+        -webkit-column-count: 2 !important;
+        -moz-column-count: 2 !important;
+        column-count: 2 !important;
+    }
+}
+@media (min-width: 55em) {
+    .card-columns {
+        -webkit-column-count: 3 !important;
+        -moz-column-count: 3 !important;
+        column-count: 3 !important;
+    }
+}
+@media (min-width: 62em) {
+    .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+
+@media (min-width: 75em) {
+    .card-columns {
+        -webkit-column-count: 5;
+        -moz-column-count: 5;
+        column-count: 5;
+    }
 }
 </style>
