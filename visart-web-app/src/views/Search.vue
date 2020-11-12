@@ -1,6 +1,5 @@
 <template>
   <div class="search">
-  <button type="button" class="btn btn-primary" id="fixedbutton">+</button>
 <section id="tagSection">
 <div id="tagContainer">
  <hooper id="hooperContainerTags" :settings="hooperSettings">
@@ -68,16 +67,7 @@
 //  bar scroll
 import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper'
 import 'hooper/dist/hooper.css'
-import axios from 'axios'
-var config = require('../../config')
-var frontendUrl = config.site
-var backendUrl = config.backend.site
 var backend = require('@/tools/backend')
-
-var AXIOS = axios.create({
-  baseURL: backendUrl,
-  headers: { 'Access-Control-Allow-Origin': frontendUrl, 'Content-Type': 'raw', 'Data-Type': 'raw' }
-})
 console.log('im here')
 export default {
   name: 'Search',
@@ -105,27 +95,13 @@ export default {
   },
   created: function () {
     //    make array of keyword parsed by space
-    backend.get('/artlisting/get_artwork_by_keyword/' + this.$route.params.keywords).then(response => {
+    var key = this.$route.query.keywords
+    console.log(key)
+    backend.get('/artlisting/get_artwork_by_keyword/', { params: { keywords: this.$route.query.keywords } }).then(response => {
       console.log(response.data)
       console.log('listing by keyword')
       for (const artListing of (response.data)) {
         this.artListings.push(artListing)
-      }
-    }).catch(e => {
-      console.log(e)
-    })
-    AXIOS.get('/managers/get_listings').then(response => {
-      console.log(response.data)
-      for (const managerListing of (response.data)) {
-        this.artListingsFeatured.push(managerListing)
-      }
-    }).catch(e => {
-      console.log(e)
-    })
-    AXIOS.get('/tags/get_all').then(response => {
-      console.log(response.data)
-      for (const tag of (response.data)) {
-        this.tags.push(tag)
       }
     }).catch(e => {
       console.log(e)

@@ -1,7 +1,6 @@
 <template>
 
   <div class="home">
-  <button type="button" class="btn btn-primary" id="fixedbutton">+</button>
   <section id="mainArtSection">
     <hooper id="hooperContainer" :autoPlay="true" :playSpeed="7000" :itemsToShow="1" :infiniteScroll="true">
     <slide>
