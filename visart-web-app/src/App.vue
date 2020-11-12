@@ -159,19 +159,20 @@ background-color:#fff !important;
   padding:75px;
   background-color:#fff;
 }
-.card{
+.homeCard{
   width:350px !important;
   margin:30px !important;
 }
-h4{
+.cardArtist{
 float:left;
 }
-h5{
+.cardPrice{
 float:right;
 }
-p{
-float:right;
-padding-bottom:10%;
+.cardDesc{
+float:left;
+padding-top:10%;
+padding-bottom:5%;
 }
 .cardHeader{
 display:inline;
