@@ -325,7 +325,7 @@ public class TestArtListingService {
     // validation.
 
     try {
-      artListing = serviceAl.updateArtListing(AL_KEY, newPostvisibility, newDescription, newTitle);
+      artListing = serviceAl.updateArtListing(AL_KEY, 0.0,newPostvisibility, newDescription, newTitle);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       fail();
