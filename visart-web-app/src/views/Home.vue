@@ -112,7 +112,7 @@ export default {
     }
   },
   created: function () {
-    backend
+    console.log(backend)
     AXIOS.get('/artListing/get_all').then(response => {
       console.log(response.data)
     }).catch(e => {
