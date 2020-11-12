@@ -1,6 +1,8 @@
 /* eslint-disable */
 import axios from 'axios'
 import formurlencoded from 'form-urlencoded'
+import firebase from 'firebase'
+
 
 var config = require('../../config')
 var frontendUrl = config.site
@@ -25,6 +27,24 @@ export let parse = function (obj) {
     })
 }
 
-export function authenticate(username, password) {
-    post('/users/login',parse({'username':username,'password':password}))
+export function authenticateUser(username, password) {
+    post('/users/login', parse({ 'username': username, 'password': password })).then(response => {
+        let firebaseJWT = response.data.firebaseJWT;
+        return firebase.auth().signInWithCustomToken(firebaseJWT)
+    }).catch(error => {console.log(error)})
+}
+
+export function authenticateEmail(email,password) {
+    post('/users/email_login', parse({ 'emailAddress': email, 'password': password })).then(response => {
+        let firebaseJWT = response.data.firebaseJWT;
+        return firebase.auth().signInWithCustomToken(firebaseJWT)
+    }).catch(error => {console.log(error)})
+}
+
+export function onFirebaseAuth(observer) {
+    firebase.auth().onAuthStateChanged(observer)
+}
+
+export function retrieveCurrentUser() {
+    return firebase.auth().currentUser
 }
