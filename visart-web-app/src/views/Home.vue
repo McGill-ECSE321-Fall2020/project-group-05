@@ -3,7 +3,7 @@
   <div class="home">
   <button type="button" class="btn btn-primary" id="fixedbutton">+</button>
   <section id="mainArtSection">
-    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="2000" :itemsToShow="1">
+    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="7000" :itemsToShow="1" :infiniteScroll="true">
     <slide>
       <div class="sectionImage" id="mainHomeArt1"></div>
     </slide>
@@ -16,14 +16,15 @@
     <slide>
       <div class="sectionImage" id="mainHomeArt4"></div>
     </slide>
+    <hooper-navigation id="tagNavigation" slot="hooper-addons"></hooper-navigation>
     </hooper>
   <div class="sectionContent" id="sectionContentTitle">Vis Art</div>
 </section>
 <section id="tagSection">
 <div id="tagContainer">
- <hooper :settings="hooperSettings">
+ <hooper id="hooperContainerTags" :settings="hooperSettings">
     <slide v-for="(tag, index) in tags" :key="index">
-    <button type="button" class="btn btn-primary tagBtn"></button>
+    <button type="button" class="btn btn-primary tagBtn">{{tag.keyword}}</button>
     </slide>
     <slide>
     <button type="button" class="btn btn-primary tagBtn">Sculpture</button>
@@ -52,19 +53,29 @@
     <slide>
     <button type="button" class="btn btn-primary tagBtn">Glass</button>
     </slide>
+      <hooper-navigation slot="hooper-addons"></hooper-navigation>
   </hooper>
 </div>
 </section>
     <div class="listingContainer">
-      <h1> – Featured Art – </h1>
-      <div class="card-columns">
-  <div class="card shadow-sm homeCard" v-for="(artlisting,index) in artListings" :key="index">
+      <label for="toggle_button">
+        <h1 v-if="isActive" id="listingsTitle"> – Featured Art – </h1>
+        <h1 v-if="! isActive" id="listingsTitle"> – Full Collection – </h1>
+        <span v-if="isActive" class="toggle__label">On</span>
+        <span v-if="! isActive" class="toggle__label">Off</span>
+        <input type="checkbox" id="toggle_button" v-model="checkedValue">
+        <span class="toggle__switch"></span>
+    </label>
+      <div v-if="! isActive" class="card-columns card-columns-home">
+  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFull" :key="index">
     <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
     <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
     <div class="card-body">
       <h4 class="card-title cardArtist"><a href="/artists">Picasso</a></h4>
       <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
-      <p class="card-text cardDesc">{{artlisting.description}}</p>
+      <div class="descriptionContainer">
+        <p class="card-text cardDesc">{{artlisting.description}}</p>
+      </div>
     </div>
   </div>
 </div>
@@ -76,7 +87,7 @@
 <script>
 // @ is an alias to /src
 //  bar scroll
-import { Hooper, Slide } from 'hooper'
+import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper'
 import 'hooper/dist/hooper.css'
 import axios from 'axios'
 var config = require('../../config')
@@ -92,19 +103,23 @@ export default {
   name: 'Home',
   components: {
     Hooper,
-    Slide
+    Slide,
+    HooperNavigation
   },
   data () {
     return {
+      currentState: false,
       tags: [],
-      artListings: [],
+      artListingsFull: [],
       hooperSettings: {
-        itemsToShow: 8,
+        itemsToShow: 7,
         centerMode: true,
         infiniteScroll: true,
-        itemsToSlide: 8,
-        rtl: true,
-        pagination: 'no'
+        itemsToSlide: 1,
+        rtl: false,
+        pagination: 'no',
+        mouseDrag: false,
+        autoPlay: true
       }
     }
   },
@@ -112,11 +127,32 @@ export default {
     AXIOS.get('/artlisting/get_all').then(response => {
       console.log(response.data)
       for (const artListing of (response.data)) {
-        this.artListings.push(artListing)
+        this.artListingsFull.push(artListing)
       }
     }).catch(e => {
       console.log(e)
     })
+    AXIOS.get('/tags/get_all').then(response => {
+      console.log(response.data)
+      for (const tag of (response.data)) {
+        this.tags.push(tag)
+      }
+    }).catch(e => {
+      console.log(e)
+    })
+  },
+  computed: {
+    isActive () {
+      return this.currentState
+    },
+    checkedValue: {
+      get () {
+        return this.defaultState
+      },
+      set (newValue) {
+        this.currentState = newValue
+      }
+    }
   }
 }
 </script>

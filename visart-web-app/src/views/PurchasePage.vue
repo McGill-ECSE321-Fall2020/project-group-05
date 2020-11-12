@@ -3,9 +3,9 @@
   <div class="row">
     <div class="col-xl">
       <div class="card" style="width: 35rem;">
-        <img class="card-img-top" src="../assets/logo.png" alt="Card image cap">
+        <img class="card-img-top card-space-image" src="image" alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title">{{title}}</h5>
+          <h5 class="card-title text-center">{{title}}</h5>
         </div>
       </div>
     </div>
@@ -18,8 +18,8 @@
         <li class="list-group-item list-group-item-secondary">Price:</li>
         <li class="list-group-item">{{price}}</li>
       </ul>
-      <button type="button" class="btn btn-secondary btn-lg btn-block btn-space">Buy Now</button>
-      <button type="button" class="btn btn-secondary btn-lg btn-block btn-space">Add to favorite</button>
+      <b-button href="#" class="btn btn-secondary btn-lg btn-block btn-space">Buy Now</b-button>
+      <button type="button" class="btn btn-secondary btn-lg btn-block btn-space" onclick="addFavorite">Add to favorite</button>
     </div>
   </div>
 </div>
@@ -40,9 +40,24 @@ export default {
   methods: {
     parseArtListing: function (response) {
       this.title = (response.data).title
-      this.artistName = (response.data).artistName
       this.description = (response.data).description
       this.price = (response.data).price
+      this.image = (response.data).postImages
+    },
+    parseArtist: function (response) {
+      this.artistName = (response.data).customer.user.displayname
+    },
+    getArtist: function () {
+      backend
+        .get('/artlisting/get/778e0c0f-32fa-42b9-83d1-34e06e2c99c8')
+        .then(response => {
+          console.log(response.data)
+          return backend
+            .get('/artists/get/' + (response.data).artist)
+        }).then(this.parseArtist)
+        .catch(e => {
+          console.log(e)
+        })
     },
     getArt: function () {
       backend
@@ -51,10 +66,17 @@ export default {
         .catch(e => {
           console.log(e)
         })
+    },
+    addFavorite: function () {
+      /* backend
+      .get('/artlisting/get/778e0c0f-32fa-42b9-83d1-34e06e2c99c8')
+      .then(response => {
+      .post('/customers/add_favorite_listing/' +(response.data)) */
     }
   },
   created: function () {
     this.getArt()
+    this.getArtist()
   }
 }
 </script>
@@ -70,5 +92,9 @@ export default {
 
 .card-space {
   margin-top: 25px;
+}
+
+.card-space-image {
+  margin-top: 70px;
 }
 </style>
