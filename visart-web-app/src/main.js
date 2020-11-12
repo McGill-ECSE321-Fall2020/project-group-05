@@ -9,6 +9,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import firebase from 'firebase'
 var config = require('../config')
 
+
+firebase.initializeApp(config.firebaseConfig)
+
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)

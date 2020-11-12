@@ -1,5 +1,5 @@
 <template>
-  <form class="form-signin">
+  <span class="form-signin" id="signin">
     <label for="inputEmail" class="sr-only">Email Address</label>
     <input
       type="email"
@@ -19,16 +19,37 @@
       placeholder="the password"
       required
     />
-    <button class="btn btn-lg btn-primary btn-block" type="submit">
+    <button
+      class="btn btn-lg btn-primary btn-block"
+      v-on:click="authenticateUser"
+    >
       Sign in
     </button>
-  </form>
+    <label for="testFile">Upload an Image</label>
+    <input
+      type="file"
+      id="testFile"
+      name="testFile"
+      accept="image/png, image/jpeg"
+    />
+    <button v-on:click="uploadFile">Confirm upload</button>
+  </span>
 </template>
 
 <script>
 /* eslint-disable */
 var backend = require("@/tools/backend");
 var storage = require("@/tools/cloud-storage");
+
+function setupImage(storedImageName) {
+  storage.read(storedImageName).then(url => {
+    // method to get a download url
+    let downloadURL = url;
+    let img = document.createElement("img");
+    img.src = downloadURL;
+    document.getElementById("signin").append(img);
+  });
+}
 
 export default {
   name: "BasicLogin",
@@ -37,10 +58,30 @@ export default {
     return {};
   },
   props: [],
-  methods: {},
-  created: function() {
-    storage.authenticate("bobby");
-    
-  }
+  methods: {
+    authenticateUser: function() {
+      let email = document.getElementById("inputEmail").value;
+      let password = document.getElementById("inputPass").value;
+      console.log(email, password);
+      backend.authenticateEmail(email, password);
+      backend.onFirebaseAuth(function(user) {
+        // listener function that occurs whenever signing in or signing out
+        console.log(user);
+      });
+    },
+    uploadFile: function() {
+      let fileElement = document.getElementById("testFile");
+      let file = fileElement.files[0];
+
+      // use this method to change the file.name into a randomized filename for the cloud storage
+      let filename = storage.createStoredName(file.name);
+      console.log(filename);
+      storage.write(filename, file).then(function(snapshot) {
+        // 'then' occurs when file is uploaded
+        setupImage(filename);
+      });
+    }
+  },
+  created: function() {}
 };
 </script>

@@ -85,6 +85,19 @@ public class UserRestController {
     return service.deleteUser(idCode);
   }
 
+  @PostMapping(value = { "/users/email_login", "/users/email_login/" })
+  public CredentialsDto loginUserByEmail(@RequestBody MultiValueMap<String, String> values) {
+    String email = values.getFirst("emailAddress");
+    String aPassword = values.getFirst("password");
+    if (service.loginUserByEmail(email, aPassword)) {
+      List<User> users = entityRepo.findEntityByAttribute("emailAddress", User.class, email);
+      String id = users.get(0).getIdCode();
+      return service.generateCredentials(id);
+    }
+    return new CredentialsDto();
+
+  }
+  
   @PostMapping(value = { "/users/login", "/users/login/" })
   public CredentialsDto loginUser(@RequestBody MultiValueMap<String, String> values) {
     String username = values.getFirst("username");
