@@ -38,19 +38,23 @@ export default {
     }
   },
   methods: {
+    parseArtListing: function (response) {
+      this.title = (response.data).title
+      this.artistName = (response.data).artistName
+      this.description = (response.data).description
+      this.price = (response.data).price
+    },
     getArt: function () {
       backend
         .get('/artlisting/get/778e0c0f-32fa-42b9-83d1-34e06e2c99c8')
-        .then(function (response) {
-          this.title = (response.data).title
-          this.artistName = (response.data).artistName
-          this.description = (response.data).description
-          this.price = (response.data).price
-        })
+        .then(this.parseArtListing)
         .catch(e => {
           console.log(e)
         })
     }
+  },
+  created: function () {
+    this.getArt()
   }
 }
 </script>
