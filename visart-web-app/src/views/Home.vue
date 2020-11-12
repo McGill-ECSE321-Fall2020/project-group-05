@@ -3,7 +3,7 @@
   <div class="home">
   <button type="button" class="btn btn-primary" id="fixedbutton">+</button>
   <section id="mainArtSection">
-    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="2000" :itemsToShow="1" :infiniteScroll="true">
+    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="7000" :itemsToShow="1" :infiniteScroll="true">
     <slide>
       <div class="sectionImage" id="mainHomeArt1"></div>
     </slide>
@@ -16,7 +16,7 @@
     <slide>
       <div class="sectionImage" id="mainHomeArt4"></div>
     </slide>
-    <hooper-navigation slot="hooper-addons"></hooper-navigation>
+    <hooper-navigation id="tagNavigation" slot="hooper-addons"></hooper-navigation>
     </hooper>
   <div class="sectionContent" id="sectionContentTitle">Vis Art</div>
 </section>
@@ -58,9 +58,16 @@
 </div>
 </section>
     <div class="listingContainer">
-      <h1 id="listingsTitle"> – Featured Art – </h1>
-      <div class="card-columns card-columns-home">
-  <div class="card shadow homeCard" v-for="(artlisting,index) in artListings" :key="index">
+      <label for="toggle_button">
+        <h1 v-if="isActive" id="listingsTitle"> – Featured Art – </h1>
+        <h1 v-if="! isActive" id="listingsTitle"> – Full Collection – </h1>
+        <span v-if="isActive" class="toggle__label">On</span>
+        <span v-if="! isActive" class="toggle__label">Off</span>
+        <input type="checkbox" id="toggle_button" v-model="checkedValue">
+        <span class="toggle__switch"></span>
+    </label>
+      <div v-if="! isActive" class="card-columns card-columns-home">
+  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFull" :key="index">
     <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
     <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
     <div class="card-body">
@@ -101,15 +108,18 @@ export default {
   },
   data () {
     return {
+      currentState: false,
       tags: [],
-      artListings: [],
+      artListingsFull: [],
       hooperSettings: {
         itemsToShow: 7,
         centerMode: true,
         infiniteScroll: true,
         itemsToSlide: 1,
-        rtl: true,
-        pagination: 'no'
+        rtl: false,
+        pagination: 'no',
+        mouseDrag: false,
+        autoPlay: true
       }
     }
   },
@@ -117,7 +127,7 @@ export default {
     AXIOS.get('/artlisting/get_all').then(response => {
       console.log(response.data)
       for (const artListing of (response.data)) {
-        this.artListings.push(artListing)
+        this.artListingsFull.push(artListing)
       }
     }).catch(e => {
       console.log(e)
@@ -130,6 +140,19 @@ export default {
     }).catch(e => {
       console.log(e)
     })
+  },
+  computed: {
+    isActive () {
+      return this.currentState
+    },
+    checkedValue: {
+      get () {
+        return this.defaultState
+      },
+      set (newValue) {
+        this.currentState = newValue
+      }
+    }
   }
 }
 </script>

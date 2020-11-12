@@ -109,7 +109,7 @@ background-color:#fff !important;
   margin:auto;
 }
 #tagContainer{
-  width: 1078px;
+  width: 80%;
   margin:auto;
   overflow-x: scroll;
   white-space: nowrap;
@@ -163,7 +163,7 @@ background-color:#fff !important;
   margin-right: 5px;
   padding:0px;
   height:40px;
-  width:150px;
+  width:95%;
   border-color:rgb(231, 215, 191) !important;
   background-color:#fff !important;
   color: rgb(146, 135, 113) !important;
