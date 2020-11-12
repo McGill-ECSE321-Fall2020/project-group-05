@@ -50,7 +50,8 @@ public class ArtListing {
   // CONSTRUCTOR
   // ------------------------
 
-  public ArtListing(Double price, PostVisibility aVisibility, String aDescription, String aTitle, String aIdCode,
+  public ArtListing(Double price, PostVisibility aVisibility, String aDescription, String aTitle,
+      String aIdCode,
       Artist aArtist) {
     this.price = price;
     visibility = aVisibility;

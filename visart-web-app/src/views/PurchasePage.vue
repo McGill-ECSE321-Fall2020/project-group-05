@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col-sm">
-      <ul class="list-group">
+      <ul class="list-group card-space">
         <li class="list-group-item list-group-item-secondary">Artist:</li>
         <li class="list-group-item">{{artistName}}</li>
         <li class="list-group-item list-group-item-secondary">Description:</li>
@@ -26,14 +26,35 @@
 </template>
 
 <script>
+// backend.js has on it: backend.get(path,params), backend.post(path,data), backend.parse(json) => post data
+var backend = require('@/tools/backend')
 export default {
   data: function () {
     return {
-      title: 'Art Piece Title',
-      artistName: 'Insert artist name',
-      description: 'Insert art piece description',
-      price: 'Insert price'
+      title: '',
+      artistName: '',
+      description: '',
+      price: ''
     }
+  },
+  methods: {
+    parseArtListing: function (response) {
+      this.title = (response.data).title
+      this.artistName = (response.data).artistName
+      this.description = (response.data).description
+      this.price = (response.data).price
+    },
+    getArt: function () {
+      backend
+        .get('/artlisting/get/778e0c0f-32fa-42b9-83d1-34e06e2c99c8')
+        .then(this.parseArtListing)
+        .catch(e => {
+          console.log(e)
+        })
+    }
+  },
+  created: function () {
+    this.getArt()
   }
 }
 </script>
@@ -44,6 +65,10 @@ export default {
 }
 
 .container-space {
-  margin-top: 35px;
+  margin-top: 100px;
+}
+
+.card-space {
+  margin-top: 25px;
 }
 </style>

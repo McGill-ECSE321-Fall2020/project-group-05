@@ -28,7 +28,7 @@ public class ArtOrderRepository {
 
   @Autowired
   EntityManager entityManager;
-  
+
   @Autowired
   TicketRepository tRepository;
 

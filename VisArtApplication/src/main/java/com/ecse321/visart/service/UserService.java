@@ -12,7 +12,6 @@ import com.ecse321.visart.dto.CredentialsDto;
 import com.ecse321.visart.model.User;
 import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.repositories.UserRepository;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
@@ -171,12 +170,13 @@ public class UserService {
   @Transactional
   public boolean loginUser(String username, String aPassword) {
     List<User> users = entityRepo.findEntityByAttribute("username", User.class, username);
-    User user = users.size() > 0 ? users.get(0) : null; 
+    User user = users.size() > 0 ? users.get(0) : null;
     if (user == null) {
       throw new IllegalArgumentException("Username cannot be found");
     }
-    if (!user.getPassword().equals(aPassword)) { // TODO: return false instead of exception, true for
-                                           // success, false for wrong password
+    if (!user.getPassword().equals(aPassword)) { // TODO: return false instead of exception, true
+                                                 // for
+      // success, false for wrong password
       throw new IllegalArgumentException("Password does not match");
     }
     return true;
@@ -236,13 +236,13 @@ public class UserService {
   @Transactional
   public CredentialsDto generateCredentials(String id) {
     CredentialsDto creds = new CredentialsDto();
-    
+
     try {
       creds.setFirebaseJWT(FirebaseAuth.getInstance().createCustomToken(id));
     } catch (FirebaseAuthException e) {
       e.printStackTrace();
     }
-    
+
     return creds;
   }
 

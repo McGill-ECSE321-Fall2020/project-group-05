@@ -22,10 +22,10 @@ public class UserDto {
   public UserDto(String emailAddress, String displayname, String username, String password,
       String profilePicLink, String profileDescription, String idCode) {
     super();
+    this.password = password;
     this.emailAddress = emailAddress;
     this.displayname = displayname;
     this.username = username;
-    this.password = password;
     this.profilePicLink = profilePicLink;
     this.profileDescription = profileDescription;
     this.idCode = idCode;
@@ -53,14 +53,6 @@ public class UserDto {
 
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
   public String getProfilePicLink() {
