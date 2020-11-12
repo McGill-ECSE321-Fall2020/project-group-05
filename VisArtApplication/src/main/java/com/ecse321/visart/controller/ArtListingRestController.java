@@ -98,9 +98,12 @@ public class ArtListingRestController {
     PostVisibility aVisibility = PostVisibility.fromString(map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
+    Double price = null;
+    if (map.getFirst("price") != null)
+       price = Double.valueOf(map.getFirst("price"));
 
     return new ArtListingDto(
-        artListingService.updateArtListing(aIdCode, aVisibility, aDescription, aTitle));
+        artListingService.updateArtListing(aIdCode, price, aVisibility, aDescription, aTitle));
   }
 
   /**
@@ -234,8 +237,7 @@ public class ArtListingRestController {
       "/artlisting/get_artwork_by_keyword/" })
   public List<ArtListingDto> filterArtworkByTagAsListings(
       @RequestParam(value = "keywords") List<String> keywords) {
-    String[] keywordsList = (String[])(keywords.toArray());
-    return artListingService.filterArtworkByTagAsListings(keywordsList).stream()
+    return artListingService.filterArtworkByTagAsListings(keywords).stream()
         .map(al -> new ArtListingDto(al))
         .collect(Collectors.toList());
   }
