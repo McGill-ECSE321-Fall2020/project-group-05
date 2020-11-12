@@ -168,6 +168,28 @@ public class UserService {
    * @return               isLoggedIn
    */
   @Transactional
+  public boolean loginUserByEmail(String emailAddress, String aPassword) {
+    List<User> users = entityRepo.findEntityByAttribute("emailAddress", User.class, emailAddress);
+    User user = users.size() > 0 ? users.get(0) : null;
+    if (user == null) {
+      throw new IllegalArgumentException("Email cannot be found");
+    }
+    if (!user.getPassword().equals(aPassword)) { // TODO: return false instead of exception, true
+                                                 // for
+      // success, false for wrong password
+      throw new IllegalArgumentException("Password does not match");
+    }
+    return true;
+  }
+  
+  /**
+   * logs in the user
+   * 
+   * @param  aEmailAddress
+   * @param  aPassword
+   * @return               isLoggedIn
+   */
+  @Transactional
   public boolean loginUser(String username, String aPassword) {
     List<User> users = entityRepo.findEntityByAttribute("username", User.class, username);
     User user = users.size() > 0 ? users.get(0) : null;
