@@ -242,7 +242,7 @@ public class UserService {
     } catch (FirebaseAuthException e) {
       e.printStackTrace();
     }
-
+    creds.setUserId(id);
     return creds;
   }
 
