@@ -3,7 +3,7 @@
 <div class = "formContainerCreate">
 <div class="container-contact100">
 <div class="wrap-contact100">
-<form class="contact100-form validate-form" method="POST" action="/">
+<form class="contact100-form validate-form" method="post">
 <span class="contact100-form-title">
 <h1>Publish a New Artwork</h1>
 </span>
@@ -28,7 +28,7 @@
 <span class="focus-input100"></span>
 </div>
 <div class="container-contact100-form-btn">
-<button class="contact100-form-btn" @click="submitListing()">
+<button class="contact100-form-btn" @click='submitListing()'>
 <span>
 <i class="fa fa-paper-plane-o m-r-6" aria-hidden="true"></i>
 Submit
@@ -71,7 +71,6 @@ export default {
     }
   },
   created: function () {
-    //    make array of keyword parsed by space
   },
   methods: {
     submitListing: function () {
