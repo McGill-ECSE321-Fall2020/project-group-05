@@ -30,7 +30,7 @@
     </ul>
   </div>
 </nav>
-<button type="button" class="btn btn-primary hvr-bounce-in" id="fixedbutton">+</button>
+<router-link to="/artlisting/create"><button type="button" class="btn btn-primary hvr-bob" id="fixedbutton">+</button></router-link>
     <router-view />
   </div>
 </template>
@@ -138,16 +138,70 @@ background-color:#fff !important;
     height: 70px;
     width: 70px;
     border-width: 0px;
+}
+/* Bob */
+@-webkit-keyframes hvr-bob {
+  0% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+  50% {
+    -webkit-transform: translateY(-4px);
+    transform: translateY(-4px);
+  }
+  100% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+}
+@keyframes hvr-bob {
+  0% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+  50% {
+    -webkit-transform: translateY(-4px);
+    transform: translateY(-4px);
+  }
+  100% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+}
+@-webkit-keyframes hvr-bob-float {
+  100% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+}
+@keyframes hvr-bob-float {
+  100% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+}
+.hvr-bob {
+  display: inline-block;
+  vertical-align: middle;
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
-  -webkit-transition-duration: 0.5s;
-  transition-duration: 0.5s;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
 }
-#fixedbutton:hover, #fixedbutton:focus, #fixedbutton:active {
-  -webkit-transform: scale(1.2) !important;
-  transform: scale(1.2) !important;
-  -webkit-transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36) !important;
-  transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36) !important;
+.hvr-bob:hover, .hvr-bob:focus, .hvr-bob:active {
+  -webkit-animation-name: hvr-bob-float, hvr-bob;
+  animation-name: hvr-bob-float, hvr-bob;
+  -webkit-animation-duration: .3s, 1.5s;
+  animation-duration: .3s, 1.5s;
+  -webkit-animation-delay: 0s, .3s;
+  animation-delay: 0s, .3s;
+  -webkit-animation-timing-function: ease-out, ease-in-out;
+  animation-timing-function: ease-out, ease-in-out;
+  -webkit-animation-iteration-count: 1, infinite;
+  animation-iteration-count: 1, infinite;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-direction: normal, alternate;
+  animation-direction: normal, alternate;
 }
 #mainHomeArt1{
   background-image: url(https://www.slantmagazine.com/wp-content/uploads/2010/05/picassoandbraquegotothemovies.jpg);
@@ -312,13 +366,18 @@ card scaling
         column-count: 4;
     }
 }
-
 @media (min-width: 75em) {
     .card-columns {
         -webkit-column-count: 5;
         -moz-column-count: 5;
         column-count: 5;
     }
+}
+.formContainerCreate{
+  width:80%;
+  height:38em;
+  background-color:cornflowerblue;
+  margin: auto;
 }
 </style>
 <script>

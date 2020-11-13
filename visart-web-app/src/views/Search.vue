@@ -39,8 +39,8 @@
 </section>
     <div class="listingContainer">
       <label for="toggle_button">
-        <h1 v-if="isActive" id="listingsTitle"> – Featured Art – </h1>
-        <h1 v-if="! isActive" id="listingsTitle"> –  – </h1>
+        <h1 v-if="isActive" id="listingsTitle"> – Featured Search Results – </h1>
+        <h1 v-if="! isActive" id="listingsTitle"> – Search Results – </h1>
         <button class="toggleBtnHome" @click="isActive = !isActive">{{isActive ? 'View Full Collection' : 'View Featured Art'}}</button>
         <span class="toggle__switch"></span>
     </label>
