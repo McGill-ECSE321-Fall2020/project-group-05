@@ -14,18 +14,23 @@ public class TicketDto {
   private String ticketOrderId;
   private String ticketCustomerId;
   private String ticketArtistId;
-  
+
   // Set after the creation
   private String ticketArtListingId;
-  private String ticketArtPieceId; 
+  private String ticketArtPieceId;
 
   // Constructors
 
   public TicketDto(Ticket t) {
     this(t.getIsPaymentConfirmed(), t.getPaymentAmount(), t.getIdCode(), t.getOrder().getIdCode(),
         t.getCustomer().getIdCode(), t.getArtist().getIdCode());
-    setTicketArtListingId(t.getOrder().getArtPiece().getIdCode());
-    setTicketArtListingId(t.getOrder().getArtPiece().getArtListing().getIdCode());
+    try {
+      setTicketArtPieceId(t.getOrder().getArtPiece().getIdCode());
+      setTicketArtListingId(t.getOrder().getArtPiece().getArtListing().getIdCode());
+    } catch (NullPointerException e) {
+
+    }
+
   }
 
   public TicketDto(boolean isPaymentConfirmed, double paymentAmount, String idCode,

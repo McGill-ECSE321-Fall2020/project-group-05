@@ -207,7 +207,7 @@ export default {
     },
     postFieldRequest: function() {
       let obj = {};
-      for (let i = 0; i < this.postFields; i++) {
+      for (let i = 0; i < this.postFieldForm.postFieldNum; i++) {
         obj[getElId("postFieldKey-" + (i + 1)).value] = getElId(
           "postFieldVal-" + (i + 1)
         ).value;
