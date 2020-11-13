@@ -1,7 +1,7 @@
 deploy:
   provider: heroku
-  api_key: 
-    secure: 7f014624-fb28-4ee6-9ccd-f4bbf8fbbec0
+  api_key:
+    secure: ky11LeK9jIHwxuZJ+ZrcVoNKM2FwHeY75QOrdvn0UZ6G7pI3EcMgJHLuWhsQ87MiZIwu7DWsuI81x6GqB/nv9wZaSX1wYswJRt8F0EB4yF1pJlAcXAOCcj2gZzPV/a4ke8cXJixno98lRwmvm+RKXWq0lxKumLYyFsnrEhjOuNhHIH+UxB8jMU1G/RHWO+nlB3x/x3wg7aNor2WrYtJKhomc0hz1yMkYjxHUV+KlDZIpsZoSh7IKiVNIv/IJB0hPXZLa2UvFfZY/InvJjuIZQk1hPhn6gfZU8Nzjg2v0QacxQRXzA9LnQP9KGXdqCR1EO0iLlvY9enKQviSMWHE9kAyQrxkUdJ3dV75mrvHBvigVJe6b6uXSpjI5+DUj72ekeUAi2tuwZo+9gIiOal/Eo4nTzzH4tOGniP7y4MsE0D8KQoaJ8d51MNKdTXz+fjkS++y9Q4y4ezINaUJNRZ9d58fEf7PImxWpItZmIa5q0mm4z5rzIr3vn9/cznuUwI6/yUkjsbD4Tby9kW9c7GxkCwDo6P96wp+ZYIcxoAmgyeDYwjXxDI75ThMzatsICFDdrlx/AlSNs6tLfGhEO1ZhCeNrt+vrI6nDNpBaNWnf1/5P5gZ3lr2dFa8u3OV3azTjGE2JXDuQ1SBLZdpmShrGBwowAz/jMKZYNUQE3DpvLsA=
   app: vis-art-web-app
   on:
     all_branches: true
@@ -9,5 +9,5 @@ lanugage: java
 python: 3.8.0
 dist: xenial
 script:
-- ./gradlew build
-- ./gradlew integrationTest
+- "./gradlew build"
+- "./gradlew integrationTest"
