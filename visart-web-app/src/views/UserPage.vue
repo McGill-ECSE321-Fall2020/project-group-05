@@ -1,15 +1,17 @@
 <template>
   <div>
-    <div class="container">
-      <div class="row">
-        <div class="col-xl">
-          <b-button v-on:click="showPublishedArt">Published Art</b-button>
-        </div>
-        <div class="col-xl">
-          <b-button v-on:click="showPurchasedArt">PurchasedArt</b-button>
-        </div>
-        <div class="col-xl">
-          <b-button v-on:click="showSoldArt">Sold Art</b-button>
+    <div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xl">
+            <b-button v-on:click="showFavoriteArt">Favorited Art</b-button>
+          </div>
+          <div class="col-xl">
+            <b-button v-on:click="showPurchasedArt">Purchased Art</b-button>
+          </div>
+          <div class="col-xl">
+            <b-button v-on:click="showSoldArt">Sold Art</b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -28,7 +30,9 @@
                 alt="Card image cap"
               />
               <div class="card-body">
-                <p class="card-text">{{ artlisting.title }}</p>
+                <p class="card-text">
+                  {{ artlisting.title }}<br />{{ artlisting.description }}
+                </p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
                     <button
@@ -37,14 +41,11 @@
                     >
                       Go to listing
                     </button>
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-outline-secondary"
-                    >
-                      Delete
-                    </button>
                   </div>
-                  <small class="text-muted">{{ artlisting.price }}</small>
+                  <small class="text-muted"
+                    >{{ artlisting.price }},
+                    {{ paymentConfirmed[index] }}</small
+                  >
                 </div>
               </div>
             </div>
@@ -56,107 +57,124 @@
 </template>
 
 <script>
-// @ is an alias to /src
 /* eslint-disable */
+
 import HelloWorld from "@/components/HelloWorld.vue";
 import axios from "axios";
 var config = require("../../config");
 var backend = require("@/tools/backend");
 
-var frontendUrl = config.site;
-
-var backendUrl = config.backend.site;
-
-const pathName = window.location.pathname;
-
-var AXIOS = axios.create({
-  baseURL: backendUrl,
-  headers: {
-    "Access-Control-Allow-Origin": frontendUrl,
-    "Content-Type": "raw",
-    "Data-Type": "raw"
-  }
-});
-/* eslint-disable */
 export default {
   name: "UserPage",
-  Component: {
-    HelloWorld
-  },
   data: function() {
     return {
-      count: 0,
       purchasedArt: [],
       artListings: [],
+      paymentConfirmed: [],
       artistId: ""
     };
   },
+  created: function() {
+    console.log("created");
+    let vm = this
+    backend.onFirebaseAuth(function(user){
+      if (user != null){
+        vm.showPurchasedArt(user.uid)
+      } else {
+        vm.showPurchasedArt(vm.$route.params.id)
+      }
+    })
+  },
   props: [],
   methods: {
-    showPurchasedArt: function() {
+    showPurchasedArt: function(customerId) {
+      let vm = this; // Can't access this in different places, so I renamed it to vm
+      this.artListings = [];
       backend
-        .get("/customers/get/" + this.$route.params.id)
-        .then(response => {
-          console.log(response.data)
+        .get("/customers/get/" + customerId) // get the current customer
+        .then(function(response) {
+          console.log(response.data);
           var tickets = response.data.boughtTickets;
-
-          for (let ticket of tickets) {
-            //get the ArtOrder corresponding to each ticket
-            backend
-              .get("/artorder/get/" + ticket['ticketOrder'])
-              .then(response => {
-                //get the ArtPiece corresponding to each order
-                console.log(response.data)
-                return backend
-                  .get("/artpiece/get/" + (response.data).artPiece)
-
-              }).then(response => {
-                //get the artlisting attached to each ArtPiece
-                return backend.get(
-                  "/artlisting/get/" + (response.data).artListing
-                );
-              })
-              .then(response => {
-                //PUSH the ArtListing to the array in data
-                this.artListings.push((response.data));
-              })
-              .catch(e => {
-                console.log(e);
-              });
+          return Promise.all(
+            tickets.map(function(ticket) {
+              return backend
+                .get("/artorder/get/" + ticket["ticketOrder"])
+                .then(function(response) {
+                  //get the ArtPiece corresponding to each order
+                  return backend.get("/artpiece/get/" + response.data.artPiece);
+                })
+                .then(function(response) {
+                  //get the artlisting attached to each ArtPiece
+                  return backend.get(
+                    "/artlisting/get/" + response.data.artListing
+                  );
+                });
+            })
+          );
+        })
+        .then(function(artlistings) {
+          for (let resp of artlistings) {
+            let listing = resp.data;
+            console.log(listing);
+            // Now that we have artlistings that were purchased, we add them
+            vm.artListings.push(listing)
           }
         })
         .catch(e => {
           console.log(e);
         });
-    },
-    showPublishedArt: function() {},
-    showSoldArt: function() {
-      this.count++;
-      console.log(this.count);
-    },
-    created: function() {
-      console.log(config.site);
-      AXIOS.post("/managers/create", {
-        emailAddress: "auryan898@gmail.com",
-        displayname: "dingdong2",
-        username: "hiIAmBilly2",
-        password: "password",
-        profilePicLink: "",
-        profileDescription: ""
-      })
-        .then(response => {
+      /*
+      backend
+        .get("/customers/get/" + this.$route.params.id) // get the current customer
+        .then(function(response) {
           console.log(response.data);
+          var tickets = response.data.boughtTickets;
+
+          for (let ticket of tickets) {
+            //get the ArtOrder corresponding to each ticket
+            this.paymentConfirmed.push(
+              "Payment Confirmed: " + ticket.paymentConfirmed
+            );
+            backend
+              .get("/artorder/get/" + ticket["ticketOrder"])
+              .then(function(response) {
+                //get the ArtPiece corresponding to each order
+                console.log(response.data);
+                return backend.get("/artpiece/get/" + response.data.artPiece);
+              })
+              .then(function(response) {
+                //get the artlisting attached to each ArtPiece
+                return backend.get(
+                  "/artlisting/get/" + response.data.artListing
+                );
+              })
+              .then(function(response) {
+                //PUSH the ArtListing to the array in data
+                this.artListings.push(response.data);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+
+          }
         })
-        .catch(error => {
-          console.log(error);
-        });
-      AXIOS.get("/managers/get_all")
-        .then(response => {
-          console.log(response.data);
+        .catch(e => {
+          console.log(e);
+        });*/
+    },
+    showFavoriteArt: function() {
+      backend
+        .get("/customers/get/" + this.$route.params.id)
+        .then(function(response) {
+          this.artListings = response.data.favoriteListings;
         })
         .catch(e => {
           console.log(e);
         });
+    },
+    showSoldArt: function() {
+      this.count++;
+      console.log(this.count);
     }
   }
 };

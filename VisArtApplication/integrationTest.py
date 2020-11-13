@@ -76,7 +76,7 @@ try:
     artists_create = (ppost("artists/create",data={'customerId':customers_create[0].json()['idCode']}))
     print(artists_create)
     # artists_ids = pget("artists/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-    artlisting_create = (ppost("artlisting/create",data={'price':'0','aVisibility':'Public','aDescription':'none','aTitle':'My Doodle','artistId':artists_create[0].json()['idCode']}))
+    artlisting_create = (ppost("artlisting/create",data={'price':'0','aVisibility':'Public','aDescription':'none','aTitle':'Another Doodle','artistId':artists_create[0].json()['idCode']}))
     print(artlisting_create)
     # artlisting_ids = pget("artlisting/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
     tags_create = (ppost("tags/create",data={"aListing":artlisting_create[0].json()['idCode'],'aKeyword':'bob','aType':'Other'}))

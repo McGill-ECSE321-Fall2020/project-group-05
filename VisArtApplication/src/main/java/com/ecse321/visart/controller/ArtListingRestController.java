@@ -100,7 +100,7 @@ public class ArtListingRestController {
     String aTitle = map.getFirst("aTitle");
     Double price = null;
     if (map.getFirst("price") != null)
-       price = Double.valueOf(map.getFirst("price"));
+      price = Double.valueOf(map.getFirst("price"));
 
     return new ArtListingDto(
         artListingService.updateArtListing(aIdCode, price, aVisibility, aDescription, aTitle));
@@ -117,14 +117,17 @@ public class ArtListingRestController {
       "/artlisting/update_dimensions/{aIdCode}/" })
   public ArtListingDto updateDimensions(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
-    ArrayList<String> dimensions = new ArrayList<>(); 
-    map.forEach((key,val)-> {
+    ArrayList<String> dimensions = new ArrayList<>();
+    System.out.println(map);
+    map.forEach((key, val) -> {
       if (key.equals("dimensions")) {
         dimensions.addAll(val);
       }
     });
-    List<Float> arr = dimensions.stream().map((d)->Float.valueOf(d)).collect(Collectors.toList());
-    return new ArtListingDto(artListingService.updateDimensions(aIdCode, (Float[]) arr.toArray()));
+    System.out.println(dimensions);
+    List<Float> arr = dimensions.stream().map((d) -> Float.valueOf(d)).collect(Collectors.toList());
+    System.out.println(arr);
+    return new ArtListingDto(artListingService.updateDimensions(aIdCode, arr));
   }
 
   /**
@@ -138,13 +141,13 @@ public class ArtListingRestController {
       "/artlisting/update_post_images/{aIdCode}/" })
   public ArtListingDto updatePostImages(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
-    ArrayList<String> images = new ArrayList<>(); 
-    map.forEach((key,val)-> {
+    ArrayList<String> images = new ArrayList<>();
+    map.forEach((key, val) -> {
       if (key.equals("images")) {
         images.addAll(val);
       }
     });
-    return new ArtListingDto(artListingService.updatePostImages(aIdCode,(String[])images.toArray()));
+    return new ArtListingDto(artListingService.updatePostImages(aIdCode, images));
   }
 
   /**

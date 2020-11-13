@@ -21,16 +21,30 @@ var axGet = axios.create({
 export let get = axGet.get
 export let post = axPost.post
 export let parse = function (obj) {
-    return formurlencoded(obj, {
+    let arr = []
+    for (let key in obj) {
+        if (Array.isArray(obj[key])) {
+            arr.push(parseList(key,obj[key]))
+        }
+    }
+
+    return arr.join('&') + '&' +  formurlencoded(obj, {
         ignorenull: true,
         sorted: true
     })
 }
 
+export let parseList = function (key, list) {
+    return list.map(item => encodeURI(key) + '=' + encodeURI(item)).join("&")
+}
+
 export function authenticateUser(username, password) {
     post('/users/login', parse({ 'username': username, 'password': password })).then(response => {
-        let firebaseJWT = response.data.firebaseJWT;
-        return firebase.auth().signInWithCustomToken(firebaseJWT)
+        let firebaseJWT = response.data.firebaseJWT; // 
+
+        return firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function(){
+            return firebase.auth().signInWithCustomToken(firebaseJWT)
+        })
     }).catch(error => {console.log(error)})
 }
 
@@ -39,6 +53,10 @@ export function authenticateEmail(email,password) {
         let firebaseJWT = response.data.firebaseJWT;
         return firebase.auth().signInWithCustomToken(firebaseJWT)
     }).catch(error => {console.log(error)})
+}
+
+export function unauthenticate(){
+    return firebase.auth().signOut()
 }
 
 export function onFirebaseAuth(observer) {

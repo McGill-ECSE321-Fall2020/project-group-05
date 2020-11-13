@@ -32,7 +32,8 @@
       name="testFile"
       accept="image/png, image/jpeg"
     />
-    <button v-on:click="uploadFile">Confirm upload</button>
+    <button v-on:click="redirectPage">Confirm upload</button>
+    <button v-on:click="logout">Logout</button>
   </span>
 </template>
 
@@ -80,6 +81,12 @@ export default {
         // 'then' occurs when file is uploaded
         setupImage(filename);
       });
+    },
+    redirectPage: function() {
+      this.$router.push({path: '/purchasepage/', query:{id:'dingdong'}})
+    },
+    logout: function(){
+      backend.unauthenticate()
     }
   },
   created: function() {}

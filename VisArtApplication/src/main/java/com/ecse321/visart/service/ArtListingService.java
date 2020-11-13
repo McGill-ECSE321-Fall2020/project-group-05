@@ -119,17 +119,22 @@ public class ArtListingService {
       }
       al.setTitle(aTitle);
     }
-    
+
     if (price != null) {
       al.setPrice(price);
     }
-    
+
     ArtListingRepo.updateArtListing(al);
     return al;
   }
 
   @Transactional
   public ArtListing updateDimensions(String aIdCode, Float[] aDimensions) {
+    return updateDimensions(aIdCode, Arrays.asList(aDimensions));
+  }
+  
+  @Transactional
+  public ArtListing updateDimensions(String aIdCode, List<Float> aDimensions) {
     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
     if (al == null) {
       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
@@ -147,6 +152,11 @@ public class ArtListingService {
 
   @Transactional
   public ArtListing updatePostImages(String aIdCode, String[] aPostImages) {
+    return updatePostImages(aIdCode, Arrays.asList(aPostImages));
+  }
+
+  @Transactional
+  public ArtListing updatePostImages(String aIdCode, List<String> aPostImages) {
     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
     if (al == null) {
       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
@@ -255,7 +265,7 @@ public class ArtListingService {
   public List<String> filterArtworkByTag(String[] keywords) {
     return filterArtworkByTag(Arrays.asList(keywords));
   }
-  
+
   @Transactional
   public List<String> filterArtworkByTag(List<String> keywords) {
     List<Tag> listTagByKeywords = entityRepo.findEntityByAttribute("keyword", Tag.class, keywords);
@@ -267,6 +277,7 @@ public class ArtListingService {
   public List<ArtListing> filterArtworkByTagAsListings(String[] keywords) {
     return filterArtworkByTagAsListings(Arrays.asList(keywords));
   }
+
   @Transactional
   public List<ArtListing> filterArtworkByTagAsListings(List<String> keywords) {
     return entityRepo.findEntityByAttribute("idCode", ArtListing.class,
