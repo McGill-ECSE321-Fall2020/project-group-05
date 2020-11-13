@@ -63,7 +63,9 @@ public class ArtPieceService {
    */
   @Transactional
   public ArtPiece getArtPiece(String idCode) {
-    return artPieceRepo.getArtPiece(idCode);
+    ArtPiece p = artPieceRepo.getArtPiece(idCode);
+    p.getArtOrder().getTicket();
+    return p;
   }
 
   /**
