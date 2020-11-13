@@ -1,13 +1,13 @@
 deploy:
   provider: heroku
-  api_key: 7f014624-fb28-4ee6-9ccd-f4bbf8fbbec0
+  api_key:
+    secure: cMOHZV3OpiJ3yolUeudmpwie/TVmkzNLw1xGEyUGaIZAo0dk0DJ3z4OMGoBJHSdHnvevnLgHciTyI8/7yftmVJda5KWSMw17BjbsHNm3jMNnRZyuxszL2cCJ49oFBfhZkNlV6N8KoS3WGtzSghAJymo8OV69bklgMO/jaqj7J21zL/WgKHILwIDdLVD85CHSqEcO+24BK9iMWzsXT0YjtgO7FcHWS7W/TflG9LEv8pxXJJrsVq3h7rtYcca9/3nJW7q1DDQ3L2nwrXdNIyHsk8Xp6id62+3b6R0V7TvWuFDVMLZ1sX2dCpBAvKgJIIM9lLJekX5iiNtfHJpNKdixp+l1GjM1q1jhonhsBSDSb00F1EKWkL5/Kp8fKdmuZR4eP+hARdfBU7kX73ehbx6Df98JrYdhbaHLZ5q+IOGcqHoDiKrDdT1KQpVZQppJ2H5XwmHDIO/l1KKfkavzE3CYFGaD4BtzpfzAL+xbks2jCmBMmQ3pgxLY7sHmoxQhr5vtb8uCnFMfutC8wd1tNZ5Uh9FVTZKHHtC3qbazskrrQa9RASj8nFDYDKSz/duvsmGlWksl2pYVO+mjy7pmrb/jm2PQqm0d3NnfH2FJpfTzGUClWK6WjsNhqWUtvGvaXfZcygg0BciPWz9kaMxoHIpRLpf3jzAbxBCcd8Fo3uoF2Tg=
   app: vis-art-web-app
-
+  on:
+    all_branches: true
 lanugage: java
 python: 3.8.0
 dist: xenial
 script:
-- ./gradlew build
-- ./gradlew integrationTest
-- cd visart-web-app
-- npm install
+- "./gradlew build"
+- "./gradlew integrationTest"
