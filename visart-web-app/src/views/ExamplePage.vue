@@ -82,10 +82,12 @@
               id="postFieldNum"
               name="postFieldNum"
               v-on:change="setPostFieldNum"
-              @input="updatePostField('postFieldNum',parseInt($event.target.value))"
+              @input="
+                updatePostField('postFieldNum', parseInt($event.target.value))
+              "
               :value="postFieldForm.postFieldNum"
-              min=1
-              max=20
+              min="1"
+              max="20"
             /><br />
             <label for="postFieldPath">POST path to call: </label>
             <input
@@ -94,13 +96,15 @@
               class="postField form-control"
               id="postFieldPath"
               name="postFieldPath"
-              @input="updatePostField('postFieldPath',($event.target.value))"
+              @input="updatePostField('postFieldPath', $event.target.value)"
               :value="postFieldForm.postFieldPath"
             /><br />
             <button class="btn btn-warning" v-on:click="postFieldRequest">
               Send POST Request
             </button>
-            <button class="btn btn-danger ml-1" v-on:click="clearPostFields">Reset this form</button>
+            <button class="btn btn-danger ml-1" v-on:click="clearPostFields">
+              Reset this form
+            </button>
           </div>
           <div class="card-body">
             <span
@@ -119,7 +123,9 @@
                   class="postField form-control"
                   type="text"
                   v-bind:placeholder="'Key ' + n"
-                  @input="updatePostField('postFieldKey-' + n,($event.target.value))"
+                  @input="
+                    updatePostField('postFieldKey-' + n, $event.target.value)
+                  "
                   :value="postFieldForm['postFieldKey-' + n]"
                 />
                 <label v-bind:for="'postFieldVal-' + n" class="sr-only"
@@ -131,8 +137,17 @@
                   class="postField form-control"
                   type="text"
                   v-bind:placeholder="'Value ' + n"
-                  @input="updatePostField('postFieldVal-' + n,($event.target.value))"
+                  @input="
+                    updatePostField('postFieldVal-' + n, $event.target.value)
+                  "
                   :value="postFieldForm['postFieldVal-' + n]"
+                />
+
+                <input
+                  type="checkbox"
+                  v-bind:name="'postFieldIsJson-' + n"
+                  v-bind:id="'postFieldIsJson-' + n"
+                  class="postField form-check-input"
                 />
                 <br />
               </div>
@@ -163,17 +178,17 @@ export default {
       userLoggedIn: "",
       postFieldForm: {
         postFieldNum: 3,
-        postFieldPath: ''
+        postFieldPath: ""
       }
     };
   },
   created: function() {
     let vm = this;
-    let tempPostFieldForm = this.loadStorage('postFieldForm')
-    if (!!tempPostFieldForm)
-      this.postFieldForm = tempPostFieldForm 
+    let tempPostFieldForm = this.loadStorage("postFieldForm");
+    if (!!tempPostFieldForm) this.postFieldForm = tempPostFieldForm;
     backend.onFirebaseAuth(function(user) {
-      vm.userLoggedIn = user.uid;
+      if (user != null)
+        vm.userLoggedIn = user.uid;
     });
   },
   methods: {
@@ -208,9 +223,11 @@ export default {
     postFieldRequest: function() {
       let obj = {};
       for (let i = 0; i < this.postFieldForm.postFieldNum; i++) {
-        obj[getElId("postFieldKey-" + (i + 1)).value] = JSON.parse(getElId(
-          "postFieldVal-" + (i + 1)
-        ).value);
+        let data = getElId("postFieldVal-" + (i + 1)).value;
+        let isJSON = getElId("postFieldIsJson-" + (i + 1)).checked;
+        obj[getElId("postFieldKey-" + (i + 1)).value] = isJSON
+          ? JSON.parse(data)
+          : data;
       }
       backend
         .post(getElId("postFieldPath").value, backend.parse(obj))
@@ -218,12 +235,10 @@ export default {
           console.log(resp);
         });
     },
-    loadPostFields: function() {
-
-    },
-    updatePostField: function(key,value) {
-      this.postFieldForm[key] = value
-      this.saveStorage('postFieldForm',this.postFieldForm)
+    loadPostFields: function() {},
+    updatePostField: function(key, value) {
+      this.postFieldForm[key] = value;
+      this.saveStorage("postFieldForm", this.postFieldForm);
     },
     loadStorage: function(name) {
       return JSON.parse(localStorage.getItem(name));
@@ -231,12 +246,12 @@ export default {
     saveStorage: function(name, obj) {
       localStorage.setItem(name, JSON.stringify(obj));
     },
-    clearPostFields: function(){
-      for(let key in this.postFieldForm) {
-        this.postFieldForm[key] = ''
+    clearPostFields: function() {
+      for (let key in this.postFieldForm) {
+        this.postFieldForm[key] = "";
       }
-      this.postFieldForm['postFieldNum'] = 2
-      localStorage.setItem('postFieldForm',{})
+      this.postFieldForm["postFieldNum"] = 2;
+      localStorage.setItem("postFieldForm", {});
     }
   }
 };

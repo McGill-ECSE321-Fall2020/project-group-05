@@ -46,18 +46,16 @@ const routes = [
     component: () => import('../views/BasicLogin.vue')
   },
   {
-<<<<<<< HEAD
     path: '/checkout/',
     name: 'checkout',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/checkout.vue')
-=======
+  }, {
     path: '/examplepage',
     name: 'ExamplePage',
     component: () => import('../views/ExamplePage.vue')
->>>>>>> 45db6891acdfe4c0df7a97edb0994f4e9118709c
   }
 ]
 
