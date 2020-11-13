@@ -3,7 +3,7 @@
 <div class = "formContainerCreate">
 <div class="container-contact100">
 <div class="wrap-contact100">
-<form class="contact100-form validate-form">
+<form class="contact100-form validate-form" method="POST" action="/">
 <span class="contact100-form-title">
 <h1>Publish a New Artwork</h1>
 </span>
@@ -23,8 +23,12 @@
 <textarea class="input100" name="url" placeholder="Image URL"></textarea>
 <span class="focus-input100"></span>
 </div>
+<div class="wrap-input100 validate-input" data-validate="Please enter your Visibility">
+<input class="input100" type="text" name="visibility" placeholder="Visibility">
+<span class="focus-input100"></span>
+</div>
 <div class="container-contact100-form-btn">
-<button class="contact100-form-btn">
+<button class="contact100-form-btn" @click="submitListing()">
 <span>
 <i class="fa fa-paper-plane-o m-r-6" aria-hidden="true"></i>
 Submit
@@ -68,17 +72,21 @@ export default {
   },
   created: function () {
     //    make array of keyword parsed by space
-    var key = this.$route.query.keywords
-    console.log(key)
-    backend.get('/artlisting/get_artwork_by_keyword/', { params: { keywords: this.$route.query.keywords } }).then(response => {
-      console.log(response.data)
-      console.log('listing by keyword')
-      for (const artListing of (response.data)) {
-        this.artListings.push(artListing)
-      }
-    }).catch(e => {
-      console.log(e)
-    })
+  },
+  methods: {
+    submitListing: function () {
+      backend.post('/artlisting/create/', { params: { aTitle: this.$route.query.title, aDescription: this.$route.query.description, price: this.$route.query.price, artist: '27332e3c-c356-4a12-8d0b-e35a3c970c49' } }).then(response => {
+        backend.post('/artlisting/update_post_images/' + (response.data)[0].idCode + '/', { params: { images: this.$route.query.url } }).then(response => {
+          console.log(response.data)
+        }).catch(e => {
+          console.log(e)
+        })
+        console.log(response.data)
+        console.log('submit')
+      }).catch(e => {
+        console.log(e)
+      })
+    }
   }
 }
 </script>
