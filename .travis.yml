@@ -1,6 +1,7 @@
 deploy:
   provider: heroku
-  api_key: 7f014624-fb28-4ee6-9ccd-f4bbf8fbbec0
+  api_key: 
+    secure: 7f014624-fb28-4ee6-9ccd-f4bbf8fbbec0
   app: vis-art-web-app
 
 lanugage: java
