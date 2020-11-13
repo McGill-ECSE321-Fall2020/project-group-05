@@ -65,7 +65,12 @@
     </label>
       <div v-if="! isActive" class="card-columns card-columns-home">
   <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFull" :key="index">
-    <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
+    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="10000" :itemsToShow="1" :infiniteScroll="true">
+      <slide v-for="(imageUrl,index) in artlisting.postImages" :key="index">
+        <img class="card-img-top cardImg" :src="imageUrl" alt="Card image cap">
+      </slide>
+      <hooper-navigation id="tagNavigation" slot="hooper-addons"></hooper-navigation>
+    </hooper>
     <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
     <div class="card-body">
       <h4 class="card-title cardArtist"><a href="/artists">Picasso</a></h4>
@@ -122,6 +127,7 @@ export default {
       tags: [],
       artListingsFull: [],
       artListingsFeatured: [],
+      postImagesArray: [],
       hooperSettings: {
         itemsToShow: 7,
         centerMode: true,
@@ -139,6 +145,9 @@ export default {
       console.log(response.data)
       for (const artListing of (response.data)) {
         this.artListingsFull.push(artListing)
+        for (const imageUrl of (artListing.postImages)) {
+          this.postImagesArray.push(imageUrl)
+        }
       }
     }).catch(e => {
       console.log(e)
