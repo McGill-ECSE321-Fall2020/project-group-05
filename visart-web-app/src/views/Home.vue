@@ -173,13 +173,13 @@ export default {
     redirectToHome: function (tag) {
       this.$router.push({ path: '/search/?keywords=' + tag })
     },
-    getArtistNameMethod: function (id) {
-      AXIOS
+    getArtistNameMethod: async function (id) {
+      return await AXIOS
         .get(
           '/artists/get/' + id
         )
         .then(
-          function (response) {
+          response => {
             console.log(response.data)
             console.log(response.data.customer.user.displayname)
             return response.data.customer.user.displayname
