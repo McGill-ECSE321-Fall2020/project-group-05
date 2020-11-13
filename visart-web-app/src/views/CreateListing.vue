@@ -143,6 +143,7 @@ export default {
           aVisibility: "Public"
         }))
         .then(response => {
+          var idListing = response.data.idCode
           backend
             .post(
               "/artlisting/update_post_images/" + response.data.idCode + "/",
@@ -155,22 +156,32 @@ export default {
             .catch(e => {
               console.log(e);
             });
+            console.log('before tag')
+            var tagArr = document.getElementById('tagInput').value.split(", ").map(s=>s.trim())
+            console.log(tagArr)
+            for ( let tag in tagArr ) {
+              backend
+                .post(
+                  "/tags/create/" , backend.parse({
+                    aListing: response.data.idCode,
+                    aKeyword: tagArr[tag],
+                    aType: "Other"
+                  })
+                )
+                .then(response => {
+                  console.log(response.data);
+                  console.log('new tag')
+                })
+                .catch(e => {
+                  console.log(e);
+                });
+            }
+          var dimensionsArr = document.getElementById('dimensionsInput').value.split("x").map(s=>s.trim())
+          console.log("=========dimensions==========")
+          console.log(dimensionsArr)
           backend
             .post(
-              "/artlisting/add_tag/" + response.data.idCode + "/",
-              backend.parse({ tagCode: document.getElementById('tagInput').value })
-            )
-            .then(response => {
-              console.log(response.data);
-              console.log('hello tag')
-            })
-            .catch(e => {
-              console.log(e);
-            });
-          backend
-            .post(
-              "/artlisting/update_dimensions/" + response.data.idCode+ "/",
-              backend.parse({ dimensions: document.getElementById('dimensionsInput').value })
+              "/artlisting/update_dimensions/" + response.data.idCode + "/", backend.parse({ dimensions: dimensionsArr })
             )
             .then(response => {
               console.log(response.data);
