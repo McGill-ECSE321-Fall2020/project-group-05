@@ -64,7 +64,9 @@ public class ArtPieceService {
   @Transactional
   public ArtPiece getArtPiece(String idCode) {
     ArtPiece p = artPieceRepo.getArtPiece(idCode);
-    p.getArtOrder().getTicket();
+    
+    if (p != null && p.getArtOrder() != null)
+      p.getArtOrder().getTicket();
     return p;
   }
 
