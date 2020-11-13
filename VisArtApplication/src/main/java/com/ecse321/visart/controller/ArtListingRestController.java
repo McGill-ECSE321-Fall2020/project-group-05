@@ -118,12 +118,15 @@ public class ArtListingRestController {
   public ArtListingDto updateDimensions(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
     ArrayList<String> dimensions = new ArrayList<>();
+    System.out.println(map);
     map.forEach((key, val) -> {
       if (key.equals("dimensions")) {
         dimensions.addAll(val);
       }
     });
+    System.out.println(dimensions);
     List<Float> arr = dimensions.stream().map((d) -> Float.valueOf(d)).collect(Collectors.toList());
+    System.out.println(arr);
     return new ArtListingDto(artListingService.updateDimensions(aIdCode, arr));
   }
 

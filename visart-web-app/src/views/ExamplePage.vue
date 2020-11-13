@@ -208,9 +208,9 @@ export default {
     postFieldRequest: function() {
       let obj = {};
       for (let i = 0; i < this.postFieldForm.postFieldNum; i++) {
-        obj[getElId("postFieldKey-" + (i + 1)).value] = getElId(
+        obj[getElId("postFieldKey-" + (i + 1)).value] = JSON.parse(getElId(
           "postFieldVal-" + (i + 1)
-        ).value;
+        ).value);
       }
       backend
         .post(getElId("postFieldPath").value, backend.parse(obj))
