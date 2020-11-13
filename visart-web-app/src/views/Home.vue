@@ -73,7 +73,7 @@
     </hooper>
     <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
     <div class="card-body">
-      <h4 class="card-title cardArtist"><a href="/artists">Picasso</a></h4>
+      <h4 class="card-title cardArtist"><a href="/artists">name : {{ getArtistNameMethod(artlisting.artist) }}</a></h4>
       <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
       <div class="descriptionContainer">
         <p class="card-text cardDesc">{{artlisting.description}}</p>
@@ -172,6 +172,23 @@ export default {
   methods: {
     redirectToHome: function (tag) {
       this.$router.push({ path: '/search/?keywords=' + tag })
+    },
+    getArtistNameMethod: function (id) {
+      AXIOS
+        .get(
+          '/artists/get/' + id
+        )
+        .then(
+          function (response) {
+            console.log(response.data)
+            console.log(response.data.customer.user.displayname)
+            return response.data.customer.user.displayname
+          }
+        )
+        .catch(e => {
+          console.log(e)
+          return e
+        })
     }
   }
 }

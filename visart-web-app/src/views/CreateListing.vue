@@ -176,12 +176,12 @@ export default {
                   console.log(e);
                 });
             }
-          var dimensionsArr = document.getElementById('dimensionsInput').value.split("x").map(s=>s.trim())
+          var dimensionsArr = document.getElementById('dimensionsInput').value.split(", ").map(s=>s.trim())
           console.log("=========dimensions==========")
           console.log(dimensionsArr)
           backend
             .post(
-              "/artlisting/update_dimensions/" + response.data.idCode + "/", backend.parse({ dimensions: dimensionsArr })
+              "/artlisting/update_dimensions/" + response.data.idCode + "/" , backend.parse({ dimensions: dimensionsArr })
             )
             .then(response => {
               console.log(response.data);
