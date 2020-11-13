@@ -76,7 +76,7 @@ export default {
   methods: {
     submitListing: function () {
       backend.post('/artlisting/create/', { aTitle: this.$route.query.title, aDescription: this.$route.query.description, price: this.$route.query.price, artist: '27332e3c-c356-4a12-8d0b-e35a3c970c49' }).then(response => {
-        backend.post('/artlisting/update_post_images/' + (response.data)[0].idCode + '/', { params: { images: this.$route.query.url } }).then(response => {
+        backend.post('/artlisting/update_post_images/' + (response.data)[0].idCode + '/', { images: this.$route.query.url }).then(response => {
           console.log(response.data)
         }).catch(e => {
           console.log(e)
