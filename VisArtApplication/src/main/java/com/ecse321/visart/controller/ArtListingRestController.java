@@ -118,6 +118,7 @@ public class ArtListingRestController {
   public ArtListingDto updateDimensions(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
     ArrayList<String> dimensions = new ArrayList<>();
+    System.out.println(map);
     map.forEach((key, val) -> {
       if (key.equals("dimensions")) {
         dimensions.addAll(val);
