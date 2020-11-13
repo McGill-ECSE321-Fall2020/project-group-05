@@ -143,7 +143,7 @@ export default {
     }).catch(e => {
       console.log(e)
     })
-    AXIOS.get('/managers/get_listings').then(response => {
+    AXIOS.get('/managers/get_listings/').then(response => {
       console.log(response.data)
       for (const managerListing of (response.data)) {
         this.artListingsFeatured.push(managerListing)

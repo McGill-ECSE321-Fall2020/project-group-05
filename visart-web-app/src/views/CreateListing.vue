@@ -108,8 +108,7 @@ export default {
       }
     };
   },
-  created: function() {
-    //    make array of keyword parsed by space
+  created: function () {
   },
   methods: {
     submitListing: function() {
@@ -135,6 +134,7 @@ export default {
             });
           console.log(response.data);
           console.log("submit");
+          this.$router.push({ path: '/' })
         })
         .catch(e => {
           console.log(e);
