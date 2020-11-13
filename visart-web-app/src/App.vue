@@ -48,6 +48,15 @@
   width:100%;
   height:100%;
 }
+.hooperContainerCardImg{
+}
+.hooperContainerImg{
+  width:2px;
+  height:2px;
+  margin:0;
+  padding:0;
+}
+
 .navbar{
 background-color:#fff !important;
   position:fixed !important; /* fixing the position takes it out of html flow - knows
@@ -99,6 +108,19 @@ background-color:#fff !important;
     font-size: 170px;
     top: 50%;
 }
+.sectionContentDelete{
+  position: absolute;
+  left: 5%;
+  transform: translate(-50%, -50%);
+  background-color:red;
+  height:20%;
+}
+.sectionContentListingDelete{
+    color:rgb(43, 38, 32);
+    font-size:200%;
+    top: 90%;
+    font-weight:400;
+}
 .sectionContentListing{
     color:rgb(43, 38, 32);
     font-size:200%;
@@ -125,6 +147,9 @@ background-color:#fff !important;
 }
 .cardImg:hover ~ .sectionContentListing{
   opacity: 0;
+}
+.hooperContainerCardImg:hover ~ .cardImg{
+  opacity: 1;
 }
 #fixedbutton {
     position: fixed;
