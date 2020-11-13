@@ -123,7 +123,9 @@ public class ArtListingRestController {
         dimensions.addAll(val);
       }
     });
+    System.out.println(dimensions);
     List<Float> arr = dimensions.stream().map((d) -> Float.valueOf(d)).collect(Collectors.toList());
+    System.out.println(arr);
     return new ArtListingDto(artListingService.updateDimensions(aIdCode, arr));
   }
 
