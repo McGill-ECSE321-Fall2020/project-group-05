@@ -12,7 +12,7 @@
               data-validate="Please enter your title"
             >
               <input
-                class="input100"
+                id="titleInput"
                 type="text"
                 name="title"
                 placeholder="Title"
@@ -24,7 +24,7 @@
               data-validate="Please enter your description"
             >
               <input
-                class="input100"
+                id="descriptionInput"
                 type="text"
                 name="description"
                 placeholder="Description"
@@ -36,7 +36,7 @@
               data-validate="Please enter your price"
             >
               <input
-                class="input100"
+                id="priceInput"
                 type="text"
                 name="price"
                 placeholder="Price"
@@ -47,11 +47,33 @@
               class="wrap-input100 validate-input"
               data-validate="Please enter your image(s) url"
             >
-              <textarea
-                class="input100"
+              <input
+                id="urlInput"
                 name="url"
                 placeholder="Image URL"
-              ></textarea>
+              />
+              <span class="focus-input100"></span>
+            </div>
+             <div
+              class="wrap-input100 validate-input"
+              data-validate="Please enter your image(s) url"
+            >
+              <input
+                id="tagInput"
+                name="tags"
+                placeholder="Tags (separate by comma)"
+              />
+              <span class="focus-input100"></span>
+            </div>
+            <div
+              class="wrap-input100 validate-input"
+              data-validate="Please enter your image(s) url"
+            >
+              <input
+                id="dimensionsInput"
+                name="dimensions"
+                placeholder="Dimensions"
+              />
               <span class="focus-input100"></span>
             </div>
             <div
@@ -59,7 +81,7 @@
               data-validate="Please enter your Visibility"
             >
               <input
-                class="input100"
+                id="visibilityInput"
                 type="text"
                 name="visibility"
                 placeholder="Visibility"
@@ -114,9 +136,9 @@ export default {
     submitListing: function() {
       backend
         .post("/artlisting/create/", backend.parse({
-          aTitle: this.$route.query.title,
-          aDescription: this.$route.query.description,
-          price: this.$route.query.price,
+          aTitle: document.getElementById('titleInput').value,
+          aDescription: document.getElementById('descriptionInput').value,
+          price: document.getElementById('priceInput').value,
           artistId: "27332e3c-c356-4a12-8d0b-e35a3c970c49",
           aVisibility: "Public"
         }))
@@ -124,10 +146,35 @@ export default {
           backend
             .post(
               "/artlisting/update_post_images/" + response.data.idCode + "/",
-              backend.parse({ images: [this.$route.query.url] })
+              backend.parse({ images: document.getElementById('urlInput').value })
             )
             .then(response => {
               console.log(response.data);
+              console.log('hello image')
+            })
+            .catch(e => {
+              console.log(e);
+            });
+          backend
+            .post(
+              "/artlisting/add_tag/" + response.data.idCode + "/",
+              backend.parse({ tagCode: document.getElementById('tagInput').value })
+            )
+            .then(response => {
+              console.log(response.data);
+              console.log('hello tag')
+            })
+            .catch(e => {
+              console.log(e);
+            });
+          backend
+            .post(
+              "/artlisting/update_dimensions/" + response.data.idCode+ "/",
+              backend.parse({ dimensions: document.getElementById('dimensionsInput').value })
+            )
+            .then(response => {
+              console.log(response.data);
+              console.log('hello dimensions')
             })
             .catch(e => {
               console.log(e);
