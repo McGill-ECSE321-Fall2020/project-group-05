@@ -1,29 +1,10 @@
 <template>
-
-  <div class="home">
-  <section id="mainArtSection">
-    <hooper id="hooperContainer" :autoPlay="true" :playSpeed="7000" :itemsToShow="1" :infiniteScroll="true">
-    <slide>
-      <div class="sectionImage" id="mainHomeArt1"></div>
-    </slide>
-    <slide>
-      <div class="sectionImage" id="mainHomeArt2"></div>
-    </slide>
-    <slide>
-      <div class="sectionImage" id="mainHomeArt3"></div>
-    </slide>
-    <slide>
-      <div class="sectionImage" id="mainHomeArt4"></div>
-    </slide>
-    <hooper-navigation id="tagNavigation" slot="hooper-addons"></hooper-navigation>
-    </hooper>
-  <div class="sectionContent" id="sectionContentTitle">Vis Art</div>
-</section>
+  <div class="search">
 <section id="tagSection">
 <div id="tagContainer">
  <hooper id="hooperContainerTags" :settings="hooperSettings">
     <slide v-for="(tag, index) in tags" :key="index">
-    <button type="button" class="btn btn-primary tagBtn" @click="redirectToHome(tag.keyword)">{{tag.keyword}}</button>
+    <button type="button" class="btn btn-primary tagBtn">{{tag.keyword}}</button>
     </slide>
     <slide>
     <button type="button" class="btn btn-primary tagBtn">Sculpture</button>
@@ -59,25 +40,12 @@
     <div class="listingContainer">
       <label for="toggle_button">
         <h1 v-if="isActive" id="listingsTitle"> – Featured Art – </h1>
-        <h1 v-if="! isActive" id="listingsTitle"> – Full Collection – </h1>
+        <h1 v-if="! isActive" id="listingsTitle"> –  – </h1>
         <button class="toggleBtnHome" @click="isActive = !isActive">{{isActive ? 'View Full Collection' : 'View Featured Art'}}</button>
         <span class="toggle__switch"></span>
     </label>
       <div v-if="! isActive" class="card-columns card-columns-home">
-  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFull" :key="index">
-    <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
-    <div class="card-body">
-      <h4 class="card-title cardArtist"><a href="/artists">Picasso</a></h4>
-      <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
-      <div class="descriptionContainer">
-        <p class="card-text cardDesc">{{artlisting.description}}</p>
-      </div>
-    </div>
-  </div>
-</div>
-<div v-if="isActive" class="card-columns card-columns-home">
-  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFeatured" :key="index">
+  <div class="card shadow homeCard" v-for="(artlisting,index) in artListings" :key="index">
     <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
     <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
     <div class="card-body">
@@ -99,18 +67,10 @@
 //  bar scroll
 import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper'
 import 'hooper/dist/hooper.css'
-import axios from 'axios'
-var config = require('../../config')
-var frontendUrl = config.site
-var backendUrl = config.backend.site
-
-var AXIOS = axios.create({
-  baseURL: backendUrl,
-  headers: { 'Access-Control-Allow-Origin': frontendUrl, 'Content-Type': 'raw', 'Data-Type': 'raw' }
-})
+var backend = require('@/tools/backend')
 console.log('im here')
 export default {
-  name: 'Home',
+  name: 'Search',
   components: {
     Hooper,
     Slide,
@@ -120,8 +80,7 @@ export default {
     return {
       isActive: false,
       tags: [],
-      artListingsFull: [],
-      artListingsFeatured: [],
+      artListings: [],
       hooperSettings: {
         itemsToShow: 7,
         centerMode: true,
@@ -135,35 +94,18 @@ export default {
     }
   },
   created: function () {
-    AXIOS.get('/artlisting/get_all').then(response => {
+    //    make array of keyword parsed by space
+    var key = this.$route.query.keywords
+    console.log(key)
+    backend.get('/artlisting/get_artwork_by_keyword/', { params: { keywords: this.$route.query.keywords } }).then(response => {
       console.log(response.data)
+      console.log('listing by keyword')
       for (const artListing of (response.data)) {
-        this.artListingsFull.push(artListing)
+        this.artListings.push(artListing)
       }
     }).catch(e => {
       console.log(e)
     })
-    AXIOS.get('/managers/get_listings').then(response => {
-      console.log(response.data)
-      for (const managerListing of (response.data)) {
-        this.artListingsFeatured.push(managerListing)
-      }
-    }).catch(e => {
-      console.log(e)
-    })
-    AXIOS.get('/tags/get_all').then(response => {
-      console.log(response.data)
-      for (const tag of (response.data)) {
-        this.tags.push(tag)
-      }
-    }).catch(e => {
-      console.log(e)
-    })
-  },
-  methods: {
-    redirectToHome: function (tag) {
-      this.$router.push({ path: '/search/?keywords=' + tag })
-    }
   }
 }
 </script>

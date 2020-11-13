@@ -1,5 +1,6 @@
 package com.ecse321.visart.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,9 +98,12 @@ public class ArtListingRestController {
     PostVisibility aVisibility = PostVisibility.fromString(map.getFirst("aVisibility"));
     String aDescription = map.getFirst("aDescription");
     String aTitle = map.getFirst("aTitle");
+    Double price = null;
+    if (map.getFirst("price") != null)
+       price = Double.valueOf(map.getFirst("price"));
 
     return new ArtListingDto(
-        artListingService.updateArtListing(aIdCode, aVisibility, aDescription, aTitle));
+        artListingService.updateArtListing(aIdCode, price, aVisibility, aDescription, aTitle));
   }
 
   /**
@@ -113,15 +117,14 @@ public class ArtListingRestController {
       "/artlisting/update_dimensions/{aIdCode}/" })
   public ArtListingDto updateDimensions(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
-    List<String> dimensions = Arrays
-        .asList(map.getFirst("dimensions").split("\\[")[1].split("\\]")[0].split(","));
-    List<Float> aDimensions = dimensions.stream().map(v -> Float.valueOf((String) v))
-        .collect(Collectors.toList());
-    Float[] arr = new Float[aDimensions.size()];
-    for (int i = 0; i < aDimensions.size(); i++) {
-      arr[i] = aDimensions.get(i);
-    }
-    return new ArtListingDto(artListingService.updateDimensions(aIdCode, arr));
+    ArrayList<String> dimensions = new ArrayList<>(); 
+    map.forEach((key,val)-> {
+      if (key.equals("dimensions")) {
+        dimensions.addAll(val);
+      }
+    });
+    List<Float> arr = dimensions.stream().map((d)->Float.valueOf(d)).collect(Collectors.toList());
+    return new ArtListingDto(artListingService.updateDimensions(aIdCode, (Float[]) arr.toArray()));
   }
 
   /**
@@ -135,9 +138,13 @@ public class ArtListingRestController {
       "/artlisting/update_post_images/{aIdCode}/" })
   public ArtListingDto updatePostImages(@PathVariable("aIdCode") String aIdCode,
       @RequestBody MultiValueMap<String, String> map) {
-    return new ArtListingDto(
-        artListingService.updatePostImages(aIdCode,
-            map.getFirst("images").split("\\[")[1].split("\\]")[0].split(",")));
+    ArrayList<String> images = new ArrayList<>(); 
+    map.forEach((key,val)-> {
+      if (key.equals("images")) {
+        images.addAll(val);
+      }
+    });
+    return new ArtListingDto(artListingService.updatePostImages(aIdCode,(String[])images.toArray()));
   }
 
   /**
@@ -229,10 +236,8 @@ public class ArtListingRestController {
       "/artlisting/get_artwork_by_keyword",
       "/artlisting/get_artwork_by_keyword/" })
   public List<ArtListingDto> filterArtworkByTagAsListings(
-      @RequestParam(value = "keywords") String keywords) {
-    String[] keywordsList = keywords.split(",");
-
-    return artListingService.filterArtworkByTagAsListings(keywordsList).stream()
+      @RequestParam(value = "keywords") List<String> keywords) {
+    return artListingService.filterArtworkByTagAsListings(keywords).stream()
         .map(al -> new ArtListingDto(al))
         .collect(Collectors.toList());
   }

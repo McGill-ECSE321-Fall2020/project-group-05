@@ -2,7 +2,7 @@
   <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" href="#"><img id="navlogo" src="./assets/navlogo0.png" alt="nav"></a>
+  <a class="navbar-brand" href="/"><img id="navlogo" src="./assets/navlogo0.png" alt="nav"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -16,8 +16,8 @@
         <a class="nav-link" href="/about">About</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0" id="searchForm">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <form method="get" action="/search/" class="form-inline my-2 my-lg-0" id="searchForm">
+      <input class="form-control mr-sm-2" type="search" placeholder="Separate by a comma ','" aria-label="Search" name="keywords">
       <button class="btn my-2 my-sm-0" type="submit"><img id="searchIcon" src="./assets/loupe.png" alt="Search"></button>
     </form>
     <ul class="navbar-nav ml-auto" id="loginUl">
@@ -30,6 +30,7 @@
     </ul>
   </div>
 </nav>
+<button type="button" class="btn btn-primary hvr-bounce-in" id="fixedbutton">+</button>
     <router-view />
   </div>
 </template>
@@ -109,7 +110,7 @@ background-color:#fff !important;
   margin:auto;
 }
 #tagContainer{
-  width: 1078px;
+  width: 80%;
   margin:auto;
   overflow-x: scroll;
   white-space: nowrap;
@@ -137,6 +138,16 @@ background-color:#fff !important;
     height: 70px;
     width: 70px;
     border-width: 0px;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  -webkit-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+}
+#fixedbutton:hover, #fixedbutton:focus, #fixedbutton:active {
+  -webkit-transform: scale(1.2) !important;
+  transform: scale(1.2) !important;
+  -webkit-transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36) !important;
+  transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36) !important;
 }
 #mainHomeArt1{
   background-image: url(https://www.slantmagazine.com/wp-content/uploads/2010/05/picassoandbraquegotothemovies.jpg);
@@ -156,6 +167,14 @@ background-color:#fff !important;
     max-height: 72px;
     max-width: 250px;
 }
+.toggleBtnHome{
+  border:0px;
+  background-color: #fff;
+  color: rgb(148, 126, 98);
+}
+.toggleBtnHome:hover{
+  color:rgb(43, 38, 32);
+}
 .tagBtn{
   margin-top:10px;
   margin-bottom:10px;
@@ -163,7 +182,7 @@ background-color:#fff !important;
   margin-right: 5px;
   padding:0px;
   height:40px;
-  width:150px;
+  width:95%;
   border-color:rgb(231, 215, 191) !important;
   background-color:#fff !important;
   color: rgb(146, 135, 113) !important;
@@ -302,3 +321,8 @@ card scaling
     }
 }
 </style>
+<script>
+export default {
+
+}
+</script>
