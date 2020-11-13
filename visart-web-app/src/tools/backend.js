@@ -29,8 +29,11 @@ export let parse = function (obj) {
 
 export function authenticateUser(username, password) {
     post('/users/login', parse({ 'username': username, 'password': password })).then(response => {
-        let firebaseJWT = response.data.firebaseJWT;
-        return firebase.auth().signInWithCustomToken(firebaseJWT)
+        let firebaseJWT = response.data.firebaseJWT; // 
+
+        return firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function(){
+            return firebase.auth().signInWithCustomToken(firebaseJWT)
+        })
     }).catch(error => {console.log(error)})
 }
 
@@ -39,6 +42,10 @@ export function authenticateEmail(email,password) {
         let firebaseJWT = response.data.firebaseJWT;
         return firebase.auth().signInWithCustomToken(firebaseJWT)
     }).catch(error => {console.log(error)})
+}
+
+export function unauthenticate(){
+    return firebase.auth().signOut()
 }
 
 export function onFirebaseAuth(observer) {
