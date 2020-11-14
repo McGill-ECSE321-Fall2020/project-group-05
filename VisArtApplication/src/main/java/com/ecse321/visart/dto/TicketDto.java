@@ -34,14 +34,20 @@ public class TicketDto {
   }
 
   public static String ticketGetOrder(Ticket t) {
+    if (t.getOrder() == null)
+      return "";
     return t.getOrder().getIdCode();
   }
 
   public static String ticketGetCustomer(Ticket t) {
+    if (t.getCustomer() == null)
+      return "";
     return t.getCustomer().getIdCode();
   }
 
   public static String ticketGetArtist(Ticket t) {
+    if (t.getArtist() == null)
+      return "";
     return t.getArtist().getIdCode();
   }
 
