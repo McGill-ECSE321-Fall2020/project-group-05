@@ -41,8 +41,8 @@
 .descriptionContainer{
   margin-top:5%;
   max-height: 300px;
-  position: relative;
   overflow: hidden;
+  float:left
 }
 #hooperContainer{
   width:100%;
@@ -108,24 +108,12 @@ background-color:#fff !important;
     font-size: 170px;
     top: 50%;
 }
-.sectionContentDelete{
-  position: absolute;
-  left: 5%;
-  transform: translate(-50%, -50%);
-  background-color:red;
-  height:20%;
-}
-.sectionContentListingDelete{
-    color:rgb(43, 38, 32);
-    font-size:200%;
-    top: 90%;
-    font-weight:400;
-}
 .sectionContentListing{
     color:rgb(43, 38, 32);
     font-size:200%;
     top: 40%;
     font-weight:400;
+    border: 1px,;
 }
 #listingsTitle{
   color:rgb(43, 38, 32);
@@ -139,17 +127,27 @@ background-color:#fff !important;
   padding:0;
 }
 .cardImg{
-  opacity: 0.4;
+  opacity: 0.7;
   filter: alpha(opacity=40); /* msie */
+  width: cover !important;
+  height:cover !important;
+  overflow: hidden !important;
+  padding:0px;
+  margin: 0px;
+  transition: transform .2s; /* Animation */
 }
 .cardImg:hover{
   opacity: 1;
+  transform:scale(1.08,1.08) !important;
 }
 .cardImg:hover ~ .sectionContentListing{
   opacity: 0;
 }
 .hooperContainerCardImg:hover ~ .cardImg{
   opacity: 1;
+}
+.cardTitlesContainer{
+  height:20% !important;
 }
 #fixedbutton {
     position: fixed;
@@ -271,7 +269,7 @@ background-color:#fff !important;
   color: rgb(226, 226, 220) !important;
   border-color:rgb(163, 155, 142) !important;
 }
-.listingContainer{
+#listingContainer{
   padding:75px;
   background-color:#fff;
     -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
@@ -306,6 +304,7 @@ background-color:#fff !important;
 .homeCard{
   width:90% !important;
   margin:30px !important;
+  border:1px solid #444
 }
 .card-columns-home{
   margin:auto !important;
@@ -321,11 +320,12 @@ font-size: 120%;
 .cardDesc{
 float:left;
 font-size: 100%;
-padding-top:10%;
-padding-bottom:5%;
+padding-top:2em;
+padding-bottom:2em;
+width:100%;
 }
-.cardHeader{
-display:inline;
+.cardBody{
+  height:10em;
 }
 #searchForm{
 position: absolute;
