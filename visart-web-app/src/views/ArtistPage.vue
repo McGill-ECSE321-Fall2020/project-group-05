@@ -72,12 +72,21 @@ export default {
         return {
             artListings : [],
             paymentConfirmed: [],
-            action2: ''
+            action2: '',
+           
         };
     }, 
     created: function () {
         console.log('created');
-        this.showPurchasedArt();
+        console.log("created");
+        let vm = this
+        backend.onFirebaseAuth(function(user){
+        if (user != null){
+            vm.showPurchasedArt(user.uid)
+        } else {
+            vm.showPurchasedArt(vm.$route.params.id)
+        }
+    })
     },
     methods: {
         showPurchasedArt: function () {
@@ -121,7 +130,12 @@ export default {
                 });
         },
         showFavoriteArt: function () {
-            this.action2 = 'Unfavorite';
+            let uId = this.getUID();
+            if (uId.localeCompare('')===0){
+                this.action2 = '';
+            } else {
+                this.action2 = 'Unfavorite';
+            }
              backend
                 .get("/artists/get/" + this.$route.params.id)
                 .then(response => {
@@ -131,7 +145,12 @@ export default {
                 });
         },
         showPublishedArt: function () {
-            this.action2 = 'Delete Lsiting';
+            let uId = this.getUID();
+            if (uId.localeCompare('')===0){
+                this.action2 = '';
+            } else {
+                this.action2 = 'Delete Listing';
+            }
             this.artListings = [];
             this.paymentConfirmed = [];
             backend
@@ -152,7 +171,12 @@ export default {
                 });
         },
         showSoldArt: function () {
-            this.action2 = 'Confirm Payment';
+            let uId = this.getUID();
+            if (uId.localeCompare('')===0){
+                this.action2 = '';
+            } else {
+                this.action2 = 'Confirm Payment';
+            }
             this.artListings = [];
             this.paymentConfirmed = [];
             backend
@@ -163,10 +187,10 @@ export default {
 
                     for (let ticket of tickets) {
                         //get the ArtOrder corresponding to each ticket
-                        this.paymentConfirmed.push("Payment Confirmed: " + ticket.paymentConfirmed);
                         backend
                             .get("/tickets/get/" + ticket)
                             .then(response => {
+                                this.paymentConfirmed.push("Payment Confirmed: " + (response.data).paymentConfirmed);
                                 return backend
                                     .get("artorder/get/" + (response.data).ticketOrder)
                             })
@@ -175,7 +199,6 @@ export default {
                                 console.log(response.data)
                                 return backend
                                     .get("/artpiece/get/" + (response.data).artPiece)
-
                             }).then(response => {
                                 //get the artlisting attached to each ArtPiece
                                 return backend.get(
@@ -185,6 +208,7 @@ export default {
                             .then(response => {
                                 //PUSH the ArtListing to the array in data
                                 this.artListings.push((response.data));
+
                             })
                             .catch(e => {
                                 console.log(e);
@@ -200,17 +224,41 @@ export default {
         },
         preformAction2: function (listingId) {
             
-            if (this.action2.localeCompare('Unfavorite')){
-                 backend.post('customers/remove_favorite_listing/'+backend.retrieveCurrentUser().uid, {'listingIdCode':listingId})
+            if (this.action2.localeCompare('Unfavorite')===0){
+                    backend.post('customers/remove_favorite_listing/'+backend.retrieveCurrentUser().uid, backend.parse({'listingIdCode':listingId}));
                 this.showFavoriteArt();       
-            }else if(this.action2.localeCompare('Delete Listing')){
+            }else if(this.action2.localeCompare('Delete Listing')===0){
+                backend.post('artlisting/delete/'+listingId);
+                this.showPublishedArt();  
+            }else if(this.action2.localeCompare('Confirm Payment')===0){
+                var ticket;
+                backend
+                .get("/artlisting/get/" + listingId)
+                .then(response => {
+                   console.log((response.data).artPieces[0].ticketId);
+                   return backend
+                   .get("/tickets/get/" + (response.data).artPieces[0].ticketId)
+                })
+                .then(response =>{
+                    backend.post('tickets/update/'+(response.data).idCode, 
+                    backend.parse({'paymentConfirmed': true}));
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+                
 
-            }else if(this.action2.localeCompare('sold')){
-
+                this.showSoldArt();
             }
-        }
-
-
+        },
+        getUID: function () {
+            let user = backend.retrieveCurrentUser();
+            if (user == null || user.uid.localeCompare('')===0 || user.uid.localeCompare(this.$route.params.id)===-1) {
+                return '';
+            } else {
+                return user.uid;
+            }
+        } 
     }
 }
 </script>
