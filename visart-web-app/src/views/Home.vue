@@ -94,13 +94,18 @@
           :key="index"
         >
           <hooper
-            id="hooperContainer"
+            class="hooperContainerImg"
             :autoPlay="true"
             :playSpeed="10000"
             :itemsToShow="1"
             :infiniteScroll="true"
+            :trimEmptySpace="true"
+            :mouseDrag="false"
+            :touchDrag="false"
+            :keyDrag="false"
           >
             <slide
+              class = "hooperContainerImg"
               v-for="(imageUrl, index) in artlisting.postImages"
               :key="index"
             >
@@ -115,12 +120,17 @@
               slot="hooper-addons"
             ></hooper-navigation>
           </hooper>
+          <div class="card-header bg-transparent border-bottom-0">
+            <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close" @click="deleteListing(artlisting.idCode)">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           <div class="sectionContent sectionContentListing">
             {{ artlisting.title }}
           </div>
           <div class="card-body">
             <h4 class="card-title cardArtist">
-              <a href="/artists">name : {{ artlisting.artistName }}</a>
+              <a href="/artists">{{ artlisting.artistName }}</a>
             </h4>
             <h5 class="card-title cardPrice">$ {{ artlisting.price }}</h5>
             <div class="descriptionContainer">
@@ -168,7 +178,7 @@ import axios from "axios";
 var config = require("../../config");
 var frontendUrl = config.site;
 var backendUrl = config.backend.site;
-
+var backend = require('@/tools/backend')
 var AXIOS = axios.create({
   baseURL: backendUrl,
   headers: {
@@ -246,6 +256,20 @@ export default {
   methods: {
     redirectToHome: function(tag) {
       this.$router.push({ path: "/search/?keywords=" + tag });
+    },
+    deleteListing: function(id) {
+      backend
+        .post(
+          '/artlisting/delete/' + id
+        )
+        .then(response => {
+          console.log(response.data);
+          console.log('successfully deleted')
+          this.$router.go()
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
   }
 };
