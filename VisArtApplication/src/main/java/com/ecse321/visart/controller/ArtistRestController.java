@@ -24,8 +24,15 @@ public class ArtistRestController {
   private ArtistService artistService;
 
   /**
-   * @param  idCode
-   * @return
+   * GET Request
+   * example:
+   * https://vis-art-application-production.herokuapp.com/artists/get/6230178493701286t350148
+   * returns: gives the artist object, given an artistId
+   * 
+   * {url}/artists/get/{idCode}
+   * :idCode = artist id to get data from
+   * params: none
+   * body  : none
    */
   @GetMapping(value = { "/artists/get/{idCode}", "/artists/get/{idCode}/" })
   public ArtistDto getArtist(@PathVariable("idCode") String idCode) {
@@ -33,8 +40,8 @@ public class ArtistRestController {
   }
 
   /**
-   * 
-   * @return
+   * GET Request
+   * example: https://vis-art-application-production.herokuapp.com/artists/get_all
    */
   @GetMapping(value = { "/artists/get_all", "/artists/get_all/" })
   public List<ArtistDto> getAllArtists() {
@@ -43,8 +50,10 @@ public class ArtistRestController {
   }
 
   /**
-   * 
-   * @return
+   * GET Request
+   * example:
+   * https://vis-art-application-production.herokuapp.com/artists/get_all_keys
+   * returns: list of string all Artist idCodes
    */
   @GetMapping(value = { "/artists/get_all_keys", "/artists/get_all_keys/" })
   public List<String> getAllArtistKeys() {
@@ -52,9 +61,19 @@ public class ArtistRestController {
   }
 
   /**
+   * POST Request
+   * example:
+   * https://vis-art-application-production.herokuapp.com/artists/create
+   * requestBody={
+   *  customerId : '321437210536819473021'
+   * }
+   * returns: the artist object, created on top of the given customer entity
    * 
-   * @param  map
-   * @return
+   * {url}/artists/create
+   * :idCode = artist id to get data from
+   * search params: none
+   * request body : none
+   * 
    */
   @PostMapping(value = { "/artists/create", "/artists/create/" })
   public ArtistDto createArtist(@RequestBody MultiValueMap<String, String> map) {
@@ -62,9 +81,10 @@ public class ArtistRestController {
   }
 
   /**
-   * 
-   * @param  idCode
-   * @return
+   * POST Request
+   * example:
+   * https://vis-art-application-production.herokuapp.com/artists/delete/232614890312658309127423
+   * returns: true if the id is a valid artistId and the artist is deleted
    */
   @PostMapping(value = { "/artists/delete/{idCode}", "/artists/delete/{idCode}/" })
   public boolean deleteArtist(@PathVariable("idCode") String idCode) {
@@ -72,9 +92,12 @@ public class ArtistRestController {
   }
 
   /**
-   * 
-   * @param idCode
-   * @param listingId
+   * POST Request
+   * description: adds the artListing to the manager, given an {idCode} for the
+   * manager id, and {listingId} for the artListingId
+   * example:
+   * https://vis-art-application-production.herokuapp.com/artists/add_listing/232614890312658309127423/4361279043218
+   * returns: nothing
    */
   @PostMapping(value = {
       "/artists/add_listing/{idCode}/{listingId}",
@@ -86,9 +109,11 @@ public class ArtistRestController {
   }
 
   /**
-   * 
-   * @param idCode
-   * @param ticketId
+   * POST Request
+   * description: adds the ticket to the manager, given an {idCode} for the
+   * manager id, and {ticketId} for the ticketId
+   * example: https://vis-art-application-production.herokuapp.com/artists/add_listing/232614890312658309127423/4361279043218
+   * returns: nothing
    */
   @PostMapping(value = {
       "/artists/add_ticket/{idCode}/{ticketId}",
@@ -100,9 +125,12 @@ public class ArtistRestController {
   }
 
   /**
-   * 
-   * @param idCode
-   * @param listingId
+   * POST Request
+   * description: removes the artListing to the manager, given an {idCode} for the
+   * manager id, and {listingId} for the artListingId
+   * example:
+   * https://vis-art-application-production.herokuapp.com/artists/add_listing/232614890312658309127423/4361279043218
+   * returns: nothing
    */
   @PostMapping(value = {
       "/artists/remove_listing/{idCode}/{listingId}",
@@ -114,9 +142,11 @@ public class ArtistRestController {
   }
 
   /**
-   * 
-   * @param idCode
-   * @param ticketId
+   * POST Request
+   * description: removes the ticket to the manager, given an {idCode} for the
+   * manager id, and {ticketId} for the ticketId
+   * example: https://vis-art-application-production.herokuapp.com/artists/add_listing/232614890312658309127423/4361279043218
+   * returns: nothing
    */
   @PostMapping(value = {
       "/artists/remove_ticket/{idCode}/{ticketId}",

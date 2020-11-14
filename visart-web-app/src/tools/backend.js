@@ -21,10 +21,21 @@ var axGet = axios.create({
 export let get = axGet.get
 export let post = axPost.post
 export let parse = function (obj) {
-    return formurlencoded(obj, {
+    let arr = []
+    for (let key in obj) {
+        if (Array.isArray(obj[key])) {
+            arr.push(parseList(key,obj[key]))
+        }
+    }
+
+    return arr.join('&') + '&' +  formurlencoded(obj, {
         ignorenull: true,
         sorted: true
     })
+}
+
+export let parseList = function (key, list) {
+    return list.map(item => encodeURI(key) + '=' + encodeURI(item)).join("&")
 }
 
 export function authenticateUser(username, password) {

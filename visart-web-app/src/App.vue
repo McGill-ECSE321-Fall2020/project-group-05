@@ -30,7 +30,7 @@
     </ul>
   </div>
 </nav>
-<button type="button" class="btn btn-primary hvr-bounce-in" id="fixedbutton">+</button>
+<router-link to="/artlisting/create"><button type="button" class="btn btn-primary hvr-bob" id="fixedbutton">+</button></router-link>
     <router-view />
   </div>
 </template>
@@ -41,13 +41,22 @@
 .descriptionContainer{
   margin-top:5%;
   max-height: 300px;
-  position: relative;
   overflow: hidden;
+  float:left
 }
 #hooperContainer{
   width:100%;
   height:100%;
 }
+.hooperContainerCardImg{
+}
+.hooperContainerImg{
+  width:2px;
+  height:2px;
+  margin:0;
+  padding:0;
+}
+
 .navbar{
 background-color:#fff !important;
   position:fixed !important; /* fixing the position takes it out of html flow - knows
@@ -104,6 +113,7 @@ background-color:#fff !important;
     font-size:200%;
     top: 40%;
     font-weight:400;
+    border: 1px,;
 }
 #listingsTitle{
   color:rgb(43, 38, 32);
@@ -117,14 +127,27 @@ background-color:#fff !important;
   padding:0;
 }
 .cardImg{
-  opacity: 0.4;
+  opacity: 0.7;
   filter: alpha(opacity=40); /* msie */
+  width: cover !important;
+  height:cover !important;
+  overflow: hidden !important;
+  padding:0px;
+  margin: 0px;
+  transition: transform .2s; /* Animation */
 }
 .cardImg:hover{
   opacity: 1;
+  transform:scale(1.08,1.08) !important;
 }
 .cardImg:hover ~ .sectionContentListing{
   opacity: 0;
+}
+.hooperContainerCardImg:hover ~ .cardImg{
+  opacity: 1;
+}
+.cardTitlesContainer{
+  height:20% !important;
 }
 #fixedbutton {
     position: fixed;
@@ -138,16 +161,70 @@ background-color:#fff !important;
     height: 70px;
     width: 70px;
     border-width: 0px;
+}
+/* Bob */
+@-webkit-keyframes hvr-bob {
+  0% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+  50% {
+    -webkit-transform: translateY(-4px);
+    transform: translateY(-4px);
+  }
+  100% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+}
+@keyframes hvr-bob {
+  0% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+  50% {
+    -webkit-transform: translateY(-4px);
+    transform: translateY(-4px);
+  }
+  100% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+}
+@-webkit-keyframes hvr-bob-float {
+  100% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+}
+@keyframes hvr-bob-float {
+  100% {
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+  }
+}
+.hvr-bob {
+  display: inline-block;
+  vertical-align: middle;
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
-  -webkit-transition-duration: 0.5s;
-  transition-duration: 0.5s;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
 }
-#fixedbutton:hover, #fixedbutton:focus, #fixedbutton:active {
-  -webkit-transform: scale(1.2) !important;
-  transform: scale(1.2) !important;
-  -webkit-transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36) !important;
-  transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36) !important;
+.hvr-bob:hover, .hvr-bob:focus, .hvr-bob:active {
+  -webkit-animation-name: hvr-bob-float, hvr-bob;
+  animation-name: hvr-bob-float, hvr-bob;
+  -webkit-animation-duration: .3s, 1.5s;
+  animation-duration: .3s, 1.5s;
+  -webkit-animation-delay: 0s, .3s;
+  animation-delay: 0s, .3s;
+  -webkit-animation-timing-function: ease-out, ease-in-out;
+  animation-timing-function: ease-out, ease-in-out;
+  -webkit-animation-iteration-count: 1, infinite;
+  animation-iteration-count: 1, infinite;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-direction: normal, alternate;
+  animation-direction: normal, alternate;
 }
 #mainHomeArt1{
   background-image: url(https://www.slantmagazine.com/wp-content/uploads/2010/05/picassoandbraquegotothemovies.jpg);
@@ -192,7 +269,7 @@ background-color:#fff !important;
   color: rgb(226, 226, 220) !important;
   border-color:rgb(163, 155, 142) !important;
 }
-.listingContainer{
+#listingContainer{
   padding:75px;
   background-color:#fff;
     -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
@@ -227,6 +304,7 @@ background-color:#fff !important;
 .homeCard{
   width:90% !important;
   margin:30px !important;
+  border:1px solid #444
 }
 .card-columns-home{
   margin:auto !important;
@@ -242,11 +320,12 @@ font-size: 120%;
 .cardDesc{
 float:left;
 font-size: 100%;
-padding-top:10%;
-padding-bottom:5%;
+padding-top:2em;
+padding-bottom:2em;
+width:100%;
 }
-.cardHeader{
-display:inline;
+.cardBody{
+  height:10em;
 }
 #searchForm{
 position: absolute;
@@ -312,13 +391,18 @@ card scaling
         column-count: 4;
     }
 }
-
 @media (min-width: 75em) {
     .card-columns {
         -webkit-column-count: 5;
         -moz-column-count: 5;
         column-count: 5;
     }
+}
+.formContainerCreate{
+  width:80%;
+  height:38em;
+  background-color:cornflowerblue;
+  margin: auto;
 }
 </style>
 <script>

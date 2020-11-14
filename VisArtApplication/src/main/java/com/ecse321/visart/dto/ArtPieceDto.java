@@ -11,6 +11,8 @@ public class ArtPieceDto {
   private String artOrderId;
   private String idCode;
 
+  private String ticketId;
+
   public ArtPieceDto(PieceLocation basicLocation, String addressLocation, String artListingId,
       String idCode) {
     super();
@@ -25,8 +27,11 @@ public class ArtPieceDto {
     addressLocation = artPiece.getAddressLocation();
     if (artPiece.getArtListing() != null)
       artListingId = artPiece.getArtListing().getIdCode();
-    if (artPiece.getArtOrder() != null)
+    if (artPiece.getArtOrder() != null) {
       artOrderId = artPiece.getArtOrder().getIdCode();
+      if (artPiece.getArtOrder().getTicket() != null)
+        ticketId = artPiece.getArtOrder().getTicket().getIdCode();
+    }
     idCode = artPiece.getIdCode();
   }
 
@@ -68,5 +73,13 @@ public class ArtPieceDto {
 
   public void setIdCode(String idCode) {
     this.idCode = idCode;
+  }
+
+  public String getTicketId() {
+    return ticketId;
+  }
+
+  public void setTicketId(String ticketId) {
+    this.ticketId = ticketId;
   }
 }

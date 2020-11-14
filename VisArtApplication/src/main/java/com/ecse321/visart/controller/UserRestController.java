@@ -62,16 +62,20 @@ public class UserRestController {
 
   /**
    * 
-   * @param  values
-   * @param  idCode
-   * @return
+   * requestBody = {
+   *  emailAddress : string
+   *  displayname : string
+   *  username : string
+   *  profilePicLink : string
+   *  profileDescription : string
+   * }
    */
   @PostMapping(value = { "/users/update/{idCode}", "/users/update/{idCode}/" })
   public UserDto updateUser(@RequestBody MultiValueMap<String, String> values,
       @PathVariable("idCode") String idCode) {
     return new UserDto(service.updateUser(idCode,
         values.getFirst("emailAddress"), values.getFirst("displayname"),
-        values.getFirst("userName"), values.getFirst("password"),
+        values.getFirst("username"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
 

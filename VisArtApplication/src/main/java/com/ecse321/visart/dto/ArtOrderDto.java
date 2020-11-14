@@ -30,7 +30,8 @@ public class ArtOrderDto {
     targetLocation = order.getTargetLocation();
     targetAddress = order.getTargetAddress();
     deliveryTracker = order.getDeliveryTracker();
-    artPieceId = order.getArtPiece().getIdCode();
+    if (order.getArtPiece() != null)
+      artPieceId = order.getArtPiece().getIdCode();
     idCode = order.getIdCode();
   }
 

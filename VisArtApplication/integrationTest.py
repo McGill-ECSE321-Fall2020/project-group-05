@@ -1,9 +1,15 @@
 import requests as r
 import json
 import sys
+import random
 url = "https://vis-art-application.herokuapp.com/" # development server
 # url = "http://localhost:8080/"
 result = 0  
+def generate_random_string(num):
+    alpha = list(range(ord('a'),ord('z'))) + list(range(ord('A'),ord('Z'))) + list(range(ord('0'),ord('9')))
+    alpha = [ chr(al) for al in alpha]
+    return ''.join([ alpha[random.randrange(len(alpha))] for i in range(num)])
+
 def get(endpoint,params=None,data=None):
     return r.get(url+endpoint,params=params,data=data)
 
@@ -66,17 +72,18 @@ try:
     # Create a bunch of entities
     print()
     print('---All Create REST Methods---')
-    users_create = (ppost("users/create",data={"emailAddress":"auryan898@gmail.com","displayname":"dingdong1","username":"hiIAmBilly1","password":"password","profilePicLink":None,"profileDescription":""}))
+    codes = [generate_random_string(3) for i in range(3)]
+    users_create = (ppost("users/create",data={"emailAddress":"auryan{}@gmail.com".format(codes[0]),"displayname":"dingdong"+codes[0],"username":"hiIAmBilly"+codes[0],"password":"password","profilePicLink":None,"profileDescription":""}))
     print(users_create)
-    managers_create = (ppost("managers/create",data={"emailAddress":"auryan898@gmail.com","displayname":"dingdong2","username":"hiIAmBilly2","password":"password","profilePicLink":None,"profileDescription":""}))
+    managers_create = (ppost("managers/create",data={"emailAddress":"auryan{}@gmail.com".format(codes[1]),"displayname":"dingdong"+codes[1],"username":"hiIAmBilly"+codes[1],"password":"password","profilePicLink":None,"profileDescription":""}))
     print(managers_create)
-    customers_create = (ppost("customers/create",data={"emailAddress":"auryan898@gmail.com","displayname":"dingdong4","username":"hiIAmBilly4","password":"password","profilePicLink":".","profileDescription":""}))
+    customers_create = (ppost("customers/create",data={"emailAddress":"auryan{}@gmail.com".format(codes[2]),"displayname":"dingdong"+codes[2],"username":"hiIAmBilly"+codes[2],"password":"password","profilePicLink":".","profileDescription":""}))
     print(customers_create)
     # customers_ids = pget("customers/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
     artists_create = (ppost("artists/create",data={'customerId':customers_create[0].json()['idCode']}))
     print(artists_create)
     # artists_ids = pget("artists/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-    artlisting_create = (ppost("artlisting/create",data={'price':'0','aVisibility':'Public','aDescription':'none','aTitle':'My Doodle','artistId':artists_create[0].json()['idCode']}))
+    artlisting_create = (ppost("artlisting/create",data={'price':'0','aVisibility':'Public','aDescription':'none','aTitle':'Another Doodle','artistId':artists_create[0].json()['idCode']}))
     print(artlisting_create)
     # artlisting_ids = pget("artlisting/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
     tags_create = (ppost("tags/create",data={"aListing":artlisting_create[0].json()['idCode'],'aKeyword':'bob','aType':'Other'}))
@@ -170,11 +177,11 @@ try:
     }))
 
     print(ppost("artlisting/update_dimensions/{idCode}".format(idCode=listing1),data={
-        'dimensions':"[4.4,4.5,2.3]"
+        'dimensions':[4.4,4.5,2.3]
         }))
 
     print(ppost("artlisting/update_post_images/{idCode}".format(idCode=listing1),data={
-        'images':"['duh.com','pfft.net']"
+        'images':['duh.com','pfft.net']
         }))
     piece1 = artpiece_create[0].json()['idCode']
     print(ppost("/artlisting/remove_piece/{idCode}".format(idCode=listing1),data={

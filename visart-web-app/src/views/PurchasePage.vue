@@ -4,12 +4,8 @@
   <div class="container container-space">
     <div class="row">
       <div class="col-xl">
-        <div class="card" style="width: 35rem;">
-          <img
-            class="card-img-top card-space-image"
-            src="image"
-            alt="Card image cap"
-          />
+        <div class="card shadow homeCard" style="width: 35rem;">
+          <img class="card-img-top card-space-image" src="../assets/cardTrial.png" alt="Card image cap" />
           <div class="card-body">
             <h5 class="card-title text-center">{{ title }}</h5>
           </div>
@@ -17,23 +13,17 @@
       </div>
       <div class="col-sm">
         <ul class="list-group card-space">
-          <li class="list-group-item list-group-item-secondary">Artist:</li>
+          <li class="list-group-item list-group-item-secondary infoColor">Artist:</li>
           <li class="list-group-item">{{ artistName }}</li>
-          <li class="list-group-item list-group-item-secondary">
+          <li class="list-group-item list-group-item-secondary infoColor">
             Description:
           </li>
           <li class="list-group-item">{{ description }}</li>
-          <li class="list-group-item list-group-item-secondary">Price:</li>
+          <li class="list-group-item list-group-item-secondary infoColor">Price:</li>
           <li class="list-group-item">{{ price }}</li>
         </ul>
-        <b-button href="#" class="btn btn-secondary btn-lg btn-block btn-space"
-          >Buy Now</b-button
-        >
-        <button
-          type="button"
-          class="btn btn-secondary btn-lg btn-block btn-space"
-          onclick="addFavorite"
-        >
+        <b-button href="/checkout" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
+        <button type="button" class="btn btn-secondary btn-lg btn-block btnPurchase" onclick="addFavorite">
           Add to favorite
         </button>
       </div>
@@ -48,10 +38,11 @@ var backend = require('@/tools/backend')
 export default {
   data: function () {
     return {
-      title: '',
+      title: 'moneylisey',
       artistName: '',
       description: '',
       price: ''
+      // image: ''
     }
   },
   methods: {
@@ -59,7 +50,8 @@ export default {
       this.title = (response.data).title
       this.description = (response.data).description
       this.price = (response.data).price
-      this.image = (response.data).postImages
+      this.artpiece = (response.data).artPieces[0]
+      // this.image = (response.data).postImages
     },
     parseArtist: function (response) {
       this.artistName = (response.data).customer.user.displayname
@@ -122,8 +114,16 @@ export default {
   margin-top: 100px;
 }
 
+.infoColor{
+  background-color: rgb(153, 153, 131);
+}
+.btnPurchase {
+  background-color: rgb(146, 135, 113);
+  color: #fff
+}
+
 .card-space {
-  margin-top: 25px;
+  margin-top: 35px;
 }
 
 .card-space-image {

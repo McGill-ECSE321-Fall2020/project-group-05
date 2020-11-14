@@ -16,9 +16,15 @@ public class TagDto {
 
   // Constructors
   public TagDto(Tag t) {
-    this(t.getKeyword(), t.getIdCode(), t.getType(), (t.getListing().getIdCode()));
+    this(t.getKeyword(), t.getIdCode(), t.getType(), tagGetListing(t));
   }
 
+  public static String tagGetListing(Tag t) {
+    if (t.getListing() == null)
+      return "";
+    return t.getListing().getIdCode();
+  }
+  
   public TagDto(String keyword, String idCode, TagType tagType, String tagListingId) {
     super();
     this.keyword = keyword;

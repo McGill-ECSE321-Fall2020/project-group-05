@@ -39,8 +39,8 @@
 </section>
     <div class="listingContainer">
       <label for="toggle_button">
-        <h1 v-if="isActive" id="listingsTitle"> – Featured Art – </h1>
-        <h1 v-if="! isActive" id="listingsTitle"> –  – </h1>
+        <h1 v-if="isActive" id="listingsTitle"> – Featured Search Results – </h1>
+        <h1 v-if="! isActive" id="listingsTitle"> – Search Results – </h1>
         <button class="toggleBtnHome" @click="isActive = !isActive">{{isActive ? 'View Full Collection' : 'View Featured Art'}}</button>
         <span class="toggle__switch"></span>
     </label>
@@ -67,7 +67,15 @@
 //  bar scroll
 import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper'
 import 'hooper/dist/hooper.css'
-var backend = require('@/tools/backend')
+import axios from 'axios'
+var config = require('../../config')
+var frontendUrl = config.site
+var backendUrl = config.backend.site
+
+var AXIOS = axios.create({
+  baseURL: backendUrl,
+  headers: { 'Access-Control-Allow-Origin': frontendUrl, 'Content-Type': 'raw', 'Data-Type': 'raw' }
+})
 console.log('im here')
 export default {
   name: 'Search',
@@ -97,7 +105,7 @@ export default {
     //    make array of keyword parsed by space
     var key = this.$route.query.keywords
     console.log(key)
-    backend.get('/artlisting/get_artwork_by_keyword/', { params: { keywords: this.$route.query.keywords } }).then(response => {
+    AXIOS.get('/artlisting/get_artwork_by_keyword/', { params: { keywords: this.$route.query.keywords } }).then(response => {
       console.log(response.data)
       console.log('listing by keyword')
       for (const artListing of (response.data)) {
