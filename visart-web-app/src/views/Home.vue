@@ -78,7 +78,7 @@
         </hooper>
       </div>
     </section>
-    <div class="listingContainer">
+    <div id="listingContainer">
       <label for="toggle_button">
         <h1 v-if="isActive" id="listingsTitle">– Featured Art –</h1>
         <h1 v-if="!isActive" id="listingsTitle">– Full Collection –</h1>
@@ -93,33 +93,11 @@
           v-for="(artlisting, index) in artListingsFull"
           :key="index"
         >
-          <hooper
-            class="hooperContainerImg"
-            :autoPlay="true"
-            :playSpeed="10000"
-            :itemsToShow="1"
-            :infiniteScroll="true"
-            :trimEmptySpace="true"
-            :mouseDrag="false"
-            :touchDrag="false"
-            :keyDrag="false"
-          >
-            <slide
-              class = "hooperContainerImg"
-              v-for="(imageUrl, index) in artlisting.postImages"
-              :key="index"
-            >
               <img
                 class="card-img-top cardImg"
-                :src="imageUrl"
+                :src="artlisting.postImages[0]"
                 alt="Card image cap"
               />
-            </slide>
-            <hooper-navigation
-              id="tagNavigation"
-              slot="hooper-addons"
-            ></hooper-navigation>
-          </hooper>
           <div class="card-header bg-transparent border-bottom-0">
             <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close" @click="deleteListing(artlisting.idCode)">
               <span aria-hidden="true">&times;</span>
@@ -128,14 +106,14 @@
           <div class="sectionContent sectionContentListing">
             {{ artlisting.title }}
           </div>
-          <div class="card-body">
-            <h4 class="card-title cardArtist">
-              <a href="/artists">{{ artlisting.artistName }}</a>
-            </h4>
-            <h5 class="card-title cardPrice">$ {{ artlisting.price }}</h5>
-            <div class="descriptionContainer">
-              <p class="card-text cardDesc">{{ artlisting.description }}</p>
+          <div class="card-body cardBody">
+            <div class="cardTitlesContainer">
+              <h4 class="card-title cardArtist">
+                <a href="/artists">{{ artlisting.artistName }}</a>
+              </h4>
+              <h5 class="card-title cardPrice">$ {{ artlisting.price }}</h5>
             </div>
+              <p class="card-text cardDesc">{{ artlisting.description }}</p>
           </div>
         </div>
       </div>
@@ -252,6 +230,9 @@ export default {
       .catch(e => {
         console.log(e);
       });
+    window.onscroll = ( ) => {
+      let bottomOfWindow = document.getElementById('listingContainer').scrollTop + window.innerHeight === document.getElementById('listingContainer').offsetHeight;
+    }
   },
   methods: {
     redirectToHome: function(tag) {
