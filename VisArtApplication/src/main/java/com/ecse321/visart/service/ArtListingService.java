@@ -130,6 +130,11 @@ public class ArtListingService {
 
   @Transactional
   public ArtListing updateDimensions(String aIdCode, Float[] aDimensions) {
+    return updateDimensions(aIdCode, Arrays.asList(aDimensions));
+  }
+  
+  @Transactional
+  public ArtListing updateDimensions(String aIdCode, List<Float> aDimensions) {
     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
     if (al == null) {
       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");

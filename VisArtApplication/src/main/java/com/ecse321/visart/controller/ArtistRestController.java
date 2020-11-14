@@ -28,6 +28,11 @@ public class ArtistRestController {
    * example:
    * https://vis-art-application-production.herokuapp.com/artists/get/6230178493701286t350148
    * returns: gives the artist object, given an artistId
+   * 
+   * {url}/artists/get/{idCode}
+   * :idCode = artist id to get data from
+   * params: none
+   * body  : none
    */
   @GetMapping(value = { "/artists/get/{idCode}", "/artists/get/{idCode}/" })
   public ArtistDto getArtist(@PathVariable("idCode") String idCode) {
@@ -60,9 +65,14 @@ public class ArtistRestController {
    * example:
    * https://vis-art-application-production.herokuapp.com/artists/create
    * requestBody={
-   * customerId : '321437210536819473021'
+   *  customerId : '321437210536819473021'
    * }
    * returns: the artist object, created on top of the given customer entity
+   * 
+   * {url}/artists/create
+   * :idCode = artist id to get data from
+   * search params: none
+   * request body : none
    * 
    */
   @PostMapping(value = { "/artists/create", "/artists/create/" })

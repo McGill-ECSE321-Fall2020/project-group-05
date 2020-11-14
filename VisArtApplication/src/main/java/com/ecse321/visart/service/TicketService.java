@@ -105,7 +105,9 @@ public class TicketService {
    */
   @Transactional
   public Ticket getTicket(String aIdCode) {
-    return ticketRepo.getTicket(aIdCode);
+    Ticket t = ticketRepo.getTicket(aIdCode);
+    t.getOrder().getArtPiece().getArtListing();
+    return t;
   }
 
   /**
