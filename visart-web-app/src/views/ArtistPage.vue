@@ -16,9 +16,8 @@
                     </div>
                 </div>
             </div>
- <div class="album py-5 bg-light">
+      <div class="album py-5 bg-light">
         <div class="container">
-
           <div class="row">
             <div class="col-md-4" v-for="(artlisting, index) in artListings" :key="index">
               <div class="card mb-4 box-shadow">
