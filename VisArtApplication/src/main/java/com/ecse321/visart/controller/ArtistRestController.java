@@ -28,6 +28,11 @@ public class ArtistRestController {
    * example:
    * https://vis-art-application-production.herokuapp.com/artists/get/6230178493701286t350148
    * returns: gives the artist object, given an artistId
+   * 
+   * {url}/artists/get/{idCode}
+   * params: none
+   * body  : none
+   * idCode = artist id to get data on
    */
   @GetMapping(value = { "/artists/get/{idCode}", "/artists/get/{idCode}/" })
   public ArtistDto getArtist(@PathVariable("idCode") String idCode) {
