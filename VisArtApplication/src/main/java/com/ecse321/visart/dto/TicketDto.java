@@ -22,8 +22,8 @@ public class TicketDto {
   // Constructors
 
   public TicketDto(Ticket t) {
-    this(t.getIsPaymentConfirmed(), t.getPaymentAmount(), t.getIdCode(), t.getOrder().getIdCode(),
-        t.getCustomer().getIdCode(), t.getArtist().getIdCode());
+    this(t.getIsPaymentConfirmed(), t.getPaymentAmount(), t.getIdCode(), ticketGetOrder(t),
+        ticketGetCustomer(t), ticketGetArtist(t));
     try {
       setTicketArtPieceId(t.getOrder().getArtPiece().getIdCode());
       setTicketArtListingId(t.getOrder().getArtPiece().getArtListing().getIdCode());
@@ -31,6 +31,24 @@ public class TicketDto {
 
     }
 
+  }
+
+  public static String ticketGetOrder(Ticket t) {
+    if (t.getOrder() == null)
+      return "";
+    return t.getOrder().getIdCode();
+  }
+
+  public static String ticketGetCustomer(Ticket t) {
+    if (t.getCustomer() == null)
+      return "";
+    return t.getCustomer().getIdCode();
+  }
+
+  public static String ticketGetArtist(Ticket t) {
+    if (t.getArtist() == null)
+      return "";
+    return t.getArtist().getIdCode();
   }
 
   public TicketDto(boolean isPaymentConfirmed, double paymentAmount, String idCode,
