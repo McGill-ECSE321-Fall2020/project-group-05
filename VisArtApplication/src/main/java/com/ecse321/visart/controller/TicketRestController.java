@@ -37,9 +37,13 @@ public class TicketRestController {
 
   /**
    * 
-   * @param  aIdCode
-   * @param  map
-   * @return
+   * requestBody = {
+   *  aIsPaymentConfirmed: boolean
+   *  aPaymentAmoung: float
+   *  aOrder: string
+   *  aCustomer: string
+   *  aArtist: string
+   * }
    */
   @PostMapping(value = { "/tickets/create", "/tickets/create/" })
   public TicketDto createTicket(@RequestBody MultiValueMap<String, String> map) {
