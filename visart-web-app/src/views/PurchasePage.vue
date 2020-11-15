@@ -23,7 +23,7 @@
           <li class="list-group-item">{{ price }}</li>
         </ul>
         <b-button v-on:click="goToCheckout(artPieceId)" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
-        <button type="button" class="btn btn-secondary btn-lg btn-block btnPurchase" onclick="addFavorite">
+        <button type="button" class="btn btn-secondary btn-lg btn-block btnPurchase" v-on:click="addFavorite">
           Add to favorite
         </button>
       </div>

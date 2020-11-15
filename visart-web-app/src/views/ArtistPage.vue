@@ -25,7 +25,7 @@
           <div class="row">
             <div class="col-md-4" v-for="(artlisting, index) in artListings" :key="index">
               <div class="card mb-4 box-shadow">
-                <img class="card-img-top" src="../assets/logo.png" alt="Card image cap">
+                <img class="card-img-top" :src="getPostImage(artlisting)[0]" alt="Card image cap">
                 <div class="card-body">
                   <p class="card-text">{{artlisting.title}}, ${{artlisting.price}}</p>
                   <div class="d-flex justify-content-between align-items-center">
@@ -34,7 +34,7 @@
                       <button type="button"
                       v-on:click="preformAction2(artlisting.idCode)"
                       class="btn btn-sm btn-outline-secondary"
-                      v-show="isLoggedIn">{{action2}}</button>
+                      v-show="isLoggedIn && !isPurchased">{{action2}}</button>
                     </div>
                   </div>
                 </div>
@@ -81,7 +81,8 @@ export default {
             action2: '',
             actionTitle: '',
             actionDescription: '',
-            isLoggedIn: false
+            isLoggedIn: true,
+            isPurchased:  false
 
         };
     },
@@ -117,7 +118,7 @@ export default {
     },
     methods: {
         showPurchasedArt: function () {
-            this.action2 = '';
+            this.isPurchased = true;
             this.artListings = [];
             this.paymentConfirmed = [];
             backend
@@ -156,9 +157,14 @@ export default {
                     console.log(e);
                 });
         },
+        getPostImage: function(listing) {
+            if (!!listing.postImages && listing.postImages.length > 0)
+                return listing.postImages;
+            else return "";
+        },
         showFavoriteArt: function () {
-            let uId = this.getUID();
-            if (uId.localeCompare('')===0){
+            this.isPurchased = false;
+            if (!this.isLoggedIn){
                 this.action2 = '';
             } else {
                 this.action2 = 'Unfavorite';
@@ -172,8 +178,8 @@ export default {
                 });
         },
         showPublishedArt: function () {
-            let uId = this.getUID();
-            if (uId.localeCompare('')===0){
+            this.isPurchased = false;
+            if (!this.isLoggedIn){
                 this.action2 = '';
             } else {
                 this.action2 = 'Delete Listing';
@@ -198,8 +204,8 @@ export default {
                 });
         },
         showSoldArt: function () {
-            let uId = this.getUID();
-            if (uId.localeCompare('')===0){
+            this.isPurchased = false;
+            if (!this.isLoggedIn){
                 this.action2 = '';
             } else {
                 this.action2 = 'Confirm Payment';
@@ -277,14 +283,6 @@ export default {
                 this.showSoldArt();
             }
         },
-        getUID: function () {
-            let user = backend.retrieveCurrentUser();
-            if (user == null || user.uid.localeCompare('')===0 || user.uid.localeCompare(this.$route.params.id)===-1) {
-                return '';
-            } else {
-                return user.uid;
-            }
-        }
     }
 }
 </script>
