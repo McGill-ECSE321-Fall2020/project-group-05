@@ -79,7 +79,6 @@ export default {
         getElId("inputEmail").value,
         getElId("inputPass").value
       );
-      vm.isSuccess = true;
       backend.onFirebaseAuth(function(user) {
       if (user != null) {
         vm.isSuccess = true;
