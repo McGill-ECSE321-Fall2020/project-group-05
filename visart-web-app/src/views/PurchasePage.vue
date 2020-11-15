@@ -22,7 +22,7 @@
           <li class="list-group-item list-group-item-secondary infoColor">Price:</li>
           <li class="list-group-item">{{ price }}</li>
         </ul>
-        <b-button href="/checkout" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
+        <b-button v-on:click="goToCheckout(artPieceId)" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
         <button type="button" class="btn btn-secondary btn-lg btn-block btnPurchase" onclick="addFavorite">
           Add to favorite
         </button>
@@ -38,11 +38,12 @@ var backend = require('@/tools/backend')
 export default {
   data: function () {
     return {
-      title: 'moneylisey',
+      title: '',
       artistName: '',
       description: '',
-      price: ''
-      // image: ''
+      price: '',
+      image: '',
+      artPieceId: ''
     }
   },
   methods: {
@@ -50,8 +51,8 @@ export default {
       this.title = (response.data).title
       this.description = (response.data).description
       this.price = (response.data).price
-      this.artpiece = (response.data).artPieces[0]
-      // this.image = (response.data).postImages
+      this.artPieceId = (response.data).artPieces[0]
+      this.image = (response.data).postImages
     },
     parseArtist: function (response) {
       this.artistName = (response.data).customer.user.displayname
@@ -96,6 +97,9 @@ export default {
           console.log(error)
         })
       }
+    },
+    goToCheckout: function (idCode) {
+      this.$router.push({ path: '/checkout/' + idCode })
     }
   },
   created: function () {
