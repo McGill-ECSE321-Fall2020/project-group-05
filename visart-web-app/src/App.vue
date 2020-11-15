@@ -55,7 +55,7 @@
       </div>
     </nav>
     <router-link to="/artlisting/create"
-      ><button type="button" class="btn btn-primary hvr-bob" id="fixedbutton">
+      ><button v-show="isArtistLoggedIn" type="button" class="btn btn-primary hvr-bob" id="fixedbutton">
         +
       </button></router-link
     >
@@ -68,6 +68,7 @@ var backend = require("@/tools/backend");
 export default {
   data: function() {
     return {
+      isArtistLoggedIn: false,
       isSignedIn: false
     };
   },
@@ -75,9 +76,19 @@ export default {
     let vm = this;
     backend.onFirebaseAuth(function(user) {
       if (user != null) {
+        backend.get('users/get/'+user.uid).then(resp => {
+          if (resp.data.role == "Customer") {
+            backend.get('customers/get/'+user.uid).then(resp => {
+              vm.isArtistLoggedIn = true
+            })
+          } else {
+             vm.isArtistLoggedIn = false
+          }
+        })
         vm.isSignedIn = true;
       } else {
         vm.isSignedIn = false;
+        vm.isArtistLoggedIn = false
       }
     });
   }
