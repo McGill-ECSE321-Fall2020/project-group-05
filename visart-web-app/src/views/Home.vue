@@ -223,16 +223,27 @@ export default {
     AXIOS.get("/tags/get_all")
       .then(response => {
         console.log(response.data);
+        var tagArr = [];
         for (const tag of response.data) {
-          this.tags.push(tag);
+          if(tagArr.length===0){
+              console.log('added first');
+              tagArr.push(tag)
+            }
+          for (const existingTag in tagArr) {
+            console.log('================');
+            console.log(tag.keyword );
+            console.log(existingTag);
+          }
         }
+        for(const tag of tagArr) {
+          this.tags.push(tag);
+        } 
+        console.log('////////////')
+        console.log(tagArr.length)
       })
       .catch(e => {
         console.log(e);
       });
-    window.onscroll = ( ) => {
-      let bottomOfWindow = document.getElementById('listingContainer').scrollTop + window.innerHeight === document.getElementById('listingContainer').offsetHeight;
-    }
   },
   methods: {
     redirectToHome: function(tag) {

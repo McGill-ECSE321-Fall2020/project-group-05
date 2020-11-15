@@ -135,6 +135,7 @@ background-color:#fff !important;
   padding:0px;
   margin: 0px;
   transition: transform .2s; /* Animation */
+  min-height: 20em;
 }
 .cardImg:hover{
   opacity: 1;
@@ -143,6 +144,14 @@ background-color:#fff !important;
 .cardImg:hover ~ .sectionContentListing{
   opacity: 0;
 }
+.sectionContentListing:hover ~ .cardImg{
+  opacity: 1;
+  transform:scale(1.08,1.08) !important;
+}
+.sectionContentListing:hover{
+  opacity: 0;
+}
+
 .hooperContainerCardImg:hover ~ .cardImg{
   opacity: 1;
 }
@@ -400,9 +409,46 @@ card scaling
 }
 .formContainerCreate{
   width:80%;
-  height:38em;
-  background-color:cornflowerblue;
-  margin: auto;
+  height:40em;
+ background-color: #dabb86;
+background-image: linear-gradient(45deg, #dabb86 0%, #e9b1a3 100%);
+padding-top:0.4em ;
+border-radius: 50px;
+}
+.createlisting{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+#publishTitle{
+  margin:0.4em;
+  font-size:42px !important;
+  color: white;
+}
+input{
+  border: 3px solid white;
+    -webkit-box-shadow:
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1);
+    -moz-box-shadow:
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1);
+    box-shadow:
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1);
+    padding: 15px;
+    background: rgba(255,255,255,0.5);
+    margin-bottom: 0.8em !important;
+    border-radius: 50px;
+    width: 67%;
+}
+.submitArtwork{
+  border: 3px solid white;
+  border-radius: 50px;
+}
+.submitArtwork:hover{
+  background-color: rgb(175, 146, 108);
+  color: white;
 }
 </style>
 <script>

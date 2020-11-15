@@ -5,7 +5,7 @@
         <div class="wrap-contact100">
           <span class="contact100-form validate-form" >
             <span class="contact100-form-title">
-              <h1>Publish a New Artwork</h1>
+              <h1 id="publishTitle">Publish a New Artwork</h1>
             </span>
             <div
               class="wrap-input100 validate-input"
@@ -89,7 +89,7 @@
               <span class="focus-input100"></span>
             </div>
             <div class="container-contact100-form-btn">
-              <button class="contact100-form-btn" v-on:click="submitListing()">
+              <button class="contact100-form-btn submitArtwork" v-on:click="submitListing()">
                 <span>
                   <i class="fa fa-paper-plane-o m-r-6" aria-hidden="true"></i>
                   Submit
@@ -140,7 +140,7 @@ export default {
           aDescription: document.getElementById('descriptionInput').value,
           price: document.getElementById('priceInput').value,
           artistId: "27332e3c-c356-4a12-8d0b-e35a3c970c49",
-          aVisibility: "Public"
+          aVisibility: document.getElementById('visibilityInput').value
         }))
         .then(response => {
           var idListing = response.data.idCode
