@@ -81,7 +81,7 @@ export default {
             action2: '',
             actionTitle: '',
             actionDescription: '',
-            isLoggedIn: true,
+            isLoggedIn: false,
             isPurchased:  false
 
         };
