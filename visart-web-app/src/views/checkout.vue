@@ -95,7 +95,7 @@ export default {
           backend.parse({
             aIsDelivered: false,
             pieceLocation: vm.pieceLocation,
-            aTargetAddress: vm.targetAddress != '' ? vm.targetAddress : 'TBD',
+            aTargetAddress: vm.targetAddress != "" ? vm.targetAddress : "TBD",
             aDeliveryTracker: "TBD",
             artPieceId: vm.artlisting.artPieces[0].idCode
           })
@@ -141,12 +141,27 @@ export default {
           .then(resp => {
             switch (vm.userdata.user.role) {
               case "Manager":
-                vm.userdata.maanger = resp.data;
+                vm.userdata.manager = resp.data;
                 break;
               case "Customer":
                 vm.userdata.customer = resp.data;
                 break;
               default:
+            }
+
+            if (
+              vm.userdata.user.role == "Customer" &&
+              resp.data.artistId &&
+              resp.data.artistId != ""
+            ) {
+              return backend
+                .get("artists/get/" + resp.data.artistId)
+                .then(resp => {
+                  vm.userdata.user.role = "Artist";
+                  vm.userdata.artist = resp.data;
+
+                  return resp;
+                });
             }
             return resp;
           });
