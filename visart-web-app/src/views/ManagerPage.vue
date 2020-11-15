@@ -40,43 +40,42 @@
                       {{ artlisting.ticketObj.customerObj.user.emailAddress }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      Artist displayname:
+                      <b>Artist displayname:</b>
                       {{ artlisting.ticketObj.customerObj.user.displayname }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      Customer email: {{ artlisting.ticketObj.customerObj.user.emailAddress }}
+                      <b>Customer email:</b> {{ artlisting.ticketObj.customerObj.user.emailAddress }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      Customer displayname:
+                      <b>Customer displayname:</b>
                       {{ artlisting.ticketObj.customerObj.user.displayname }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      Piece location:
+                      <b>Piece location:</b>
                       {{ artlisting.artPieces[0].basicLocation }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      Target Piece location:{{
+                      <b>Target Piece location:</b>{{
                         artOrders[parseInt(index)].targetLocation
                       }}, {{ artOrders[parseInt(index)].targetAddress }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      Delivery method: {{ artOrders[parseInt(index)].deliveryTracker }}
+                      <b>Delivery method:</b> {{ artOrders[parseInt(index)].deliveryTracker }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      Art Delivered: {{ artOrders[parseInt(index)].delivered }}
+                      <b>Art Delivered:</b> {{ artOrders[parseInt(index)].delivered }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      Payment Confirmed:
+                      <b>Payment Confirmed:</b>
                       {{ artTickets[parseInt(index)].paymentConfirmed }}
                     </li>
-                    <li>Gallery Commision: ${{ 0.1 * artlisting.price }}</li>
+                    <li><b>Gallery Commision:</b> ${{ 0.1 * artlisting.price }}</li>
                   </ul>
                   <button
                     type="button"
                     class="btn btn-lg btn-block btn-outline-primary"
-                    v-show="actionTitle.localeCompare('Pinned Art') === 0"
-                    v-on:click="unpinArt(artlisting.idCode)"
-                  >
+                    v-show="isLoggedIn && !isSoldAvailable"
+                    v-on:click="unpinArt(artlisting.idCode)">
                     Unpin listing
                   </button>
                 </div>
@@ -121,14 +120,26 @@ export default {
       artTickets: [],
       artists: [],
       customers: [],
-      isSoldAvailable: false
+      isSoldAvailable: false,
+      isLoggedIn: false
     };
   },
   created: function() {
+    this.isSoldAvailable = false;
     this.showPinned();
-  },
+    this.isLoggednIn = false;
+    let vm = this
+    backend.onFirebaseAuth(function(user){
+    if (user != null){
+        vm.isLoggedIn = ((user.uid).localeCompare(vm.$route.params.id) ===0);
+    } else {
+       vm.isLoggedIn = false;
+    }
+    })
+},
   methods: {
     showPinned: function() {
+      this.isSoldAvailable = false;
       this.actionTitle = "Pinned Art";
       this.actionDescription = "Managers Pinned Art In the Gallary";
       this.artListings = [];
@@ -148,6 +159,7 @@ export default {
                 console.log(e);
               });
           }
+
         })
         .catch(e => {
           console.log(e);
@@ -226,7 +238,7 @@ export default {
     },
     unpinArt: function(listingId) {
       if (
-        backend.retrieveCurrentUser().uid.localeCompare(this.$route.params.id)
+        backend.retrieveCurrentUser().uid.localeCompare(this.$route.params.id) ===0
       ) {
         backend.post(
           "managers/remove_listing/" + backend.retrieveCurrentUser().uid,

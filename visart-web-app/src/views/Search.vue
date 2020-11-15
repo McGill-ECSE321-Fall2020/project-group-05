@@ -46,10 +46,23 @@
     </label>
       <div v-if="! isActive" class="card-columns card-columns-home">
   <div class="card shadow homeCard" v-for="(artlisting,index) in artListings" :key="index">
-    <img class="card-img-top cardImg" src="../assets/cardTrial.png" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
+    <img class="card-img-top cardImg" :src="artlisting.postImages[0]" @click="goToListing(artlisting.idCode)" alt="Card image cap">
+    <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">{{artlisting.title}}</div>
     <div class="card-body">
-      <h4 class="card-title cardArtist"><a href="/artists">Picasso</a></h4>
+      <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">{{ artlisting.artistName }}</h4>
+      <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
+      <div class="descriptionContainer">
+        <p class="card-text cardDesc">{{artlisting.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div v-if="isActive" class="card-columns card-columns-home">
+  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFeatured" :key="index">
+    <img class="card-img-top cardImg" @click="goToListing(artlisting.idCode)" :src="artlisting.postImages[0]" alt="Card image cap">
+    <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">{{artlisting.title}}</div>
+    <div class="card-body">
+      <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">{{ artlisting.artistName }}</h4>
       <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
       <div class="descriptionContainer">
         <p class="card-text cardDesc">{{artlisting.description}}</p>
@@ -71,7 +84,7 @@ import axios from 'axios'
 var config = require('../../config')
 var frontendUrl = config.site
 var backendUrl = config.backend.site
-
+var backend = require('@/tools/backend')
 var AXIOS = axios.create({
   baseURL: backendUrl,
   headers: { 'Access-Control-Allow-Origin': frontendUrl, 'Content-Type': 'raw', 'Data-Type': 'raw' }
@@ -89,6 +102,7 @@ export default {
       isActive: false,
       tags: [],
       artListings: [],
+      artListingsFeatured: [],
       hooperSettings: {
         itemsToShow: 7,
         centerMode: true,
@@ -101,6 +115,28 @@ export default {
       }
     }
   },
+  methods: {
+    goToArtist: function (id) {
+      this.$router.push({ path: '/artistpage/' + id })
+    },
+    goToListing: function (id) {
+      this.$router.push({ path: '/purchasepage/' + id })
+    },
+    deleteListing: function (id) {
+      backend
+        .post(
+          '/artlisting/delete/' + id
+        )
+        .then(response => {
+          console.log(response.data)
+          console.log('successfully deleted')
+          this.$router.go()
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+  },
   created: function () {
     //    make array of keyword parsed by space
     var key = this.$route.query.keywords
@@ -109,7 +145,16 @@ export default {
       console.log(response.data)
       console.log('listing by keyword')
       for (const artListing of (response.data)) {
-        this.artListings.push(artListing)
+        if (artListing.managerId.length !== 0) {
+          this.artListingsFeatured.push(artListing)
+        }
+        AXIOS.get('artists/get/' + artListing.artist)
+          .then(
+            response => {
+              artListing.artistName = response.data.customer.user.displayname
+              console.log(artListing.artistName)
+              this.artListings.push(artListing)
+            })
       }
     }).catch(e => {
       console.log(e)

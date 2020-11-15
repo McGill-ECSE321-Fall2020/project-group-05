@@ -222,7 +222,11 @@ export default {
             vm.artListingAttributes.tags.split(",").map(s => s.trim())
           );
 
-          document.alert("Your art listing has been created!")
+          window.alert("Your art listing has been created!")
+        })
+        .catch( e => {
+         console.log(e)
+         window.alert("WARNING: Creation unsuccessful! Make sure to fill in the fields correctly")
         });
     },
     addTags: function(id, keywords) {
@@ -240,7 +244,7 @@ export default {
           return Promise.all(responses.map(r => storage.read(r[0])));
         })
         .then(urls => {
-          console.log(urls);
+          // console.log(urls);
           return backend.post(
             "/artlisting/update_post_images/" +id,
             backend.parse({

@@ -92,19 +92,19 @@
           class="card shadow homeCard"
           v-for="(artlisting, index) in artListingsFull"
           :key="index"
-          @click="goToListing(artlisting.idCode)"
         >
               <img
                 class="card-img-top cardImg"
                 :src="artlisting.postImages[0]"
                 alt="Card image cap"
+                @click="goToListing(artlisting.idCode)"
               />
           <div class="card-header bg-transparent border-bottom-0">
             <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close" @click="deleteListing(artlisting.idCode)">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="sectionContent sectionContentListing">
+          <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">
             {{ artlisting.title }}
           </div>
           <div class="card-body cardBody">
@@ -124,22 +124,28 @@
           v-for="(artlisting, index) in artListingsFeatured"
           :key="index"
         >
-          <img
-            class="card-img-top cardImg"
-            src="../assets/cardTrial.png"
-            alt="Card image cap"
-          />
-          <div class="sectionContent sectionContentListing">
+         <img
+                class="card-img-top cardImg"
+                :src="artlisting.postImages[0]"
+                alt="Card image cap"
+                @click="goToListing(artlisting.idCode)"
+              />
+          <div class="card-header bg-transparent border-bottom-0">
+            <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close" @click="deleteListing(artlisting.idCode)">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">
             {{ artlisting.title }}
           </div>
-          <div class="card-body">
-            <h4 class="card-title cardArtist">
-              <a href="/artists">Picasso</a>
-            </h4>
-            <h5 class="card-title cardPrice">$ {{ artlisting.price }}</h5>
-            <div class="descriptionContainer">
-              <p class="card-text cardDesc">{{ artlisting.description }}</p>
+          <div class="card-body cardBody">
+            <div class="cardTitlesContainer">
+              <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">
+                {{ artlisting.artistName }}
+              </h4>
+              <h5 class="card-title cardPrice">$ {{ artlisting.price }}</h5>
             </div>
+              <p class="card-text cardDesc">{{ artlisting.description }}</p>
           </div>
         </div>
       </div>
@@ -200,27 +206,19 @@ export default {
       .then(response => {
         console.log(response.data);
         for (const artListing of response.data) {
+          if (artListing.managerId.length !== 0) {
+            this.artListingsFeatured.push(artListing)
+          }
           AXIOS.get("artists/get/" + artListing.artist).then(response => {
             artListing.artistName = response.data.customer.user.displayname;
             console.log(artListing.artistName);
             vm.artListingsFull.push(artListing);
-            for (const imageUrl of artListing.postImages) {
-              vm.postImagesArray.push(imageUrl);
-            }
           });
         }
       })
       .catch(e => {
         console.log(e);
       });
-    // AXIOS.get('/managers/get_listings/'+managerId).then(response => { // TODO: needs managerId
-    //   console.log(response.data)
-    //   for (const managerListing of (response.data)) {
-    //     this.artListingsFeatured.push(managerListing)
-    //   }
-    // }).catch(e => {
-    //   console.log(e)
-    // })
     AXIOS.get("/tags/get_all")
       .then(response => {
         console.log(response.data);
@@ -254,7 +252,7 @@ export default {
       this.$router.push({ path: "/artistpage/" + id });
     },
     goToListing: function(id) {
-      this.$router.push({ path: "/artlisting/" + id });
+      this.$router.push({ path: "/purchasepage/" + id });
     },
     deleteListing: function(id) {
       backend
