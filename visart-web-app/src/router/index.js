@@ -56,7 +56,7 @@ const routes = [
     component: () => import('../views/BasicLogin.vue')
   },
   {
-    path: '/checkout/',
+    path: '/checkout/:id',
     name: 'checkout',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -66,6 +66,11 @@ const routes = [
     path: '/examplepage',
     name: 'ExamplePage',
     component: () => import('../views/ExamplePage.vue')
+  },
+  {
+    path: '/ordersuccess',
+    name: 'OrderSuccessPage',
+    component: () => import('../views/orderSuccess.vue')
   }
 ]
 
