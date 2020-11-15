@@ -134,7 +134,7 @@ public class ManagerService {
    * @param aListingCode
    */
   @Transactional
-  public void addListing(String aIdCode, String aListingIdCode) {
+  public Manager addListing(String aIdCode, String aListingIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
       throw new IllegalArgumentException("Cannot find manager");
     }
@@ -144,6 +144,7 @@ public class ManagerService {
     Manager manager = getManager(aIdCode, true);
     manager.addPromotedListing(artListingService.getArtListing(aListingIdCode));
     managerRepo.updateManager(manager);
+    return manager;
   }
 
   /**
@@ -151,9 +152,10 @@ public class ManagerService {
    * 
    * @param aIdCode
    * @param aListingCode
+   * @return 
    */
   @Transactional
-  public void removeListing(String aIdCode, String aListingIdCode) {
+  public Manager removeListing(String aIdCode, String aListingIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
       throw new IllegalArgumentException("Cannot find manager");
     }
@@ -163,6 +165,7 @@ public class ManagerService {
     Manager manager = getManager(aIdCode, true);
     manager.removePromotedListing(artListingService.getArtListing(aListingIdCode));
     managerRepo.updateManager(manager);
+    return manager;
   }
 
   /**
