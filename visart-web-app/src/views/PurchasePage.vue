@@ -5,7 +5,24 @@
     <div class="row">
       <div class="col-xl">
         <div class="card shadow homeCard" style="width: 35rem;">
-          <img class="card-img-top card-space-image" src="../assets/cardTrial.png" alt="Card image cap" />
+          <b-carousel
+      id="carousel-1"
+      v-model="slide"
+      :interval="4000"
+      controls
+      indicators
+      background="#ababab"
+      img-width="1024"
+      img-height="480"
+      style="text-shadow: 1px 1px 2px #333;"
+      @sliding-start="onSlideStart"
+      @sliding-end="onSlideEnd"
+    >
+      <!-- Slides with image only -->
+      <div class="carouselPurchaseDiv" v-for="(img, index) in images" :key="index">
+        <b-carousel-slide :img-src="img"></b-carousel-slide>
+      </div>
+    </b-carousel>
           <div class="card-body">
             <h5 class="card-title text-center">{{ title }}</h5>
           </div>
@@ -42,17 +59,25 @@ export default {
       artistName: '',
       description: '',
       price: '',
-      image: '',
-      artPieceId: ''
+      images: [],
+      artPieceId: '',
+      slide: 0,
+      sliding: null
     }
   },
   methods: {
+    onSlideStart (slide) {
+      this.sliding = true
+    },
+    onSlideEnd (slide) {
+      this.sliding = false
+    },
     parseArtListing: function (response) {
       this.title = (response.data).title
       this.description = (response.data).description
       this.price = (response.data).price
       this.artPieceId = (response.data).artPieces[0]
-      this.image = (response.data).postImages
+      this.images.push((response.data).postImages)
     },
     parseArtist: function (response) {
       this.artistName = (response.data).customer.user.displayname
