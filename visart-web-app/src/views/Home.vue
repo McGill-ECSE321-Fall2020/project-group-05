@@ -254,7 +254,7 @@ export default {
       this.$router.push({ path: "/artistpage/" + id });
     },
     goToListing: function(id) {
-      this.$router.push({ path: "/artlisting/" + id });
+      this.$router.push({ path: "/purchasepage/" + id });
     },
     deleteListing: function(id) {
       backend
