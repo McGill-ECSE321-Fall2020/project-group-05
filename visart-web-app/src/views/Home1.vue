@@ -12,11 +12,17 @@
     <!--Title of listings-->
     <h4>Most popular categories:</h4>
     <b-tabs pills fill align="center">
-      <b-button v-for="(category,index) in categoriesFiltered" v-bind:key="index" class="btn btn-primary mx-3" v-bind:title="category">{{capitalizedString(category)}}</b-button>
+      <b-button
+        v-for="(category, index) in categoriesFiltered"
+        v-bind:key="index"
+        class="btn btn-primary mx-3"
+        v-bind:title="category"
+        @click="$router.push({path:'/search/',query:{keywords:category}})"
+        >{{ capitalizedString(category) }}</b-button
+      >
     </b-tabs>
-    <div class="row">
-    </div>
-    <br/>
+    <div class="row"></div>
+    <br />
 
     <!--Actual Listings-->
     <h3>-Full Collection-</h3>
@@ -53,9 +59,9 @@
             </router-link>
             <p
               href="#"
-              class="btn btn-primary"
+              class="btn btn-primary mx-3"
               @click="deleteListing(listing, index1)"
-              hidden
+              v-if="showDeleteButton"
             >
               Delete This Artwork
             </p>
@@ -72,9 +78,8 @@ var backend = require("@/tools/backend");
 
 export default {
   created: function() {
-    
-    this.loadTagCategories()
-    console.log(this.categories)
+    this.loadTagCategories();
+    console.log(this.categories);
     this.loadArtListings();
   },
   data: function() {
@@ -94,7 +99,8 @@ export default {
       // price
       categories: [],
       artlistings: [],
-      maxCategories: 10
+      maxCategories: 10,
+      showDeleteButton: true
     };
   },
   computed: {
@@ -118,11 +124,10 @@ export default {
       }
       return result;
     },
-    categoriesFiltered: function(){
+    categoriesFiltered: function() {
       if (!!this.categories)
-        return this.categories.slice(0, this.maxCategories)
-      else
-        return []
+        return this.categories.slice(0, this.maxCategories);
+      else return [];
     }
   },
   methods: {
@@ -135,16 +140,18 @@ export default {
       let vm = this;
       // vm.artlistings
       backend.get("artlisting/get_all").then(resp => {
-        return Promise.all(resp.data.map(listing => {
-          backend.get("artists/get/" + listing.artist).then(artistResp => {
-            listing["artistUserId"] = artistResp.data.customer.idCode;
-            listing["artistName"] = artistResp.data.customer.user.displayname;
-            listing["postImages"].push(
-              "https://firebasestorage.googleapis.com/v0/b/visartapplication.appspot.com/o/postedImages%2F0e548bcd-dbe4-4bdb-952c-c1690ad636a7.png?alt=media&token=6e09902f-1234-4d04-8503-14d681cfa3bb"
-            );
-            vm.artlistings.push(listing);
-          });
-        }))
+        return Promise.all(
+          resp.data.map(listing => {
+            backend.get("artists/get/" + listing.artist).then(artistResp => {
+              listing["artistUserId"] = artistResp.data.customer.idCode;
+              listing["artistName"] = artistResp.data.customer.user.displayname;
+              listing["postImages"].push(
+                "https://firebasestorage.googleapis.com/v0/b/visartapplication.appspot.com/o/postedImages%2F0e548bcd-dbe4-4bdb-952c-c1690ad636a7.png?alt=media&token=6e09902f-1234-4d04-8503-14d681cfa3bb"
+              );
+              vm.artlistings.push(listing);
+            });
+          })
+        );
       });
     },
     deleteListing: function(listing, index) {
@@ -162,13 +169,16 @@ export default {
           .filter(t => {
             return ++dict[t.keyword] == 1;
           })
-          .sort((x, y) => dict[y] - dict[x]).map(t=>t.keyword);
-        console.log(arr)
-        arr.forEach(val=>{this.categories.push(val)})
+          .sort((x, y) => dict[y] - dict[x])
+          .map(t => t.keyword);
+        console.log(arr);
+        arr.forEach(val => {
+          this.categories.push(val);
+        });
       });
     },
     capitalizedString: function(s) {
-      return s.charAt(0).toUpperCase() + s.slice(1)
+      return s.charAt(0).toUpperCase() + s.slice(1);
     }
   }
 };
