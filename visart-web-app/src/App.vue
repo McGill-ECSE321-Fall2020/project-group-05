@@ -326,11 +326,19 @@ font-size: 120%;
 float:right;
 font-size: 120%;
 }
+.cardArtist{
+ color: rgb(202, 182, 145);
+ transition: all .2 ease-in-out;
+}
+.cardArtist:hover{
+  color: rgb(145, 123, 84);
+  cursor: pointer;
+}
 .cardDesc{
 float:left;
 font-size: 100%;
-padding-top:2em;
-padding-bottom:2em;
+margin-top:2em;
+margin-bottom:2em;
 width:100%;
 }
 .cardBody{

@@ -139,7 +139,10 @@ export default {
           aTitle: document.getElementById('titleInput').value,
           aDescription: document.getElementById('descriptionInput').value,
           price: document.getElementById('priceInput').value,
-          artistId: "27332e3c-c356-4a12-8d0b-e35a3c970c49",
+          artistId: 
+            backend
+            .retrieveCurrentUser().uid
+          ,
           aVisibility: document.getElementById('visibilityInput').value
         }))
         .then(response => {

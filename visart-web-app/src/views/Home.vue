@@ -92,6 +92,7 @@
           class="card shadow homeCard"
           v-for="(artlisting, index) in artListingsFull"
           :key="index"
+          @click="goToListing(artlisting.id)"
         >
               <img
                 class="card-img-top cardImg"
@@ -108,8 +109,8 @@
           </div>
           <div class="card-body cardBody">
             <div class="cardTitlesContainer">
-              <h4 class="card-title cardArtist">
-                <a href="/artists">{{ artlisting.artistName }}</a>
+              <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">
+                {{ artlisting.artistName }}
               </h4>
               <h5 class="card-title cardPrice">$ {{ artlisting.price }}</h5>
             </div>
@@ -248,6 +249,12 @@ export default {
   methods: {
     redirectToHome: function(tag) {
       this.$router.push({ path: "/search/?keywords=" + tag });
+    },
+    goToArtist: function(id) {
+      this.$router.push({ path: "/artistpage/" + id });
+    },
+    goToListing: function(id) {
+      this.$router.push({ path: "/artlisting/" + id });
     },
     deleteListing: function(id) {
       backend
