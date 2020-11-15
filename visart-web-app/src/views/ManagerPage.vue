@@ -156,6 +156,35 @@ export default {
            
 
       },
+      showSold2: function () {
+        var vm = this
+        var listings = (response.data)
+        var artorders = listings.map(l => {
+            vm.artListings.push(l)
+            return (l.artPieces[0].artOrder)
+        })
+        var promises0 = artorders.map(id => (backend.get('/artorder/get/' + id)))
+        Promise.all(promises).then(responses => {
+            responses.forEach(r => {
+                vm.artorders.push(r.data)
+            })
+        })
+
+        var promises1 = listings.map(l => {
+            return backend.get('tickets/get/'+l.artPieces[0].ticketId)
+        })
+        Promise.all(promises).then(responses => {
+            // retrieved all tickets
+            var promises2 = response.map(r => {
+                vm.artTickets.push(r.data)
+                return backend.get('/customers/get/'+reponse.data.ticketCustomer)
+            })
+            return Promise.all(promises2)
+        }).then(responses => {
+            // retrieved all customers
+            
+        })
+      },
       unpinArt: function (listingId) {
         if ((backend.retrieveCurrentUser().uid).localeCompare(this.$route.params.id)){  
             backend.post('managers/remove_listing/'+backend.retrieveCurrentUser().uid, backend.parse({'listingIdCode':listingId}));
