@@ -1,21 +1,25 @@
 <template>
 <div>
  <div class="container">
-                <div class="row">
-                    <div class="col-xl">
-                        <b-button v-on:click="showFavoriteArt">Favorited Art</b-button>
-                    </div>
-                    <div class="col-xl">
-                        <b-button v-on:click="showPurchasedArt">Purchased Art</b-button>
-                    </div>
-                    <div class="col-xl">
-                        <b-button v-on:click="showPublishedArt">Unsold Published Art</b-button>
-                    </div>
-                    <div class="col-xl">
-                        <b-button v-on:click="showSoldArt">Sold Art</b-button>
-                    </div>
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">{{ actionTitle }}</h1>
+        <p class="lead">{{ actionDescription }}</p>
+            <div class="row">
+                <div class="col-xl">
+                    <b-button v-on:click="showFavoriteArt">Favorited Art</b-button>
+                </div>
+                <div class="col-xl">
+                    <b-button v-on:click="showPurchasedArt">Purchased Art</b-button>
+                </div>
+                <div class="col-xl">
+                    <b-button v-on:click="showPublishedArt">Unsold Published Art</b-button>
+                </div>
+                <div class="col-xl">
+                    <b-button v-on:click="showSoldArt">Sold Art</b-button>
                 </div>
             </div>
+        </div>
+    </div>
       <div class="album py-5 bg-light">
         <div class="container">
           <div class="row">
@@ -27,9 +31,11 @@
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" v-on:click="goToListing(artlisting.idCode)" class="btn btn-sm btn-outline-secondary">Go to listing</button>
-                      <button type="button" v-on:click="preformAction2(artlisting.idCode)" class="btn btn-sm btn-outline-secondary">{{action2}}</button>
+                      <button type="button"
+                      v-on:click="preformAction2(artlisting.idCode)"
+                      class="btn btn-sm btn-outline-secondary"
+                      v-show="isLoggedIn">{{action2}}</button>
                     </div>
-                    <small class="text-muted">{{paymentConfirmed[index]}}</small>
                   </div>
                 </div>
               </div>
@@ -40,7 +46,8 @@
 </div>
 </template>
 
-<script>/* eslint-disable */
+<script>
+/* eslint-disable */
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
 import axios from "axios";
@@ -72,18 +79,39 @@ export default {
             artListings : [],
             paymentConfirmed: [],
             action2: '',
-           
+            actionTitle: '',
+            actionDescription: '',
+            isLoggedIn: false
+
         };
-    }, 
+    },
     created: function () {
         console.log('created');
         console.log("created");
+        this.showPublishedArt();
         let vm = this
+
+        backend
+        .get("/artists/get/" + this.$route.params.id)
+        .then(response => {
+            this.actionTitle = (response.data).customer.user.displayname;
+            this.actionDescription = 'Certified artist in collaboration with Vis Art Gallery';
+        })
+        .catch(e => {
+            console.log(e);
+        });
+
         backend.onFirebaseAuth(function(user){
         if (user != null){
-            vm.showPurchasedArt(user.uid)
-        } else {
-            vm.showPurchasedArt(vm.$route.params.id)
+            backend
+            .get("/artists/get/" + vm.$route.params.id)
+            .then(response => {
+               vm.isLoggedIn = (user.uid).localeCompare((response.data).customer.user.idCode)===0;
+            })
+            .catch(e => {
+                console.log(e);
+            });
+
         }
     })
     },
@@ -222,13 +250,13 @@ export default {
             this.$router.push({path:'/purchasepage/'+idCode});
         },
         preformAction2: function (listingId) {
-            
+
             if (this.action2.localeCompare('Unfavorite')===0){
                     backend.post('customers/remove_favorite_listing/'+backend.retrieveCurrentUser().uid, backend.parse({'listingIdCode':listingId}));
-                this.showFavoriteArt();       
+                this.showFavoriteArt();
             }else if(this.action2.localeCompare('Delete Listing')===0){
                 backend.post('artlisting/delete/'+listingId);
-                this.showPublishedArt();  
+                this.showPublishedArt();
             }else if(this.action2.localeCompare('Confirm Payment')===0){
                 var ticket;
                 backend
@@ -239,13 +267,12 @@ export default {
                    .get("/tickets/get/" + (response.data).artPieces[0].ticketId)
                 })
                 .then(response =>{
-                    backend.post('tickets/update/'+(response.data).idCode, 
+                    backend.post('tickets/update/'+(response.data).idCode,
                     backend.parse({'paymentConfirmed': true}));
                 })
                 .catch(e => {
                     console.log(e);
                 });
-                
 
                 this.showSoldArt();
             }
@@ -257,7 +284,7 @@ export default {
             } else {
                 return user.uid;
             }
-        } 
+        }
     }
 }
 </script>
