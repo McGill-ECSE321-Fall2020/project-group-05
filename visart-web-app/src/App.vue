@@ -184,7 +184,8 @@ export default {
   overflow: hidden !important;
   padding: 0px;
   margin: 0px;
-  transition: transform 0.2s; /* Animation */
+  transition: transform .2s; /* Animation */
+  min-height: 20em;
 }
 .cardImg:hover {
   opacity: 1;
@@ -193,7 +194,15 @@ export default {
 .cardImg:hover ~ .sectionContentListing {
   opacity: 0;
 }
-.hooperContainerCardImg:hover ~ .cardImg {
+.sectionContentListing:hover ~ .cardImg{
+  opacity: 1;
+  transform:scale(1.08,1.08) !important;
+}
+.sectionContentListing:hover{
+  opacity: 0;
+}
+
+.hooperContainerCardImg:hover ~ .cardImg{
   opacity: 1;
 }
 .cardTitlesContainer {
@@ -362,46 +371,50 @@ export default {
 
 /* Internet Explorer */
 @-ms-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
-.homeCard {
-  width: 90% !important;
-  margin: 30px !important;
-  border: 1px solid #444;
+.homeCard{
+  width:90% !important;
+  margin:30px !important;
+  border:1px solid #444
 }
-.card-columns-home {
-  margin: auto !important;
+.card-columns-home{
+  margin:auto !important;
 }
-.cardArtist {
-  float: left;
-  font-size: 120%;
+.cardArtist{
+float:left;
+font-size: 120%;
 }
-.cardPrice {
-  float: right;
-  font-size: 120%;
+.cardPrice{
+float:right;
+font-size: 120%;
 }
-.cardDesc {
-  float: left;
-  font-size: 100%;
-  padding-top: 2em;
-  padding-bottom: 2em;
-  width: 100%;
+.cardArtist{
+ color: rgb(202, 182, 145);
+ transition: all .2 ease-in-out;
 }
-.cardBody {
-  height: 10em;
+.cardArtist:hover{
+  color: rgb(145, 123, 84);
+  cursor: pointer;
 }
-#searchForm {
-  position: absolute;
-  left: 50%;
-  transform: translatex(-50%);
+.cardDesc{
+float:left;
+font-size: 100%;
+margin-top:2em;
+margin-bottom:2em;
+width:100%;
 }
-#searchIcon {
-  transform: scale(0.9, 0.9);
+.cardBody{
+  height:10em;
+}
+#searchForm{
+position: absolute;
+left: 50%;
+transform: translatex(-50%);
+}
+#searchIcon{
+  transform:scale(0.9,0.9);
   padding: 0px;
   margin: 0px;
   max-height: 30px;
@@ -460,16 +473,53 @@ card scaling
   }
 }
 @media (min-width: 75em) {
-  .card-columns {
-    -webkit-column-count: 5;
-    -moz-column-count: 5;
-    column-count: 5;
-  }
+    .card-columns {
+        -webkit-column-count: 5;
+        -moz-column-count: 5;
+        column-count: 5;
+    }
 }
-.formContainerCreate {
-  width: 80%;
-  height: 38em;
-  background-color: cornflowerblue;
-  margin: auto;
+.formContainerCreate{
+  width:80%;
+  height:40em;
+ background-color: #dabb86;
+background-image: linear-gradient(45deg, #dabb86 0%, #e9b1a3 100%);
+padding-top:0.4em ;
+border-radius: 50px;
+}
+.createlisting{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+#publishTitle{
+  margin:0.4em;
+  font-size:42px !important;
+  color: white;
+}
+input{
+  border: 3px solid white;
+    -webkit-box-shadow:
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1);
+    -moz-box-shadow:
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1);
+    box-shadow:
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1);
+    padding: 15px;
+    background: rgba(255,255,255,0.5);
+    margin-bottom: 0.8em !important;
+    border-radius: 50px;
+    width: 67%;
+}
+.submitArtwork{
+  border: 3px solid white;
+  border-radius: 50px;
+}
+.submitArtwork:hover{
+  background-color: rgb(175, 146, 108);
+  color: white;
 }
 </style>
