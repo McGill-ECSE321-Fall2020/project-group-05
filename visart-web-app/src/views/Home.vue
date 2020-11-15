@@ -206,7 +206,7 @@ export default {
       .then(response => {
         console.log(response.data);
         for (const artListing of response.data) {
-          if (artListing.managerId.length !== 0) {
+          if (artListing.managerId != null) {
             this.artListingsFeatured.push(artListing)
           }
           AXIOS.get("artists/get/" + artListing.artist).then(response => {
