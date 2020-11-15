@@ -1,28 +1,49 @@
 
 <template>
-    <form class="form-signin">
-    <img class="mb-4" src="../assets/navlogo0.png" alt="" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input
-        type="email"
-        id="inputEmail"
-        class="form-control"
-        placeholder="Email address"
-        name="emailAddress"
-        required
-        autofocus>
-    <label for="inputPass" class="sr-only">Password</label>
-    <input
-        type="password"
-        id="inputPass"
-        class="form-control"
-        placeholder="Password"
-        name="password"
-        required>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="authenticateUser">Sign in</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2020-2020</p>
-    </form>
+<span class="container-fluid">
+    <div class="row">
+      <div class="col-md-4"/>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h4>Login</h4>
+          </div>
+          <div class="card-body">
+            <span class="form-group" id="signin">
+              <label for="inputEmail" class="sr-only">Email Address</label>
+              <input
+                type="email"
+                id="inputEmail"
+                class="form-control"
+                name="emailAddress"
+                placeholder="an email"
+                required
+                autofocus
+              />
+              <label for="inputPass" class="sr-only">Password</label>
+              <input
+                type="password"
+                id="inputPass"
+                class="form-control"
+                name="password"
+                placeholder="the password"
+                required
+              />
+              <button
+                class="btn btn-lg btn-primary btn-block"
+                v-on:click="authenticateUser"
+              >
+                Sign in
+              </button>
+              <div class="alert alert-warning" role="alert" v-if="!isSuccess">
+                Login was not successful
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+</span>
 </template>
 
 <script>
@@ -30,34 +51,42 @@
 var backend = require("@/tools/backend");
 var storage = require("@/tools/cloud-storage");
 
-function setupImage(storedImageName) {
-  storage.read(storedImageName).then(url => {
-    // method to get a download url
-    let downloadURL = url;
-    let img = document.createElement("img");
-    img.src = downloadURL;
-    document.getElementById("signin").append(img);
-  });
+function getElId(id) {
+  return document.getElementById(id);
 }
 
 export default {
-  name: "BasicLogin",
-  Component: {},
+  name: "ExamplePage",
+  components: {},
   data: function() {
-    return {};
+    return {
+      isSuccess: true
+    };
   },
-  props: [],
+  created: function() {
+    let vm = this;
+    backend.onFirebaseAuth(function(user) {
+      if (user != null)
+        vm.$router.push({path:'/'});
+    });
+  },
   methods: {
     authenticateUser: function() {
-      let email = document.getElementById("inputEmail").value;
-      let password = document.getElementById("inputPass").value;
-      backend.authenticateEmail(email, password);
+      let vm = this;
+      backend.authenticateEmail(
+        getElId("inputEmail").value,
+        getElId("inputPass").value
+      );
       backend.onFirebaseAuth(function(user) {
-        // listener function that occurs whenever signing in or signing out
+      if (user != null) {
+        vm.isSuccess = true;
+        vm.$router.push({path:'/'});
+      } else {
+        vm.isSuccess = false;
+      }
       });
     }
-  },
-  created: function() {}
+  }
 };
 </script>
 
