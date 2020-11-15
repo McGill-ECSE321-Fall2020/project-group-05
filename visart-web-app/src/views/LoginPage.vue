@@ -16,7 +16,7 @@
                 id="inputEmail"
                 class="form-control"
                 name="emailAddress"
-                placeholder="an email"
+                placeholder="Email"
                 required
                 autofocus
               />
@@ -26,7 +26,7 @@
                 id="inputPass"
                 class="form-control"
                 name="password"
-                placeholder="the password"
+                placeholder="Password"
                 required
               />
               <button
@@ -56,7 +56,7 @@ function getElId(id) {
 }
 
 export default {
-  name: "ExamplePage",
+  name: "LoginPage",
   components: {},
   data: function() {
     return {
@@ -66,8 +66,10 @@ export default {
   created: function() {
     let vm = this;
     backend.onFirebaseAuth(function(user) {
-      if (user != null)
+      if (user != null){
         vm.$router.push({path:'/'});
+      }
+      
     });
   },
   methods: {
@@ -77,6 +79,7 @@ export default {
         getElId("inputEmail").value,
         getElId("inputPass").value
       );
+      vm.isSuccess = true;
       backend.onFirebaseAuth(function(user) {
       if (user != null) {
         vm.isSuccess = true;

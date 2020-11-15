@@ -102,7 +102,7 @@ export default {
   methods: {
     unauthenticateUser: function() {
       backend.unauthenticate();
-      this.$router.push({path:'/login'});
+      setTimeout(()=>this.$router.push({path:'/login'}), 100);
   }}
 };
 </script>
