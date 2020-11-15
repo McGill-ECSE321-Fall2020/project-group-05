@@ -44,14 +44,21 @@
             <img id="searchIcon" src="./assets/loupe.png" alt="Search" />
           </button>
         </form>
-        <ul class="navbar-nav ml-auto" id="loginUl" v-if="!isSignedIn">
+        <div v-if="!isSignedIn">
+        <ul class="navbar-nav ml-auto" id="loginUl">
           <li class="nav-item loginDiv">
-            <a class="nav-link" href="/about">Login</a>
+            <a class="nav-link" href="/login">Login</a>
           </li>
           <li class="nav-item loginDiv">
-            <a class="nav-link" href="/about">Sign Up</a>
+            <a class="nav-link" href="/signup">Sign Up</a>
           </li>
         </ul>
+        </div>
+        <div v-else>
+        <form class="form-inkine">
+          <button class="btn btn-light my-2 my-sm-0" type="button" v-on:click="unauthenticateUser">Logout</button>
+        </form>
+        </div>
       </div>
     </nav>
     <router-link to="/artlisting/create"
@@ -91,7 +98,12 @@ export default {
         vm.isArtistLoggedIn = false
       }
     });
-  }
+  },
+  methods: {
+    unauthenticateUser: function() {
+      backend.unauthenticate();
+      setTimeout(()=>this.$router.push({path:'/login'}), 100);
+  }}
 };
 </script>
 

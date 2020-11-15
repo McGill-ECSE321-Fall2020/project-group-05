@@ -74,9 +74,8 @@
                   <button
                     type="button"
                     class="btn btn-lg btn-block btn-outline-primary"
-                    v-show="actionTitle.localeCompare('Pinned Art') === 0"
-                    v-on:click="unpinArt(artlisting.idCode)"
-                  >
+                    v-show="isLoggedIn && !isSoldAvailable"
+                    v-on:click="unpinArt(artlisting.idCode)">
                     Unpin listing
                   </button>
                 </div>
@@ -121,14 +120,26 @@ export default {
       artTickets: [],
       artists: [],
       customers: [],
-      isSoldAvailable: false
+      isSoldAvailable: false,
+      isLoggedIn: false
     };
   },
   created: function() {
+    this.isSoldAvailable = false;    
     this.showPinned();
-  },
+    this.isLoggednIn = false;
+    let vm = this
+    backend.onFirebaseAuth(function(user){
+    if (user != null){
+        vm.isLoggedIn = ((user.uid).localeCompare(vm.$route.params.id) ===0);
+    } else {
+       vm.isLoggedIn = false;
+    }
+    })
+},
   methods: {
     showPinned: function() {
+      this.isSoldAvailable = false;
       this.actionTitle = "Pinned Art";
       this.actionDescription = "Managers Pinned Art In the Gallary";
       this.artListings = [];
@@ -148,6 +159,7 @@ export default {
                 console.log(e);
               });
           }
+          
         })
         .catch(e => {
           console.log(e);
@@ -226,7 +238,7 @@ export default {
     },
     unpinArt: function(listingId) {
       if (
-        backend.retrieveCurrentUser().uid.localeCompare(this.$route.params.id)
+        backend.retrieveCurrentUser().uid.localeCompare(this.$route.params.id) ===0
       ) {
         backend.post(
           "managers/remove_listing/" + backend.retrieveCurrentUser().uid,
