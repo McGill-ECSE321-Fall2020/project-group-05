@@ -26,6 +26,7 @@
 
     <!--Actual Listings-->
     <h3>-Full Collection-</h3>
+    <a @click="showFeaturedArtOnly=!showFeaturedArtOnly" href="#">{{showFeaturedArtOnly ? "Show All Art" : "Show Featured Art"}}</a>
     <div
       class="row mb-2"
       v-for="(listingrow, index) in artlisting_rows"
@@ -100,7 +101,8 @@ export default {
       categories: [],
       artlistings: [],
       maxCategories: 10,
-      showDeleteButton: true
+      showDeleteButton: false,
+      showFeaturedArtOnly: false
     };
   },
   computed: {
@@ -109,20 +111,23 @@ export default {
       let result = [];
       for (
         let i = 0;
-        i < Math.ceil(this.artlistings.length / itemsPerRow);
+        i < Math.ceil(this.artlistingsFiltered.length / itemsPerRow);
         i++
       ) {
         result.push([]);
         let k = i * itemsPerRow;
         for (
           let j = 0;
-          j < itemsPerRow && k + j < this.artlistings.length;
+          j < itemsPerRow && k + j < this.artlistingsFiltered.length;
           j++
         ) {
-          result[i].push(this.artlistings[k + j]);
+          result[i].push(this.artlistingsFiltered[k + j]);
         }
       }
       return result;
+    },
+    artlistingsFiltered: function(){
+      return this.artlistings.filter(l=> !this.showFeaturedArtOnly || l.managerId != null && l.managerId != '')
     },
     categoriesFiltered: function() {
       if (!!this.categories)
@@ -165,13 +170,14 @@ export default {
         resp.data.forEach(t => {
           dict[t.keyword] = 0;
         });
+        
+        console.log(resp.data);
         let arr = resp.data
           .filter(t => {
             return ++dict[t.keyword] == 1;
           })
           .sort((x, y) => dict[y] - dict[x])
           .map(t => t.keyword);
-        console.log(arr);
         arr.forEach(val => {
           this.categories.push(val);
         });
