@@ -92,7 +92,7 @@
           class="card shadow homeCard"
           v-for="(artlisting, index) in artListingsFull"
           :key="index"
-          @click="goToListing(artlisting.id)"
+          @click="goToListing(artlisting.idCode)"
         >
               <img
                 class="card-img-top cardImg"

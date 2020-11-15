@@ -189,6 +189,8 @@ export default {
     backend.onFirebaseAuth(function(user) {
       if (user != null)
         vm.userLoggedIn = user.uid;
+      else
+        vm.userLoggedIn = '';
     });
   },
   methods: {

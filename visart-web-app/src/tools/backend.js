@@ -66,26 +66,3 @@ export function onFirebaseAuth(observer) {
 export function retrieveCurrentUser() {
     return firebase.auth().currentUser
 }
-
-// this function also returns the userId for when it is done, null if not logged in
-// listener takes the form function(customerId, artistId, managerId){}, 
-// and the fields are null when the id is not available
-export function performUserAction(listener, errorFunc) {
-    let user = retrieveCurrentUser()
-    if (user != null) {
-        get('customers/get/' + user.uid).then(function (response) {
-            if (response.data.artistId && response.data.artistId != '') {
-                listener(response.data.idCode, response.data.artistId, null)
-            } else {
-                listener(response.data.idCode, null, null)
-            }
-        }).catch(function (error) {
-            return backend.get('managers/get/' + user.uid)
-        }).then(function (response) {
-            listener(null, null, response.data.idCode)
-        }).catch(errorFunc)
-        return user.uid
-    } else {
-        return null
-    }
-}

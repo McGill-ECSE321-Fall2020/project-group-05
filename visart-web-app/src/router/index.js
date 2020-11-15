@@ -21,6 +21,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/CreateListing.vue')
   },
   {
+    path: '/login',
+    name: 'LoginPage',
+    component: () => import(/* webpackChunkName: "about" */ '../views/LoginPage.vue')
+  },
+  {
+    path: '/signup',
+    name: 'SignupPage',
+    component: () => import(/* webpackChunkName: "about" */ '../views/SignupPage.vue')
+  },
+  {
     path: '/about',
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
@@ -51,7 +61,7 @@ const routes = [
     component: () => import('../views/BasicLogin.vue')
   },
   {
-    path: '/checkout/',
+    path: '/checkout/:id',
     name: 'checkout',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -61,6 +71,11 @@ const routes = [
     path: '/examplepage',
     name: 'ExamplePage',
     component: () => import('../views/ExamplePage.vue')
+  },
+  {
+    path: '/ordersuccess',
+    name: 'OrderSuccessPage',
+    component: () => import('../views/orderSuccess.vue')
   }
 ]
 

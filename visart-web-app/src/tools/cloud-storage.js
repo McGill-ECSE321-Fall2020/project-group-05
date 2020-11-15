@@ -24,3 +24,8 @@ export function write(storedImageName, file) {
     let ref = firebase.storage().ref('postedImages')
     return ref.child(storedImageName).put(file)
 }
+
+export function writeSafe(file) {
+    let filename = createStoredName(file.name)
+    return Promise.all([filename, write(filename, file)])
+}

@@ -12,12 +12,11 @@
           <input type="text" id="adr" name="address" placeholder="Enter email" required>
           <label class="titleAdjust">Phone number</label>
           <input type="text" id="adr" name="address" placeholder="Enter phone number">
-          <label class="titleAdjust">Address</label>
-          <input type="text" id="adr" name="address" placeholder="Not required for pick up">
-          <label class="leftAlign"> <input type="checkbox" id="check1"/> Ship to address
-          </label>
-          <label class="leftAlign"> <input type="checkbox" id="check2"/> Pick up at gallery
-          </label>
+          <input class="leftAlign" type="radio" id="add" name="method" v-on:click="show()"/>
+          <label for="add">Ship to address</label><br>
+          <input type="text" name="address" placeholder="Please enter your address here" id="addressButton" style="display: none">
+          <input class="leftAlign" type="radio" id="pick" v-on:click="hide()" name="method"/>
+          <label for="pick">Pick up at gallery</label><br>
           <input type="submit" value="Place Order" class="tagBtn" v-on:click="check()">
           </form>
         </div>
@@ -107,22 +106,62 @@ span.price {
   }
 }</style>
 <script>
-
+// backend.js has on it: backend.get(path,params), backend.post(path,data), backend.parse(json) => post data
+var backend = require('@/tools/backend')
 export default {
   data: function () {
     return {
-      pressed: ''
+      pieceId: '',
+      ArtPieceLocation: ''
     }
   },
   methods: {
+    placeOrder: function () {
+      backend
+        .post('/artorder/create', backend.parse({
+          aIsDelivered: 'false',
+          pieceLocation: this.ArtPieceLocation,
+          aTargetAddress: 'a',
+          aDeliveryTracker: 'a',
+          artPieceId: this.pieceId
+        })
+        )
+        .then(function (response) {
+
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    preSetPieceLocation: function () {
+      backend
+        .get('/artpiece/get/' + this.pieceId)
+        .then(this.setPieceLocation)
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    setPieceLocation: function (response) {
+      this.ArtPieceLocation = (response.data).basicLocation
+    },
     check: function () {
       if (document.getElementById('check1').checked || document.getElementById('check2').checked) {
-        return true
+        this.placeOrder()
       } else {
         alert('Please check delivery or pick up options')
         event.preventDefault()
       }
+    },
+    show: function () {
+      document.getElementById('addressButton').style.display = 'block'
+    },
+    hide: function () {
+      document.getElementById('addressButton').style.display = 'none'
     }
+  },
+  create: function () {
+    this.pieceId = this.$route.params.id
+    this.preSetPieceLocation()
   }
 }
 </script>
