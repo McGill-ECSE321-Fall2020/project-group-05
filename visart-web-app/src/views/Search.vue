@@ -46,10 +46,23 @@
     </label>
       <div v-if="! isActive" class="card-columns card-columns-home">
   <div class="card shadow homeCard" v-for="(artlisting,index) in artListings" :key="index">
-    <img class="card-img-top cardImg" :src="artlisting.postImages[0]" alt="Card image cap">
-    <div class="sectionContent sectionContentListing">{{artlisting.title}}</div>
+    <img class="card-img-top cardImg" :src="artlisting.postImages[0]" @click="goToListing(artlisting.idCode)" alt="Card image cap">
+    <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">{{artlisting.title}}</div>
     <div class="card-body">
-      <h4 class="card-title cardArtist"><a href="/artists">{{ artlisting.artistName }}</a></h4>
+      <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">{{ artlisting.artistName }}</h4>
+      <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
+      <div class="descriptionContainer">
+        <p class="card-text cardDesc">{{artlisting.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div v-if="isActive" class="card-columns card-columns-home">
+  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFeatured" :key="index">
+    <img class="card-img-top cardImg" @click="goToListing(artlisting.idCode)" :src="artlisting.postImages[0]" alt="Card image cap">
+    <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">{{artlisting.title}}</div>
+    <div class="card-body">
+      <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">{{ artlisting.artistName }}</h4>
       <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
       <div class="descriptionContainer">
         <p class="card-text cardDesc">{{artlisting.description}}</p>
@@ -89,6 +102,7 @@ export default {
       isActive: false,
       tags: [],
       artListings: [],
+      artListingsFeatured: [],
       hooperSettings: {
         itemsToShow: 7,
         centerMode: true,
@@ -131,6 +145,9 @@ export default {
       console.log(response.data)
       console.log('listing by keyword')
       for (const artListing of (response.data)) {
+        if (artListing.managerId.length !== 0) {
+          this.artListingsFeatured.push(artListing)
+        }
         AXIOS.get('artists/get/' + artListing.artist)
           .then(
             response => {
