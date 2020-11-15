@@ -1,166 +1,216 @@
-
-  <template>
+<template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" href="/"><img id="navlogo" src="./assets/navlogo0.png" alt="nav"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+      <a class="navbar-brand" href="/"
+        ><img id="navlogo" src="./assets/navlogo0.png" alt="nav"
+      /></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/about">About</a>
-      </li>
-    </ul>
-    <form method="get" action="/search/" class="form-inline my-2 my-lg-0" id="searchForm">
-      <input class="form-control mr-sm-2" type="search" placeholder="Separate by a comma ','" aria-label="Search" name="keywords">
-      <button class="btn my-2 my-sm-0" type="submit"><img id="searchIcon" src="./assets/loupe.png" alt="Search"></button>
-    </form>
-    <ul class="navbar-nav ml-auto" id="loginUl">
-        <li class="nav-item loginDiv">
-        <a class="nav-link" href="/about">Login</a>
-      </li>
-      <li class="nav-item loginDiv">
-        <a class="nav-link" href="/about">Sign Up</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-<router-link to="/artlisting/create"><button type="button" class="btn btn-primary hvr-bob" id="fixedbutton">+</button></router-link>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+        </ul>
+        <form
+          method="get"
+          action="/search/"
+          class="form-inline my-2 my-lg-0"
+          id="searchForm"
+        >
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Separate by a comma ','"
+            aria-label="Search"
+            name="keywords"
+          />
+          <button class="btn my-2 my-sm-0" type="submit">
+            <img id="searchIcon" src="./assets/loupe.png" alt="Search" />
+          </button>
+        </form>
+        <ul class="navbar-nav ml-auto" id="loginUl" v-if="!isSignedIn">
+          <li class="nav-item loginDiv">
+            <a class="nav-link" href="/about">Login</a>
+          </li>
+          <li class="nav-item loginDiv">
+            <a class="nav-link" href="/about">Sign Up</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <router-link to="/artlisting/create"
+      ><button type="button" class="btn btn-primary hvr-bob" id="fixedbutton">
+        +
+      </button></router-link
+    >
     <router-view />
   </div>
 </template>
-  <style>
-  /*
+<script>
+/* eslint-disable */
+var backend = require("@/tools/backend");
+export default {
+  data: function() {
+    return {
+      isSignedIn: false
+    };
+  },
+  created: function() {
+    let vm = this;
+    backend.onFirebaseAuth(function(user) {
+      if (user != null) {
+        vm.isSignedIn = true;
+      } else {
+        vm.isSignedIn = false;
+      }
+    });
+  }
+};
+</script>
+
+<style>
+/*
   Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 */
-.descriptionContainer{
-  margin-top:5%;
+.descriptionContainer {
+  margin-top: 5%;
   max-height: 300px;
   overflow: hidden;
-  float:left
+  float: left;
 }
-#hooperContainer{
-  width:100%;
-  height:100%;
+#hooperContainer {
+  width: 100%;
+  height: 100%;
 }
-.hooperContainerCardImg{
+.hooperContainerCardImg {
 }
-.hooperContainerImg{
-  width:2px;
-  height:2px;
-  margin:0;
-  padding:0;
+.hooperContainerImg {
+  width: 2px;
+  height: 2px;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar{
-background-color:#fff !important;
-  position:fixed !important; /* fixing the position takes it out of html flow - knows
+.navbar {
+  background-color: #fff !important;
+  position: fixed !important; /* fixing the position takes it out of html flow - knows
                    nothing about where to locate itself except by browser
                    coordinates */
-  left:0 !important;           /* top left corner should start at leftmost spot */
-  top:0 !important;            /* top left corner should start at topmost spot */
-  width:100vw !important;      /* take up the full browser width */
-  z-index:200 !important;  /* high z index so other content scrolls underneath */
+  left: 0 !important; /* top left corner should start at leftmost spot */
+  top: 0 !important; /* top left corner should start at topmost spot */
+  width: 100vw !important; /* take up the full browser width */
+  z-index: 200 !important; /* high z index so other content scrolls underneath */
 }
-.mainArtContainer{
+.mainArtContainer {
   height: 532px;
 }
-.mainArt{
+.mainArt {
   background-size: 100% auto;
 }
-#mainArtSection{
-  background:#444;
-  position:relative;
+#mainArtSection {
+  background: #444;
+  position: relative;
   margin: auto;
-  height:385px;
-  width:100%;
-  color:#fff;
-}
-#tagSection{
-  background:rgb(202, 193, 176);
-  position:relative;
-  margin:0;
-  padding:0;
-  height:60px;
-  width:100%;
-  color:#fff;
-}
-#hooperContainerTags{
-  height:60px;
-}
-.sectionImage{
+  height: 385px;
   width: 100%;
-  height:100%;
+  color: #fff;
+}
+#tagSection {
+  background: rgb(202, 193, 176);
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 60px;
+  width: 100%;
+  color: #fff;
+}
+#hooperContainerTags {
+  height: 60px;
+}
+.sectionImage {
+  width: 100%;
+  height: 100%;
   background: transparent none no-repeat top top;
   background-size: cover;
 }
-.sectionContent{
+.sectionContent {
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-#sectionContentTitle{
-    font-size: 170px;
-    top: 50%;
+#sectionContentTitle {
+  font-size: 170px;
+  top: 50%;
 }
-.sectionContentListing{
-    color:rgb(43, 38, 32);
-    font-size:200%;
-    top: 40%;
-    font-weight:400;
-    border: 1px,;
+.sectionContentListing {
+  color: rgb(43, 38, 32);
+  font-size: 200%;
+  top: 40%;
+  font-weight: 400;
+  border: 1px;
 }
-#listingsTitle{
-  color:rgb(43, 38, 32);
-  margin:auto;
+#listingsTitle {
+  color: rgb(43, 38, 32);
+  margin: auto;
 }
-#tagContainer{
+#tagContainer {
   width: 80%;
-  margin:auto;
+  margin: auto;
   overflow-x: scroll;
   white-space: nowrap;
-  padding:0;
+  padding: 0;
 }
-.cardImg{
+.cardImg {
   opacity: 0.7;
   filter: alpha(opacity=40); /* msie */
   width: cover !important;
-  height:cover !important;
+  height: cover !important;
   overflow: hidden !important;
-  padding:0px;
+  padding: 0px;
   margin: 0px;
-  transition: transform .2s; /* Animation */
+  transition: transform 0.2s; /* Animation */
 }
-.cardImg:hover{
+.cardImg:hover {
   opacity: 1;
-  transform:scale(1.08,1.08) !important;
+  transform: scale(1.08, 1.08) !important;
 }
-.cardImg:hover ~ .sectionContentListing{
+.cardImg:hover ~ .sectionContentListing {
   opacity: 0;
 }
-.hooperContainerCardImg:hover ~ .cardImg{
+.hooperContainerCardImg:hover ~ .cardImg {
   opacity: 1;
 }
-.cardTitlesContainer{
-  height:20% !important;
+.cardTitlesContainer {
+  height: 20% !important;
 }
 #fixedbutton {
-    position: fixed;
-    bottom: 5%;
-    right: 5%;
-    z-index: 9998;
-    background-color: rgb(202, 121, 110);
-    font-size:200%;
-    font-weight: 600;
-    border-radius: 50%;
-    height: 70px;
-    width: 70px;
-    border-width: 0px;
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  z-index: 9998;
+  background-color: rgb(202, 121, 110);
+  font-size: 200%;
+  font-weight: 600;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  border-width: 0px;
 }
 /* Bob */
 @-webkit-keyframes hvr-bob {
@@ -210,13 +260,15 @@ background-color:#fff !important;
   transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
 }
-.hvr-bob:hover, .hvr-bob:focus, .hvr-bob:active {
+.hvr-bob:hover,
+.hvr-bob:focus,
+.hvr-bob:active {
   -webkit-animation-name: hvr-bob-float, hvr-bob;
   animation-name: hvr-bob-float, hvr-bob;
-  -webkit-animation-duration: .3s, 1.5s;
-  animation-duration: .3s, 1.5s;
-  -webkit-animation-delay: 0s, .3s;
-  animation-delay: 0s, .3s;
+  -webkit-animation-duration: 0.3s, 1.5s;
+  animation-duration: 0.3s, 1.5s;
+  -webkit-animation-delay: 0s, 0.3s;
+  animation-delay: 0s, 0.3s;
   -webkit-animation-timing-function: ease-out, ease-in-out;
   animation-timing-function: ease-out, ease-in-out;
   -webkit-animation-iteration-count: 1, infinite;
@@ -226,114 +278,130 @@ background-color:#fff !important;
   -webkit-animation-direction: normal, alternate;
   animation-direction: normal, alternate;
 }
-#mainHomeArt1{
+#mainHomeArt1 {
   background-image: url(https://www.slantmagazine.com/wp-content/uploads/2010/05/picassoandbraquegotothemovies.jpg);
 }
-#mainHomeArt2{
+#mainHomeArt2 {
   background-image: url(https://media.architecturaldigest.com/photos/5ab021fad91fc303af543aa3/16:9/w_2560%2Cc_limit/56797527.jpg);
 }
-#mainHomeArt3{
+#mainHomeArt3 {
   background-image: url(https://thisiscolossal.com/wp-content/uploads/2011/01/odani-5.jpg);
 }
-#mainHomeArt4{
+#mainHomeArt4 {
   background-image: url(https://static01.nyt.com/images/2011/04/05/opinion/editorial_tooker/editorial_tooker-jumbo.jpg);
 }
-#navLogo{
+#navLogo {
   height: auto;
-    width: auto;
-    max-height: 72px;
-    max-width: 250px;
+  width: auto;
+  max-height: 72px;
+  max-width: 250px;
 }
-.toggleBtnHome{
-  border:0px;
+.toggleBtnHome {
+  border: 0px;
   background-color: #fff;
   color: rgb(148, 126, 98);
 }
-.toggleBtnHome:hover{
-  color:rgb(43, 38, 32);
+.toggleBtnHome:hover {
+  color: rgb(43, 38, 32);
 }
-.tagBtn{
-  margin-top:10px;
-  margin-bottom:10px;
+.tagBtn {
+  margin-top: 10px;
+  margin-bottom: 10px;
   margin-left: 5px;
   margin-right: 5px;
-  padding:0px;
-  height:40px;
-  width:95%;
-  border-color:rgb(231, 215, 191) !important;
-  background-color:#fff !important;
+  padding: 0px;
+  height: 40px;
+  width: 95%;
+  border-color: rgb(231, 215, 191) !important;
+  background-color: #fff !important;
   color: rgb(146, 135, 113) !important;
 }
-.tagBtn:hover{
-  background-color:rgb(153, 153, 131) !important;
+.tagBtn:hover {
+  background-color: rgb(153, 153, 131) !important;
   color: rgb(226, 226, 220) !important;
-  border-color:rgb(163, 155, 142) !important;
+  border-color: rgb(163, 155, 142) !important;
 }
-#listingContainer{
-  padding:75px;
-  background-color:#fff;
-    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadein 2s; /* Firefox < 16 */
-        -ms-animation: fadein 2s; /* Internet Explorer */
-         -o-animation: fadein 2s; /* Opera < 12.1 */
-            animation: fadein 2s;
+#listingContainer {
+  padding: 75px;
+  background-color: #fff;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+  -ms-animation: fadein 2s; /* Internet Explorer */
+  -o-animation: fadein 2s; /* Opera < 12.1 */
+  animation: fadein 2s;
 }
 
 @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Firefox < 16 */
 @-moz-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Internet Explorer */
 @-ms-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-.homeCard{
-  width:90% !important;
-  margin:30px !important;
-  border:1px solid #444
+.homeCard {
+  width: 90% !important;
+  margin: 30px !important;
+  border: 1px solid #444;
 }
-.card-columns-home{
-  margin:auto !important;
+.card-columns-home {
+  margin: auto !important;
 }
-.cardArtist{
-float:left;
-font-size: 120%;
+.cardArtist {
+  float: left;
+  font-size: 120%;
 }
-.cardPrice{
-float:right;
-font-size: 120%;
+.cardPrice {
+  float: right;
+  font-size: 120%;
 }
-.cardDesc{
-float:left;
-font-size: 100%;
-padding-top:2em;
-padding-bottom:2em;
-width:100%;
+.cardDesc {
+  float: left;
+  font-size: 100%;
+  padding-top: 2em;
+  padding-bottom: 2em;
+  width: 100%;
 }
-.cardBody{
-  height:10em;
+.cardBody {
+  height: 10em;
 }
-#searchForm{
-position: absolute;
-left: 50%;
-transform: translatex(-50%);
+#searchForm {
+  position: absolute;
+  left: 50%;
+  transform: translatex(-50%);
 }
-#searchIcon{
-  transform:scale(0.9,0.9);
+#searchIcon {
+  transform: scale(0.9, 0.9);
   padding: 0px;
   margin: 0px;
   max-height: 30px;
@@ -345,7 +413,7 @@ transform: translatex(-50%);
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top:65px;
+  margin-top: 65px;
 }
 
 #nav {
@@ -364,49 +432,44 @@ transform: translatex(-50%);
 card scaling
 */
 @media (min-width: 36em) {
-    .card-columns {
-        -webkit-column-count: 1 !important;
-        -moz-column-count: 1 !important;
-        column-count: 1 !important;
-    }
+  .card-columns {
+    -webkit-column-count: 1 !important;
+    -moz-column-count: 1 !important;
+    column-count: 1 !important;
+  }
 }
 @media (min-width: 50em) {
-    .card-columns {
-        -webkit-column-count: 2 !important;
-        -moz-column-count: 2 !important;
-        column-count: 2 !important;
-    }
+  .card-columns {
+    -webkit-column-count: 2 !important;
+    -moz-column-count: 2 !important;
+    column-count: 2 !important;
+  }
 }
 @media (min-width: 55em) {
-    .card-columns {
-        -webkit-column-count: 3 !important;
-        -moz-column-count: 3 !important;
-        column-count: 3 !important;
-    }
+  .card-columns {
+    -webkit-column-count: 3 !important;
+    -moz-column-count: 3 !important;
+    column-count: 3 !important;
+  }
 }
 @media (min-width: 62em) {
-    .card-columns {
-        -webkit-column-count: 4;
-        -moz-column-count: 4;
-        column-count: 4;
-    }
+  .card-columns {
+    -webkit-column-count: 4;
+    -moz-column-count: 4;
+    column-count: 4;
+  }
 }
 @media (min-width: 75em) {
-    .card-columns {
-        -webkit-column-count: 5;
-        -moz-column-count: 5;
-        column-count: 5;
-    }
+  .card-columns {
+    -webkit-column-count: 5;
+    -moz-column-count: 5;
+    column-count: 5;
+  }
 }
-.formContainerCreate{
-  width:80%;
-  height:38em;
-  background-color:cornflowerblue;
+.formContainerCreate {
+  width: 80%;
+  height: 38em;
+  background-color: cornflowerblue;
   margin: auto;
 }
 </style>
-<script>
-export default {
-
-}
-</script>
