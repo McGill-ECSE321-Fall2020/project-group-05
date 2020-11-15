@@ -80,6 +80,7 @@ export default {
         getElId("inputEmail").value,
         getElId("inputPass").value
       );
+      setTimeout(()=>
       backend.onFirebaseAuth(function(user) {
       if (user != null) {
         vm.isSuccess = true;
@@ -87,7 +88,7 @@ export default {
       } else {
         vm.isSuccess = false;
       }
-      });
+      }),400);
     }
   }
 };
