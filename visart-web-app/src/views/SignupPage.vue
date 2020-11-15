@@ -42,9 +42,29 @@
                 Valid password required.
               </div>
             </div>
+            <div class="mb-3">
+              <label for="password2">Re-type password</label>
+              <input type="password" class="form-control" id="password2" placeholder="" required>
+              <div class="invalid-feedback">
+                Valid password required.
+              </div>
+            </div>
+            <div class="alert alert-warning" role="alert" v-show="!isSamePassword">
+                Passwords do not match
+            </div>
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="isArtist">
-              <label class="custom-control-label" for="isArtist">Do you want to be an Artist?</label>
+              <label class="custom-control-label" for="isArtist">I want to be an Artist.</label>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="managerCode">Manager Code </label>
+                <input type="text" class="form-control" id="managerCode" placeholder="VisArt">
+            </div>
+            <div class="alert alert-warning" role="alert" v-show="!isSuccess">
+                Signup Failed
+            </div>
+            <div class="alert alert-warning" role="alert" v-show="!isCorrectManagerCode">
+                Wrong Manager Id
             </div>
 
             <button class="btn btn-primary btn-lg btn-block" type="button" v-on:click="createAccount">Create Account</button>
@@ -68,7 +88,9 @@ export default {
   components: {},
   data: function() {
     return {
-      isSuccess: true
+      isSuccess: true,
+      isSamePassword: true,
+      isCorrectManagerCode: true
     };
   },
   created: function() {
@@ -83,9 +105,15 @@ export default {
   methods: {
     createAccount: function () {
       let vm = this;
-      console.log(getElId("isArtist").value);
-      backend
-        .post('/customers/create', backend.parse({
+      if (getElId("password").value != getElId("password2").value) {
+          vm.isSamePassword=false;
+      }else{
+      vm.isSamePassword = true;
+      vm.isSuccess = true;
+      if (getElId("managerCode").value=="VisArt"){
+        vm.isCorrectManagerCode=true;
+        backend
+        .post('/managers/create', backend.parse({
           emailAddress: getElId("email")?.value,
           displayname: getElId("displayName")?.value,
           username: getElId("username")?.value,
@@ -99,8 +127,41 @@ export default {
             vm.$router.push({path:'/login'});
         })
         .catch(e => {
+          vm.isSuccess=false;
           console.log(e)
         })
+
+      }else if(getElId("managerCode").value==""){
+      backend
+        .post('/customers/create', backend.parse({
+          emailAddress: getElId("email")?.value,
+          displayname: getElId("displayName")?.value,
+          username: getElId("username")?.value,
+          password: getElId("password")?.value,
+          profilePicLink: "",
+          profileDescription: ""
+        })
+        )
+        .then(function (response) {
+            console.log(response)
+            if (getElId("isArtist").value=="on"){
+                backend.post('/artists/create', backend.parse({
+                    customerId:response.data.idCode 
+                })).then(function (r) {
+                    console.log(r);
+                })
+            } 
+            vm.$router.push({path:'/login'});
+        })
+        .catch(e => {
+          vm.isSuccess=false;
+          console.log(e)
+        })
+    }
+    else{
+        vm.isCorrectManagerCode=false;
+    }  
+    }
     }
   }
 };
