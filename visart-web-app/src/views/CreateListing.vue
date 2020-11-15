@@ -3,7 +3,7 @@
     <div class="formContainerCreate">
       <div class="container-contact100">
         <div class="wrap-contact100">
-          <span class="contact100-form validate-form" >
+          <span class="contact100-form validate-form">
             <span class="contact100-form-title">
               <h1 id="publishTitle">Publish a New Artwork</h1>
             </span>
@@ -16,6 +16,7 @@
                 type="text"
                 name="title"
                 placeholder="Title"
+                @input="artListingAttributes.title = $event.target.value"
               />
               <span class="focus-input100"></span>
             </div>
@@ -28,6 +29,7 @@
                 type="text"
                 name="description"
                 placeholder="Description"
+                @input="artListingAttributes.description = $event.target.value"
               />
               <span class="focus-input100"></span>
             </div>
@@ -37,9 +39,11 @@
             >
               <input
                 id="priceInput"
-                type="text"
+                type="number"
+                min="0"
                 name="price"
                 placeholder="Price"
+                @input="artListingAttributes.price = $event.target.value"
               />
               <span class="focus-input100"></span>
             </div>
@@ -48,13 +52,17 @@
               data-validate="Please enter your image(s) url"
             >
               <input
+                type="file"
                 id="urlInput"
                 name="url"
-                placeholder="Image URL"
+                placeholder="Image Files"
+                @input="artListingAttributes.images = $event.target.files"
+                :multiple="allowMultipleImages"
+                accept="image/png, image/jpeg"
               />
               <span class="focus-input100"></span>
             </div>
-             <div
+            <div
               class="wrap-input100 validate-input"
               data-validate="Please enter your image(s) url"
             >
@@ -62,6 +70,7 @@
                 id="tagInput"
                 name="tags"
                 placeholder="Tags (separate by comma)"
+                @input="artListingAttributes.tags = $event.target.value"
               />
               <span class="focus-input100"></span>
             </div>
@@ -72,7 +81,8 @@
               <input
                 id="dimensionsInput"
                 name="dimensions"
-                placeholder="Dimensions"
+                placeholder="Dimensions (separate by comma)"
+                @input="artListingAttributes.dimensions = $event.target.value"
               />
               <span class="focus-input100"></span>
             </div>
@@ -85,11 +95,21 @@
                 type="text"
                 name="visibility"
                 placeholder="Visibility"
+                :value="artListingAttributes.visibility"
               />
+              <select @change="artListingAttributes.visibility = $event.target.value">
+                <option value="Public">Public</option>
+                <option value="Private">Private</option>
+                <option value="Unlisted">Unlisted</option>
+                <option value="Draft">Draft</option>
+              </select>
               <span class="focus-input100"></span>
             </div>
             <div class="container-contact100-form-btn">
-              <button class="contact100-form-btn submitArtwork" v-on:click="submitListing()">
+              <button
+                class="contact100-form-btn submitArtwork"
+                v-on:click="submitListing()"
+              >
                 <span>
                   <i class="fa fa-paper-plane-o m-r-6" aria-hidden="true"></i>
                   Submit
@@ -109,15 +129,26 @@
 //  bar scroll
 import "hooper/dist/hooper.css";
 var backend = require("@/tools/backend");
+var storage = require("@/tools/cloud-storage");
 console.log("im here");
 export default {
   name: "CreateListing",
   components: {},
   data() {
     return {
-      isActive: false,
-      tags: [],
-      artListings: [],
+      artistId: "",
+      artListingId: "",
+      artListingAttributes: {
+        title: "",
+        description: "",
+        price: "",
+        images: null,
+        image_links: null,
+        tags: "",
+        dimensions: "",
+        visibility: "Public"
+      },
+      allowMultipleImages: true,
       hooperSettings: {
         itemsToShow: 7,
         centerMode: true,
@@ -130,75 +161,92 @@ export default {
       }
     };
   },
-  created: function () {
+  created: function() {
+    let vm = this;
+    backend.onFirebaseAuth(user => {
+      if (user != null) {
+        backend.get("users/get/" + user.uid).then(resp => {
+          if (resp.data.role == "Customer") {
+            backend.get("customers/get/" + user.uid).then(resp => {
+              vm.isArtistLoggedIn = true;
+              vm.artistId = resp.data.artistId;
+            });
+          } else {
+            vm.isArtistLoggedIn = false;
+          }
+        });
+      } else {
+        vm.isArtistLoggedIn = false;
+      }
+    });
   },
   methods: {
     submitListing: function() {
+      let vm = this;
+
+      // create
       backend
-        .post("/artlisting/create/", backend.parse({
-          aTitle: document.getElementById('titleInput').value,
-          aDescription: document.getElementById('descriptionInput').value,
-          price: document.getElementById('priceInput').value,
-          artistId: 
-            backend
-            .retrieveCurrentUser().uid
-          ,
-          aVisibility: document.getElementById('visibilityInput').value
+        .post(
+          "/artlisting/create",
+          backend.parse({
+            aVisibility: vm.artListingAttributes.visibility,
+            aDescription: vm.artListingAttributes.description,
+            aTitle: vm.artListingAttributes.title,
+            artistId: vm.artistId,
+            price: vm.artListingAttributes.price
+          })
+        )
+        .then(resp => {
+          vm.artListingId = resp.data.idCode;
+          backend.post(
+            "/artpiece/create",
+            backend.parse({
+              pieceLocation: "Offsite", // TODO: Fill in pieceLocation
+              aAddressLocation: "TBD", // TODO: Fill in address
+              aArtListingId: vm.artListingId
+            })
+          );
+          backend.post(
+            "/artlisting/update_dimensions/" + vm.artListingId,
+            backend.parse({
+              dimensions: vm.artListingAttributes.dimensions
+                .split(",")
+                .map(s => s.trim())
+            })
+          );
+
+          vm.uploadImages(vm.artListingId, vm.artListingAttributes.images)
+
+          vm.addTags(
+            vm.artListingId,
+            vm.artListingAttributes.tags.split(",").map(s => s.trim())
+          );
+
+          document.alert("Your art listing has been created!")
+        });
+    },
+    addTags: function(id, keywords) {
+      keywords.forEach(key => {
+        backend.post('tags/create',backend.parse({
+          aListing: id,
+          aKeyword: key,
+          aType: 'Other'
         }))
-        .then(response => {
-          var idListing = response.data.idCode
-          backend
-            .post(
-              "/artlisting/update_post_images/" + response.data.idCode + "/",
-              backend.parse({ images: document.getElementById('urlInput').value })
-            )
-            .then(response => {
-              console.log(response.data);
-              console.log('hello image')
-            })
-            .catch(e => {
-              console.log(e);
-            });
-            console.log('before tag')
-            var tagArr = document.getElementById('tagInput').value.split(", ").map(s=>s.trim())
-            console.log(tagArr)
-            for ( let tag in tagArr ) {
-              backend
-                .post(
-                  "/tags/create/" , backend.parse({
-                    aListing: response.data.idCode,
-                    aKeyword: tagArr[tag],
-                    aType: "Other"
-                  })
-                )
-                .then(response => {
-                  console.log(response.data);
-                  console.log('new tag')
-                })
-                .catch(e => {
-                  console.log(e);
-                });
-            }
-          var dimensionsArr = document.getElementById('dimensionsInput').value.split(", ").map(s=>s.trim())
-          console.log("=========dimensions==========")
-          console.log(dimensionsArr)
-          backend
-            .post(
-              "/artlisting/update_dimensions/" + response.data.idCode + "/" , backend.parse({ dimensions: dimensionsArr })
-            )
-            .then(response => {
-              console.log(response.data);
-              console.log('hello dimensions')
-            })
-            .catch(e => {
-              console.log(e);
-            });
-          console.log(response.data);
-          console.log("submit");
-          this.$router.push({ path: '/' })
+      })
+    },
+    uploadImages: function(id, images) {
+      return Promise.all([...images].map(i => storage.writeSafe(i)))
+        .then(responses => {
+          return Promise.all(responses.map(r => storage.read(r[0])));
         })
-        .catch(e => {
-          console.log(e);
+        .then(urls => {
+          console.log(urls);
+          return backend.post(
+            "/artlisting/update_post_images/" +id,
+            backend.parse({
+              images: urls
+            })
+          );
         });
     }
   }
