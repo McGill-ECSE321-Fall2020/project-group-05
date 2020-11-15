@@ -223,6 +223,10 @@ export default {
           );
 
           window.alert("Your art listing has been created!")
+        })
+        .catch( e => {
+         console.log(e)
+         window.alert("WARNING: Creation unsuccessful! Make sure to fill in the fields correctly")
         });
     },
     addTags: function(id, keywords) {
