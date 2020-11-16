@@ -116,9 +116,9 @@ export default {
         const artlistingId = this.$route.params.id
         backend.get('/customers/get/' + userId).then(function (response) {
           // This function will run if the id is for a customer
-          return backend.post('/customers/add_favorite_listing/' + userId, {
+          return backend.post('/customers/add_favorite_listing/' + userId, backend.parse({
             listingIdCode: artlistingId
-          })
+          }))
         }).then(function (response) {
           // response.data is the newly updated CustomerDto object, if you need it
         }).catch(function (error) {
