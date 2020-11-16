@@ -44,7 +44,8 @@
                       {{ artlisting.ticketObj.customerObj.user.displayname }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      <b>Customer email:</b> {{ artlisting.ticketObj.customerObj.user.emailAddress }}
+                      <b>Customer email:</b>
+                      {{ artlisting.ticketObj.customerObj.user.emailAddress }}
                     </li>
                     <li v-if="isSoldAvailable">
                       <b>Customer displayname:</b>
@@ -55,27 +56,32 @@
                       {{ artlisting.artPieces[0].basicLocation }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      <b>Target Piece location:</b>{{
-                        artOrders[parseInt(index)].targetLocation
-                      }}, {{ artOrders[parseInt(index)].targetAddress }}
+                      <b>Target Piece location:</b
+                      >{{ artOrders[parseInt(index)].targetLocation }},
+                      {{ artOrders[parseInt(index)].targetAddress }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      <b>Delivery method:</b> {{ artOrders[parseInt(index)].deliveryTracker }}
+                      <b>Delivery method:</b>
+                      {{ artOrders[parseInt(index)].deliveryTracker }}
                     </li>
                     <li v-if="isSoldAvailable">
-                      <b>Art Delivered:</b> {{ artOrders[parseInt(index)].delivered }}
+                      <b>Art Delivered:</b>
+                      {{ artOrders[parseInt(index)].delivered }}
                     </li>
                     <li v-if="isSoldAvailable">
                       <b>Payment Confirmed:</b>
                       {{ artTickets[parseInt(index)].paymentConfirmed }}
                     </li>
-                    <li><b>Gallery Commision:</b> ${{ 0.1 * artlisting.price }}</li>
+                    <li>
+                      <b>Gallery Commision:</b> ${{ 0.1 * artlisting.price }}
+                    </li>
                   </ul>
                   <button
                     type="button"
                     class="btn btn-lg btn-block btn-outline-primary"
                     v-show="isLoggedIn && !isSoldAvailable"
-                    v-on:click="unpinArt(artlisting.idCode)">
+                    v-on:click="unpinArt(artlisting.idCode)"
+                  >
                     Unpin listing
                   </button>
                 </div>
@@ -128,15 +134,15 @@ export default {
     this.isSoldAvailable = false;
     this.showPinned();
     this.isLoggednIn = false;
-    let vm = this
-    backend.onFirebaseAuth(function(user){
-    if (user != null){
-        vm.isLoggedIn = ((user.uid).localeCompare(vm.$route.params.id) ===0);
-    } else {
-       vm.isLoggedIn = false;
-    }
-    })
-},
+    let vm = this;
+    backend.onFirebaseAuth(function(user) {
+      if (user != null) {
+        vm.isLoggedIn = user.uid.localeCompare(vm.$route.params.id) === 0;
+      } else {
+        vm.isLoggedIn = false;
+      }
+    });
+  },
   methods: {
     showPinned: function() {
       this.isSoldAvailable = false;
@@ -159,7 +165,6 @@ export default {
                 console.log(e);
               });
           }
-
         })
         .catch(e => {
           console.log(e);
@@ -175,9 +180,10 @@ export default {
       this.artists = [];
       this.customers = [];
       let vm = this;
-      vm.isSoldAvailable = false
-
+      vm.isSoldAvailable = false;
+      let listingsObj;
       backend
+<<<<<<< HEAD
         .get("/artlisting/get_all/")
         .then(response => {
           var listings = response.data.filter(
@@ -188,58 +194,41 @@ export default {
           var artorders = listings.map(l => {
             vm.artListings.push(l);
             return l.artPieces[0].artOrder;
+=======
+        .get("artlisting/get_all/")
+        .then(resp => {
+          let listings = resp.data;
+          listingsObj = {};
+          listings.forEach(l => {
+            listingsObj[l.idCode] = l;
+>>>>>>> ea4ac48861db90cdb81bb4b7f85a83a1d663c393
           });
-          var promises0 = artorders.map(id =>
-            backend.get("/artorder/get/" + id)
+          let ticketIds = listings
+            .map(l => l.artPieces[0].ticketId)
+            .filter(t => t != null);
+
+          return Promise.all(
+            ticketIds.map(t => backend.get("tickets/get/" + t))
           );
-          Promise.all(promises0)
-            .then(responses => {
-              console.log(responses)
-              responses.forEach(r => {
-                vm.artOrders.push(r.data);
-              });
-              var promises1 = listings.map(l => {
-                return backend.get("tickets/get/" + l.artPieces[0].ticketId);
-              });
-              return Promise.all(promises1);
-            })
-            .then(responses => {
-              console.log(responses)
-              // retrieved all tickets
-              var promises2 = responses.map(r => {
-                vm.artTickets.push(r.data);
-                return backend.get(
-                  "/customers/get/" + r.data.ticketCustomer
-                );
-              });
-              var promises3 = responses.map(r => {
-                return backend.get("/artists/get/" + r.data.ticketArtist);
-              });
-              return Promise.all([Promise.all(promises2), Promise.all(promises3)]);
-            })
-            .then(bothResponses => {
-              console.log(bothResponses)
-              let cResps = bothResponses[0]
-              let aResps = bothResponses[1]
-              for (let i = 0; i < cResps.length && i < aResps.length && i < vm.artTickets.length && vm.artListings.length; i++){
-                vm.artTickets[i].artistObj = aResps[i].data
-                vm.artists.push(aResps[i].data)
-                vm.artTickets[i].customerObj = cResps[i].data
-                vm.customers.push(cResps[i].data)
-                vm.artListings[i].ticketObj = vm.artTickets[i]
-              }
-              console.log(vm.artListings)
-              console.log(vm.customers)
-              vm.isSoldAvailable = true
-            });
         })
-        .catch(e => {
-          console.log(e);
+        .then(resp => {
+          // retrieved tickets
+          let tickets = resp.map(r => r.data);
+          tickets.forEach(t => {
+            let curr = listingsObj[t.ticketArtListingId];
+            curr.ticket = t;
+            vm.artListings.push(curr);
+          });
+          console.log(this.artListings);
+          vm.isSoldAvailable = false;
         });
+      // artlistings is populated, and has a artlistings[0].ticket
     },
     unpinArt: function(listingId) {
       if (
-        backend.retrieveCurrentUser().uid.localeCompare(this.$route.params.id) ===0
+        backend
+          .retrieveCurrentUser()
+          .uid.localeCompare(this.$route.params.id) === 0
       ) {
         backend.post(
           "managers/remove_listing/" + backend.retrieveCurrentUser().uid,
