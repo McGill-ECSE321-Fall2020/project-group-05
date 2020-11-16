@@ -79,7 +79,7 @@ export default {
             artListings : [],
             paymentConfirmed: [],
             action2: '',
-            actionTitle: '',
+            actionTitle: 'Not an Artist',
             actionDescription: '',
             isLoggedIn: false,
 
