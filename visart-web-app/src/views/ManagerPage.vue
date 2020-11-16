@@ -171,6 +171,7 @@ export default {
         });
     },
     showSold: function() {
+       console.log('show sold is called');
       this.actionTitle = "Sold Art";
       this.actionDescription = "All Sold Art In the Gallary";
       this.artListings = [];

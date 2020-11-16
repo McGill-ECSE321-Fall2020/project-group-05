@@ -34,7 +34,7 @@
                       <button type="button"
                       v-on:click="preformAction2(artlisting.idCode)"
                       class="btn btn-sm btn-outline-secondary"
-                      v-show="isLoggedIn && !isPurchased">{{action2}}</button>
+                      v-show="isLoggedIn">{{action2}}</button>
                     </div>
                   </div>
                 </div>
@@ -82,14 +82,12 @@ export default {
             actionTitle: '',
             actionDescription: '',
             isLoggedIn: false,
-            isPurchased:  false
 
         };
     },
     created: function () {
         console.log('created');
         console.log("created");
-        this.showPublishedArt();
         let vm = this
 
         backend
@@ -108,6 +106,7 @@ export default {
             .get("/artists/get/" + vm.$route.params.id)
             .then(response => {
                vm.isLoggedIn = (user.uid).localeCompare((response.data).customer.user.idCode)===0;
+               this.showPublishedArt();
             })
             .catch(e => {
                 console.log(e);
@@ -118,7 +117,11 @@ export default {
     },
     methods: {
         showPurchasedArt: function () {
-            this.isPurchased = true;
+            if (!this.isLoggedIn){
+                this.action2 = '';
+            } else {
+                this.action2 = 'Confirm Delivery';
+            }
             this.artListings = [];
             this.paymentConfirmed = [];
             backend
@@ -163,7 +166,6 @@ export default {
             else return "";
         },
         showFavoriteArt: function () {
-            this.isPurchased = false;
             if (!this.isLoggedIn){
                 this.action2 = '';
             } else {
@@ -178,7 +180,6 @@ export default {
                 });
         },
         showPublishedArt: function () {
-            this.isPurchased = false;
             if (!this.isLoggedIn){
                 this.action2 = '';
             } else {
@@ -204,7 +205,6 @@ export default {
                 });
         },
         showSoldArt: function () {
-            this.isPurchased = false;
             if (!this.isLoggedIn){
                 this.action2 = '';
             } else {
@@ -258,12 +258,30 @@ export default {
         preformAction2: function (listingId) {
 
             if (this.action2.localeCompare('Unfavorite')===0){
-                    backend.post('customers/remove_favorite_listing/'+backend.retrieveCurrentUser().uid, backend.parse({'listingIdCode':listingId}));
+                backend.post('customers/remove_favorite_listing/'+backend.retrieveCurrentUser().uid, backend.parse({'listingIdCode':listingId}));
                 this.showFavoriteArt();
             }else if(this.action2.localeCompare('Delete Listing')===0){
                 backend.post('artlisting/delete/'+listingId);
                 this.showPublishedArt();
-            }else if(this.action2.localeCompare('Confirm Payment')===0){
+            }else if(this.action2.localeCompare('Confirm Delivery')===0){
+                var ticket;
+                backend
+                .get("/artlisting/get/" + listingId)
+                .then(response => {
+                   console.log((response.data).artPieces[0].ticketId);
+                   return backend
+                   .get("/artorder/get/" + (response.data).artPieces[0].orderId)
+                })
+                .then(response =>{
+                    backend.post('artorder/update/'+(response.data).idCode,
+                    backend.parse({'aIsDelivered': true}));
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+
+                this.showSoldArt();
+            } else if(this.action2.localeCompare('Confirm Payment')===0){
                 var ticket;
                 backend
                 .get("/artlisting/get/" + listingId)
@@ -273,8 +291,9 @@ export default {
                    .get("/tickets/get/" + (response.data).artPieces[0].ticketId)
                 })
                 .then(response =>{
+                    console.log('reached here');
                     backend.post('tickets/update/'+(response.data).idCode,
-                    backend.parse({'paymentConfirmed': true}));
+                    backend.parse({'aIsPaymentConfirmed': true}));
                 })
                 .catch(e => {
                     console.log(e);
