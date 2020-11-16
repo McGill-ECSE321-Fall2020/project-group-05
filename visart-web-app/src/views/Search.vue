@@ -4,7 +4,7 @@
 <div id="tagContainer">
  <hooper id="hooperContainerTags" :settings="hooperSettings">
     <slide v-for="(tag, index) in tags" :key="index">
-    <button type="button" class="btn btn-primary tagBtn">{{tag.keyword}}</button>
+    <button type="button" class="btn btn-primary tagBtn" @click="redirectToHome(tag.keyword)">{{tag.keyword}}</button>
     </slide>
       <hooper-navigation slot="hooper-addons"></hooper-navigation>
   </hooper>
@@ -119,6 +119,9 @@ export default {
     }
   },
   methods: {
+    redirectToHome: function (tag) {
+      this.$router.push({ path: '/search/?keywords=' + tag })
+    },
     goToArtist: function (id) {
       this.$router.push({ path: '/artistpage/' + id })
     },

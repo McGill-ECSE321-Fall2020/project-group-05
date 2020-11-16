@@ -1,10 +1,10 @@
 <template>
 <div id="demoFont" class="text-space center">
-<div id="demoFont" style="font-family: 'Arial Black', Gadget, sans-serif; font-weight: 400;">Thank you!</div>
-<div style="color: #444444; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: medium; font-weight: 400; letter-spacing: normal; word-spacing: 0px;">Your order has been processed succesfully.</div>
-<div style="color: #444444; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: medium; font-weight: 400; letter-spacing: normal; word-spacing: 0px;">&nbsp;</div>
-<div style="color: #444444; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: medium; font-weight: 400; letter-spacing: normal; word-spacing: 0px;">Please do not hesitate to contact us for further inquiries.</div>
-<b-button v-on:click="goBackHome()" class="btn btn-lg btn-block btn-space btnPurchase">View more art pieces</b-button>
+<div id="demoFont" style="font-size: 80px; color: black; font-family: 'Arial Black', Gadget, sans-serif; font-weight: 400;">Thank you!</div>
+<div class="btn-space" style="color: rgb(146, 135, 113); font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: medium; font-weight: 400; letter-spacing: normal; word-spacing: 0px;">Your order has been processed succesfully.</div>
+<div style="color: rgb(146, 135, 113); font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: medium; font-weight: 400; letter-spacing: normal; word-spacing: 0px;">&nbsp;</div>
+<div style="color: rgb(146, 135, 113); font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: medium; font-weight: 400; letter-spacing: normal; word-spacing: 0px;">Please do not hesitate to contact us for further inquiries.</div>
+<b-button v-on:click="goBackHome()" style="background-color: rgb(146, 135, 113);" class="btn-lg btn-space btnPurchase">View more art pieces</b-button>
 </div>
 </template>
 <style>
