@@ -181,7 +181,7 @@ export default {
       console.log(response.data)
       console.log('listing by keyword')
       for (const artListing of (response.data)) {
-        if (artListing.managerId.length !== 0) {
+        if (artListing.managerId != null) {
           this.artListingsFeatured.push(artListing)
         }
         AXIOS.get('artists/get/' + artListing.artist)

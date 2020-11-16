@@ -222,20 +222,12 @@ export default {
     AXIOS.get("/tags/get_all")
       .then(response => {
         console.log(response.data);
-        var tagArr = [];
-        for (const tag of response.data) {
-          if(tagArr.length===0){
-              console.log('added first');
-              tagArr.push(tag)
-            }
-          for (const existingTag in tagArr) {
-            console.log('================');
-            console.log(tag.keyword );
-            console.log(existingTag);
-          }
+         var tagArr = {};
+        for (var i = 0; i < (response.data).length; i++) {
+            tagArr[response.data[i]['keyword']] = response.data[i]
         }
-        for(const tag of tagArr) {
-          this.tags.push(tag);
+        for(var key in tagArr) {
+          this.tags.push(tagArr[key]);
         } 
         console.log('////////////')
         console.log(tagArr.length)
