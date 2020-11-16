@@ -39,7 +39,7 @@
           <li class="list-group-item list-group-item-secondary infoColor">Price:</li>
           <li class="list-group-item">{{ price }}</li>
         </ul>
-        <b-button v-on:click="goToCheckout(artPieceId)" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
+        <b-button v-on:click="goToCheckout(listId)" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
         <button type="button" class="btn btn-secondary btn-lg btn-block btnPurchase" @click="addFavorite">
           Add to favorite
         </button>
@@ -60,7 +60,7 @@ export default {
       description: '',
       price: '',
       images: [],
-      artPieceId: '',
+      listId: '',
       slide: 0,
       sliding: null
     }
@@ -76,7 +76,6 @@ export default {
       this.title = (response.data).title
       this.description = (response.data).description
       this.price = (response.data).price
-      this.artPieceId = (response.data).artPieces[0]
       this.images.push((response.data).postImages)
     },
     parseArtist: function (response) {
@@ -130,6 +129,7 @@ export default {
   created: function () {
     this.getArt()
     this.getArtist()
+    this.listId = this.$route.params.id
   }
 }
 </script>

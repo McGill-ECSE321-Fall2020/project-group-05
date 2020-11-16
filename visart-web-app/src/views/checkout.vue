@@ -114,6 +114,7 @@ export default {
         })
         .then(resp => {
           console.log(resp.data);
+          this.$router.push({ path: '/ordersuccess/' })
         });
     },
     loadUserData: function() {
