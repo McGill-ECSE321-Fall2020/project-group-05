@@ -231,7 +231,11 @@ export default {
   position: relative;
   margin: 0;
   padding: 0;
+<<<<<<< HEAD
   height: 60px;
+=======
+  height: 40% !important;
+>>>>>>> 78d157ccb16c2a19e912e9a7dd9f2ca9e38713bb
   width: 100%;
   color: #fff;
 }
