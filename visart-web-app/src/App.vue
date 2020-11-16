@@ -254,12 +254,23 @@ export default {
   top: 50%;
 }
 .sectionContentListing {
-  color: rgb(43, 38, 32);
-  font-size: 200%;
-  top: 40%;
-  font-weight: 400;
-  border: 1px;
+   color: rgb(43, 38, 32);
+   font-size: 150%;
+   font-weight: 400;
+   border: 1px;
+   width:100%;
+   padding:0%;
+   padding-top: 4%!important;
+   height:12% !important;
+   overflow: hidden;
+   transition: all .2s ease-in-out;
+   z-index: 1000;
 }
+.listingsTitle {
+   color: rgb(43, 38, 32);
+   margin: auto;
+   margin-top: 20px;
+ }
 #listingsTitle {
   color: rgb(43, 38, 32);
   margin: auto;
@@ -285,22 +296,19 @@ export default {
   opacity: 1;
   transform: scale(1.08, 1.08) !important;
 }
-.cardImg:hover ~ .sectionContentListing {
-  opacity: 0;
-}
-.sectionContentListing:hover ~ .cardImg{
-  opacity: 1;
-  transform:scale(1.08,1.08) !important;
-}
+
+
 .sectionContentListing:hover{
-  opacity: 0;
+  color: #746850;
+  cursor: pointer;
 }
 
 .hooperContainerCardImg:hover ~ .cardImg{
   opacity: 1;
 }
 .cardTitlesContainer {
-  height: 20% !important;
+   height: 10% !important;
+   overflow: hidden;
 }
 #fixedbutton {
   position: fixed;
@@ -491,31 +499,43 @@ export default {
   margin:auto !important;
 }
 .cardArtist{
-float:left;
-font-size: 120%;
-}
-.cardPrice{
-float:right;
-font-size: 120%;
-}
-.cardArtist{
- color: rgb(202, 182, 145);
- transition: all .2 ease-in-out;
-}
-.cardArtist:hover{
-  color: rgb(145, 123, 84);
-  cursor: pointer;
-}
-.cardDesc{
-float:left;
-font-size: 100%;
-margin-top:2em;
-margin-bottom:2em;
-width:100%;
-}
-.cardBody{
-  height:10em;
-}
+ position: absolute;
+ float: left;
+ font-size: 120%;
+
+ }
+ .cardPrice{
+   float: right;
+ font-size: 120%;
+ margin-top:17%;
+ margin-bottom:5%;
+ margin-right: 1%;
+ }
+ .cardArtist{
+  color: rgb(202, 182, 145);
+  transition: all .2 ease-in-out;
+ margin-top:15%;
+ margin-bottom:5%;
+ margin-left: 5%;
+ }
+ .cardArtist:hover{
+   color: rgb(145, 123, 84);
+ }
+ .cardDesc{
+ float:left;
+ font-size: 100%;
+ margin-top:5%;
+ margin-bottom:1em;
+ width:100%;
+ max-height:6rem;
+ overflow:hidden;
+ padding-bottom: 2.5rem;
+ }
+ .cardBody{
+   height:120%;
+   position:relative;
+   padding:0px !important;
+ }
 #searchForm{
 position: absolute;
 left: 50%;
