@@ -472,7 +472,21 @@ export default {
 .homeCard{
   width:90% !important;
   margin:30px !important;
-  border:1px solid #444
+  border:1px solid rgb(128, 116, 116);
+  position: relative;
+}
+.homeCard:after{
+    content  : "";
+  position : absolute;
+  z-index  : 1;
+  bottom   : 0;
+  left     : 0;
+  pointer-events   : none;
+  background-image : linear-gradient(to bottom,
+                    rgba(255,255,255, 0),
+                    rgba(255,255,255, 1) 95%);
+  width    : 100%;
+  height   : 4em;
 }
 .card-columns-home{
   margin:auto !important;
@@ -616,5 +630,15 @@ input{
 .submitArtwork:hover{
   background-color: rgb(175, 146, 108);
   color: white;
+}
+.homeCardBuy{
+  border-radius: 30px !important;
+  overflow: hidden !important;
+}
+.listingInfoBuy{
+  border-radius: 30px !important;
+}
+.cardBodyBuy{
+  color: rgb(63, 57, 53);
 }
 </style>

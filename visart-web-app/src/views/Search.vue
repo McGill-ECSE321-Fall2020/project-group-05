@@ -6,33 +6,6 @@
     <slide v-for="(tag, index) in tags" :key="index">
     <button type="button" class="btn btn-primary tagBtn">{{tag.keyword}}</button>
     </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Sculpture</button>
-    </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Cubism</button>
-    </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Realism</button>
-    </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Fauvism</button>
-    </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Oil</button>
-    </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Absurd</button>
-    </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Comtemporary</button>
-    </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Resin</button>
-    </slide>
-    <slide>
-    <button type="button" class="btn btn-primary tagBtn">Glass</button>
-    </slide>
       <hooper-navigation slot="hooper-addons"></hooper-navigation>
   </hooper>
 </div>
@@ -140,7 +113,7 @@ export default {
       artListingsFull: [],
       artListingsFeatured: [],
       hooperSettings: {
-        itemsToShow: 7,
+        itemsToShow: 5,
         centerMode: true,
         infiniteScroll: true,
         itemsToSlide: 1,
@@ -181,7 +154,7 @@ export default {
       console.log(response.data)
       console.log('listing by keyword')
       for (const artListing of (response.data)) {
-        if (artListing.managerId.length !== 0) {
+        if (artListing.managerId != null) {
           this.artListingsFeatured.push(artListing)
         }
         AXIOS.get('artists/get/' + artListing.artist)
@@ -195,6 +168,22 @@ export default {
     }).catch(e => {
       console.log(e)
     })
+    AXIOS.get('/tags/get_all')
+      .then(response => {
+        console.log(response.data)
+        var tagArr = []
+        for (var i = 0; i < (response.data).length; i++) {
+          tagArr[response.data[i].keyword] = response.data[i]
+        }
+        for (var key in tagArr) {
+          this.tags.push(tagArr[key])
+        }
+        console.log('////////////')
+        console.log(tagArr.length)
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 </script>

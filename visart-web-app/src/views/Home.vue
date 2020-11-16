@@ -40,41 +40,6 @@
               {{ tag.keyword }}
             </button>
           </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">
-              Sculpture
-            </button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Cubism</button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">
-              Realism
-            </button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">
-              Fauvism
-            </button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Oil</button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Absurd</button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">
-              Comtemporary
-            </button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Resin</button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Glass</button>
-          </slide>
           <hooper-navigation slot="hooper-addons"></hooper-navigation>
         </hooper>
       </div>
@@ -188,7 +153,7 @@ export default {
       artListingsFeatured: [],
       postImagesArray: [],
       hooperSettings: {
-        itemsToShow: 7,
+        itemsToShow: 5,
         centerMode: true,
         infiniteScroll: true,
         itemsToSlide: 1,
@@ -222,20 +187,12 @@ export default {
     AXIOS.get("/tags/get_all")
       .then(response => {
         console.log(response.data);
-        var tagArr = [];
-        for (const tag of response.data) {
-          if(tagArr.length===0){
-              console.log('added first');
-              tagArr.push(tag)
-            }
-          for (const existingTag in tagArr) {
-            console.log('================');
-            console.log(tag.keyword );
-            console.log(existingTag);
-          }
+         var tagArr = {};
+        for (var i = 0; i < (response.data).length; i++) {
+            tagArr[response.data[i]['keyword']] = response.data[i]
         }
-        for(const tag of tagArr) {
-          this.tags.push(tag);
+        for(var key in tagArr) {
+          this.tags.push(tagArr[key]);
         } 
         console.log('////////////')
         console.log(tagArr.length)
