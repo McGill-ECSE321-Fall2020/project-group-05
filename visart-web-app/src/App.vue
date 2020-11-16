@@ -425,7 +425,7 @@ color: rgb(255, 255, 255);
   pointer-events   : none;
   background-image : linear-gradient(to bottom, 
                     rgba(255,255,255, 0), 
-                    rgba(255,255,255, 1) 90%);
+                    rgba(255,255,255, 1) 95%);
   width    : 100%;
   height   : 4em;
 }
@@ -584,5 +584,15 @@ input{
 .submitArtwork:hover{
   background-color: rgb(175, 146, 108);
   color: white;
+}
+.homeCardBuy{
+  border-radius: 30px !important;
+  overflow: hidden !important;
+}
+.listingInfoBuy{
+  border-radius: 30px !important;
+}
+.cardBodyBuy{
+  color: rgb(63, 57, 53);
 }
 </style>
