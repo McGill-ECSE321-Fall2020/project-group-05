@@ -52,13 +52,13 @@
             <div class="alert alert-warning" role="alert" v-show="!isSamePassword">
                 Passwords do not match
             </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="isArtist">
-              <label class="custom-control-label" for="isArtist">I want to be an Artist.</label>
+            <div class="mb-3">
+              <label class="form-check-label" for="accept">I want to be an Artist.</label>
+              <input type="checkbox" v-model="isArtist" id="accept" class="form-check-input" style="width:auto;margin:5px 5px">
             </div>
             <div class="col-md-6 mb-3">
                 <label for="managerCode">Manager Code </label>
-                <input type="text" class="form-control" id="managerCode" placeholder="VisArt">
+                <input type="text" class="form-control" id="managerCode" placeholder="(Write VisArt to be a Manager, ortherwise leave empty)">
             </div>
             <div class="alert alert-warning" role="alert" v-show="!isSuccess">
                 Signup Failed
@@ -90,7 +90,8 @@ export default {
     return {
       isSuccess: true,
       isSamePassword: true,
-      isCorrectManagerCode: true
+      isCorrectManagerCode: true,
+      isArtist: false
     };
   },
   created: function() {
@@ -144,7 +145,7 @@ export default {
         )
         .then(function (response) {
             console.log(response)
-            if (getElId("isArtist").value=="on"){
+            if (vm.isArtist){
                 backend.post('/artists/create', backend.parse({
                     customerId:response.data.idCode 
                 })).then(function (r) {
