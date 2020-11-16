@@ -30,9 +30,6 @@
                 @click="goToListing(artlisting.idCode)"
               />
           <div class="card-header bg-transparent border-bottom-0">
-            <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close" @click="deleteListing(artlisting.idCode)">
-              <span aria-hidden="true">&times;</span>
-            </button>
           </div>
           <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">
             {{ artlisting.title }}
@@ -61,9 +58,6 @@
                 @click="goToListing(artlisting.idCode)"
               />
           <div class="card-header bg-transparent border-bottom-0">
-            <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close" @click="deleteListing(artlisting.idCode)">
-              <span aria-hidden="true">&times;</span>
-            </button>
           </div>
           <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">
             {{ artlisting.title }}
