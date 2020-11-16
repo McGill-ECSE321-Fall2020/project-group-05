@@ -91,7 +91,7 @@ export default {
         backend.get('users/get/'+user.uid).then(resp => {
           if (resp.data.role == "Customer") {
             backend.get('customers/get/'+user.uid).then(resp => {
-              vm.isArtistLoggedIn = true
+              vm.isArtistLoggedIn = resp.data.artistId != null
             })
           } else {
              vm.isArtistLoggedIn = false
