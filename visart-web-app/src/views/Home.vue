@@ -167,10 +167,11 @@ export default {
   },
   created: function() {
     let vm = this;
-    AXIOS.get("/artlisting/get_all")
+    AXIOS.get("/artlisting/get_unsold_art")
       .then(response => {
         console.log(response.data);
         for (const artListing of response.data) {
+
           if (artListing.managerId != null) {
             this.artListingsFeatured.push(artListing)
           }

@@ -154,16 +154,18 @@ export default {
       console.log(response.data)
       console.log('listing by keyword')
       for (const artListing of (response.data)) {
-        if (artListing.managerId != null) {
-          this.artListingsFeatured.push(artListing)
+        if (artListing.artPieces[0].ticketId == null) {
+          if (artListing.managerId != null) {
+            this.artListingsFeatured.push(artListing)
+          }
+          AXIOS.get('artists/get/' + artListing.artist)
+            .then(
+              response => {
+                artListing.artistName = response.data.customer.user.displayname
+                console.log(artListing.artistName)
+                this.artListingsFull.push(artListing)
+              })
         }
-        AXIOS.get('artists/get/' + artListing.artist)
-          .then(
-            response => {
-              artListing.artistName = response.data.customer.user.displayname
-              console.log(artListing.artistName)
-              this.artListingsFull.push(artListing)
-            })
       }
     }).catch(e => {
       console.log(e)
