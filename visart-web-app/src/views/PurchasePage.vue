@@ -1,10 +1,10 @@
 <template>
 <span>
-  <button type="button" class="btn btn-primary" id="fixedbutton">+</button>
+  <h1 class="purchasePageTitle">Discover – {{ title }} –</h1>
   <div class="container container-space">
     <div class="row">
       <div class="col-xl">
-        <div class="card shadow homeCard" style="width: 35rem;">
+        <div class="card shadow homeCardBuy homeCard" style="width: 35rem;">
           <b-carousel
       id="carousel-1"
       v-model="slide"
@@ -20,24 +20,24 @@
     >
       <!-- Slides with image only -->
       <div class="carouselPurchaseDiv" v-for="(img, index) in images" :key="index">
-        <b-carousel-slide :img-src="img"></b-carousel-slide>
+        <b-carousel-slide :img-src="img.toString()"></b-carousel-slide>
       </div>
     </b-carousel>
-          <div class="card-body">
+          <div class="card-body cardBodyBuy">
             <h5 class="card-title text-center">{{ title }}</h5>
           </div>
         </div>
       </div>
       <div class="col-sm">
-        <ul class="list-group card-space">
+        <ul class="list-group card-space listingInfoBuy shadow">
           <li class="list-group-item list-group-item-secondary infoColor">Artist:</li>
-          <li class="list-group-item">{{ artistName }}</li>
+          <li class="list-group-item varInfo" id="artistLinkBuy" @click="goToArtistPage(artistId)">{{ artistName }}</li>
           <li class="list-group-item list-group-item-secondary infoColor">
             Description:
           </li>
-          <li class="list-group-item">{{ description }}</li>
+          <li class="list-group-item varInfo">{{ description }}</li>
           <li class="list-group-item list-group-item-secondary infoColor">Price:</li>
-          <li class="list-group-item">{{ price }}</li>
+          <li class="list-group-item varInfo">{{ price }}</li>
         </ul>
         <b-button v-on:click="goToCheckout(listId)" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
         <button type="button" class="btn btn-secondary btn-lg btn-block btnPurchase" @click="addFavorite">
@@ -62,10 +62,14 @@ export default {
       images: [],
       listId: '',
       slide: 0,
-      sliding: null
+      sliding: null,
+      artistId: ''
     }
   },
   methods: {
+    goToArtistPage: function (id) {
+      this.$router.push({ path: '/artistpage/' + id })
+    },
     onSlideStart (slide) {
       this.sliding = true
     },
@@ -77,6 +81,7 @@ export default {
       this.description = (response.data).description
       this.price = (response.data).price
       this.images.push((response.data).postImages)
+      this.artistId = (response.data).artist
     },
     parseArtist: function (response) {
       this.artistName = (response.data).customer.user.displayname
@@ -144,10 +149,17 @@ export default {
 }
 
 .infoColor{
-  background-color: rgb(153, 153, 131);
+  background-color: rgb(168, 162, 138);
+  font-size:120%;
+  color: #fff;
 }
 .btnPurchase {
   background-color: rgb(146, 135, 113);
+  color: #fff
+}
+
+.btnPurchase:hover {
+  background-color: rgb(104, 95, 77);
   color: #fff
 }
 
@@ -157,5 +169,18 @@ export default {
 
 .card-space-image {
   margin-top: 70px;
+}
+.varInfo{
+  color: rgb(80, 73, 65);
+}
+.purchasePageTitle{
+  margin-top: 10%;
+  margin-bottom:-5%;
+  font-size:200%;
+  color: rgb(80, 73, 65);
+}
+#artistLinkBuy:hover{
+  cursor: pointer;
+  color:rgb(121, 111, 99);
 }
 </style>
