@@ -272,8 +272,7 @@ export default {
   padding: 0;
 }
 .cardImg {
-  opacity: 0.7;
-  filter: alpha(opacity=40); /* msie */
+  opacity: 1;
   width: cover !important;
   height: cover !important;
   overflow: hidden !important;
