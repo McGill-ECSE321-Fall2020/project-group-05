@@ -37,19 +37,19 @@
                     </li>
                     <li v-if="isSoldAvailable">
                       <b>Artist email:</b>
-                      {{ artlisting.ticketObj.customerObj.user.emailAddress }}
+                      {{ artlisting.ticket.customer.user.emailAddress }}
                     </li>
                     <li v-if="isSoldAvailable">
                       <b>Artist displayname:</b>
-                      {{ artlisting.ticketObj.customerObj.user.displayname }}
+                      {{ artlisting.ticket.customer.user.displayname }}
                     </li>
                     <li v-if="isSoldAvailable">
                       <b>Customer email:</b>
-                      {{ artlisting.ticketObj.customerObj.user.emailAddress }}
+                      {{ artlisting.ticket.customer.user.emailAddress }}
                     </li>
                     <li v-if="isSoldAvailable">
                       <b>Customer displayname:</b>
-                      {{ artlisting.ticketObj.customerObj.user.displayname }}
+                      {{ artlisting.ticket.customer.user.displayname }}
                     </li>
                     <li v-if="isSoldAvailable">
                       <b>Piece location:</b>
@@ -180,12 +180,12 @@ export default {
       this.customers = [];
       let vm = this;
       vm.isSoldAvailable = false;
-      let listingsObj;
+      let listingsObj = {};
+      let ticketsObj = {};
       backend
         .get("artlisting/get_all/")
         .then(resp => {
           let listings = resp.data;
-          listingsObj = {};
           listings.forEach(l => {
             listingsObj[l.idCode] = l;
           });
@@ -204,9 +204,36 @@ export default {
             let curr = listingsObj[t.ticketArtListingId];
             curr.ticket = t;
             vm.artListings.push(curr);
+            vm.artTickets.push(t);
+            ticketsObj[t.idCode] = t;
           });
-          console.log(this.artListings);
+          // console.log(this.artListings);
           vm.isSoldAvailable = false;
+          let orderPromises = Promise.all(
+            tickets.map(t => backend.get("artorder/get/" + t.ticketOrder))
+          ); // ticketOrderId;
+          let customerPromises = Promise.all(
+            tickets.map(t => backend.get("customers/get/" + t.ticketCustomer))
+          ); //   ticketCustomerId;
+          let artistPromises = Promise.all(
+            tickets.map(t => backend.get("artists/get/" + t.ticketArtist))
+          ); //   ticketArtistId;
+          return Promise.all([orderPromises, customerPromises, artistPromises]);
+        })
+        .then(responses => {
+          console.log(responses);
+          for (let i = 0; i < vm.artTickets.length; i++) {
+            let order = responses[0][i].data;
+            vm.artOrders.push(order);
+            vm.artTickets[i].artOrder = order;
+            let customer = responses[1][i].data;
+            vm.customers.push(customer);
+            vm.artTickets[i].customer = customer;
+            let artist = responses[2][i].data;
+            vm.artists.push(artist);
+            vm.artTickets[i].artist = artist;
+          }
+          vm.isSoldAvailable = true
         });
       // artlistings is populated, and has a artlistings[0].ticket
     },
