@@ -31,7 +31,7 @@
       <div class="col-sm">
         <ul class="list-group card-space listingInfoBuy shadow">
           <li class="list-group-item list-group-item-secondary infoColor">Artist:</li>
-          <li class="list-group-item varInfo">{{ artistName }}</li>
+          <li class="list-group-item varInfo" id="artistLinkBuy" @click="goToArtistPage(artistId)">{{ artistName }}</li>
           <li class="list-group-item list-group-item-secondary infoColor">
             Description:
           </li>
@@ -39,7 +39,7 @@
           <li class="list-group-item list-group-item-secondary infoColor">Price:</li>
           <li class="list-group-item varInfo">{{ price }}</li>
         </ul>
-        <b-button v-on:click="goToCheckout(artPieceId)" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
+        <b-button v-on:click="goToCheckout(listId)" class="btn btn-secondary btn-lg btn-block btn-space btnPurchase">Buy Now</b-button>
         <button type="button" class="btn btn-secondary btn-lg btn-block btnPurchase" @click="addFavorite">
           Add to favorite
         </button>
@@ -60,12 +60,16 @@ export default {
       description: '',
       price: '',
       images: [],
-      artPieceId: '',
+      listId: '',
       slide: 0,
-      sliding: null
+      sliding: null,
+      artistId: ''
     }
   },
   methods: {
+    goToArtistPage: function (id) {
+      this.$router.push({ path: '/artistpage/' + id })
+    },
     onSlideStart (slide) {
       this.sliding = true
     },
@@ -76,8 +80,8 @@ export default {
       this.title = (response.data).title
       this.description = (response.data).description
       this.price = (response.data).price
-      this.artPieceId = (response.data).artPieces[0]
       this.images.push((response.data).postImages)
+      this.artistId = (response.data).artist
     },
     parseArtist: function (response) {
       this.artistName = (response.data).customer.user.displayname
@@ -130,6 +134,7 @@ export default {
   created: function () {
     this.getArt()
     this.getArtist()
+    this.listId = this.$route.params.id
   }
 }
 </script>
@@ -173,5 +178,9 @@ export default {
   margin-bottom:-5%;
   font-size:200%;
   color: rgb(80, 73, 65);
+}
+#artistLinkBuy:hover{
+  cursor: pointer;
+  color:rgb(121, 111, 99);
 }
 </style>
