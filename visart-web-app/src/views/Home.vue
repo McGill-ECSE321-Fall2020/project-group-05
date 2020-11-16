@@ -40,41 +40,6 @@
               {{ tag.keyword }}
             </button>
           </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">
-              Sculpture
-            </button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Cubism</button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">
-              Realism
-            </button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">
-              Fauvism
-            </button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Oil</button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Absurd</button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">
-              Comtemporary
-            </button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Resin</button>
-          </slide>
-          <slide>
-            <button type="button" class="btn btn-primary tagBtn">Glass</button>
-          </slide>
           <hooper-navigation slot="hooper-addons"></hooper-navigation>
         </hooper>
       </div>
@@ -188,7 +153,7 @@ export default {
       artListingsFeatured: [],
       postImagesArray: [],
       hooperSettings: {
-        itemsToShow: 7,
+        itemsToShow: 5,
         centerMode: true,
         infiniteScroll: true,
         itemsToSlide: 1,
