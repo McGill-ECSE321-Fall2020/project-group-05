@@ -121,6 +121,7 @@ export default {
   methods: {
     redirectToHome: function (tag) {
       this.$router.push({ path: '/search/?keywords=' + tag })
+      this.$router.go()
     },
     goToArtist: function (id) {
       this.$router.push({ path: '/artistpage/' + id })

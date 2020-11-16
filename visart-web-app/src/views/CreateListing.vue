@@ -148,7 +148,7 @@ export default {
         dimensions: "",
         visibility: "Public"
       },
-      allowMultipleImages: true,
+      allowMultipleImages: false,
       hooperSettings: {
         itemsToShow: 7,
         centerMode: true,
@@ -223,6 +223,8 @@ export default {
           );
 
           window.alert("Your art listing has been created!")
+          this.$router.push({ path: '/'})
+          this.$router.go()
         })
         .catch( e => {
          console.log(e)
