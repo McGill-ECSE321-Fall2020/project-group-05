@@ -1,30 +1,183 @@
 <template>
-<div class="row">
-  <div class="col-75">
-    <div class="container">
-      <div class="row">
-        <div class="col-50">
-          <h3>Almost yours!</h3>
-          <h3> </h3>
-          <h3> </h3>
-          <form id="sectionForm" action="/purchasepage">
-          <label class="titleAdjust">Email</label>
-          <input type="text" id="adr" name="address" placeholder="Enter email" required>
-          <label class="titleAdjust">Phone number</label>
-          <input type="text" id="adr" name="address" placeholder="Enter phone number">
-          <input class="leftAlign" type="radio" id="add" name="method" v-on:click="show()"/>
-          <label for="add">Ship to address</label><br>
-          <input type="text" name="address" placeholder="Please enter your address here" id="addressButton" style="display: none">
-          <input class="leftAlign" type="radio" id="pick" v-on:click="hide()" name="method"/>
-          <label for="pick">Pick up at gallery</label><br>
-          <input type="submit" value="Place Order" class="tagBtn" v-on:click="check()">
-          </form>
+  <div class="row">
+    <div class="col-75">
+      <div class="container">
+        <div class="row">
+          <div class="col-50">
+            <h3>Hello {{ userdata.user.displayname }}</h3>
+            <h4>This Art is Almost Yours!</h4>
+            <h3></h3>
+            <div id="sectionForm" class="form-inline">
+              <label for="AtGallery" class="form-check-label"
+                >Pick up at gallery</label
+              >
+              <input
+                class="leftAlign form-check-input"
+                name="AtGallery"
+                id="AtGallery"
+                type="radio"
+                v-model="pieceLocation"
+                value="AtGallery"
+              />
+              <br />
+              <label for="Offsite">Ship to address</label>
+              <input
+                class="leftAlign"
+                name="Offsite"
+                id="Offsite"
+                type="radio"
+                v-model="pieceLocation"
+                value="Offsite"
+              />
+              <br />
+
+              <input
+                type="text"
+                name="address"
+                placeholder="Please enter your address here"
+                id="addressButton"
+                v-if="isVisibleAddress"
+                v-model="targetAddress"
+              />
+
+              <input
+                type="submit"
+                value="Place Order"
+                class="tagBtn"
+                v-on:click="purchaseArtwork()"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </template>
+
+<script>
+/* eslint-disable */
+// backend.js has on it: backend.get(path,params), backend.post(path,data), backend.parse(json) => post data
+var backend = require("@/tools/backend");
+export default {
+  data: function() {
+    return {
+      pieceId: "",
+      pieceLocation: "AtGallery",
+      targetAddress: "",
+      listingId: "",
+      artlisting: {},
+      userdata: {
+        user: { displayname: "" },
+        customer: {},
+        manager: {}
+      }
+    };
+  },
+  computed: {
+    isVisibleAddress: function() {
+      return this.pieceLocation == "Offsite";
+    }
+  },
+  created: function() {
+    this.listingId = this.$route.params.id;
+    console.log("working");
+    backend.onFirebaseAuth(user => {
+      this.loadUserData();
+    });
+    this.loadArtListing();
+  },
+  methods: {
+    purchaseArtwork: function() {
+      let vm = this;
+      backend
+        .post(
+          "/artorder/create",
+          backend.parse({
+            aIsDelivered: false,
+            pieceLocation: vm.pieceLocation,
+            aTargetAddress: vm.targetAddress != "" ? vm.targetAddress : "TBD",
+            aDeliveryTracker: "TBD",
+            artPieceId: vm.artlisting.artPieces[0].idCode
+          })
+        )
+        .then(resp => {
+          return backend.post(
+            "/tickets/create",
+            backend.parse({
+              aIsPaymentConfirmed: false,
+              aPaymentAmount: vm.artlisting.price,
+              aOrder: resp.data.idCode,
+              aCustomer: vm.userdata.customer.idCode,
+              aArtist: vm.artlisting.artist
+            })
+          );
+        })
+        .then(resp => {
+          console.log(resp.data);
+        });
+    },
+    loadUserData: function() {
+      let userf = backend.retrieveCurrentUser();
+      console.log(userf);
+      let id = userf ? userf.uid : null;
+      let vm = this;
+      if (id != null && id != "") {
+        backend
+          .get("users/get/" + id)
+          .then(resp => {
+            vm.userdata.user = resp.data;
+
+            console.log(resp);
+            switch (vm.userdata.user.role) {
+              case "Manager":
+                return backend.get("managers/get/" + id);
+              case "Customer":
+                return backend.get("customers/get/" + id);
+              default:
+                vm.userdata.user.role = "User";
+                return resp;
+            }
+          })
+          .then(resp => {
+            switch (vm.userdata.user.role) {
+              case "Manager":
+                vm.userdata.manager = resp.data;
+                break;
+              case "Customer":
+                vm.userdata.customer = resp.data;
+                break;
+              default:
+            }
+
+            if (
+              vm.userdata.user.role == "Customer" &&
+              resp.data.artistId &&
+              resp.data.artistId != ""
+            ) {
+              return backend
+                .get("artists/get/" + resp.data.artistId)
+                .then(resp => {
+                  vm.userdata.user.role = "Artist";
+                  vm.userdata.artist = resp.data;
+
+                  return resp;
+                });
+            }
+            return resp;
+          });
+        return true;
+      } else return false;
+    },
+    loadArtListing: function() {
+      if (this.listingId != null && this.listingId != "")
+        backend.get("artlisting/get/" + this.listingId).then(resp => {
+          this.artlisting = resp.data;
+        });
+    }
+  }
+};
+</script>
+
 <style>
 .row {
   display: -ms-flexbox; /* IE10 */
@@ -62,7 +215,12 @@
   border-radius: 3px;
 }
 
-input[type=text] {
+input[type="radio"] {
+  margin-bottom: 0px !important;
+  width: 25px;
+}
+
+input[type="text"] {
   width: 100%;
   margin-bottom: 20px;
   padding: 12px;
@@ -87,13 +245,13 @@ span.price {
 }
 
 .titleAdjust {
-    text-align:left;
-    line-height:150%;
-    font-size:1em;
+  text-align: left;
+  line-height: 150%;
+  font-size: 1em;
 }
 
 .leftAlign {
-  text-align:left;
+  text-align: left;
 }
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
@@ -104,64 +262,5 @@ span.price {
   .col-25 {
     margin-bottom: 20px;
   }
-}</style>
-<script>
-// backend.js has on it: backend.get(path,params), backend.post(path,data), backend.parse(json) => post data
-var backend = require('@/tools/backend')
-export default {
-  data: function () {
-    return {
-      pieceId: '',
-      ArtPieceLocation: ''
-    }
-  },
-  methods: {
-    placeOrder: function () {
-      backend
-        .post('/artorder/create', backend.parse({
-          aIsDelivered: 'false',
-          pieceLocation: this.ArtPieceLocation,
-          aTargetAddress: 'a',
-          aDeliveryTracker: 'a',
-          artPieceId: this.pieceId
-        })
-        )
-        .then(function (response) {
-
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    },
-    preSetPieceLocation: function () {
-      backend
-        .get('/artpiece/get/' + this.pieceId)
-        .then(this.setPieceLocation)
-        .catch(e => {
-          console.log(e)
-        })
-    },
-    setPieceLocation: function (response) {
-      this.ArtPieceLocation = (response.data).basicLocation
-    },
-    check: function () {
-      if (document.getElementById('check1').checked || document.getElementById('check2').checked) {
-        this.placeOrder()
-      } else {
-        alert('Please check delivery or pick up options')
-        event.preventDefault()
-      }
-    },
-    show: function () {
-      document.getElementById('addressButton').style.display = 'block'
-    },
-    hide: function () {
-      document.getElementById('addressButton').style.display = 'none'
-    }
-  },
-  create: function () {
-    this.pieceId = this.$route.params.id
-    this.preSetPieceLocation()
-  }
 }
-</script>
+</style>

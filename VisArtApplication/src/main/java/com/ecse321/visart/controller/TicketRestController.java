@@ -52,8 +52,14 @@ public class TicketRestController {
     String aOrderDto = map.getFirst("aOrder");
     String aCustomerDto = map.getFirst("aCustomer");
     String aArtistDto = map.getFirst("aArtist");
-    boolean aIsPaymentConfirmedBool = Boolean.parseBoolean(aIsPaymentConfirmed);
-    double aPaymentAmountDbl = Double.parseDouble(aPaymentAmount);
+
+    Boolean aIsPaymentConfirmedBool = null;
+    if (aIsPaymentConfirmed != null)
+      aIsPaymentConfirmedBool = Boolean.parseBoolean(aIsPaymentConfirmed);
+    
+    Double aPaymentAmountDbl = null;
+    if (aPaymentAmount != null)
+      aPaymentAmountDbl = Double.parseDouble(aPaymentAmount);
     return new TicketDto(ticService.createTicket(aIsPaymentConfirmedBool, aPaymentAmountDbl,
         aOrderDto, aCustomerDto, aArtistDto));
   }

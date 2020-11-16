@@ -39,37 +39,73 @@
 </section>
     <div class="listingContainer">
       <label for="toggle_button">
-        <h1 v-if="isActive" id="listingsTitle"> – Featured Search Results – </h1>
-        <h1 v-if="! isActive" id="listingsTitle"> – Search Results – </h1>
+        <h1 v-if="isActive" class="listingsTitle"> – Featured Search Results – </h1>
+        <h1 v-if="! isActive" class="listingsTitle"> – Search Results – </h1>
         <button class="toggleBtnHome" @click="isActive = !isActive">{{isActive ? 'View Full Collection' : 'View Featured Art'}}</button>
         <span class="toggle__switch"></span>
     </label>
-      <div v-if="! isActive" class="card-columns card-columns-home">
-  <div class="card shadow homeCard" v-for="(artlisting,index) in artListings" :key="index">
-    <img class="card-img-top cardImg" :src="artlisting.postImages[0]" @click="goToListing(artlisting.idCode)" alt="Card image cap">
-    <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">{{artlisting.title}}</div>
-    <div class="card-body">
-      <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">{{ artlisting.artistName }}</h4>
-      <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
-      <div class="descriptionContainer">
-        <p class="card-text cardDesc">{{artlisting.description}}</p>
+        <div v-if="!isActive" class="card-columns card-columns-home">
+        <div
+          class="card shadow homeCard"
+          v-for="(artlisting, index) in artListingsFull"
+          :key="index"
+        >
+              <img
+                class="card-img-top cardImg"
+                :src="artlisting.postImages[0]"
+                alt="Card image cap"
+                @click="goToListing(artlisting.idCode)"
+              />
+          <div class="card-header bg-transparent border-bottom-0">
+            <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close" @click="deleteListing(artlisting.idCode)">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">
+            {{ artlisting.title }}
+          </div>
+          <div class="card-body cardBody">
+            <div class="cardTitlesContainer">
+              <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">
+                {{ artlisting.artistName }}
+              </h4>
+              <h5 class="card-title cardPrice">CAD$ {{ artlisting.price }}</h5>
+            </div>
+              <p class="card-text cardDesc">{{ artlisting.description }}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-<div v-if="isActive" class="card-columns card-columns-home">
-  <div class="card shadow homeCard" v-for="(artlisting,index) in artListingsFeatured" :key="index">
-    <img class="card-img-top cardImg" @click="goToListing(artlisting.idCode)" :src="artlisting.postImages[0]" alt="Card image cap">
-    <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">{{artlisting.title}}</div>
-    <div class="card-body">
-      <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">{{ artlisting.artistName }}</h4>
-      <h5 class="card-title cardPrice">$ {{artlisting.price}}</h5>
-      <div class="descriptionContainer">
-        <p class="card-text cardDesc">{{artlisting.description}}</p>
+      <div v-if="isActive" class="card-columns card-columns-home">
+        <div
+          class="card shadow homeCard"
+          v-for="(artlisting, index) in artListingsFeatured"
+          :key="index"
+        >
+         <img
+                class="card-img-top cardImg"
+                :src="artlisting.postImages[0]"
+                alt="Card image cap"
+                @click="goToListing(artlisting.idCode)"
+              />
+          <div class="card-header bg-transparent border-bottom-0">
+            <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close" @click="deleteListing(artlisting.idCode)">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">
+            {{ artlisting.title }}
+          </div>
+          <div class="card-body cardBody">
+            <div class="cardTitlesContainer">
+              <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">
+                {{ artlisting.artistName }}
+              </h4>
+              <h5 class="card-title cardPrice">CAD$ {{ artlisting.price }}</h5>
+            </div>
+              <p class="card-text cardDesc">{{ artlisting.description }}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
     </div>
     <div>
     </div>
@@ -101,7 +137,7 @@ export default {
     return {
       isActive: false,
       tags: [],
-      artListings: [],
+      artListingsFull: [],
       artListingsFeatured: [],
       hooperSettings: {
         itemsToShow: 7,
@@ -153,7 +189,7 @@ export default {
             response => {
               artListing.artistName = response.data.customer.user.displayname
               console.log(artListing.artistName)
-              this.artListings.push(artListing)
+              this.artListingsFull.push(artListing)
             })
       }
     }).catch(e => {

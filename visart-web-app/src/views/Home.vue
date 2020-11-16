@@ -28,6 +28,7 @@
       <div class="sectionContent" id="sectionContentTitle">Vis Art</div>
     </section>
     <section id="tagSection">
+      <h5 class="mainTagsTitle">Our Main Tags</h5>
       <div id="tagContainer">
         <hooper id="hooperContainerTags" :settings="hooperSettings">
           <slide v-for="(tag, index) in tags" :key="index">
@@ -112,7 +113,7 @@
               <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">
                 {{ artlisting.artistName }}
               </h4>
-              <h5 class="card-title cardPrice">$ {{ artlisting.price }}</h5>
+              <h5 class="card-title cardPrice">CAD$ {{ artlisting.price }}</h5>
             </div>
               <p class="card-text cardDesc">{{ artlisting.description }}</p>
           </div>
@@ -143,14 +144,13 @@
               <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">
                 {{ artlisting.artistName }}
               </h4>
-              <h5 class="card-title cardPrice">$ {{ artlisting.price }}</h5>
+              <h5 class="card-title cardPrice">CAD$ {{ artlisting.price }}</h5>
             </div>
               <p class="card-text cardDesc">{{ artlisting.description }}</p>
           </div>
         </div>
       </div>
     </div>
-    <div></div>
   </div>
 </template>
 <script>
@@ -206,7 +206,7 @@ export default {
       .then(response => {
         console.log(response.data);
         for (const artListing of response.data) {
-          if (artListing.managerId.length !== 0) {
+          if (artListing.managerId != null) {
             this.artListingsFeatured.push(artListing)
           }
           AXIOS.get("artists/get/" + artListing.artist).then(response => {
