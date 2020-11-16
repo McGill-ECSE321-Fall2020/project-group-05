@@ -159,7 +159,7 @@ export default {
   position: relative;
   margin: 0;
   padding: 0;
-  height: 40% !important;
+  height: 6em !important;
   width: 100%;
   color: #fff;
   padding-top:5px;
