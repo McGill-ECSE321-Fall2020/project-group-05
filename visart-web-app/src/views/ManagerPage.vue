@@ -183,25 +183,12 @@ export default {
       vm.isSoldAvailable = false;
       let listingsObj;
       backend
-<<<<<<< HEAD
-        .get("/artlisting/get_all/")
-        .then(response => {
-          var listings = response.data.filter(
-            listing =>
-              listing != null &&
-              listing.artPieces[0].artOrder == ''
-          );
-          var artorders = listings.map(l => {
-            vm.artListings.push(l);
-            return l.artPieces[0].artOrder;
-=======
         .get("artlisting/get_all/")
         .then(resp => {
           let listings = resp.data;
           listingsObj = {};
           listings.forEach(l => {
             listingsObj[l.idCode] = l;
->>>>>>> ea4ac48861db90cdb81bb4b7f85a83a1d663c393
           });
           let ticketIds = listings
             .map(l => l.artPieces[0].ticketId)
