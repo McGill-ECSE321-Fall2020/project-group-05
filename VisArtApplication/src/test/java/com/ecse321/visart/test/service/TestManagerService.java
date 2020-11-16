@@ -88,7 +88,7 @@ public class TestManagerService {
               profileDescription);
           Customer customer = new Customer("123", user);
           Artist artist = new Artist("123", customer);
-          ArtListing al = new ArtListing(ArtListing.PostVisibility.Public, "testpost", "testpost",
+          ArtListing al = new ArtListing(0.0,ArtListing.PostVisibility.Public, "testpost", "testpost",
               "testpost", artist);
           return al;
 

@@ -88,7 +88,8 @@ public class TagService {
    */
   @Transactional
   public List<Tag> getTagByType(TagType type) {
-    return entityRepo.getAllEntities(Tag.class).stream().filter(t->t.getType() == (type)).collect(Collectors.toList());
+    return entityRepo.getAllEntities(Tag.class).stream().filter(t -> t.getType() == (type))
+        .collect(Collectors.toList());
   }
 
   /**
@@ -101,7 +102,8 @@ public class TagService {
    */
   @Transactional
   public List<Tag> getTagByType(String type) {
-    return entityRepo.getAllEntities(Tag.class).stream().filter(t->t.getType() == TagType.fromString(type)).collect(Collectors.toList());
+    return entityRepo.getAllEntities(Tag.class).stream()
+        .filter(t -> t.getType() == TagType.fromString(type)).collect(Collectors.toList());
   }
 
   /**

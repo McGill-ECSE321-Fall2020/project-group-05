@@ -1,6 +1,7 @@
 package com.ecse321.visart.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,8 @@ public class ArtListingService {
    * @return              persisted ArtListing instance
    */
   @Transactional
-  public ArtListing createArtListing(PostVisibility aVisibility, String aDescription, String aTitle,
+  public ArtListing createArtListing(Double price, PostVisibility aVisibility, String aDescription,
+      String aTitle,
       Artist aArtist) {
     String aIdCode = EntityRepository.getUniqueKey();
 
@@ -78,7 +80,8 @@ public class ArtListingService {
       throw new IllegalArgumentException("Artist cannot be empty!");
     }
 
-    return ArtListingRepo.createArtListing(aVisibility, aDescription, aTitle, aIdCode, aArtist);
+    return ArtListingRepo.createArtListing(price, aVisibility, aDescription, aTitle, aIdCode,
+        aArtist);
   }
 
   /**
@@ -93,7 +96,8 @@ public class ArtListingService {
    * 
    */
   @Transactional
-  public ArtListing updateArtListing(String aIdCode, PostVisibility aVisibility, String aDescription,
+  public ArtListing updateArtListing(String aIdCode, Double price, PostVisibility aVisibility,
+      String aDescription,
       String aTitle) {
     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
     if (al == null) {
@@ -115,12 +119,22 @@ public class ArtListingService {
       }
       al.setTitle(aTitle);
     }
+
+    if (price != null) {
+      al.setPrice(price);
+    }
+
     ArtListingRepo.updateArtListing(al);
     return al;
   }
 
   @Transactional
   public ArtListing updateDimensions(String aIdCode, Float[] aDimensions) {
+    return updateDimensions(aIdCode, Arrays.asList(aDimensions));
+  }
+  
+  @Transactional
+  public ArtListing updateDimensions(String aIdCode, List<Float> aDimensions) {
     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
     if (al == null) {
       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
@@ -138,6 +152,11 @@ public class ArtListingService {
 
   @Transactional
   public ArtListing updatePostImages(String aIdCode, String[] aPostImages) {
+    return updatePostImages(aIdCode, Arrays.asList(aPostImages));
+  }
+
+  @Transactional
+  public ArtListing updatePostImages(String aIdCode, List<String> aPostImages) {
     ArtListing al = ArtListingRepo.getArtListing(aIdCode);
     if (al == null) {
       throw new IllegalArgumentException("ArtListing cannot be resolved with given id!");
@@ -244,6 +263,11 @@ public class ArtListingService {
 
   @Transactional
   public List<String> filterArtworkByTag(String[] keywords) {
+    return filterArtworkByTag(Arrays.asList(keywords));
+  }
+
+  @Transactional
+  public List<String> filterArtworkByTag(List<String> keywords) {
     List<Tag> listTagByKeywords = entityRepo.findEntityByAttribute("keyword", Tag.class, keywords);
     return new ArrayList<String>(listTagByKeywords.stream()
         .map((tag) -> tag.getListing().getIdCode()).collect(Collectors.toSet()));
@@ -251,6 +275,11 @@ public class ArtListingService {
 
   @Transactional
   public List<ArtListing> filterArtworkByTagAsListings(String[] keywords) {
+    return filterArtworkByTagAsListings(Arrays.asList(keywords));
+  }
+
+  @Transactional
+  public List<ArtListing> filterArtworkByTagAsListings(List<String> keywords) {
     return entityRepo.findEntityByAttribute("idCode", ArtListing.class,
         filterArtworkByTag(keywords));
   }

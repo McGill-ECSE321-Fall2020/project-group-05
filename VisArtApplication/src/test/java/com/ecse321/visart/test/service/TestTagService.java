@@ -48,7 +48,7 @@ public class TestTagService {
   private static final User aUser = new User("a", "b", "c", "d", "e", "f", "g");
   private static final Customer aCustomer = new Customer("customerCode", aUser);
   private static final Artist aArtist = new Artist("artistCode", aCustomer);
-  private static final ArtListing TAG_LISTING = new ArtListing(PostVisibility.Draft, "name",
+  private static final ArtListing TAG_LISTING = new ArtListing(0.0,PostVisibility.Draft, "name",
       "listing", "listingcode",
       aArtist);
   private static Tag tagTest = null;

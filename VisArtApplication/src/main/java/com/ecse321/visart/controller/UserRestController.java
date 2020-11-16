@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecse321.visart.dto.CredentialsDto;
 import com.ecse321.visart.dto.UserDto;
+import com.ecse321.visart.model.User;
+import com.ecse321.visart.repositories.EntityRepository;
 import com.ecse321.visart.service.UserService;
 
 @CrossOrigin(origins = "*")
@@ -21,6 +24,9 @@ public class UserRestController {
 
   @Autowired
   private UserService service;
+
+  @Autowired
+  private EntityRepository entityRepo;
 
   /**
    * 
@@ -56,16 +62,20 @@ public class UserRestController {
 
   /**
    * 
-   * @param  values
-   * @param  idCode
-   * @return
+   * requestBody = {
+   *  emailAddress : string
+   *  displayname : string
+   *  username : string
+   *  profilePicLink : string
+   *  profileDescription : string
+   * }
    */
   @PostMapping(value = { "/users/update/{idCode}", "/users/update/{idCode}/" })
   public UserDto updateUser(@RequestBody MultiValueMap<String, String> values,
       @PathVariable("idCode") String idCode) {
     return new UserDto(service.updateUser(idCode,
         values.getFirst("emailAddress"), values.getFirst("displayname"),
-        values.getFirst("userName"), values.getFirst("password"),
+        values.getFirst("username"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));
   }
 
@@ -79,4 +89,29 @@ public class UserRestController {
     return service.deleteUser(idCode);
   }
 
+  @PostMapping(value = { "/users/email_login", "/users/email_login/" })
+  public CredentialsDto loginUserByEmail(@RequestBody MultiValueMap<String, String> values) {
+    String email = values.getFirst("emailAddress");
+    String aPassword = values.getFirst("password");
+    if (service.loginUserByEmail(email, aPassword)) {
+      List<User> users = entityRepo.findEntityByAttribute("emailAddress", User.class, email);
+      String id = users.get(0).getIdCode();
+      return service.generateCredentials(id);
+    }
+    return new CredentialsDto();
+
+  }
+  
+  @PostMapping(value = { "/users/login", "/users/login/" })
+  public CredentialsDto loginUser(@RequestBody MultiValueMap<String, String> values) {
+    String username = values.getFirst("username");
+    String aPassword = values.getFirst("password");
+    if (service.loginUser(username, aPassword)) {
+      List<User> users = entityRepo.findEntityByAttribute("username", User.class, username);
+      String id = users.get(0).getIdCode();
+      return service.generateCredentials(id);
+    }
+    return new CredentialsDto();
+
+  }
 }

@@ -47,6 +47,13 @@ public class ManagerRepository {
     return manager;
   }
 
+  public Manager createManager(String userIdCode) {
+    User user = entityManager.find(User.class, userIdCode);
+    Manager manager = new Manager(userIdCode, user);
+    entityManager.persist(manager);
+    return manager;
+  }
+
   /**
    * Overloaded getManager method retrieves Manager instance from the database.
    * Its collection of promotedListings will be inaccessible unless the option

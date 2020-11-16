@@ -50,13 +50,13 @@ public class ArtOrderRestController {
   }
 
   /**
-   * 
-   * @param  aIsDelivered
-   * @param  aTargetLocation
-   * @param  aTargetAddress
-   * @param  aDeliveryTracker
-   * @param  artPieceDto
-   * @return
+   * requestBody = {
+   *  aIsDelivered: boolean
+   *  pieceLocation: AtGallery, Offsite
+   *  aTargetAddress: string
+   *  aDeliveryTracker: string
+   *  artPieceId: string
+   * }
    */
   @PostMapping(value = { "/artorder/create", "/artorder/create/" })
   public ArtOrderDto createArtOrder(@RequestBody MultiValueMap<String, String> map) {

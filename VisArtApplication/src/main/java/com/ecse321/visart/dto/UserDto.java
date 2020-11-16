@@ -10,6 +10,7 @@ public class UserDto {
   private String profilePicLink;
   private String profileDescription;
   private String idCode;
+  private String role = "";
 
   public UserDto() {
   }
@@ -17,15 +18,20 @@ public class UserDto {
   public UserDto(User user) {
     this(user.getEmailAddress(), user.getDisplayname(), user.getUsername(), user.getPassword(),
         user.getProfilePicLink(), user.getProfileDescription(), user.getIdCode());
+    try {
+      setRole(user.getRole().getClass().getSimpleName());
+    } catch (NullPointerException e) {
+      
+    }
   }
 
   public UserDto(String emailAddress, String displayname, String username, String password,
       String profilePicLink, String profileDescription, String idCode) {
     super();
+    this.password = password;
     this.emailAddress = emailAddress;
     this.displayname = displayname;
     this.username = username;
-    this.password = password;
     this.profilePicLink = profilePicLink;
     this.profileDescription = profileDescription;
     this.idCode = idCode;
@@ -55,14 +61,6 @@ public class UserDto {
     this.username = username;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
   public String getProfilePicLink() {
     return profilePicLink;
   }
@@ -85,5 +83,13 @@ public class UserDto {
 
   public void setIdCode(String idCode) {
     this.idCode = idCode;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 }

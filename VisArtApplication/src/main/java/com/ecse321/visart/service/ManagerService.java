@@ -15,9 +15,11 @@ import com.ecse321.visart.repositories.ManagerRepository;
 @Service
 public class ManagerService {
   /**
-  *
-  * @author danielbucci
-  */
+   *
+   * @author danielbucci
+   */
+  @Autowired
+  UserService userService;
 
   @Autowired
   ManagerRepository managerRepo;
@@ -28,16 +30,25 @@ public class ManagerService {
   @Autowired
   ArtListingService artListingService;
 
+  @Transactional
+  public Manager createManagerUnified(String aEmailAddress, String aDisplayname,
+      String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
+
+    User user = userService.createUser(aEmailAddress, aDisplayname, aUsername, aPassword,
+        aProfilePicLink, aProfileDescription);
+    return managerRepo.createManager(user.getIdCode());
+  }
+
   /**
-  *
-  * @param  aEmailAddress
-  * @param  aDisplayname
-  * @param  aUsername
-  * @param  aPassword
-  * @param  aProfilePicLink
-  * @param  aProfileDescription
-  * @return
-  */
+   *
+   * @param  aEmailAddress
+   * @param  aDisplayname
+   * @param  aUsername
+   * @param  aPassword
+   * @param  aProfilePicLink
+   * @param  aProfileDescription
+   * @return
+   */
   @Transactional
   public Manager createManager(String aEmailAddress, String aDisplayname,
       String aUsername, String aPassword, String aProfilePicLink, String aProfileDescription) {
@@ -81,12 +92,12 @@ public class ManagerService {
 
   }
 
-
   /**
-  * return manager given an id from db
-  * @param  aIdCode
-  * @return Manager 
-  */
+   * return manager given an id from db
+   * 
+   * @param  aIdCode
+   * @return         Manager
+   */
 
   // @Transactional
   // public Manager addManagerListing(String aIdCode, ArtListing artListing) {
@@ -99,17 +110,17 @@ public class ManagerService {
   // return manager;
   // }
 
-
   @Transactional
   public Manager getManager(String aIdCode) {
     return managerRepo.getManager(aIdCode);
   }
-  
+
   /**
    * return manager with the listings given an id from db
+   * 
    * @param  aIdCode
    * @param  promotedListing
-   * @return Manager 
+   * @return                 Manager
    */
   @Transactional
   public Manager getManager(String aIdCode, Boolean promotedListings) {
@@ -118,11 +129,12 @@ public class ManagerService {
 
   /**
    * adds listing to a managers db
-   * @param  aIdCode
-   * @param  aListingCode
+   * 
+   * @param aIdCode
+   * @param aListingCode
    */
   @Transactional
-  public void addListing(String aIdCode, String aListingIdCode) {
+  public Manager addListing(String aIdCode, String aListingIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
       throw new IllegalArgumentException("Cannot find manager");
     }
@@ -132,15 +144,18 @@ public class ManagerService {
     Manager manager = getManager(aIdCode, true);
     manager.addPromotedListing(artListingService.getArtListing(aListingIdCode));
     managerRepo.updateManager(manager);
+    return manager;
   }
 
   /**
    * removes a listing to a managers db
-   * @param  aIdCode
-   * @param  aListingCode
+   * 
+   * @param aIdCode
+   * @param aListingCode
+   * @return 
    */
   @Transactional
-  public void removeListing(String aIdCode, String aListingIdCode) {
+  public Manager removeListing(String aIdCode, String aListingIdCode) {
     if (aIdCode == null || aIdCode.equals("")) {
       throw new IllegalArgumentException("Cannot find manager");
     }
@@ -150,11 +165,13 @@ public class ManagerService {
     Manager manager = getManager(aIdCode, true);
     manager.removePromotedListing(artListingService.getArtListing(aListingIdCode));
     managerRepo.updateManager(manager);
+    return manager;
   }
 
   /**
    * deletes a manager from a db
-   * @param  aIdCode
+   * 
+   * @param aIdCode
    */
   @Transactional
   public Boolean deleteManager(String aIdCode) {
@@ -165,7 +182,6 @@ public class ManagerService {
     }
   }
 
-  
   /**
    * @return List<Manager> all the managers in the db
    */
@@ -174,12 +190,12 @@ public class ManagerService {
     return entityRepo.getAllEntities(Manager.class);
   }
 
-
   /**
    * https://www.geeksforgeeks.org/check-email-address-valid-not-java/
    * checks if an email is valid
+   * 
    * @param  String email
-   * @return Boolean isValid
+   * @return        Boolean isValid
    */
   // https://www.geeksforgeeks.org/check-email-address-valid-not-java/
   public static boolean isValidEmail(String email) {

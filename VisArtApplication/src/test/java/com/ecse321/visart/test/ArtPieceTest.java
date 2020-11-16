@@ -55,7 +55,7 @@ public class ArtPieceTest {
     artist = aRepo.createArtist("kl" + l + 13, "steve@gmail.com", "Steve Jobs", "steve56",
         "apple1234",
         "steveimage", "ceo");
-    artListing = alRepo.createArtListing(ArtListing.PostVisibility.Public, "rainbowss", "myartss",
+    artListing = alRepo.createArtListing(0.0,ArtListing.PostVisibility.Public, "rainbowss", "myartss",
         "ki" + l + 23,
         artist);
 

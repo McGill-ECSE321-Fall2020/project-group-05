@@ -1,11 +1,18 @@
 import requests as r
 import json
 import sys
+import random
 url = "https://vis-art-application.herokuapp.com/" # development server
 # url = "http://localhost:8080/"
-result = 0
+result = 0  
+def generate_random_string(num):
+    alpha = list(range(ord('a'),ord('z'))) + list(range(ord('A'),ord('Z'))) + list(range(ord('0'),ord('9')))
+    alpha = [ chr(al) for al in alpha]
+    return ''.join([ alpha[random.randrange(len(alpha))] for i in range(num)])
+
 def get(endpoint,params=None,data=None):
     return r.get(url+endpoint,params=params,data=data)
+
 def post(endpoint,params=None,data=None):
     return r.post(url+endpoint,params=params,data=data)
 
@@ -16,6 +23,7 @@ def pget(endpoint,params=None,data=None,func=None):
         return c,c.content
     else:
         return c,c.content,func(c)
+
 def ppost(endpoint,params=None,data=None,func=None):
     c = post(endpoint,params=params,data=data)
     sys.stderr.write(">>> "+str(c)+' '+str(c.url)+'\n')
@@ -23,6 +31,31 @@ def ppost(endpoint,params=None,data=None,func=None):
         return c,c.content
     else:
         return c,c.content,func(c)
+
+def clearDatabase():
+    # Delete All entities
+    print('---All Deleting REST Methods (delete everything in database---')
+    customers_ids = pget("customers/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    artists_ids = pget("artists/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    managers_ids = pget("managers/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    artpiece_ids = pget("artpiece/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    artlisting_ids = pget("artlisting/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    tags_ids = pget("tags/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    tickets_ids = pget("tickets/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    artorder_ids = pget("artorder/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    users_ids = pget("users/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+
+
+    print("delete tickets",     [ppost("tickets/delete/{}".format(id_code)) for id_code in tickets_ids])
+    print("delete artorder",    [ppost("artorder/delete/{}".format(id_code)) for id_code in artorder_ids])
+    print("delete artpiece",    [ppost("artpiece/delete/{}".format(id_code)) for id_code in artpiece_ids])
+    print("delete tags",        [ppost("tags/delete/{}".format(id_code)) for id_code in tags_ids])
+    print("delete artlisting",  [ppost("artlisting/delete/{}".format(id_code)) for id_code in artlisting_ids])
+    print("delete artists",     [ppost("artists/delete/{}".format(id_code)) for id_code in artists_ids])
+    print("delete customers",   [ppost("customers/delete/{}".format(id_code)) for id_code in customers_ids])
+    print("delete managers",    [ppost("managers/delete/{}".format(id_code)) for id_code in managers_ids])
+    users_ids = pget("users/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
+    print("delete users",       [ppost("users/delete/{}".format(id_code)) for id_code in users_ids])
 
 print('---Retrieve Everything Currently in the Database---')
 print("customers",pget("customers/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2])
@@ -34,22 +67,23 @@ print("artlisting",pget("artlisting/get_all", func=lambda c: [i['idCode'] for i 
 print("tags",pget("tags/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2])
 print("tickets",pget("tickets/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2])
 print("artorder",pget("artorder/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2])
-
+clearDatabase()
 try:
     # Create a bunch of entities
     print()
     print('---All Create REST Methods---')
-    users_create = (ppost("users/create",data={"emailAddress":"auryan898@gmail.com","displayname":"dingdong1","username":"hiIAmBilly1","password":"password","profilePicLink":None,"profileDescription":""}))
+    codes = [generate_random_string(3) for i in range(3)]
+    users_create = (ppost("users/create",data={"emailAddress":"auryan{}@gmail.com".format(codes[0]),"displayname":"dingdong"+codes[0],"username":"hiIAmBilly"+codes[0],"password":"password","profilePicLink":None,"profileDescription":""}))
     print(users_create)
-    managers_create = (ppost("managers/create",data={"emailAddress":"auryan898@gmail.com","displayname":"dingdong2","username":"hiIAmBilly2","password":"password","profilePicLink":None,"profileDescription":""}))
+    managers_create = (ppost("managers/create",data={"emailAddress":"auryan{}@gmail.com".format(codes[1]),"displayname":"dingdong"+codes[1],"username":"hiIAmBilly"+codes[1],"password":"password","profilePicLink":None,"profileDescription":""}))
     print(managers_create)
-    customers_create = (ppost("customers/create",data={"emailAddress":"auryan898@gmail.com","displayname":"dingdong4","username":"hiIAmBilly4","password":"password","profilePicLink":".","profileDescription":""}))
+    customers_create = (ppost("customers/create",data={"emailAddress":"auryan{}@gmail.com".format(codes[2]),"displayname":"dingdong"+codes[2],"username":"hiIAmBilly"+codes[2],"password":"password","profilePicLink":".","profileDescription":""}))
     print(customers_create)
     # customers_ids = pget("customers/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
     artists_create = (ppost("artists/create",data={'customerId':customers_create[0].json()['idCode']}))
     print(artists_create)
     # artists_ids = pget("artists/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-    artlisting_create = (ppost("artlisting/create",data={'aVisibility':'Public','aDescription':'none','aTitle':'My Doodle','artistId':artists_create[0].json()['idCode']}))
+    artlisting_create = (ppost("artlisting/create",data={'price':'0','aVisibility':'Public','aDescription':'none','aTitle':'Another Doodle','artistId':artists_create[0].json()['idCode']}))
     print(artlisting_create)
     # artlisting_ids = pget("artlisting/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
     tags_create = (ppost("tags/create",data={"aListing":artlisting_create[0].json()['idCode'],'aKeyword':'bob','aType':'Other'}))
@@ -143,11 +177,11 @@ try:
     }))
 
     print(ppost("artlisting/update_dimensions/{idCode}".format(idCode=listing1),data={
-        'dimensions':"[4.4,4.5,2.3]"
+        'dimensions':[4.4,4.5,2.3]
         }))
 
     print(ppost("artlisting/update_post_images/{idCode}".format(idCode=listing1),data={
-        'images':"['duh.com','pfft.net']"
+        'images':['duh.com','pfft.net']
         }))
     piece1 = artpiece_create[0].json()['idCode']
     print(ppost("/artlisting/remove_piece/{idCode}".format(idCode=listing1),data={
@@ -213,32 +247,14 @@ try:
     }))
     
 except Exception as e:
-    sys.stderr.write(e)
+    sys.stderr.write(str(e))
     sys.stderr.write('\n')
     result = 1
 print()
+exit(result)
 print("Cleaning Up...")
-# Delete All entities
-print('---All Deleting REST Methods (delete everything in database---')
-customers_ids = pget("customers/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-artists_ids = pget("artists/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-managers_ids = pget("managers/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-artpiece_ids = pget("artpiece/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-artlisting_ids = pget("artlisting/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-tags_ids = pget("tags/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-tickets_ids = pget("tickets/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-artorder_ids = pget("artorder/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-users_ids = pget("users/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
 
 
-print("delete tickets",     [ppost("tickets/delete/{}".format(id_code)) for id_code in tickets_ids])
-print("delete artorder",    [ppost("artorder/delete/{}".format(id_code)) for id_code in artorder_ids])
-print("delete artpiece",    [ppost("artpiece/delete/{}".format(id_code)) for id_code in artpiece_ids])
-print("delete tags",        [ppost("tags/delete/{}".format(id_code)) for id_code in tags_ids])
-print("delete artlisting",  [ppost("artlisting/delete/{}".format(id_code)) for id_code in artlisting_ids])
-print("delete artists",     [ppost("artists/delete/{}".format(id_code)) for id_code in artists_ids])
-print("delete customers",   [ppost("customers/delete/{}".format(id_code)) for id_code in customers_ids])
-print("delete managers",    [ppost("managers/delete/{}".format(id_code)) for id_code in managers_ids])
-users_ids = pget("users/get_all", func=lambda c: [i['idCode'] for i in c.json()])[2]
-print("delete users",       [ppost("users/delete/{}".format(id_code)) for id_code in users_ids])
+
+clearDatabase()
 exit(result)

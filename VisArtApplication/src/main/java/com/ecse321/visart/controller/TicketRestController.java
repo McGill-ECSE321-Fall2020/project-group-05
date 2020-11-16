@@ -37,9 +37,13 @@ public class TicketRestController {
 
   /**
    * 
-   * @param  aIdCode
-   * @param  map
-   * @return
+   * requestBody = {
+   *  aIsPaymentConfirmed: boolean
+   *  aPaymentAmoung: float
+   *  aOrder: string
+   *  aCustomer: string
+   *  aArtist: string
+   * }
    */
   @PostMapping(value = { "/tickets/create", "/tickets/create/" })
   public TicketDto createTicket(@RequestBody MultiValueMap<String, String> map) {
@@ -48,8 +52,14 @@ public class TicketRestController {
     String aOrderDto = map.getFirst("aOrder");
     String aCustomerDto = map.getFirst("aCustomer");
     String aArtistDto = map.getFirst("aArtist");
-    boolean aIsPaymentConfirmedBool = Boolean.parseBoolean(aIsPaymentConfirmed);
-    double aPaymentAmountDbl = Double.parseDouble(aPaymentAmount);
+
+    Boolean aIsPaymentConfirmedBool = null;
+    if (aIsPaymentConfirmed != null)
+      aIsPaymentConfirmedBool = Boolean.parseBoolean(aIsPaymentConfirmed);
+    
+    Double aPaymentAmountDbl = null;
+    if (aPaymentAmount != null)
+      aPaymentAmountDbl = Double.parseDouble(aPaymentAmount);
     return new TicketDto(ticService.createTicket(aIsPaymentConfirmedBool, aPaymentAmountDbl,
         aOrderDto, aCustomerDto, aArtistDto));
   }
@@ -68,8 +78,14 @@ public class TicketRestController {
     String aOrderDto = map.getFirst("aOrder");
     String aCustomerDto = map.getFirst("aCustomer");
     String aArtistDto = map.getFirst("aArtist");
-    boolean aIsPaymentConfirmedBool = Boolean.parseBoolean(aIsPaymentConfirmed);
-    double aPaymentAmountDbl = Double.parseDouble(aPaymentAmount);
+    
+    Boolean aIsPaymentConfirmedBool = null;
+    if (aIsPaymentConfirmed != null)
+      aIsPaymentConfirmedBool = Boolean.parseBoolean(aIsPaymentConfirmed);
+    
+    Double aPaymentAmountDbl = null;
+    if (aPaymentAmount != null)
+      aPaymentAmountDbl = Double.parseDouble(aPaymentAmount);
     return new TicketDto(ticService.updateTicket(aIsPaymentConfirmedBool, aPaymentAmountDbl,
         aIdCode, aOrderDto, aCustomerDto, aArtistDto));
   }
@@ -82,7 +98,9 @@ public class TicketRestController {
   @PostMapping(value = { "/tickets/delete/{id}", "/tickets/delete/{id}/" })
   public Boolean deleteTicket(@PathVariable("id") String idCode) {
     return ticService.deleteTicket(idCode);
-  } /**
+  }
+
+  /**
    * 
    * @param  idCode
    * @return

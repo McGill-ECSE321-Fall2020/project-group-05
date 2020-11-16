@@ -79,7 +79,7 @@ public class TagTest {
         profilePic,
         profileDesc);
     aArtist = artistRepo.createArtist(id + 5, aCustomer);
-    aListing = listingRepo.createArtListing(ArtListing.PostVisibility.Public, title, listingDesc,
+    aListing = listingRepo.createArtListing(0.0,ArtListing.PostVisibility.Public, title, listingDesc,
         id + 4, aArtist);
 
   }

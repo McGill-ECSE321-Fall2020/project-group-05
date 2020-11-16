@@ -66,8 +66,7 @@ public class ManagerRestController {
   @PostMapping(value = { "/managers/add_listing/{idCode}", "/managers/add_listing/{idCode}/" })
   public ManagerDto addManagerListing(@RequestBody MultiValueMap<String, String> values,
       @PathVariable("idCode") String idCode) {
-    Manager manager = service.getManager(idCode);
-    manager.addPromotedListing(serviceal.getArtListing(values.getFirst("listingIdCode")));
+    Manager manager = service.addListing(idCode, values.getFirst("listingIdCode"));
     return new ManagerDto(manager);
   }
 
@@ -82,9 +81,7 @@ public class ManagerRestController {
       "/managers/remove_lisiting/{idCode}/" })
   public ManagerDto deleteManagerListing(@RequestBody MultiValueMap<String, String> values,
       @PathVariable("idCode") String idCode) {
-    Manager manager = service.getManager(idCode);
-    manager.removePromotedListing(serviceal.getArtListing(values.getFirst("listingIdCode")));
-
+    Manager manager = service.removeListing(idCode, values.getFirst("listingIdCode"));
     return new ManagerDto(manager);
   }
 
@@ -95,7 +92,7 @@ public class ManagerRestController {
    */
   @PostMapping(value = { "/managers/create", "/managers/create/" })
   public ManagerDto createManager(@RequestBody MultiValueMap<String, String> values) {
-    return new ManagerDto(service.createManager(
+    return new ManagerDto(service.createManagerUnified(
         values.getFirst("emailAddress"), values.getFirst("displayname"),
         values.getFirst("username"), values.getFirst("password"),
         values.getFirst("profilePicLink"), values.getFirst("profileDescription")));

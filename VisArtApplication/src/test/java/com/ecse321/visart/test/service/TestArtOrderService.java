@@ -54,7 +54,7 @@ public class TestArtOrderService {
   private static final User aUser = new User("a", "b", "c", "d", "e", "f", "g");
   private static final Customer aCustomer = new Customer("customerCode", aUser);
   private static final Artist aArtist = new Artist("artistCode", aCustomer);
-  private static final ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+  private static final ArtListing TEST_LISTING = new ArtListing(0.0,PostVisibility.Draft, "name",
       "listing", "mockcode",
       aArtist);
 
@@ -81,7 +81,7 @@ public class TestArtOrderService {
     lenient().when(apRepo.getArtPiece(anyString())).thenAnswer(
         (InvocationOnMock invocation) -> {
           if (invocation.getArgument(0).equals(AP_KEY)) {
-            ArtListing TEST_LISTING = new ArtListing(PostVisibility.Draft, "name",
+            ArtListing TEST_LISTING = new ArtListing(0.0,PostVisibility.Draft, "name",
                 "listing", "mockcode",
                 aArtist);
             ArtPiece artPiece = new ArtPiece(pieceLocation, AP_KEY, AP_KEY,

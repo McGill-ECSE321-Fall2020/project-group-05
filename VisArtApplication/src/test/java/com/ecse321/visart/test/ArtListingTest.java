@@ -55,7 +55,7 @@ public class ArtListingTest {
   void testCreate1() {
 
     // Create
-    ArtListing artListingTest1 = aListRepo.createArtListing(ArtListing.PostVisibility.Public,
+    ArtListing artListingTest1 = aListRepo.createArtListing(0.0,ArtListing.PostVisibility.Public,
         description, title,
         "tt" + l, artist);
 

@@ -39,6 +39,7 @@ public class ArtListing {
   private PostVisibility visibility;
   private String description;
   private String title;
+  private Double price;
 
   @ElementCollection
   private List<String> postingPicLink;
@@ -49,8 +50,10 @@ public class ArtListing {
   // CONSTRUCTOR
   // ------------------------
 
-  public ArtListing(PostVisibility aVisibility, String aDescription, String aTitle, String aIdCode,
+  public ArtListing(Double price, PostVisibility aVisibility, String aDescription, String aTitle,
+      String aIdCode,
       Artist aArtist) {
+    this.price = price;
     visibility = aVisibility;
     dimensions = new ArrayList<Float>();
     description = aDescription;
@@ -588,6 +591,14 @@ public class ArtListing {
   // line 150 "../../../../../resources/visart.ump"
   public ArtListing() {
 
+  }
+
+  public Double getPrice() {
+    return price;
+  }
+
+  public void setPrice(Double price) {
+    this.price = price;
   }
 
   public String toString() {

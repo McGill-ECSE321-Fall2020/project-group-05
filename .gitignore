@@ -53,3 +53,6 @@ atlassian-ide-plugin.xml
 *.so
 
 .gradle
+firebase-config.json
+*firebase-adminsdk*.json
+*google-serviceadmin*.json
