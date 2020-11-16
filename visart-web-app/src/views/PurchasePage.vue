@@ -63,7 +63,8 @@ export default {
       listId: '',
       slide: 0,
       sliding: null,
-      artistId: ''
+      artistId: '',
+      loggedin: ''
     }
   },
   methods: {
@@ -107,11 +108,11 @@ export default {
         })
     },
     addFavorite: function () {
-      const userId = backend.retrieveCurrentUser().uid
-      if (userId == null) {
-        this.$alert('Sign in to add Artwork to your Favorites!')
+      const user = backend.retrieveCurrentUser()
+      if (user == null) {
+        this.$router.push({ path: '/login/' })
       } else {
-        // User id is therefore valid
+        const userId = user.uid
         const artlistingId = this.$route.params.id
         backend.get('/customers/get/' + userId).then(function (response) {
           // This function will run if the id is for a customer
@@ -128,7 +129,12 @@ export default {
       }
     },
     goToCheckout: function (idCode) {
-      this.$router.push({ path: '/checkout/' + idCode })
+      const user = backend.retrieveCurrentUser()
+      if (user != null) {
+        this.$router.push({ path: '/checkout/' + idCode })
+      } else {
+        this.$router.push({ path: '/login/' })
+      }
     }
   },
   created: function () {
