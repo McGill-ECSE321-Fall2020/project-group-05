@@ -273,8 +273,9 @@ export default {
                    .get("/tickets/get/" + (response.data).artPieces[0].ticketId)
                 })
                 .then(response =>{
+                    console.log('reached here');
                     backend.post('tickets/update/'+(response.data).idCode,
-                    backend.parse({'paymentConfirmed': true}));
+                    backend.parse({'aIsPaymentConfirmed': true}));
                 })
                 .catch(e => {
                     console.log(e);

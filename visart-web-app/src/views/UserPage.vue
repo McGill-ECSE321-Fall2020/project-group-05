@@ -184,11 +184,11 @@ export default {
                 .then(response => {
                    console.log((response.data).artPieces[0].ticketId);
                    return backend
-                   .get("/tickets/get/" + (response.data).artPieces[0].ticketId)
+                   .get("/artorder/get/" + (response.data).artPieces[0].orderId)
                 })
                 .then(response =>{
-                    backend.post('tickets/update/'+(response.data).idCode,
-                    backend.parse({'paymentConfirmed': true}));
+                    backend.post('artorder/update/'+(response.data).idCode,
+                    backend.parse({'aIsDelivered': true}));
                 })
                 .catch(e => {
                     console.log(e);

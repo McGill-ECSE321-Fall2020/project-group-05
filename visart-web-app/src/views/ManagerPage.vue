@@ -166,6 +166,7 @@ export default {
         });
     },
     showSold: function() {
+       console.log('show sold is called');
       this.actionTitle = "Sold Art";
       this.actionDescription = "All Sold Art In the Gallary";
       this.artListings = [];
@@ -182,7 +183,7 @@ export default {
           var listings = response.data.filter(
             listing =>
               listing != null &&
-              listing.artPieces[0].artOrder.localeCompare("") != 0
+              listing.artPieces[0].artOrder == ''
           );
           var artorders = listings.map(l => {
             vm.artListings.push(l);

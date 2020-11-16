@@ -57,6 +57,8 @@
         <div v-else>
         <form class="form-inkine">
           <button class="btn btn-light my-2 my-sm-0" type="button" v-on:click="unauthenticateUser">Logout</button>
+
+          <button class="btn btn-light my-2 my-sm-0" type="button" v-on:click="goToDashBoard">Go To My Dashboard</button>
         </form>
         </div>
       </div>
@@ -76,12 +78,18 @@ export default {
   data: function() {
     return {
       isArtistLoggedIn: false,
-      isSignedIn: false
+      isSignedIn: false,
+      userdata: {
+        user: { displayname: "", role: '' },
+        customer: {},
+        manager: {}
+      }
     };
   },
   created: function() {
     let vm = this;
     backend.onFirebaseAuth(function(user) {
+      vm.loadUserData();
       if (user != null) {
         backend.get('users/get/'+user.uid).then(resp => {
           if (resp.data.role == "Customer") {
@@ -98,12 +106,76 @@ export default {
         vm.isArtistLoggedIn = false
       }
     });
+
   },
   methods: {
     unauthenticateUser: function() {
       backend.unauthenticate();
       setTimeout(()=>this.$router.push({path:'/login'}), 100);
-  }}
+  },
+  goToDashBoard: function() {
+    console.log('Role' + this.userdata.user.role);
+    if (this.userdata.user.role == 'Manager'){
+      this.$router.push({path:'/managerpage/'+ this.userdata.manager.idCode});
+    } else if (this.userdata.user.role == 'Artist'){
+       this.$router.push({path:'/artistpage/'+ this.userdata.customer.artistId});
+    } else if(this.userdata.user.role == 'Customer'){
+       this.$router.push({path:'/userpage/'+ this.userdata.customer.idCode});
+    }
+  },
+  loadUserData: function() {
+      let userf = backend.retrieveCurrentUser();
+      console.log(userf);
+      let id = userf ? userf.uid : null;
+      let vm = this;
+      if (id != null && id != "") {
+        backend
+          .get("users/get/" + id)
+          .then(resp => {
+            vm.userdata.user = resp.data;
+
+            console.log(resp);
+            switch (vm.userdata.user.role) {
+              case "Manager":
+                return backend.get("managers/get/" + id);
+              case "Customer":
+                return backend.get("customers/get/" + id);
+              default:
+                vm.userdata.user.role = "User";
+                return resp;
+            }
+          })
+          .then(resp => {
+            switch (vm.userdata.user.role) {
+              case "Manager":
+                vm.userdata.manager = resp.data;
+                break;
+              case "Customer":
+                vm.userdata.customer = resp.data;
+                break;
+              default:
+            }
+
+            if (
+              vm.userdata.user.role == "Customer" &&
+              resp.data.artistId &&
+              resp.data.artistId != ""
+            ) {
+              return backend
+                .get("artists/get/" + resp.data.artistId)
+                .then(resp => {
+                  vm.userdata.user.role = "Artist";
+                  vm.userdata.artist = resp.data;
+
+                  return resp;
+                });
+            }
+            return resp;
+          });
+        return true;
+      } else return false;
+    },
+}
 };
 </script>
 
@@ -159,14 +231,9 @@ export default {
   position: relative;
   margin: 0;
   padding: 0;
-  height: 90px;
+  height: 60px;
   width: 100%;
   color: #fff;
-  padding-top:5px;
-}
-.mainTagsTitle{
-margin-bottom:-5px;
-color: rgb(255, 255, 255);
 }
 #hooperContainerTags {
   height: 60px;
@@ -188,21 +255,10 @@ color: rgb(255, 255, 255);
 }
 .sectionContentListing {
   color: rgb(43, 38, 32);
-  font-size: 150%;
+  font-size: 200%;
+  top: 40%;
   font-weight: 400;
   border: 1px;
-  width:100%;
-  padding:0%;
-  padding-top: 4%!important;
-  height:12% !important;
-  overflow: hidden;
-  transition: all .2s ease-in-out;
-  z-index: 1000;
-}
-.listingsTitle {
-  color: rgb(43, 38, 32);
-  margin: auto;
-  margin-top: 20px;
 }
 #listingsTitle {
   color: rgb(43, 38, 32);
@@ -230,19 +286,22 @@ color: rgb(255, 255, 255);
   opacity: 1;
   transform: scale(1.08, 1.08) !important;
 }
-
+.cardImg:hover ~ .sectionContentListing {
+  opacity: 0;
+}
+.sectionContentListing:hover ~ .cardImg{
+  opacity: 1;
+  transform:scale(1.08,1.08) !important;
+}
 .sectionContentListing:hover{
-  font-size: 160% !important;
-  color: rgb(90, 79, 66) !important;
-  cursor: pointer;
+  opacity: 0;
 }
 
 .hooperContainerCardImg:hover ~ .cardImg{
   opacity: 1;
 }
 .cardTitlesContainer {
-  height: 10% !important;
-  overflow: hidden;
+  height: 20% !important;
 }
 #fixedbutton {
   position: fixed;
@@ -413,44 +472,22 @@ color: rgb(255, 255, 255);
 .homeCard{
   width:90% !important;
   margin:30px !important;
-  border:1px solid rgb(128, 116, 116);
-  position: relative;
-}
-.homeCard:after{
-    content  : "";
-  position : absolute;
-  z-index  : 1;
-  bottom   : 0;
-  left     : 0;
-  pointer-events   : none;
-  background-image : linear-gradient(to bottom, 
-                    rgba(255,255,255, 0), 
-                    rgba(255,255,255, 1) 90%);
-  width    : 100%;
-  height   : 4em;
+  border:1px solid #444
 }
 .card-columns-home{
   margin:auto !important;
 }
 .cardArtist{
-position: absolute;
-float: left;
+float:left;
 font-size: 120%;
-
 }
 .cardPrice{
-  float: right;
+float:right;
 font-size: 120%;
-margin-top:17%;
-margin-bottom:5%;
-margin-right: 1%;
 }
 .cardArtist{
  color: rgb(202, 182, 145);
  transition: all .2 ease-in-out;
-margin-top:15%;
-margin-bottom:5%;
-margin-left: 5%;
 }
 .cardArtist:hover{
   color: rgb(145, 123, 84);
@@ -459,17 +496,12 @@ margin-left: 5%;
 .cardDesc{
 float:left;
 font-size: 100%;
-margin-top:5%;
-margin-bottom:1em;
+margin-top:2em;
+margin-bottom:2em;
 width:100%;
-max-height:6rem;
-overflow:hidden;
-padding-bottom: 2.5rem;
 }
 .cardBody{
-  height:120%;
-  position:relative;
-  padding:0px !important;
+  height:10em;
 }
 #searchForm{
 position: absolute;
