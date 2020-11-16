@@ -79,7 +79,7 @@ export default {
             artListings : [],
             paymentConfirmed: [],
             action2: '',
-            actionTitle: 'Delete Listing',
+            actionTitle: '',
             actionDescription: '',
             isLoggedIn: false,
 
