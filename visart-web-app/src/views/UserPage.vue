@@ -73,7 +73,7 @@ export default {
             artListings : [],
             paymentConfirmed: [],
             action2: 'Unfavorite',
-            actionTitle: '',
+            actionTitle: 'Not a User',
             actionDescription: '',
             isLoggedIn: false,
         };

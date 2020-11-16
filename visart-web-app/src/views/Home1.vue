@@ -144,7 +144,7 @@ export default {
     loadArtListings: function() {
       let vm = this;
       // vm.artlistings
-      backend.get("artlisting/get_unsold_art").then(resp => {
+      backend.get("artlisting/get_all").then(resp => {
         return Promise.all(
           resp.data.map(listing => {
             backend.get("artists/get/" + listing.artist).then(artistResp => {
