@@ -1,3 +1,4 @@
 task stage() {
     dependsOn ':VisArtApplication:assemble'
+    dependsOn ':visart-mobile-app:assemble'
 }
