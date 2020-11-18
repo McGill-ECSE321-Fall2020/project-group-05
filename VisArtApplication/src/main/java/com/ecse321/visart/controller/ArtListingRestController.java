@@ -228,6 +228,16 @@ public class ArtListingRestController {
   }
 
   /**
+   * 
+   * @return
+   */
+  @GetMapping(value = { "/artlisting/get_sold_art", "/artlisting/get_sold_art/" })
+  public List<ArtListingDto> getSoldArtworks() {
+    return artListingService.getSoldArtworks().stream().map(al -> new ArtListingDto(al))
+        .collect(Collectors.toList());
+  }
+
+  /**
    * example:
    * https://heroku.com/artlisting/get_artwork_by_keyword?keywords=bob%20burgers,hello,dingaling
    * keywords -> ["bob burgers", "hello", "dingaling"]
