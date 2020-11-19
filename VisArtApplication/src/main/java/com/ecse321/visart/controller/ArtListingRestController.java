@@ -15,21 +15,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecse321.visart.model.ArtListing;
 import com.ecse321.visart.model.ArtListing.PostVisibility;
+import com.ecse321.visart.model.ArtOrder;
+import com.ecse321.visart.model.ArtPiece.PieceLocation;
 import com.ecse321.visart.model.Artist;
 import com.ecse321.visart.dto.ArtListingDto;
+import com.ecse321.visart.dto.TicketDto;
 import com.ecse321.visart.service.ArtListingService;
+import com.ecse321.visart.service.ArtOrderService;
 import com.ecse321.visart.service.ArtistService;
+import com.ecse321.visart.service.TicketService;
 
 @CrossOrigin(origins = "*")
 @RestController
-
 public class ArtListingRestController {
   @Autowired
   private ArtListingService artListingService;
 
   @Autowired
   private ArtistService artistService;
+
+  @Autowired
+  private ArtOrderService artOrderService;
+
+  private TicketService ticketService;
 
   /**
    * 
@@ -255,4 +265,19 @@ public class ArtListingRestController {
         .collect(Collectors.toList());
   }
 
+  @PostMapping(value = {
+      "/artpiece/buy_artpiece",
+      "/artpiece/buy_artpiece/" })
+  public TicketDto purchaseArtListing(@RequestBody MultiValueMap<String, String> map) {
+    String targetAddress = map.getFirst("targetAddress");
+    String customerId = map.getFirst("customerId");
+    String listingId = map.getFirst("listingId");
+    
+    ArtListing listing = artListingService.getArtListing(listingId);
+    
+    PieceLocation targetLocation = PieceLocation.valueOf(map.getFirst("targetLocation"));
+    ArtOrder ao = artOrderService.createArtOrder(false, targetLocation, targetAddress, "TBD", listing.getPiece(0).getIdCode());
+    return new TicketDto(ticketService.createTicket(false, listing.getPrice(), ao.getIdCode(), customerId, listing.getArtist().getIdCode()));
+    
+  }
 }
