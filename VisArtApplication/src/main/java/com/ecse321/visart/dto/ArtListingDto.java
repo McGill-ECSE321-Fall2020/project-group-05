@@ -22,6 +22,8 @@ public class ArtListingDto {
   private String managerId;
   private String artistId;
   private double price;
+  private String artistDisplayname;
+  private String artistUsername;
 
   private List<ArtPieceDto> artPieces;
   private List<TagDto> tags;
@@ -42,8 +44,11 @@ public class ArtListingDto {
         .map((customer) -> customer.getIdCode()).collect(Collectors.toList()));
     if (listing.getTags() != null)
       setTags(listing.getTags());
-    if (listing.getArtist() != null)
+    if (listing.getArtist() != null) {
       artistId = listing.getArtist().getIdCode();
+      artistDisplayname = listing.getArtist().getCustomer().getUser().getDisplayname();
+      artistUsername = listing.getArtist().getCustomer().getUser().getUsername();
+    }
   }
 
   public ArtListingDto(String description, String[] postImages, String title,
@@ -159,5 +164,21 @@ public class ArtListingDto {
 
   public void setPrice(double price) {
     this.price = price;
+  }
+
+  public String getArtistDisplayname() {
+    return artistDisplayname;
+  }
+
+  public void setArtistDisplayname(String artistDisplayname) {
+    this.artistDisplayname = artistDisplayname;
+  }
+
+  public String getArtistUsername() {
+    return artistUsername;
+  }
+
+  public void setArtistUsername(String artistUsername) {
+    this.artistUsername = artistUsername;
   }
 }
