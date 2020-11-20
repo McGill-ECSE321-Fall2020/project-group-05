@@ -2,8 +2,6 @@ package com.example.visartmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,23 +26,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // data to populate the RecyclerView with
-        ArrayList<String> cardNames = new ArrayList<>();
-        cardNames.add("Horse");
-        cardNames.add("Cow");
-        cardNames.add("Camel");
-        cardNames.add("Sheep");
-        cardNames.add("Goat");
+        ArrayList<ArtListing> cardTitles = new ArrayList<ArtListing>();
+        for(int i = 0; i< 10; i++){
+           ArtListing listing = new ArtListing();
+           listing.setTitle(i+"");
+           cardTitles.add(listing);
+        }
 
-        // set up the RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.cards);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CardViewAdapter(this, cardNames);
-        adapter.setClickListener((CardViewAdapter.ItemClickListener) this);
-        recyclerView.setAdapter(adapter);
+        System.out.println("list size: " + cardTitles.size());
+        RecyclerView cards = (RecyclerView) findViewById(R.id.cards);
+
+        CardViewAdapter adapter = new CardViewAdapter(cardTitles);
+        System.out.println("I am here");
+        cards.setAdapter(adapter);
+        cards.setLayoutManager(new LinearLayoutManager(this));
+
+
     }
 
 
-    public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-    }
+//    public void onItemClick(View view, int position) {
+//        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+//    }
 }
