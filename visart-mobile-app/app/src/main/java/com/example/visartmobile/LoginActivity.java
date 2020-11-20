@@ -28,44 +28,63 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginButtonClicked(View view) {
         EditText emailBox = findViewById(R.id.loginEmail);
-        String randomNumbers = (System.nanoTime() + "");
-        randomNumbers = randomNumbers.substring(randomNumbers.length() - 5);
+        EditText passBox = findViewById(R.id.loginPass);
+//        String randomNumbers = (System.nanoTime() + "");
+//        randomNumbers = randomNumbers.substring(randomNumbers.length() - 5);
         String[][] data = {
-                {"emailAddress", randomNumbers + "bob@email.com"},
-                {"displayname", randomNumbers + "TheRy"},
-                {"username", randomNumbers + "TheRy"},
-                {"password", "password"},
-                {"profilePicLink", PLACEHOLDER_PROFILE_PIC},
-                {"profileDescription", "I describe myself here."},
+                {"emailAddress", emailBox.getText().toString()},
+                {"password", passBox.getText().toString()}
         };
-        HttpUtils.postForm("users/create", data, new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Toast.makeText(LoginActivity.this, "Email or Password Incorrect ", Toast.LENGTH_LONG).show();
-                System.err.println(e.toString());
-            }
+        HttpUtils.postForm("users/email_login", data, new LoginCallback());
+    }
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                JSONObject json = null;
-                try {
-                    String resp = response.body().string();
-                    json = new JSONObject(resp);
+    class LoginCallback implements Callback {
 
-                    System.out.println(json.toString());
-                    final String name = json.getString("username");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(LoginActivity.this, "Login Successful, Welcome " + name, Toast.LENGTH_LONG).show();
+        @Override
+        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            System.err.println(e.toString());
+        }
+
+        @Override
+        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            String userID = null;
+            try {
+                userID = new JSONObject(response.body().string()).getString("userId");
+                HttpUtils.get("users/get/" + userID, new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        System.err.println(e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        try {
+                            JSONObject json = new JSONObject(response.body().string());
+                            System.out.println(json.toString());
+
+                            final String name = json.getString("username");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this, "Login Successful, Welcome " + name, Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                    }
+                });
+            } catch (JSONException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, "Login Unsuccessful", Toast.LENGTH_LONG).show();
+                    }
+                });
+                e.printStackTrace();
             }
-        });
+        }
     }
 }

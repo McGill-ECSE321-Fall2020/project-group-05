@@ -1,5 +1,9 @@
 package com.example.visartmobile;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import okhttp3.Call;
@@ -38,7 +42,7 @@ public class HttpUtils {
         postBody(url, builder.build(), callback);
     }
 
-    public static void post(String url, FormBody formBody, Callback callback) {
+    public static void postForm(String url, FormBody formBody, Callback callback) {
         postBody(url, formBody, callback);
     }
 
@@ -52,8 +56,43 @@ public class HttpUtils {
         call.enqueue(callback);
     }
 
+    public static void get(String url, String[][] queryParameters, Callback callback) {
+        String params = "?";
+        for (String[] query : queryParameters) {
+            if (query.length >= 2) {
+                params += query[0] + "=" + encodeValue(query[1]).replace("+","%20");
+            }
+        }
+        get(url + params, callback);
+    }
+
+    public static void get(String url, Callback callback) {
+        Request request = new Request.Builder()
+                .url(getAbsoluteUrl(url))
+                .get()
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
     private static String getAbsoluteUrl(String relativeUrl) {
         System.out.println("The URL is: " + baseUrl + relativeUrl);
         return baseUrl + relativeUrl;
+    }
+
+    public static String encodeValue(String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
+    }
+
+    public static String decodeValue(String value) {
+        try {
+            return URLDecoder.decode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
     }
 }
