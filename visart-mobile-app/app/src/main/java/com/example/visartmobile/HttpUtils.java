@@ -1,7 +1,10 @@
 package com.example.visartmobile;
 
+import java.util.Arrays;
+
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,6 +24,26 @@ public class HttpUtils {
 
     public static void post(String url, String json, Callback callback) {
         RequestBody requestBody = RequestBody.create(json, JSON);
+        postBody(url, requestBody, callback);
+    }
+
+    public static void postForm(String url, String[][] body, Callback callback) {
+        FormBody.Builder builder = new FormBody.Builder();
+        for (String[] pair : body) {
+            if (pair.length >= 2) {
+                builder.add(pair[0], pair[1]);
+            }
+        }
+
+        postBody(url, builder.build(), callback);
+    }
+
+    public static void post(String url, FormBody formBody, Callback callback) {
+        postBody(url, formBody, callback);
+    }
+
+
+    public static void postBody(String url, RequestBody requestBody, Callback callback) {
         Request request = new Request.Builder()
                 .url(getAbsoluteUrl(url))
                 .post(requestBody)
@@ -30,7 +53,7 @@ public class HttpUtils {
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {
-        System.out.println("The URL is: "+baseUrl + relativeUrl);
+        System.out.println("The URL is: " + baseUrl + relativeUrl);
         return baseUrl + relativeUrl;
     }
 }
