@@ -10,6 +10,8 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.visartmobile.util.ArtListing;
+
 public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHolder> {
 
     private List<ArtListing> artListings;

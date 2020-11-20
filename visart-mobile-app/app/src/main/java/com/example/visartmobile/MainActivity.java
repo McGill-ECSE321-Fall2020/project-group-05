@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.visartmobile.util.ArtListing;
+
 public class MainActivity extends AppCompatActivity {
 
     private boolean isLoggedIn = true;

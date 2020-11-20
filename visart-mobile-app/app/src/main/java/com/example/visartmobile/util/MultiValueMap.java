@@ -1,4 +1,4 @@
-package com.example.visartmobile;
+package com.example.visartmobile.util;
 
 import android.os.Build;
 

@@ -1,4 +1,4 @@
-package com.example.visartmobile;
+package com.example.visartmobile.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
