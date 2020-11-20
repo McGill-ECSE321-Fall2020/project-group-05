@@ -12,7 +12,7 @@ import okhttp3.RequestBody;
 
 public class HttpUtils {
 
-    public static final String DEFAULT_BASE_URL = "https://vis-art-application-production.herokuapp.com/";
+    public static final String DEFAULT_BASE_URL = "https://vis-art-application.herokuapp.com/";
 
     private static String baseUrl;
     private static OkHttpClient client = new OkHttpClient();
