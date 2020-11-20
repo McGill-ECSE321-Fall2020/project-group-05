@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class MultiValueMap<K, V> implements Iterable {
     private HashMap<K, ArrayList<V>> map = new HashMap<>();
@@ -52,6 +53,21 @@ public class MultiValueMap<K, V> implements Iterable {
     @NonNull
     @Override
     public Iterator iterator() {
-        return map.entrySet().iterator();
+        return new MultiValueMapIterator();
+    }
+    class MultiValueMapIterator implements Iterator<Map.Entry<K,List<V>>> {
+        Iterator it = map.entrySet().iterator();
+        @Override
+        public boolean hasNext() {
+            return it.hasNext();
+        }
+
+        @Override
+        public Map.Entry<K, List<V>> next() {
+            Map.Entry<K,List<V>> e = (Map.Entry<K, List<V>>) it.next();
+            e.setValue(Collections.unmodifiableList(e.getValue()));
+            return e;
+        }
     }
 }
+
