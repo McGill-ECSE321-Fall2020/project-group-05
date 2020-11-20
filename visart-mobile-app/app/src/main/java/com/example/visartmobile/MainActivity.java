@@ -2,6 +2,10 @@ package com.example.visartmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -13,12 +17,15 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isLoggedIn = true;
     CardViewAdapter adapter;
+    RecyclerView cards;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mHandler = new Handler(Looper.getMainLooper());
 
         if (isLoggedIn == false) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -33,15 +40,28 @@ public class MainActivity extends AppCompatActivity {
            cardTitles.add(listing);
         }
 
-        System.out.println("list size: " + cardTitles.size());
-        RecyclerView cards = (RecyclerView) findViewById(R.id.cards);
+        cards = (RecyclerView) findViewById(R.id.cards);
 
-        CardViewAdapter adapter = new CardViewAdapter(cardTitles);
-        System.out.println("I am here");
+        populateCardView(cardTitles);
+
+
+
+    }
+
+    public void goToListingPage(int position){
+        Toast.makeText(this, position+ " was clicked!", Toast.LENGTH_SHORT).show();
+    };
+
+    public void populateCardView(ArrayList<ArtListing> cardTitles){
+        adapter = new CardViewAdapter(cardTitles);
+        adapter.setOnItemClickListener(new CardViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                goToListingPage(position);
+            }
+        });
         cards.setAdapter(adapter);
         cards.setLayoutManager(new LinearLayoutManager(this));
-
-
     }
 
 
