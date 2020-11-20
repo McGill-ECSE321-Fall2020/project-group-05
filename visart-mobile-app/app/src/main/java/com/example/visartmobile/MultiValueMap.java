@@ -1,8 +1,9 @@
 package com.example.visartmobile;
 
-import android.util.Pair;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class MultiValueMap<K, V> implements Iterable {
     private HashMap<K, ArrayList<V>> map = new HashMap<>();
@@ -53,21 +55,12 @@ public class MultiValueMap<K, V> implements Iterable {
     @NonNull
     @Override
     public Iterator iterator() {
-        return new MultiValueMapIterator();
+        return map.entrySet().iterator();
     }
-    class MultiValueMapIterator implements Iterator<Map.Entry<K,List<V>>> {
-        Iterator it = map.entrySet().iterator();
-        @Override
-        public boolean hasNext() {
-            return it.hasNext();
-        }
 
-        @Override
-        public Map.Entry<K, List<V>> next() {
-            Map.Entry<K,List<V>> e = (Map.Entry<K, List<V>>) it.next();
-            e.setValue(Collections.unmodifiableList(e.getValue()));
-            return e;
-        }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public Stream<Map.Entry<K, ArrayList<V>>> stream() {
+        return map.entrySet().stream();
     }
 }
 
