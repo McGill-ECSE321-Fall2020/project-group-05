@@ -1,1 +1,2 @@
 include ':VisArtApplication'
+include ':visart-mobile-app'

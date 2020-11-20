@@ -68,6 +68,12 @@ test {
     environment "SPRING_DATASOURCE_PASSWORD","8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8"
     systemProperty "spring.datasource.url", "jdbc:postgresql://ec2-34-200-106-49.compute-1.amazonaws.com:5432/d1fa9t0eht8kmf?password=8aa27235bd628d960a06b94da267acd22842e00556aecad5ac331094b6c0b9a8&sslmode=require&user=ujosysdilonyjy"
 }
+
+bootRun {
+    environment "FIREBASE_CONFIG", "../firebase-config.json"
+    environment "GOOGLE_APPLICATION_CREDENTIALS", "../visartapplication-firebase-adminsdk-1.json"
+}
+
 springBoot {
     mainClassName = 'com.ecse321.visart.DemoApplication'
 

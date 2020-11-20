@@ -262,6 +262,24 @@ public class ArtListingService {
   }
 
   @Transactional
+  public List<ArtListing> getSoldArtworks() {
+    List<ArtListing> allListings = entityRepo.getAllEntities(ArtListing.class);
+    List<ArtListing> soldListings = new ArrayList<ArtListing>();
+    for (ArtListing al : allListings) {
+      if (!al.hasPieces()) {
+        continue;
+      }
+      for (ArtPiece p : al.getPieces()) {
+        if (p.hasArtOrder()) {
+          soldListings.add(al);
+          break;
+        }
+      }
+    }
+    return soldListings;
+  }
+
+  @Transactional
   public List<String> filterArtworkByTag(String[] keywords) {
     return filterArtworkByTag(Arrays.asList(keywords));
   }
