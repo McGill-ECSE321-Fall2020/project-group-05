@@ -50,6 +50,13 @@
                 android:layout_height="wrap_content"
                 android:onClick="onMainNavClick"
                 android:text="Go To Art Listings" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onGetListings"
+                android:text="Get ArtListings Test" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

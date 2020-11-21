@@ -1,7 +1,14 @@
 package com.example.visartmobile.util;
 
-public class ArtListing {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArtListing {
+    private boolean isPromoted;
     private String description;
     private String[] postImages;
     private String title;
@@ -107,5 +114,63 @@ public class ArtListing {
 
     public void setArtistUsername(String artistUsername) {
         this.artistUsername = artistUsername;
+    }
+
+    public static ArtListing parseJSON(JSONObject artlistingObj) {
+        ArtListing al = new ArtListing();
+
+        try {
+            al.setDescription(artlistingObj.getString("description"));
+            List<String> postImagesList = jsonArrayToList(artlistingObj.getJSONArray("postImages"));
+            String[] postImages = new String[postImagesList.size()];
+            postImagesList.toArray(postImages);
+            al.setPostImages(postImages);
+            al.setTitle(artlistingObj.getString("title"));
+            al.setVisibility(PostVisibility.fromString(artlistingObj.getString("visibility")));
+            al.setIdCode(artlistingObj.getString("idCode"));
+            String managerId = artlistingObj.getString("managerId");
+            managerId = managerId == null || managerId.equals("null") ? null : managerId;
+            al.setManagerId(managerId);
+            al.setPromoted(managerId != null);
+            al.setArtistId(artlistingObj.getString("artistId"));
+            al.setPrice(artlistingObj.getDouble("price"));
+            al.setArtistDisplayname(artlistingObj.getString("artistDisplayname"));
+            al.setArtistUsername(artlistingObj.getString("artistUsername"));
+            return al;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static ArrayList<ArtListing> parseJSONArray(JSONArray artListingObj) {
+        ArrayList<ArtListing> list = new ArrayList<>();
+        for (int i = 0; i < artListingObj.length(); i++) {
+            try {
+                list.add(parseJSON(artListingObj.getJSONObject(i)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    public static <T> List<T> jsonArrayToList(JSONArray arr) throws JSONException {
+        List<T> result = new ArrayList<>();
+        for (int i = 0; i < arr.length(); i++) {
+            try {
+                Object t = arr.get(i);
+                result.add((T) t);
+            } catch (Exception e) {
+            }
+        }
+        return result;
+    }
+
+    public boolean isPromoted() {
+        return isPromoted;
+    }
+
+    public void setPromoted(boolean promoted) {
+        isPromoted = promoted;
     }
 }
