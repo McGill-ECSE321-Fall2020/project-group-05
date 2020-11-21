@@ -4,13 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.visartmobile.util.ArtListing;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.visartmobile.util.ArtListing;
 
 public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHolder> {
 
@@ -39,6 +41,9 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView cardTitle;
+        public ImageView postImage;
+        public TextView listingUsername;
+        public TextView listingDescription;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -48,6 +53,9 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
             super(itemView);
 
             cardTitle = (TextView) itemView.findViewById(R.id.card_name);
+            postImage = (ImageView) itemView.findViewById(R.id.post_image);
+            listingUsername = (TextView) itemView.findViewById(R.id.listingUsername);
+            listingDescription = (TextView) itemView.findViewById(R.id.listingDescription);
 
             // Setup the click listener
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -84,9 +92,18 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
         // Get the data model based on position
         ArtListing listing = artListings.get(position);
 
-        // Set item views based on your views and data model
+        // Set item views based on the views and data model
         TextView titleTextView = holder.cardTitle;
+        TextView postDescription = holder.listingDescription;
+        TextView postUsername = holder.listingUsername;
+        ImageView postImage = holder.postImage;
+
+
         titleTextView.setText(listing.getTitle());
+        postDescription.setText(listing.getDescription());
+        postUsername.setText((listing.getArtistDisplayname()));
+        Picasso.with(holder.postImage.getContext()).load(listing.getPostImages()).fit().into(postImage);
+
     }
 
     // Returns the total count of items in the list

@@ -7,13 +7,13 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.visartmobile.util.ArtListing;
+
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.visartmobile.util.ArtListing;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i< 10; i++){
            ArtListing listing = new ArtListing();
            listing.setTitle(i+"");
+           listing.setDescription(i + "");
+           listing.setArtistDisplayname(i + "");
+           String imageUri = "https://firebasestorage.googleapis.com/v0/b/visartapplication.appspot.com/o/postedImages%2Fd0872f7b-9147-4bd6-b8e5-64db18aa9e8d.png?alt=media&token=86e847fe-084e-4b06-910d-5a6d8bea6e6e";
+           listing.setPostImages(imageUri);
            cardTitles.add(listing);
         }
 
