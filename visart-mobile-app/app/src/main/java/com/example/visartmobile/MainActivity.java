@@ -7,13 +7,21 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.visartmobile.util.ArtListing;
+import com.example.visartmobile.util.HttpUtils;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.visartmobile.util.ArtListing;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,23 +36,43 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mHandler = new Handler(Looper.getMainLooper());
+        cards = (RecyclerView) findViewById(R.id.cards);
 
         if (isLoggedIn == false) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         }
 
-        // data to populate the RecyclerView with
-        ArrayList<ArtListing> cardTitles = new ArrayList<ArtListing>();
-        for(int i = 0; i< 10; i++){
-           ArtListing listing = new ArtListing();
-           listing.setTitle(i+"");
-           cardTitles.add(listing);
+        try{
+            HttpUtils.get("artlisting/get_all", new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    showToastFromThread("Oops, Not Connected To Database!");
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if(response.isSuccessful()){
+                        System.out.println("Call sucessful");
+                        String responseData = response.body().string();
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(responseData);
+                            populateCardView(jsonResponse);
+
+                        } catch (Exception e) {
+                            System.out.println("Error creating JSON object: " + e.getMessage());
+                        }
+
+                    } else{
+                        System.out.println("error occured");
+                    }
+                }
+            });
+
+        } catch (Exception ex){
+
         }
-
-        cards = (RecyclerView) findViewById(R.id.cards);
-
-        populateCardView(cardTitles);
 
 
 
@@ -54,16 +82,33 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, position+ " was clicked!", Toast.LENGTH_SHORT).show();
     };
 
-    public void populateCardView(ArrayList<ArtListing> cardTitles){
-        adapter = new CardViewAdapter(cardTitles);
-        adapter.setOnItemClickListener(new CardViewAdapter.OnItemClickListener() {
+    public void populateCardView(JSONObject json){
+        mHandler.post(new Runnable() {
             @Override
-            public void onItemClick(View view, int position) {
-                goToListingPage(position);
+            public void run() {
+                ArrayList<ArtListing> listings = new ArrayList<ArtListing>();
+                //init the listing with the json data
+                adapter = new CardViewAdapter(listings);
+                adapter.setOnItemClickListener(new CardViewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        goToListingPage(position);
+                    }
+                });
+                cards.setAdapter(adapter);
+                cards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
             }
         });
-        cards.setAdapter(adapter);
-        cards.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void showToastFromThread(String message){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast= Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
     }
 
 

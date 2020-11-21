@@ -10,7 +10,7 @@ import java.util.List;
 public class ArtListing {
     private boolean isPromoted;
     private String description;
-    private String[] postImages;
+    private String postImages;
     private String title;
     private PostVisibility visibility;
     private String idCode;
@@ -23,7 +23,7 @@ public class ArtListing {
     public ArtListing() {
     }
 
-    public ArtListing(String description, String[] postImages, String title, PostVisibility visibility, String idCode, String managerId, String artistId, double price, String artistDisplayname, String artistUsername) {
+    public ArtListing(String description, String postImages, String title, PostVisibility visibility, String idCode, String managerId, String artistId, double price, String artistDisplayname, String artistUsername) {
         this.description = description;
         this.postImages = postImages;
         this.title = title;
@@ -44,11 +44,11 @@ public class ArtListing {
         this.description = description;
     }
 
-    public String[] getPostImages() {
+    public String getPostImages() {
         return postImages;
     }
 
-    public void setPostImages(String[] postImages) {
+    public void setPostImages(String postImages) {
         this.postImages = postImages;
     }
 
