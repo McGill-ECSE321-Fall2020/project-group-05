@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecse321.visart.dto.ManagerDto;
 import com.ecse321.visart.model.Manager;
-import com.ecse321.visart.service.ArtListingService;
 import com.ecse321.visart.service.ManagerService;
 
 @CrossOrigin(origins = "*")
@@ -23,9 +22,6 @@ public class ManagerRestController {
 
   @Autowired
   private ManagerService service;
-
-  @Autowired
-  private ArtListingService serviceal;
 
   /**
    * 

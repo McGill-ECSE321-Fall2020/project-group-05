@@ -181,4 +181,28 @@ public class ArtListingDto {
   public void setArtistUsername(String artistUsername) {
     this.artistUsername = artistUsername;
   }
+
+  public List<String> getArtPieceIds() {
+    return artPieceIds;
+  }
+
+  public void setArtPieceIds(List<String> artPieceIds) {
+    this.artPieceIds = artPieceIds;
+  }
+
+  public List<String> getTagIds() {
+    return tagIds;
+  }
+
+  public void setTagIds(List<String> tagIds) {
+    this.tagIds = tagIds;
+  }
+
+  public String getArtistId() {
+    return artistId;
+  }
+
+  public void setArtistId(String artistId) {
+    this.artistId = artistId;
+  }
 }
