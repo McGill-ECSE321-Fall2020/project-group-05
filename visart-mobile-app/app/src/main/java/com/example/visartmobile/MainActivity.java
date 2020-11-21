@@ -78,8 +78,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void goToListingPage(int position){
-        Toast.makeText(this, position+ " was clicked!", Toast.LENGTH_SHORT).show();
+    public void goToListingPage(ArtListing listing){
+        Intent intent = new Intent(this, ListingActivity.class);
+        intent.putExtra("listingId", listing.getIdCode());
+        startActivity(intent);
     };
 
     public void populateCardView(ArrayList<ArtListing> listings){
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setOnItemClickListener(new CardViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        goToListingPage(position);
+                        goToListingPage(listings.get(position));
                     }
                 });
                 cards.setAdapter(adapter);
