@@ -11,7 +11,7 @@ import com.example.visartmobile.util.ArtListing;
 import com.example.visartmobile.util.HttpUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,11 +54,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     if(response.isSuccessful()){
                         System.out.println("Call sucessful");
-                        String responseData = response.body().string();
 
                         try {
-                            JSONObject jsonResponse = new JSONObject(responseData);
-                            populateCardView(jsonResponse);
+                            JSONArray arr = new JSONArray(response.body().string());
+                            ArrayList<ArtListing> listings = ArtListing.parseJSONArray(arr);
+                            populateCardView(listings);
 
                         } catch (Exception e) {
                             System.out.println("Error creating JSON object: " + e.getMessage());
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
         } catch (Exception ex){
-
+            System.out.println("error occured trying to call");
         }
 
 
@@ -82,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, position+ " was clicked!", Toast.LENGTH_SHORT).show();
     };
 
-    public void populateCardView(JSONObject json){
+    public void populateCardView(ArrayList<ArtListing> listings){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                ArrayList<ArtListing> listings = new ArrayList<ArtListing>();
+                System.out.println("Got to the printer");
                 //init the listing with the json data
                 adapter = new CardViewAdapter(listings);
                 adapter.setOnItemClickListener(new CardViewAdapter.OnItemClickListener() {
@@ -110,9 +110,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-//    public void onItemClick(View view, int position) {
-//        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-//    }
 }
