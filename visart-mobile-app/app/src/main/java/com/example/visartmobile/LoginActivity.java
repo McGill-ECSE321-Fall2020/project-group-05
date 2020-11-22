@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.visartmobile.util.HttpUtils;
+import com.example.visartmobile.util.UserAuth;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -31,62 +32,21 @@ public class LoginActivity extends AppCompatActivity {
     public void loginButtonClicked(View view) {
         EditText emailBox = findViewById(R.id.loginEmail);
         EditText passBox = findViewById(R.id.loginPass);
-//        String randomNumbers = (System.nanoTime() + "");
-//        randomNumbers = randomNumbers.substring(randomNumbers.length() - 5);
-        String[][] data = {
-                {"emailAddress", emailBox.getText().toString()},
-                {"password", passBox.getText().toString()}
-        };
-        HttpUtils.postForm("users/email_login", data, new LoginCallback());
-    }
-
-    class LoginCallback implements Callback {
-
-        @Override
-        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-            System.err.println(e.toString());
-        }
-
-        @Override
-        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-            String userID = null;
-            try {
-                userID = new JSONObject(response.body().string()).getString("userId");
-                HttpUtils.get("users/get/" + userID, new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        System.err.println(e.toString());
-                    }
-
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        try {
-                            JSONObject json = new JSONObject(response.body().string());
-                            System.out.println(json.toString());
-
-                            final String name = json.getString("username");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(LoginActivity.this, "Login Successful, Welcome " + name, Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-            } catch (JSONException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(LoginActivity.this, "Login Unsuccessful", Toast.LENGTH_LONG).show();
-                    }
-                });
-                e.printStackTrace();
-            }
-        }
+        UserAuth.loginGetUser(emailBox.getText().toString(), passBox.getText().toString(), true, (user) -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LoginActivity.this, "Login Successful, welcome: " + user.getDisplayname(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }, (failureType) -> {
+            System.out.println(failureType.toString());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LoginActivity.this, "Login Unsuccessful", Toast.LENGTH_LONG).show();
+                }
+            });
+        });
     }
 }

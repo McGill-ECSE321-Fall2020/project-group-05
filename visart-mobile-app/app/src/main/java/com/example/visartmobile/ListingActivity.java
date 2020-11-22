@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -46,7 +47,7 @@ public class ListingActivity extends AppCompatActivity {
         listingUsername = (TextView) findViewById(R.id.listingUsername2);
         listingDescription = (TextView) findViewById(R.id.listingDescription2);
 
-        try{
+        try {
             HttpUtils.get("artlisting/get/" + ID_CODE, new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -55,7 +56,7 @@ public class ListingActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         System.out.println("Call sucessful");
 
                         try {
@@ -67,38 +68,38 @@ public class ListingActivity extends AppCompatActivity {
                             System.out.println("Error creating JSON object: " + e.getMessage());
                         }
 
-                    } else{
+                    } else {
                         System.out.println("error occured");
                     }
                 }
             });
-        } catch (Exception ex){
+        } catch (Exception ex) {
 
         }
 
 
-
     }
 
-    public void setListingInfo(ArtListing listing){
+    public void setListingInfo(ArtListing listing) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
 
-                cardTitle.setText(listing.getTitle()+", $"+listing.getPrice());
+                cardTitle.setText(listing.getTitle() + ", $" + listing.getPrice());
                 listingDescription.setText(listing.getDescription());
                 listingUsername.setText((listing.getArtistDisplayname()));
-                Picasso.with(getApplicationContext()).load(listing.getPostImages()[0]).fit().into(postImage);
+                if (listing.getPostImages().length > 0)
+                    Picasso.with(getApplicationContext()).load(listing.getPostImages()[0]).fit().into(postImage);
 
             }
         });
     }
 
-    public void showToastFromThread(String message){
+    public void showToastFromThread(String message) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                Toast toast= Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
                 toast.show();
             }
         });

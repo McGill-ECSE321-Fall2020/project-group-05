@@ -59,15 +59,6 @@ public class StartupActivity extends AppCompatActivity {
     }
 
     public void onTestMethod(View view) {
-        UserAuth.loginGetUser("auryan6Xn@gmail.com", "password", true, (user) -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(StartupActivity.this, "Login Successful, welcome: " + user.getDisplayname(), Toast.LENGTH_LONG).show();
-                }
-            });
-        }, (failureType) -> {
-            System.out.println(failureType.toString());
-        });
+        Toast.makeText(StartupActivity.this, "I am a test method!", Toast.LENGTH_LONG).show();
     }
 }

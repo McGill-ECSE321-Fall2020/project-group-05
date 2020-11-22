@@ -18,7 +18,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
 
     private List<ArtListing> artListings;
 
-    public CardViewAdapter(List<ArtListing> artListings){
+    public CardViewAdapter(List<ArtListing> artListings) {
         this.artListings = artListings;
     }
 
@@ -26,10 +26,12 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
 
     // Define listener member variable
     private OnItemClickListener listener;
+
     // Define the listener interface
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
+
     // Define the method that allows the parent activity or fragment to define the listener
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
@@ -99,10 +101,11 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
         ImageView postImage = holder.postImage;
 
 
-        titleTextView.setText(listing.getTitle()+", $"+listing.getPrice());
+        titleTextView.setText(listing.getTitle() + ", $" + listing.getPrice());
         postDescription.setText(listing.getDescription());
         postUsername.setText((listing.getArtistDisplayname()));
-        Picasso.with(holder.postImage.getContext()).load(listing.getPostImages()[0]).fit().into(postImage);
+        if (listing.getPostImages().length > 0)
+            Picasso.with(holder.postImage.getContext()).load(listing.getPostImages()[0]).fit().into(postImage);
 
     }
 
