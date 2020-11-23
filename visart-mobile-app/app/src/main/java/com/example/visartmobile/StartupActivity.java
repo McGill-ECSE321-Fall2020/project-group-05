@@ -50,6 +50,11 @@ public class StartupActivity extends AppCompatActivity {
         startActivity(loginIntent);
     }
 
+    public void goToCheckout() {
+        Intent checkoutIntent = new Intent(this, CheckoutActivity.class);
+        startActivity(checkoutIntent);
+    }
+
     public void onLoginNavClick(View view) {
         goToLoginPage();
     }
@@ -57,6 +62,8 @@ public class StartupActivity extends AppCompatActivity {
     public void onMainNavClick(View view) {
         goToMainListings();
     }
+
+    public void onCheckoutNavClick(View view) { goToCheckout(); }
 
     public void onTestMethod(View view) {
         Toast.makeText(StartupActivity.this, "I am a test method!", Toast.LENGTH_LONG).show();
