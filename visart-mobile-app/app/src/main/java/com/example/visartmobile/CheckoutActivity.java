@@ -30,6 +30,8 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     public void clickedAddress(View view) {
+        EditText et=(EditText)findViewById(R.id.addressField);
+        et.setVisibility(View.VISIBLE);
 
     }
 
