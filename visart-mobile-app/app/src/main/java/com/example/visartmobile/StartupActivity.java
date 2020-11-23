@@ -8,20 +8,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.visartmobile.util.ArtListing;
 import com.example.visartmobile.util.HttpUtils;
+import com.example.visartmobile.util.UserAuth;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -60,25 +58,7 @@ public class StartupActivity extends AppCompatActivity {
         goToMainListings();
     }
 
-    public void onGetListings(View view) {
-        HttpUtils.get("artlisting/get_all", new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try {
-                    JSONArray arr = new JSONArray(response.body().string());
-                    ArrayList<ArtListing> list = ArtListing.parseJSONArray(arr);
-
-//                    JSONObject obj = new JSONObject(response.body().string());
-//                    ArtListing al = ArtListing.parseJSON(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public void onTestMethod(View view) {
+        Toast.makeText(StartupActivity.this, "I am a test method!", Toast.LENGTH_LONG).show();
     }
 }

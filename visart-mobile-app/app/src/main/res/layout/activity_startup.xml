@@ -55,8 +55,8 @@
                 android:id="@+id/button3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onGetListings"
-                android:text="Get ArtListings Test" />
+                android:onClick="onTestMethod"
+                android:text="Test Your Method" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
