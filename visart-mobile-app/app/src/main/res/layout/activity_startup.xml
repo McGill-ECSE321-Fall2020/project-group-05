@@ -56,7 +56,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckoutNavClick"
-                android:text="Go To Checkout" />
+                android:text="Go To Checkout (test)" />
+
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onOrderNavClick"
+                android:text="Go To Order Success (test)" />
 
             <Button
                 android:id="@+id/button3"
