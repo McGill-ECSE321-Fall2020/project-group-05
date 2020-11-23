@@ -102,7 +102,9 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
         titleTextView.setText(listing.getTitle()+", $"+listing.getPrice());
         postDescription.setText(listing.getDescription());
         postUsername.setText((listing.getArtistDisplayname()));
-        Picasso.with(holder.postImage.getContext()).load(listing.getPostImages()[0]).fit().into(postImage);
+        if(listing.getPostImages().length != 0) {
+            Picasso.with(holder.postImage.getContext()).load(listing.getPostImages()[0]).fit().into(postImage);
+        }
 
     }
 

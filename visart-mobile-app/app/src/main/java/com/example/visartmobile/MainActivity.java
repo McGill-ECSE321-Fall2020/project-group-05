@@ -88,9 +88,13 @@ public class MainActivity extends AppCompatActivity {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Got to the printer");
+                System.out.println("List is:");
+                for(int i = 0; i <listings.size(); i++){
+                    System.out.println(i+"is"+listings.get(i).getTitle());
+                }
                 //init the listing with the json data
-                adapter = new CardViewAdapter(listings);
+                ArrayList<ArtListing> allListings = listings;
+                adapter = new CardViewAdapter(allListings);
                 adapter.setOnItemClickListener(new CardViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
