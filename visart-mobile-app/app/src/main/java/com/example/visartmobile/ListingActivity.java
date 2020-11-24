@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.visartmobile.util.ArtListing;
 import com.example.visartmobile.util.HttpUtils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -106,8 +107,44 @@ public class ListingActivity extends AppCompatActivity {
     }
 
     public void buyArt(View view) {
+
+
     }
 
     public void pinArt(View view) {
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        try {
+            HttpUtils.post("customer/add_favorite_listing/" + userId,"listingIdCode",new Callback() {
+
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    showToastFromThread("Could not add to favorites");
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        System.out.println("Successfully added into favorites");
+
+                        try {
+
+                        } catch (Exception e) {
+
+                        }
+
+                    } else {
+                        System.out.println("Error occured: could not add into favorites");
+                    }
+                }
+            });
+        } catch (Exception ex) {
+
+        }
+
     }
 }
+
+
+
