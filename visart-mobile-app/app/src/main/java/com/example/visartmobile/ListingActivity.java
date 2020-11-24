@@ -108,9 +108,15 @@ public class ListingActivity extends AppCompatActivity {
 
     public void buyArt(View view) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //create artorder
+
 
         try {
-            HttpUtils.post("customer/purchase_artpiece/" + userId,"listingIdCode",new Callback() {
+            HttpUtils.post("tickets/create",{"aIsPaymentConfirmed"="false",
+                    "aPaymentAmount"= vm.artlisting.price,
+                    "aOrder"= resp.data.idCode,
+                    "aCustomer"= userId,
+                    "aArtist"= "vm.artlisting.artist"} ,new Callback() {
 
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
