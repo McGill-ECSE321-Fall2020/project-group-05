@@ -107,8 +107,35 @@ public class ListingActivity extends AppCompatActivity {
     }
 
     public void buyArt(View view) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        try {
+            HttpUtils.post("customer/purchase_artpiece/" + userId,"listingIdCode",new Callback() {
 
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    showToastFromThread("Could not add to favorites");
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        showToastFromThread("Successfully added into favorites");
+
+                        try {
+
+                        } catch (Exception e) {
+
+                        }
+
+                    } else {
+                        showToastFromThread("Could not add into favorites");
+                    }
+                }
+            });
+        } catch (Exception ex) {
+
+        }
     }
 
     public void pinArt(View view) {
