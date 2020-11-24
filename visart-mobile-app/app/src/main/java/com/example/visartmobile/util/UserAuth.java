@@ -28,6 +28,31 @@ public class UserAuth {
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static StorageReference storageRef = storage.getReference();
 
+    public static void retriveCurrentUser(Callback<UserDto> success, Callback<AuthFailureType> failure) {
+        if (success == null)
+            success = (userId) -> {
+            };
+
+        if (failure == null)
+            failure = (failureType) -> {
+            };
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Callback<UserDto> finalSuccess = success;
+        Callback<AuthFailureType> finalFailure = failure;
+
+        HttpUtils.get("users/get/" + userId, new okhttp3.Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                finalSuccess.callback(UserDto.parseJSON(response.body().string()));
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                finalFailure.callback(AuthFailureType.GET_USER_REQUEST_FAILED);
+            }
+        });
+    }
+
     /**
      * Performs full firebase/spring db login, whose success handler (callback) gives a UserDto object, instead of just a userId.
      *
