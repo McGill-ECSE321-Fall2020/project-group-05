@@ -126,7 +126,7 @@ public class ListingActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     if (response.isSuccessful()) {
-                        System.out.println("Successfully added into favorites");
+                        showToastFromThread("Successfully added into favorites");
 
                         try {
 
@@ -135,7 +135,7 @@ public class ListingActivity extends AppCompatActivity {
                         }
 
                     } else {
-                        System.out.println("Error occured: could not add into favorites");
+                        showToastFromThread("Could not add into favorites");
                     }
                 }
             });
