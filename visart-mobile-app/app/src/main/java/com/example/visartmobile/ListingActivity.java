@@ -1,5 +1,6 @@
 package com.example.visartmobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -106,80 +107,12 @@ public class ListingActivity extends AppCompatActivity {
         });
     }
 
-    public void buyArt(View view) {
-
-        ID_CODE = getIntent().getStringExtra("listingId");
-
-        mHandler = new Handler(Looper.getMainLooper());
-
-        cardTitle = (TextView) findViewById(R.id.card_name2);
-        postImage = (ImageView) findViewById(R.id.post_image2);
-        listingUsername = (TextView) findViewById(R.id.listingUsername2);
-        listingDescription = (TextView) findViewById(R.id.listingDescription2);
-
-        try {
-            HttpUtils.get("artlisting/get/" + ID_CODE, new Callback() {
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    showToastFromThread("Database failed to connect");
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        System.out.println("Call sucessful");
-
-                        try {
-                            PieceLocation pieceLocation= ArtOrder.PieceLocation.AtGallery;
-                            String targetAddress= "";
-                            JSONObject json = new JSONObject(response.body().string());
-                            ArtListing listing = ArtListing.parseJSON(json);
-                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                                HttpUtils.post("artorder/create",{"aIsDelivered"=String.valueOf(false),
-                                        "pieceLocation"="At Gallery",
-                                        "aTargetAddress"=  != "" ? vm.targetAddress : "TBD",
-                                        "aDeliveryTracker"= "TBD",
-                                        "artPieceId"= vm.artlisting.artPieces[0].idCode} ,new Callback() {
-
-                                    @Override
-                                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                        showToastFromThread("Could not add to favorites");
-                                    }
-
-                                    @Override
-                                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                                        if (response.isSuccessful()) {
-                                            showToastFromThread("Successfully added into favorites");
-
-                                            try {
-
-                                            } catch (Exception e) {
-
-                                            }
-
-                                        } else {
-                                            showToastFromThread("Could not add into favorites");
-                                        }
-                                    }
-                                });
-
-
-                        } catch (Exception e) {
-                            System.out.println("Error creating JSON object: " + e.getMessage());
-                        }
-
-                    } else {
-                        System.out.println("error occured");
-                    }
-                }
-            });
-        } catch (Exception ex) {
-
-        }
-
-
+    public void buyArt() {
+        Intent intent = new Intent(this, PurchaseArtActivity.class);
+        intent.putExtra("idCodeListing", ID_CODE);
+        startActivity(intent);
     }
+
 
     public void pinArt(View view) {
 

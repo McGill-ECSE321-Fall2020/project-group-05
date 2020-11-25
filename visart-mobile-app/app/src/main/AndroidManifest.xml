@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VisArtMobile">
-        <activity android:name=".OrderSuccess"></activity>
+        <activity android:name=".PurchaseArtActivity"></activity>
+        <activity android:name=".OrderSuccess" />
         <activity android:name=".CheckoutActivity" />
         <activity android:name=".ListingActivity" />
         <activity android:name=".LoginActivity" />
