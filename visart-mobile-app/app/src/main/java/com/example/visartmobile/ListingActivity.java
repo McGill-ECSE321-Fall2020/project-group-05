@@ -127,7 +127,7 @@ public class ListingActivity extends AppCompatActivity {
             };
 
             try {
-                HttpUtils.postForm("customer/add_favorite_listing/" + userId, data, new Callback() {
+                HttpUtils.postForm("customers/add_favorite_listing/" + userId, data, new Callback() {
 
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
