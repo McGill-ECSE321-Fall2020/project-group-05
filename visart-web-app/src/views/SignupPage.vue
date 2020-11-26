@@ -123,8 +123,8 @@ export default {
           displayname: getElId("displayName")?.value,
           username: getElId("username")?.value,
           password: getElId("password")?.value,
-          profilePicLink: "",
-          profileDescription: ""
+          profilePicLink: ".",
+          profileDescription: "none"
         })
         )
         .then(function (response) {
