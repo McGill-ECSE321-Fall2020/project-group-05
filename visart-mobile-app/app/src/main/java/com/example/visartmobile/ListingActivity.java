@@ -118,8 +118,12 @@ public class ListingActivity extends AppCompatActivity {
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        String[][] data = {
+                {"listingIdCode", ID_CODE}
+        };
+
         try {
-            HttpUtils.post("customer/add_favorite_listing/" + userId,"listingIdCode",new Callback() {
+            HttpUtils.postForm("customer/add_favorite_listing/" + userId, data, new Callback() {
 
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
