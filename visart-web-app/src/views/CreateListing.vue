@@ -97,7 +97,9 @@
                 placeholder="Visibility"
                 :value="artListingAttributes.visibility"
               />
-              <select @change="artListingAttributes.visibility = $event.target.value">
+              <select
+                @change="artListingAttributes.visibility = $event.target.value"
+              >
                 <option value="Public">Public</option>
                 <option value="Private">Private</option>
                 <option value="Unlisted">Unlisted</option>
@@ -183,7 +185,7 @@ export default {
   methods: {
     submitListing: function() {
       let vm = this;
-
+      
       // create
       backend
         .post(
@@ -198,47 +200,61 @@ export default {
         )
         .then(resp => {
           vm.artListingId = resp.data.idCode;
-          backend.post(
-            "/artpiece/create",
-            backend.parse({
-              pieceLocation: "Offsite", // TODO: Fill in pieceLocation
-              aAddressLocation: "TBD", // TODO: Fill in address
-              aArtListingId: vm.artListingId
+          backend
+            .post(
+              "/artpiece/create",
+              backend.parse({
+                pieceLocation: "Offsite", // TODO: Fill in pieceLocation
+                aAddressLocation: "TBD", // TODO: Fill in address
+                aArtListingId: vm.artListingId
+              })
+            )
+            .then(resp => {
+              return backend.post(
+                "/artlisting/update_dimensions/" + vm.artListingId,
+                backend.parse({
+                  dimensions: vm.artListingAttributes.dimensions
+                    .split(",")
+                    .map(s => s.trim())
+                })
+              );
             })
-          );
-          backend.post(
-            "/artlisting/update_dimensions/" + vm.artListingId,
-            backend.parse({
-              dimensions: vm.artListingAttributes.dimensions
-                .split(",")
-                .map(s => s.trim())
+            .then(resp => {
+              return vm.uploadImages(
+                vm.artListingId,
+                vm.artListingAttributes.images
+              );
             })
-          );
-
-          vm.uploadImages(vm.artListingId, vm.artListingAttributes.images)
-
-          vm.addTags(
-            vm.artListingId,
-            vm.artListingAttributes.tags.split(",").map(s => s.trim())
-          );
-
-          window.alert("Your art listing has been created!")
-          this.$router.push({ path: '/'})
-          this.$router.go()
+            .then(resp => {
+              return vm.addTags(
+                vm.artListingId,
+                vm.artListingAttributes.tags.split(",").map(s => s.trim())
+              );
+            })
+            .then(resp => {
+              window.alert("Your art listing has been created!");
+              this.$router.push({ path: "/" });
+              this.$router.go();
+            });
         })
-        .catch( e => {
-         console.log(e)
-         window.alert("WARNING: Creation unsuccessful! Make sure to fill in the fields correctly")
+        .catch(e => {
+          console.log(e);
+          window.alert(
+            "WARNING: Creation unsuccessful! Make sure to fill in the fields correctly"
+          );
         });
     },
     addTags: function(id, keywords) {
       keywords.forEach(key => {
-        backend.post('tags/create',backend.parse({
-          aListing: id,
-          aKeyword: key,
-          aType: 'Other'
-        }))
-      })
+        backend.post(
+          "tags/create",
+          backend.parse({
+            aListing: id,
+            aKeyword: key,
+            aType: "Other"
+          })
+        );
+      });
     },
     uploadImages: function(id, images) {
       return Promise.all([...images].map(i => storage.writeSafe(i)))
@@ -248,7 +264,7 @@ export default {
         .then(urls => {
           // console.log(urls);
           return backend.post(
-            "/artlisting/update_post_images/" +id,
+            "/artlisting/update_post_images/" + id,
             backend.parse({
               images: urls
             })

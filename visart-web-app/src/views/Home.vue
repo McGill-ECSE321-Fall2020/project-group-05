@@ -59,25 +59,59 @@
           v-for="(artlisting, index) in artListingsFull"
           :key="index"
         >
-              <img
-                class="card-img-top cardImg"
-                :src="artlisting.postImages[0]"
-                alt="Card image cap"
-                @click="goToListing(artlisting.idCode)"
-              />
-          <div class="card-header bg-transparent border-bottom-0">
-          </div>
-          <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">
+          <img
+            class="card-img-top cardImg"
+            :src="artlisting.postImages[0]"
+            alt="Card image cap"
+            @click="goToListing(artlisting.idCode)"
+          />
+          <div class="card-header bg-transparent border-bottom-0"></div>
+          <div
+            class="sectionContent sectionContentListing"
+            @click="goToListing(artlisting.idCode)"
+          >
             {{ artlisting.title }}
+            <svg
+              v-if="isPromoted(artlisting)"
+              width=".8em"
+              height=".8em"
+              viewBox="0 0 16 16"
+              class="bi bi-star-fill"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              style="color:blue;"
+            >
+              <path
+                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+              />
+            </svg>
+            <svg
+              v-if="isFavorited(artlisting)"
+              width=".8em"
+              height=".8em"
+              viewBox="0 0 16 16"
+              class="bi bi-heart-fill"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                style="color:red;"
+                d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+              />
+            </svg>
           </div>
           <div class="card-body cardBody">
             <div class="cardTitlesContainer">
-              <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">
+              <h4
+                class="card-title cardArtist"
+                @click="goToArtist(artlisting.artist)"
+              >
                 {{ artlisting.artistName }}
               </h4>
               <h5 class="card-title cardPrice">CAD$ {{ artlisting.price }}</h5>
             </div>
-              <p class="card-text cardDesc">{{ artlisting.description }}</p>
+            <p class="card-text cardDesc">{{ artlisting.description }}</p>
           </div>
         </div>
       </div>
@@ -87,25 +121,59 @@
           v-for="(artlisting, index) in artListingsFeatured"
           :key="index"
         >
-         <img
-                class="card-img-top cardImg"
-                :src="artlisting.postImages[0]"
-                alt="Card image cap"
-                @click="goToListing(artlisting.idCode)"
-              />
-          <div class="card-header bg-transparent border-bottom-0">
-          </div>
-          <div class="sectionContent sectionContentListing" @click="goToListing(artlisting.idCode)">
+          <img
+            class="card-img-top cardImg"
+            :src="artlisting.postImages[0]"
+            alt="Card image cap"
+            @click="goToListing(artlisting.idCode)"
+          />
+          <div class="card-header bg-transparent border-bottom-0"></div>
+          <div
+            class="sectionContent sectionContentListing"
+            @click="goToListing(artlisting.idCode)"
+          >
             {{ artlisting.title }}
+            <svg
+              v-if="isPromoted(artlisting)"
+              width=".8em"
+              height=".8em"
+              viewBox="0 0 16 16"
+              class="bi bi-star-fill"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              style="color:blue;"
+            >
+              <path
+                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+              />
+            </svg>
+            <svg
+              v-if="isFavorited(artlisting)"
+              width=".8em"
+              height=".8em"
+              viewBox="0 0 16 16"
+              class="bi bi-heart-fill"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                style="color:red;"
+                d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+              />
+            </svg>
           </div>
           <div class="card-body cardBody">
             <div class="cardTitlesContainer">
-              <h4 class="card-title cardArtist" @click="goToArtist(artlisting.artist)">
+              <h4
+                class="card-title cardArtist"
+                @click="goToArtist(artlisting.artist)"
+              >
                 {{ artlisting.artistName }}
               </h4>
               <h5 class="card-title cardPrice">CAD$ {{ artlisting.price }}</h5>
             </div>
-              <p class="card-text cardDesc">{{ artlisting.description }}</p>
+            <p class="card-text cardDesc">{{ artlisting.description }}</p>
           </div>
         </div>
       </div>
@@ -122,7 +190,7 @@ import axios from "axios";
 var config = require("../../config");
 var frontendUrl = config.site;
 var backendUrl = config.backend.site;
-var backend = require('@/tools/backend')
+var backend = require("@/tools/backend");
 var AXIOS = axios.create({
   baseURL: backendUrl,
   headers: {
@@ -165,9 +233,8 @@ export default {
       .then(response => {
         console.log(response.data);
         for (const artListing of response.data) {
-
           if (artListing.managerId != null) {
-            this.artListingsFeatured.push(artListing)
+            this.artListingsFeatured.push(artListing);
           }
           AXIOS.get("artists/get/" + artListing.artist).then(response => {
             artListing.artistName = response.data.customer.user.displayname;
@@ -182,21 +249,30 @@ export default {
     AXIOS.get("/tags/get_all")
       .then(response => {
         console.log(response.data);
-         var tagArr = {};
-        for (var i = 0; i < (response.data).length; i++) {
-            tagArr[response.data[i]['keyword']] = response.data[i]
+        var tagArr = {};
+        for (var i = 0; i < response.data.length; i++) {
+          tagArr[response.data[i]["keyword"]] = response.data[i];
         }
-        for(var key in tagArr) {
+        for (var key in tagArr) {
           this.tags.push(tagArr[key]);
-        } 
-        console.log('////////////')
-        console.log(tagArr.length)
+        }
+        console.log("////////////");
+        console.log(tagArr.length);
       })
       .catch(e => {
         console.log(e);
       });
   },
   methods: {
+    isPromoted: function(listing) {
+      return listing.managerId != null;
+    },
+    isFavorited: function(listing) {
+      let userId = backend.retrieveCurrentUser();
+      userId = userId != null ? userId.uid : null;
+      return listing.favoritedCustomerIds.some(id => id == userId);
+    },
+
     redirectToHome: function(tag) {
       this.$router.push({ path: "/search/?keywords=" + tag });
     },
@@ -208,13 +284,11 @@ export default {
     },
     deleteListing: function(id) {
       backend
-        .post(
-          '/artlisting/delete/' + id
-        )
+        .post("/artlisting/delete/" + id)
         .then(response => {
           console.log(response.data);
-          console.log('successfully deleted')
-          this.$router.go()
+          console.log("successfully deleted");
+          this.$router.go();
         })
         .catch(e => {
           console.log(e);
