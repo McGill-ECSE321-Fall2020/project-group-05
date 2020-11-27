@@ -107,6 +107,9 @@ public class CheckoutActivity extends AppCompatActivity {
                                         // ticket was created yay!
                                         System.out.println("you bought artwork yay!");
                                         showToastFromThread("You bought this artwork yay!");
+                                        Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
+                                        startActivity(mainIntent);
                                     } else {
                                         System.err.println("Error: " + resp3.code());
                                         System.err.println("Unsuccessful ticket creation");

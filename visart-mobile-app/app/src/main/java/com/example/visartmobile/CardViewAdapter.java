@@ -100,8 +100,11 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
         TextView postUsername = holder.listingUsername;
         ImageView postImage = holder.postImage;
 
-
-        titleTextView.setText(listing.getTitle() + ", $" + listing.getPrice());
+        String isPined = "";
+        if(listing.getManagerId() == null){
+            isPined = "*Gallery Favorite*";
+        }
+        titleTextView.setText(listing.getTitle() + ", $" + listing.getPrice() + isPined);
         postDescription.setText(listing.getDescription());
         postUsername.setText((listing.getArtistDisplayname()));
 
