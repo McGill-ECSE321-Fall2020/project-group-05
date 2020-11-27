@@ -86,11 +86,11 @@ public class CheckoutActivity extends AppCompatActivity {
 
 
                         } catch (Exception e) {
-
+                            showToastFromThread("Could not create a ticket");
                         }
 
                     } else {
-                        showToastFromThread("Could not add into favorites");
+                        showToastFromThread("Could not purchase item!");
                     }
                 }
             });
@@ -116,6 +116,7 @@ public class CheckoutActivity extends AppCompatActivity {
                             ArtListing listing = ArtListing.parseJSON(json);
                             artPieceId = listing.getArtPieceId();
                             listingPrice = (String.valueOf(listing.getPrice()));
+                            listingArtist = listing.getArtistId();
 
                         } catch (Exception e) {
                             System.out.println("Error creating JSON object: " + e.getMessage());
