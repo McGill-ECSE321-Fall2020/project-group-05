@@ -136,7 +136,7 @@ public class ListingActivity extends AppCompatActivity {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         if (userId == null) {
-            showToastFromThread("Please log in or sign up");
+            showToastFromThread("Please log to favorite an art listing!");
             goToLogin();
         } else {
             String[][] data = {
@@ -175,6 +175,14 @@ public class ListingActivity extends AppCompatActivity {
         startActivity(mainIntent);
     }
 
+
+    /**
+     * @author Riad
+     * When user clicks buy art it checks if they are logged in, if they are not the method
+     * takes them to the login page. If they are logged in, the method takes them to the checkout
+     * page
+     * @param view
+     */
     public void buyArt(View view) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -188,6 +196,7 @@ public class ListingActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
 }
 
 

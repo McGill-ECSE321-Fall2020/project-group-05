@@ -5,6 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+
+import com.example.visartmobile.util.HttpUtils;
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class OrderSuccess extends AppCompatActivity {
 
@@ -12,6 +24,8 @@ public class OrderSuccess extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_success);
+        TextView userTitle = (TextView) findViewById(R.id.userName3);
+        userTitle.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
     }
 
     /**
@@ -25,10 +39,12 @@ public class OrderSuccess extends AppCompatActivity {
 
     /**
      * This method is called when the user clicks the button.
-     * Calls the browseClicked() method to redirect user. 
+     * Calls the browseClicked() method to redirect user.
+     *
      * @param view
      */
     public void onBrowseClick(View view) {
         browseClicked();
     }
+
 }

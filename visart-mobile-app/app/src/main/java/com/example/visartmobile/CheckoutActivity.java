@@ -77,6 +77,12 @@ public class CheckoutActivity extends AppCompatActivity {
         isAtGallery = true;
     }
 
+    /**
+     * This method performs the buying by getting the artlisting the customer wants to buy and its
+     * information. Then this method creates an art order and a ticket and finally redirects the
+     * User to the order success page or displays an error message.
+     * @param view
+     */
     public void clickedPurchase(View view) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         HttpUtils.get("artlisting/get/" + listingId, new String[][]{}, (resp1) -> {
@@ -107,9 +113,7 @@ public class CheckoutActivity extends AppCompatActivity {
                                         // ticket was created yay!
                                         System.out.println("you bought artwork yay!");
                                         showToastFromThread("You bought this artwork yay!");
-                                        Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
-                                        startActivity(mainIntent);
+                                        purchaseClicked();
                                     } else {
                                         System.err.println("Error: " + resp3.code());
                                         System.err.println("Unsuccessful ticket creation");
@@ -133,72 +137,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 System.err.println("Unsuccessful artlisting retrieval");
             }
         });
-
-        // Old -->
-        getPurchaseListingInfo();
-        String[][] dataAO =
-                {
-                        {"aIsDelivered", "false"},
-                        {"pieceLocation", "AtGallery"},
-                        {"aTargetAddress", typedAddress}, //do address
-                        {"aDeliveryTracker", "TBD"},
-                        {"artPieceId", artPieceId}
-                };
-        try {
-            HttpUtils.postForm("/artorder/create/", dataAO, new Callback() {
-
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    showToastFromThread("Could not create your order!");
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        try {
-                            JSONObject jsonOrder = new JSONObject(response.body().string());
-                            String orderId = jsonOrder.getString("idCode");
-                            String[][] dataTicket = {
-                                    {"aIsPaymentConfirmed", "false"},
-                                    {"aPaymentAmount", listingPrice.toString()},
-                                    {"aOrder", orderId},
-                                    {"aCustomer", userId},
-                                    {"aArtist", listingArtist}
-                            };
-
-                            try {
-                                HttpUtils.postForm("ticket/create/", dataTicket, new Callback() {
-                                    @Override
-                                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                        showToastFromThread("Database failed to connect");
-                                    }
-
-                                    @Override
-                                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                                        if (response.isSuccessful()) {
-                                            System.out.println("Purchase sucessful");
-                                            //go to main and add a flag to not go back
-                                        } else {
-                                            System.out.println("Purchase error occured");
-                                        }
-                                    }
-                                });
-                            } catch (Exception ex) {
-
-                            }
-
-                        } catch (Exception e) {
-                            showToastFromThread("Could not create a ticket");
-                        }
-
-                    } else {
-                        showToastFromThread("Could not purchase item!");
-                    }
-                }
-            });
-        } catch (Exception ex) {
-
-        }
+        
     }
 
     public void getPurchaseListingInfo() {
@@ -244,4 +183,25 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * This method redirects the user to the order success page
+     */
+    public void purchaseClicked() {
+        Intent orderIntent = new Intent(getApplicationContext(), OrderSuccess.class);
+        orderIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
+        startActivity(orderIntent);
+        finish();
+    }
+
+    /**
+     * This method is called when the user clicks the button.
+     * Calls the  method to redirect user to the order success page.
+     *
+     * @param view
+     */
+    public void onPurchaseClick(View view) {
+        purchaseClicked();
+    }
+
 }
