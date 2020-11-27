@@ -105,7 +105,26 @@ public class CheckoutActivity extends AppCompatActivity {
                                 {"aArtist", listingArtist}
                          };
 
+                            try {
+                                HttpUtils.postForm("ticket/create/", dataTicket,new Callback() {
+                                    @Override
+                                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                        showToastFromThread("Database failed to connect");
+                                    }
 
+                                    @Override
+                                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                        if (response.isSuccessful()) {
+                                            System.out.println("Purchase sucessful");
+                                            //go to main and add a flag to not go back
+                                        } else {
+                                            System.out.println("Purchase error occured");
+                                        }
+                                    }
+                                });
+                            } catch (Exception ex) {
+
+                            }
 
                         } catch (Exception e) {
                             showToastFromThread("Could not create a ticket");
