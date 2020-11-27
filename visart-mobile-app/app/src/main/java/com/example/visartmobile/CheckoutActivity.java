@@ -1,6 +1,7 @@
 package com.example.visartmobile;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,7 +23,7 @@ import okhttp3.Response;
 
 
 public class CheckoutActivity extends AppCompatActivity {
-
+    private Handler mHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,45 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     public void clickedPurchase(View view) {
+        String[][] data = {
+                {"listingIdCode", }
+        };
+        try {
+            HttpUtils.postForm("customers/add_favorite_listing/" + userId, data, new Callback() {
 
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    showToastFromThread("Could not add to favorites!");
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        showToastFromThread("Successfully added into favorites");
+
+                        try {
+
+                        } catch (Exception e) {
+
+                        }
+
+                    } else {
+                        showToastFromThread("Could not add into favorites");
+                    }
+                }
+            });
+        } catch (Exception ex) {
+
+        }
+    }
+
+    public void showToastFromThread(String message) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
     }
 }
