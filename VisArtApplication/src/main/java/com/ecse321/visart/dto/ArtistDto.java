@@ -12,8 +12,8 @@ public class ArtistDto {
   private List<String> listingIds;
   private List<String> soldTicketIds;
   private String idCode;
-  private List<ArtListingDto> listings;
-  private List<TicketDto> soldTickets;
+  private List<ArtListingDto> artListingsDtos;
+  private List<TicketDto> soldTicketsDtos;
 
   public CustomerDto getCustomer() {
     return customer;
@@ -44,7 +44,7 @@ public class ArtistDto {
   }
 
   public void setListings(List<ArtListing> listings) {
-    this.listings = listings.stream().map(l -> new ArtListingDto(l)).collect(Collectors.toList());
+    this.artListingsDtos = listings.stream().map(l -> new ArtListingDto(l)).collect(Collectors.toList());
     this.listingIds = listings.stream().map((l) -> l.getIdCode()).collect(Collectors.toList());
   }
 
@@ -53,7 +53,7 @@ public class ArtistDto {
   }
 
   public void setSoldTickets(List<Ticket> soldTickets) {
-    this.soldTickets = soldTickets.stream().map(l -> new TicketDto(l)).collect(Collectors.toList());
+    this.soldTicketsDtos = soldTickets.stream().map(l -> new TicketDto(l)).collect(Collectors.toList());
     this.soldTicketIds = soldTickets.stream().map((t) -> t.getIdCode())
         .collect(Collectors.toList());
   }
@@ -64,6 +64,22 @@ public class ArtistDto {
 
   public void setIdCode(String idCode) {
     this.idCode = idCode;
+  }
+
+  public List<ArtListingDto> getArtListingsDtos() {
+    return artListingsDtos;
+  }
+
+  public void setArtListingsDtos(List<ArtListingDto> artListingsDtos) {
+    this.artListingsDtos = artListingsDtos;
+  }
+
+  public List<TicketDto> getSoldTicketsDtos() {
+    return soldTicketsDtos;
+  }
+
+  public void setSoldTicketsDtos(List<TicketDto> soldTicketsDtos) {
+    this.soldTicketsDtos = soldTicketsDtos;
   }
 
 }

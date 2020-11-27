@@ -6,7 +6,6 @@ public class UserDto {
   private String emailAddress;
   private String displayname;
   private String username;
-  private String password;
   private String profilePicLink;
   private String profileDescription;
   private String idCode;
@@ -28,7 +27,6 @@ public class UserDto {
   public UserDto(String emailAddress, String displayname, String username, String password,
       String profilePicLink, String profileDescription, String idCode) {
     super();
-    this.password = password;
     this.emailAddress = emailAddress;
     this.displayname = displayname;
     this.username = username;

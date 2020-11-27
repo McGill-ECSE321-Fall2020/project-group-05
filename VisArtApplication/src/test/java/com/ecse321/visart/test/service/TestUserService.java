@@ -236,10 +236,10 @@ public class TestUserService {
   @Test
   public void testupdateDuplicateUserEmail() {
     String error = null;
-    User user = null;
     try {
-      user = service.updateUser(id, "email123@gmail.com", displayname, username, password,
+      User user = service.updateUser(id, "email123@gmail.com", displayname, username, password,
           profilepic, profileDescription);
+      assertNull(user);
     } catch (IllegalArgumentException e) {
       // Check that no error occurred
       error = e.getMessage();
