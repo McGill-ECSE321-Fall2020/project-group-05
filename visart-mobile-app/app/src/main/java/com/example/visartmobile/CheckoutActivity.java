@@ -188,9 +188,9 @@ public class CheckoutActivity extends AppCompatActivity {
      * This method redirects the user to the order success page
      */
     public void purchaseClicked() {
-        Intent mainIntent = new Intent(this, OrderSuccess.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
-        startActivity(mainIntent);
+        Intent orderIntent = new Intent(getApplicationContext(), OrderSuccess.class);
+        orderIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
+        startActivity(orderIntent);
         finish();
     }
 
