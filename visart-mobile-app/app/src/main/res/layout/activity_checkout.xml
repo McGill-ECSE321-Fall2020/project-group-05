@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:background="@drawable/login_background"
+    tools:context=".CheckoutActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:text="This art piece is almost yours!"
+        android:textColor="#FFFFFF"
+        android:textSize="30dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/form_bubble_shape"
+        >
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ship to address"
+            android:onClick="clickedAddress">
+            </RadioButton>
+<!--            android:onClick=""/>-->
+        <RadioButton android:id="@+id/pickUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pick up at gallery"
+            android:onClick="clickedPickUp">
+        </RadioButton>
+<!--            android:onClick="onRadioButtonClicked"/>-->
+    </RadioGroup>
+
+        <EditText
+            android:visibility = "gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/addressField"
+            android:hint="Enter address"
+            />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="clickedPurchase"
+            android:text="Purchase Now !"
+            android:background="@drawable/button_background_login"
+            />
+
+    </LinearLayout>
+</LinearLayout>

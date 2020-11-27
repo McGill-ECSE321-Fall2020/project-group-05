@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "692662316141",
+    "firebase_url": "https://visartapplication.firebaseio.com",
+    "project_id": "visartapplication",
+    "storage_bucket": "visartapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692662316141:android:b2cb5f580a8b57255b2364",
+        "android_client_info": {
+          "package_name": "com.example.visartmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "692662316141-jdtm5lvc9280165gb5m93500bhkunovc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDp9mHkoBCjAD4_kLtsYSWigHyJ0pkYXdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "692662316141-jdtm5lvc9280165gb5m93500bhkunovc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
