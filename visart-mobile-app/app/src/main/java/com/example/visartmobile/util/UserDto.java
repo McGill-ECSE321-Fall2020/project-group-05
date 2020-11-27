@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * UserDto retrieved from the Spring database, containing as much data from a User as possible.
+ * UserDto retrieved from the Spring database, containing as much data from a User as needed.
  */
 public class UserDto {
 
@@ -72,6 +72,12 @@ public class UserDto {
         this.role = role;
     }
 
+    /**
+     * Parse a JSON string and convert into a UserDto. Returns null upon failed parsing.
+     *
+     * @param string json string data
+     * @return parsed UserDto on success, null on failure
+     */
     public static UserDto parseJSON(String string) {
         try {
             return parseJSON(new JSONObject(string));
@@ -80,6 +86,12 @@ public class UserDto {
         }
     }
 
+    /**
+     * Parse a JSON Object and convert into a UserDto. Returns null upon failed parsing.
+     *
+     * @param jsonObject the json object to parse
+     * @return parsed UserDto on success, null on failure
+     */
     private static UserDto parseJSON(JSONObject jsonObject) {
         UserDto user = new UserDto();
         try {

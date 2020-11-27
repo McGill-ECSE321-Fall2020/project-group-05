@@ -33,6 +33,7 @@ public class OrderSuccess extends AppCompatActivity {
      */
     public void browseClicked() {
         Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
         startActivity(mainIntent);
     }
 

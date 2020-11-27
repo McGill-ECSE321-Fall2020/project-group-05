@@ -23,11 +23,21 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Response;
 
+/**
+ * UserAuth provides helper methods to log a user into firebase, and upload and
+ * access images in firebase storage.
+ */
 public class UserAuth {
     private static FirebaseStorage storage = FirebaseStorage.getInstance();
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static StorageReference storageRef = storage.getReference();
 
+    /**
+     * A method to get the UserDto object of the currently logged in user.
+     *
+     * @param success handler on success, passes UserDto object
+     * @param failure handler on failure, provides failure type
+     */
     public static void retriveCurrentUser(Callback<UserDto> success, Callback<AuthFailureType> failure) {
         if (success == null)
             success = (userId) -> {
@@ -145,12 +155,19 @@ public class UserAuth {
         });
     }
 
+    /**
+     * Uploads the given file at the Uri to the firebase storage with the name filename under postImages/.
+     *
+     * @param file     the file to upload
+     * @param filename the filename to write in the database
+     * @param success  handler on success
+     */
     public static void uploadImageFile(Uri file, String filename, Callback<Uri> success) {
         uploadImageFile(file, filename, success, null);
     }
 
     /**
-     * Uploads an image given by Uri, and saves it into postImages in the database under the given filname.
+     * Uploads an image given by Uri, and saves it into postImages in the database under the given filename.
      *
      * @param file     actual file to upload, designated by uri
      * @param filename string filename to store in database, should be unique
@@ -159,12 +176,22 @@ public class UserAuth {
      */
     public static void uploadImageFile(Uri file, String filename, Callback<Uri> success, Callback<Task> failure) {
         // Create file metadata including the content type
-        StorageReference ref = storageRef.child(filename);
-        UploadTask uploadTask = ref.putFile(file);
-        uploadImageFile(uploadTask, ref, success, failure);
+        StorageReference ref = storageRef.child("postImages").child(filename);
+        uploadFile(file, ref, success, failure);
     }
 
-    private static void uploadImageFile(UploadTask uploadTask, StorageReference ref, Callback<Uri> success, Callback<Task> failure) {
+    /**
+     * Uploads a file to firebase storage given the uri of the file to upload, a StorageReference for where to
+     * upload the file, a success handler which is given the download link of the uploaded file, and a failure
+     * handler, which provides the failed task as a parameter.
+     *
+     * @param file    the file uri to upload
+     * @param ref     the ref to upload to
+     * @param success handler on success
+     * @param failure handler on failure
+     */
+    private static void uploadFile(Uri file, StorageReference ref, Callback<Uri> success, Callback<Task> failure) {
+        UploadTask uploadTask = ref.putFile(file);
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -212,6 +239,14 @@ public class UserAuth {
         getFileLink("profile-placeholder.png", success, failure);
     }
 
+    /**
+     * Gets the download link for the file in firebase storage, given the filepath, and passes it to
+     * the success handler. It provides the failed task to the failure handler on failure.
+     *
+     * @param filepath the filepath in firebase storage to access
+     * @param success  handler on success, receives download link uri
+     * @param failure  handler on failure, receives failed task
+     */
     private static void getFileLink(String filepath, Callback<Uri> success, Callback<Task> failure) {
         storageRef.child(filepath).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
@@ -230,14 +265,18 @@ public class UserAuth {
         });
     }
 
+    /**
+     * A one method interface for use as a simple callback method.
+     *
+     * @param <T> the type of the parameter passed to the callback
+     */
     public static interface Callback<T> {
         void callback(T t);
     }
 
-    public static interface MultiValueCallback<T> {
-        void callback(T... t);
-    }
-
+    /**
+     * The type of authorization failures that could be encountered when calling the login...() methods.
+     */
     public static enum AuthFailureType {
         LOGIN_REQUEST_FAILED,
         LOGIN_INCORRECT,

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler(Looper.getMainLooper());
         cards = (RecyclerView) findViewById(R.id.cards);
 
+        //setup an auth listener to prevent non logged in users to view art
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         };
         mAuth.addAuthStateListener(mAuthListener);
 
+        //Make call to the API
         try{
             HttpUtils.get("artlisting/get_all", new Callback() {
                 @Override
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             JSONArray arr = new JSONArray(response.body().string());
                             ArrayList<ArtListing> listings = ArtListing.parseJSONArray(arr);
-                            populateCardView(listings);
+                            populateCardView(listings); //update the UI with the response
 
                         } catch (Exception e) {
                             System.out.println("Error creating JSON object: " + e.getMessage());
@@ -93,17 +95,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     };
 
+    /**
+     * This method enables the RecyclerView to be updated with the list values from a CallBack (seperate thread)
+     *
+     * @param ArrayList<ArtListing> listings is the listings to be displayed on the Recycler View
+     * **/
     public void populateCardView(ArrayList<ArtListing> listings){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                System.out.println("List is:");
-                for(int i = 0; i <listings.size(); i++){
-                    System.out.println(i+"is"+listings.get(i).getTitle());
-                }
                 //init the listing with the json data
                 ArrayList<ArtListing> allListings = listings;
                 adapter = new CardViewAdapter(allListings);
+                //setup the onclick listener for every card element
                 adapter.setOnItemClickListener(new CardViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -116,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method enables a Toast message to be shown from a callback thread
+     *
+     * @param String message is the message to be displayed vis Toast
+     * **/
     public void showToastFromThread(String message){
         mHandler.post(new Runnable() {
             @Override
@@ -126,6 +135,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Logs the user out when the log out button is pressed
+     *
+     * **/
     public void logoutButtonClicked(View view) {
         this.mAuth.signOut();
     }

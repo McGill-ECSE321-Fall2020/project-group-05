@@ -12,11 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VisArtMobile">
         <activity android:name=".PurchaseArtActivity"></activity>
-        <activity android:name=".OrderSuccess" />
-        <activity android:name=".CheckoutActivity" />
-        <activity android:name=".ListingActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".OrderSuccess"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CheckoutActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ListingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

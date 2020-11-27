@@ -16,6 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHolder> {
 
+    /**
+     * @author Daniel Bucci
+     * @author Nikola Milekic
+     *
+     * This class is to implement the cards logic and displaying the information desired to the view
+     *
+     * **/
+
     private List<ArtListing> artListings;
 
     public CardViewAdapter(List<ArtListing> artListings) {
@@ -88,7 +96,14 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
         return viewHolder;
     }
 
-    // Involves populating data into the item through holder
+    /**
+     *
+     * This method initializes the card at each index witht he appropriate information with respectt ot he array.
+     *
+     * @param CardViewHolder.ViewHolder holder
+     * @param int position is the position of the array to be loaded into a car view
+     *
+     * **/
     @Override
     public void onBindViewHolder(CardViewAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
@@ -100,8 +115,11 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
         TextView postUsername = holder.listingUsername;
         ImageView postImage = holder.postImage;
 
-
-        titleTextView.setText(listing.getTitle() + ", $" + listing.getPrice());
+        String isPined = "";
+        if(listing.getManagerId() == null){
+            isPined = "*Gallery Favorite*";
+        }
+        titleTextView.setText(listing.getTitle() + ", $" + listing.getPrice() + isPined);
         postDescription.setText(listing.getDescription());
         postUsername.setText((listing.getArtistDisplayname()));
 
