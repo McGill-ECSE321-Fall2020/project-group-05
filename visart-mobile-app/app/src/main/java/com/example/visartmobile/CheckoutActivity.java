@@ -35,7 +35,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private String typedAddress;
     public FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private Boolean isAtGallery;
+    private Boolean isAtGallery = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
