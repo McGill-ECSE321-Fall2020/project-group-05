@@ -111,7 +111,8 @@ public class ListingActivity extends AppCompatActivity {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         if (userId == null) {
-            showToastFromThread("Please log in or sign up");
+            Toast toast = Toast.makeText(getApplicationContext(), "Please log in or sign up", Toast.LENGTH_LONG);
+            toast.show();
             favoriteClicked();
         } else {
             Intent intent = new Intent(this, CheckoutActivity.class);
