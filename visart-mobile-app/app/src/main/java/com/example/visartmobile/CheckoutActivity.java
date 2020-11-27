@@ -35,6 +35,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private String typedAddress;
     public FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private Boolean isAtGallery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +67,14 @@ public class CheckoutActivity extends AppCompatActivity {
         EditText et = (EditText) findViewById(R.id.addressField);
         et.setVisibility(View.VISIBLE);
         typedAddress = ((EditText) findViewById(R.id.addressField)).getText().toString();
-
+        isAtGallery = false;
     }
 
     public void clickedPickUp(View view) {
         EditText et = (EditText) findViewById(R.id.addressField);
         et.setVisibility(View.INVISIBLE);
         typedAddress = "TBD";
+        isAtGallery = true;
     }
 
     public void clickedPurchase(View view) {
@@ -84,7 +86,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     // buy first artpiece from al now:
                     String[][] data = {
                             {"aIsDelivered", "false"},
-                            {"pieceLocation", true ? "AtGallery" : "Offsite"}, // TODO: change true to a condition, based on radio box
+                            {"pieceLocation", isAtGallery ? "AtGallery" : "Offsite"}, // TODO: change true to a condition, based on radio box
                             {"aTargetAddress", typedAddress}, //do address
                             {"aDeliveryTracker", "TBD"},
                             {"artPieceId", al.getArtPieceIds().length > 0 ? al.getArtPieceIds()[0] : ""}
