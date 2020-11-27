@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import okhttp3.Call;
@@ -27,6 +28,8 @@ import okhttp3.Response;
 
 public class ListingActivity extends AppCompatActivity {
 
+    public FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private String ID_CODE;
     public TextView cardTitle;
     public ImageView postImage;
@@ -39,6 +42,20 @@ public class ListingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (mAuth.getCurrentUser() ==  null){
+                    Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
+                    startActivity(loginIntent);
+                    finish();
+                }
+            }
+        };
+        mAuth.addAuthStateListener(mAuthListener);
 
         ID_CODE = getIntent().getStringExtra("listingId");
 

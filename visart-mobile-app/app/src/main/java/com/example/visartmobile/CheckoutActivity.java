@@ -1,24 +1,24 @@
 package com.example.visartmobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.visartmobile.util.ArtListing;
 import com.example.visartmobile.util.HttpUtils;
-import com.example.visartmobile.util.UserAuth;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -31,12 +31,31 @@ public class CheckoutActivity extends AppCompatActivity {
     private String listingPrice;
     private String listingArtist;
     private String typedAddress;
+    public FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (mAuth.getCurrentUser() ==  null){
+                    Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
+                    startActivity(loginIntent);
+                    finish();
+                }
+            }
+        };
+        mAuth.addAuthStateListener(mAuthListener);
+
         Bundle extras = getIntent().getExtras();
         listingId = extras.getString("idCodeListing");
+
+        mHandler = new Handler(Looper.getMainLooper());
 
     }
 
