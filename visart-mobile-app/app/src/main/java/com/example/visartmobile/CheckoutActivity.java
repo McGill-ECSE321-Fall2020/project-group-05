@@ -113,10 +113,7 @@ public class CheckoutActivity extends AppCompatActivity {
                                         // ticket was created yay!
                                         System.out.println("you bought artwork yay!");
                                         showToastFromThread("You bought this artwork yay!");
-                                        Intent orderIntent = new Intent(getApplicationContext(), OrderSuccess.class);
-                                        orderIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
-                                        startActivity(orderIntent);
-                                        finish();
+                                        purchaseClicked();
                                     } else {
                                         System.err.println("Error: " + resp3.code());
                                         System.err.println("Unsuccessful ticket creation");
@@ -186,4 +183,25 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * This method redirects the user to the order success page
+     */
+    public void purchaseClicked() {
+        Intent orderIntent = new Intent(getApplicationContext(), OrderSuccess.class);
+        orderIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
+        startActivity(orderIntent);
+        finish();
+    }
+
+    /**
+     * This method is called when the user clicks the button.
+     * Calls the  method to redirect user to the order success page.
+     *
+     * @param view
+     */
+    public void onPurchaseClick(View view) {
+        purchaseClicked();
+    }
+
 }
