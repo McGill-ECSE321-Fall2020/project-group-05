@@ -110,6 +110,7 @@ public class CheckoutActivity extends AppCompatActivity {
                                         Intent orderIntent = new Intent(getApplicationContext(), OrderSuccess.class);
                                         orderIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
                                         startActivity(orderIntent);
+                                        finish();
                                     } else {
                                         System.err.println("Error: " + resp3.code());
                                         System.err.println("Unsuccessful ticket creation");
