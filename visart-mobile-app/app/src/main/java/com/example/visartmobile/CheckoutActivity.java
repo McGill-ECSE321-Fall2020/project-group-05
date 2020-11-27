@@ -36,6 +36,11 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     public void clickedPickUp(View view) {
+        EditText et=(EditText)findViewById(R.id.addressField);
+        et.setVisibility(View.INVISIBLE);
+    }
+
+    public void clickedPurchase(View view) {
 
     }
 }

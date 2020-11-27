@@ -64,5 +64,14 @@
             android:hint="Enter address"
             />
 
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="clickedPurchase"
+            android:text="Purchase Now !"
+            android:background="@drawable/button_background_login"
+            />
+
     </LinearLayout>
 </LinearLayout>

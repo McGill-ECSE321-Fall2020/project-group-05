@@ -108,9 +108,16 @@ public class ListingActivity extends AppCompatActivity {
     }
 
     public void buyArt() {
-        Intent intent = new Intent(this, CheckoutActivity.class);
-        intent.putExtra("idCodeListing", ID_CODE);
-        startActivity(intent);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        if (userId == null) {
+            showToastFromThread("Please log in or sign up");
+            favoriteClicked();
+        } else {
+            Intent intent = new Intent(this, CheckoutActivity.class);
+            intent.putExtra("idCodeListing", ID_CODE);
+            startActivity(intent);
+        }
     }
 
 
