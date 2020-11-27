@@ -108,7 +108,7 @@ public class ListingActivity extends AppCompatActivity {
     }
 
     public void buyArt() {
-        Intent intent = new Intent(this, PurchaseArtActivity.class);
+        Intent intent = new Intent(this, CheckoutActivity.class);
         intent.putExtra("idCodeListing", ID_CODE);
         startActivity(intent);
     }
