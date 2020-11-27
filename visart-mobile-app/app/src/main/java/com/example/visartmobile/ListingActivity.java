@@ -124,14 +124,20 @@ public class ListingActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * This method allows a customer to favorite an ART LISTING so that it is added into the customer's favorite page.
+     * If the customer is not signed in, it will redirect to the log in page.
+     * A message appears indicating if the ART LISTING was successfully added into favorites.
+     * @param view
+     *
+     */
     public void pinArt(View view) {
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         if (userId == null) {
             showToastFromThread("Please log in or sign up");
-            favoriteClicked();
+            goToLogin();
         } else {
             String[][] data = {
                     {"listingIdCode", ID_CODE}
@@ -161,7 +167,10 @@ public class ListingActivity extends AppCompatActivity {
         }
     }
 
-    public void favoriteClicked() {
+    /**
+     * Upon call, this method will redirect the user to the log in page.
+     */
+    public void goToLogin() {
         Intent mainIntent = new Intent(this, LoginActivity.class);
         startActivity(mainIntent);
     }
@@ -172,7 +181,7 @@ public class ListingActivity extends AppCompatActivity {
         if (userId == null) {
             Toast toast = Toast.makeText(getApplicationContext(), "Please log in or sign up", Toast.LENGTH_LONG);
             toast.show();
-            favoriteClicked();
+            goToLogin();
         } else {
             Intent intent = new Intent(this, CheckoutActivity.class);
             intent.putExtra("idCodeListing", ID_CODE);
