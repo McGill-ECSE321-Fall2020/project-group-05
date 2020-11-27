@@ -19,6 +19,7 @@ public class ArtListing {
     private double price;
     private String artistDisplayname;
     private String artistUsername;
+    private String artPieceId;
 
     public ArtListing() {
     }
@@ -34,6 +35,7 @@ public class ArtListing {
         this.price = price;
         this.artistDisplayname = artistDisplayname;
         this.artistUsername = artistUsername;
+        this.artPieceId = "";
     }
 
     public String getDescription() {
@@ -74,6 +76,14 @@ public class ArtListing {
 
     public void setIdCode(String idCode) {
         this.idCode = idCode;
+    }
+
+    public String getArtPieceId() {
+        return artPieceId;
+    }
+
+    public void setArtPieceId(String idCode) {
+        this.artPieceId = idCode;
     }
 
     public String getManagerId() {
@@ -136,6 +146,7 @@ public class ArtListing {
             al.setPrice(artlistingObj.getDouble("price"));
             al.setArtistDisplayname(artlistingObj.getString("artistDisplayname"));
             al.setArtistUsername(artlistingObj.getString("artistUsername"));
+            al.setArtPieceId(artlistingObj.getString("artPieces[0].idCode"));
             return al;
         } catch (JSONException e) {
             return null;

@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.visartmobile.util.ArtListing;
 import com.example.visartmobile.util.HttpUtils;
 import com.example.visartmobile.util.UserAuth;
 
@@ -24,11 +25,15 @@ import okhttp3.Response;
 
 public class CheckoutActivity extends AppCompatActivity {
     private Handler mHandler;
-
+    private String listingId;
+    private String artPieceId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+        Bundle extras = getIntent().getExtras();
+        listingId = extras.getString("idCodeListing");
+
     }
 
     public void clickedAddress(View view) {
@@ -49,7 +54,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         {"pieceLocation", "AtGallery"},
                         {"aTargetAddress", "TBD"},
                         {"aDeliveryTracker", "TBD"},
-                        {"artPieceId", vm.artlisting.artPieces[0].idCode}
+                        {"artPieceId", }
                 };
         try {
             HttpUtils.postForm("customers/add_favorite_listing/" + userId, data, new Callback() {
@@ -72,6 +77,37 @@ public class CheckoutActivity extends AppCompatActivity {
 
                     } else {
                         showToastFromThread("Could not add into favorites");
+                    }
+                }
+            });
+        } catch (Exception ex) {
+
+        }
+    }
+    public void getPurchaseListingInfo(View view) {
+        try {
+            HttpUtils.get("artlisting/get/" + listingId, new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    showToastFromThread("Database failed to connect");
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        System.out.println("Call sucessful");
+
+                        try {
+                            JSONObject json = new JSONObject(response.body().string());
+                            ArtListing listing = ArtListing.parseJSON(json);
+                            artPieceId = listing.getArtPieceId();
+
+                        } catch (Exception e) {
+                            System.out.println("Error creating JSON object: " + e.getMessage());
+                        }
+
+                    } else {
+                        System.out.println("error occured");
                     }
                 }
             });
