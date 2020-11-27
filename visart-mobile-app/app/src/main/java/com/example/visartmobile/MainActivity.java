@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.visartmobile.util.ArtListing;
 import com.example.visartmobile.util.HttpUtils;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -25,7 +26,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private boolean isLoggedIn = true;
+    private boolean isLoggedIn;
     CardViewAdapter adapter;
     RecyclerView cards;
     private Handler mHandler;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler(Looper.getMainLooper());
         cards = (RecyclerView) findViewById(R.id.cards);
 
+        isLoggedIn = FirebaseAuth.getInstance().getCurrentUser().getUid() != null;
         if (isLoggedIn == false) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
@@ -73,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ex){
             System.out.println("error occured trying to call");
         }
-
-
-
     }
 
     public void goToListingPage(ArtListing listing){
