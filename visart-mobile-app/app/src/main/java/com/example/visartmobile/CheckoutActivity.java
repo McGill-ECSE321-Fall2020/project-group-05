@@ -30,6 +30,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private String artPieceId;
     private String listingPrice;
     private String listingArtist;
+    private String typedAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +43,14 @@ public class CheckoutActivity extends AppCompatActivity {
     public void clickedAddress(View view) {
         EditText et=(EditText)findViewById(R.id.addressField);
         et.setVisibility(View.VISIBLE);
+        typedAddress = ((EditText) findViewById(R.id.addressField)).getText().toString();
 
     }
 
     public void clickedPickUp(View view) {
         EditText et=(EditText)findViewById(R.id.addressField);
         et.setVisibility(View.INVISIBLE);
+        typedAddress = "TBD";
     }
 
     public void clickedPurchase(View view) {
@@ -57,7 +60,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 {
                     {"aIsDelivered", "false"},
                         {"pieceLocation", "AtGallery"},
-                        {"aTargetAddress", "TBD"}, //do address
+                        {"aTargetAddress", typedAddress}, //do address
                         {"aDeliveryTracker", "TBD"},
                         {"artPieceId", artPieceId}
                 };
