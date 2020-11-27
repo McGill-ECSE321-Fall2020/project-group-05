@@ -77,6 +77,12 @@ public class CheckoutActivity extends AppCompatActivity {
         isAtGallery = true;
     }
 
+    /**
+     * This method performs the buying by getting the artlisting the customer wants to buy and its
+     * information. Then this method creates an art order and a ticket and finally redirects the
+     * User to the order success page or displays an error message.
+     * @param view
+     */
     public void clickedPurchase(View view) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         HttpUtils.get("artlisting/get/" + listingId, new String[][]{}, (resp1) -> {
