@@ -146,7 +146,7 @@ public class ArtListing {
             al.setPrice(artlistingObj.getDouble("price"));
             al.setArtistDisplayname(artlistingObj.getString("artistDisplayname"));
             al.setArtistUsername(artlistingObj.getString("artistUsername"));
-            al.setArtPieceId(artlistingObj.getString("artPieces[0].idCode"));
+        
             return al;
         } catch (JSONException e) {
             return null;
