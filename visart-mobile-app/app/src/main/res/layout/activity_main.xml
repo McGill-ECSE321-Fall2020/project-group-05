@@ -7,7 +7,17 @@
     tools:context=".MainActivity"
     android:background="@drawable/main_activity_background">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logOutBtn"
+        android:onClick="logoutButtonClicked"
+        android:text="LogOut"
+        android:layout_centerHorizontal="true"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/logOutBtn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/cards"/>

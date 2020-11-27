@@ -107,20 +107,6 @@ public class ListingActivity extends AppCompatActivity {
         });
     }
 
-    public void buyArt() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        if (userId == null) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please log in or sign up", Toast.LENGTH_LONG);
-            toast.show();
-            favoriteClicked();
-        } else {
-            Intent intent = new Intent(this, CheckoutActivity.class);
-            intent.putExtra("idCodeListing", ID_CODE);
-            startActivity(intent);
-        }
-    }
-
 
     public void pinArt(View view) {
 
@@ -139,20 +125,13 @@ public class ListingActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        showToastFromThread("Could not add to favorites!");
+                        showToastFromThread("Oops, could not add to favorites!");
                     }
 
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                         if (response.isSuccessful()) {
                             showToastFromThread("Successfully added into favorites");
-
-                            try {
-
-                            } catch (Exception e) {
-
-                            }
-
                         } else {
                             showToastFromThread("Could not add into favorites");
                         }
@@ -168,6 +147,20 @@ public class ListingActivity extends AppCompatActivity {
     public void favoriteClicked() {
         Intent mainIntent = new Intent(this, LoginActivity.class);
         startActivity(mainIntent);
+    }
+
+    public void buyArt(View view) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        if (userId == null) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Please log in or sign up", Toast.LENGTH_LONG);
+            toast.show();
+            favoriteClicked();
+        } else {
+            Intent intent = new Intent(this, CheckoutActivity.class);
+            intent.putExtra("idCodeListing", ID_CODE);
+            startActivity(intent);
+        }
     }
 }
 

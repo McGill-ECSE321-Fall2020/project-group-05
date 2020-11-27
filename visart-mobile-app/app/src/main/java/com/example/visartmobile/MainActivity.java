@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +27,8 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private boolean isLoggedIn;
+    public FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     CardViewAdapter adapter;
     RecyclerView cards;
     private Handler mHandler;
@@ -39,11 +41,19 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler(Looper.getMainLooper());
         cards = (RecyclerView) findViewById(R.id.cards);
 
-        isLoggedIn = FirebaseAuth.getInstance().getCurrentUser().getUid() != null;
-        if (isLoggedIn == false) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-        }
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (mAuth.getCurrentUser() ==  null){
+                    Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
+                    startActivity(loginIntent);
+                    finish();
+                }
+            }
+        };
+        mAuth.addAuthStateListener(mAuthListener);
 
         try{
             HttpUtils.get("artlisting/get_all", new Callback() {
@@ -114,5 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
             }
         });
+    }
+
+    public void logoutButtonClicked(View view) {
+        this.mAuth.signOut();
     }
 }
