@@ -7,6 +7,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ArtListing object derived from the ArtListingDto data sent from the database. It parses as much
+ * information as necessary.
+ */
 public class ArtListing {
     private boolean isPromoted;
     private String description;
@@ -136,6 +140,20 @@ public class ArtListing {
         this.artistUsername = artistUsername;
     }
 
+    public boolean isPromoted() {
+        return isPromoted;
+    }
+
+    public void setPromoted(boolean promoted) {
+        isPromoted = promoted;
+    }
+
+    /**
+     * parseJSON converts a JSON object into an ArtListing object. Returns null when it fails to parse.
+     *
+     * @param artlistingObj a valid JSON object, that contains the information of an ArtListingDto
+     * @return an ArtListing object on success, null on failure
+     */
     public static ArtListing parseJSON(JSONObject artlistingObj) {
         ArtListing al = new ArtListing();
 
@@ -166,6 +184,12 @@ public class ArtListing {
         }
     }
 
+    /**
+     * Converts an array of ArtListingDto JSON objects into an ArrayList of ArtListing java objects. May return an empty list if all conversions fail.
+     *
+     * @param artListingObj a JSONArray of artListingObj
+     * @return list of ArtListing, or empty list when failing
+     */
     public static ArrayList<ArtListing> parseJSONArray(JSONArray artListingObj) {
         ArrayList<ArtListing> list = new ArrayList<>();
         for (int i = 0; i < artListingObj.length(); i++) {
@@ -178,6 +202,14 @@ public class ArtListing {
         return list;
     }
 
+    /**
+     * Converts a JSONArray of a simple type to an array of the given type.
+     *
+     * @param arr a valid JSONArray of primitive (non-JSONObject) types
+     * @param <T> the type to cast the primitive types to
+     * @return a list of the items from the JSONArray, or an empty list when failing
+     * @throws JSONException
+     */
     public static <T> List<T> jsonArrayToList(JSONArray arr) throws JSONException {
         List<T> result = new ArrayList<>();
         for (int i = 0; i < arr.length(); i++) {
@@ -190,11 +222,4 @@ public class ArtListing {
         return result;
     }
 
-    public boolean isPromoted() {
-        return isPromoted;
-    }
-
-    public void setPromoted(boolean promoted) {
-        isPromoted = promoted;
-    }
 }
