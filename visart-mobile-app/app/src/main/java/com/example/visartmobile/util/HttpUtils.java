@@ -1,5 +1,8 @@
 package com.example.visartmobile.util;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -13,6 +16,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HttpUtils {
 
@@ -42,6 +46,26 @@ public class HttpUtils {
         postBody(url, builder.build(), callback);
     }
 
+    public static void postForm(String url, String[][] body, SimpleCallback<Response> success) {
+        postForm(url, body, success, (f) -> {
+            System.err.println(f);
+        });
+    }
+
+    public static void postForm(String url, String[][] body, SimpleCallback<Response> success, SimpleCallback<String> failure) {
+        postForm(url, body, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                failure.callback("Could not perform REST API Call");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                success.callback(response);
+            }
+        });
+    }
+
     public static void postForm(String url, FormBody formBody, Callback callback) {
         postBody(url, formBody, callback);
     }
@@ -55,12 +79,31 @@ public class HttpUtils {
         Call call = client.newCall(request);
         call.enqueue(callback);
     }
+    public static void get(String url, String[][] queryParameters, SimpleCallback<Response> success, SimpleCallback<String> failure) {
+        get(url, queryParameters, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                failure.callback("Could not perform REST API Call");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                success.callback(response);
+            }
+        });
+    }
+
+    public static void get(String url, String[][] queryParameters, SimpleCallback<Response> success) {
+        get(url,queryParameters,success,(f)->{
+            System.err.println(f);
+        });
+    }
 
     public static void get(String url, String[][] queryParameters, Callback callback) {
         String params = "?";
         for (String[] query : queryParameters) {
             if (query.length >= 2) {
-                params += query[0] + "=" + encodeValue(query[1]).replace("+","%20");
+                params += query[0] + "=" + encodeValue(query[1]).replace("+", "%20");
             }
         }
         get(url + params, callback);
@@ -96,5 +139,7 @@ public class HttpUtils {
         }
     }
 
-
+    public static interface SimpleCallback<T> {
+        void callback(T t);
+    }
 }
