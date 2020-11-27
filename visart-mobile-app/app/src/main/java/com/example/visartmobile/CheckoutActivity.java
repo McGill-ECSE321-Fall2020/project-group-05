@@ -24,6 +24,7 @@ import okhttp3.Response;
 
 public class CheckoutActivity extends AppCompatActivity {
     private Handler mHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +43,14 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     public void clickedPurchase(View view) {
-        String[][] data = {
-                {"listingIdCode", }
-        };
+        String[][] data =
+                {
+                    {"aIsDelivered", "false"},
+                        {"pieceLocation", "AtGallery"},
+                        {"aTargetAddress", "TBD"},
+                        {"aDeliveryTracker", "TBD"},
+                        {"artPieceId", vm.artlisting.artPieces[0].idCode}
+                };
         try {
             HttpUtils.postForm("customers/add_favorite_listing/" + userId, data, new Callback() {
 
