@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Make call to the API
         try{
-            HttpUtils.get("artlisting/get_all", new Callback() {
+            HttpUtils.get("artlisting/get_unsold_art", new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     showToastFromThread("Oops, Not Connected To Database!");
