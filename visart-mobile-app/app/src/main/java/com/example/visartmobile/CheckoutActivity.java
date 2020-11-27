@@ -244,4 +244,24 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * This method redirects the user to the order success page
+     */
+    public void purchaseClicked() {
+        Intent mainIntent = new Intent(this, OrderSuccess.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // prevents user from going back to previous activity
+        startActivity(mainIntent);
+    }
+
+    /**
+     * This method is called when the user clicks the button.
+     * Calls the  method to redirect user to the order success page.
+     *
+     * @param view
+     */
+    public void onPurchaseClick(View view) {
+        purchaseClicked();
+    }
+
 }
