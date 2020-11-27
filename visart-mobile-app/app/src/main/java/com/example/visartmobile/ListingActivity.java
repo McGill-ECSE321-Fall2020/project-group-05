@@ -118,40 +118,51 @@ public class ListingActivity extends AppCompatActivity {
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        String[][] data = {
-                {"listingIdCode", ID_CODE}
-        };
+        if (userId == null) {
+            showToastFromThread("Please log in or sign up");
+            favoriteClicked();
+        } else {
+            String[][] data = {
+                    {"listingIdCode", ID_CODE}
+            };
 
-        try {
-            HttpUtils.postForm("customer/add_favorite_listing/" + userId, data, new Callback() {
+            try {
+                HttpUtils.postForm("customers/add_favorite_listing/" + userId, data, new Callback() {
 
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    showToastFromThread("Could not add to favorites");
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        showToastFromThread("Successfully added into favorites");
-
-                        try {
-
-                        } catch (Exception e) {
-
-                        }
-
-                    } else {
-                        showToastFromThread("Could not add into favorites");
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        showToastFromThread("Could not add to favorites!");
                     }
-                }
-            });
-        } catch (Exception ex) {
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            showToastFromThread("Successfully added into favorites");
+
+                            try {
+
+                            } catch (Exception e) {
+
+                            }
+
+                        } else {
+                            showToastFromThread("Could not add into favorites");
+                        }
+                    }
+                });
+            } catch (Exception ex) {
+
+            }
 
         }
+    }
 
+    public void favoriteClicked() {
+        Intent mainIntent = new Intent(this, LoginActivity.class);
+        startActivity(mainIntent);
     }
 }
+
 
 
 
