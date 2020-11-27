@@ -136,7 +136,7 @@ public class ListingActivity extends AppCompatActivity {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         if (userId == null) {
-            showToastFromThread("Please log in or sign up");
+            showToastFromThread("Please log to favorite an art listing!");
             goToLogin();
         } else {
             String[][] data = {
@@ -188,6 +188,7 @@ public class ListingActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
 }
 
 

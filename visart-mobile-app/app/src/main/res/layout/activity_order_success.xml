@@ -20,7 +20,19 @@
         android:layout_marginRight="10dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
-        android:text="Thank you!"
+        android:text="Thank you "
+        android:textColor="#FFFFFF"
+        android:textSize="30dp"/>
+    <TextView
+        android:id="@+id/userName3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:text="userName"
         android:textColor="#FFFFFF"
         android:textSize="30dp"/>
 
