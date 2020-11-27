@@ -140,72 +140,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 System.err.println("Unsuccessful artlisting retrieval");
             }
         });
-
-        // Old -->
-        getPurchaseListingInfo();
-        String[][] dataAO =
-                {
-                        {"aIsDelivered", "false"},
-                        {"pieceLocation", "AtGallery"},
-                        {"aTargetAddress", typedAddress}, //do address
-                        {"aDeliveryTracker", "TBD"},
-                        {"artPieceId", artPieceId}
-                };
-        try {
-            HttpUtils.postForm("/artorder/create/", dataAO, new Callback() {
-
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    showToastFromThread("Could not create your order!");
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        try {
-                            JSONObject jsonOrder = new JSONObject(response.body().string());
-                            String orderId = jsonOrder.getString("idCode");
-                            String[][] dataTicket = {
-                                    {"aIsPaymentConfirmed", "false"},
-                                    {"aPaymentAmount", listingPrice.toString()},
-                                    {"aOrder", orderId},
-                                    {"aCustomer", userId},
-                                    {"aArtist", listingArtist}
-                            };
-
-                            try {
-                                HttpUtils.postForm("ticket/create/", dataTicket, new Callback() {
-                                    @Override
-                                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                        showToastFromThread("Database failed to connect");
-                                    }
-
-                                    @Override
-                                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                                        if (response.isSuccessful()) {
-                                            System.out.println("Purchase sucessful");
-                                            //go to main and add a flag to not go back
-                                        } else {
-                                            System.out.println("Purchase error occured");
-                                        }
-                                    }
-                                });
-                            } catch (Exception ex) {
-
-                            }
-
-                        } catch (Exception e) {
-                            showToastFromThread("Could not create a ticket");
-                        }
-
-                    } else {
-                        showToastFromThread("Could not purchase item!");
-                    }
-                }
-            });
-        } catch (Exception ex) {
-
-        }
+        
     }
 
     public void getPurchaseListingInfo() {
