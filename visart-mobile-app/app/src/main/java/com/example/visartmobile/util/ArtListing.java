@@ -21,6 +21,16 @@ public class ArtListing {
     private String artistUsername;
     private String artPieceId;
 
+    public String[] getArtPieceIds() {
+        return artPieceIds;
+    }
+
+    public void setArtPieceIds(String[] artPieceIds) {
+        this.artPieceIds = artPieceIds;
+    }
+
+    private String[] artPieceIds;
+
     public ArtListing() {
     }
 
@@ -146,7 +156,10 @@ public class ArtListing {
             al.setPrice(artlistingObj.getDouble("price"));
             al.setArtistDisplayname(artlistingObj.getString("artistDisplayname"));
             al.setArtistUsername(artlistingObj.getString("artistUsername"));
-        
+            List<String> artPieceIdsList = jsonArrayToList(artlistingObj.getJSONArray("artPieceIds"));
+            String[] artPieceIds = new String[artPieceIdsList.size()];
+            artPieceIdsList.toArray(artPieceIds);
+            al.setArtPieceIds(artPieceIds);
             return al;
         } catch (JSONException e) {
             return null;
