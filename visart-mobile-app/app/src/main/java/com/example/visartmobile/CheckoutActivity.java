@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.visartmobile.util.ArtListing;
 import com.example.visartmobile.util.HttpUtils;
 import com.example.visartmobile.util.UserAuth;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -27,6 +28,8 @@ public class CheckoutActivity extends AppCompatActivity {
     private Handler mHandler;
     private String listingId;
     private String artPieceId;
+    private String listingPrice;
+    private String listingArtist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,28 +51,39 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     public void clickedPurchase(View view) {
-        String[][] data =
+        getPurchaseListingInfo();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String[][] dataAO =
                 {
                     {"aIsDelivered", "false"},
                         {"pieceLocation", "AtGallery"},
-                        {"aTargetAddress", "TBD"},
+                        {"aTargetAddress", "TBD"}, //do address
                         {"aDeliveryTracker", "TBD"},
-                        {"artPieceId", }
+                        {"artPieceId", artPieceId}
                 };
         try {
-            HttpUtils.postForm("customers/add_favorite_listing/" + userId, data, new Callback() {
+            HttpUtils.postForm("/artorder/create/", dataAO, new Callback() {
 
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    showToastFromThread("Could not add to favorites!");
+                    showToastFromThread("Could not create your order!");
                 }
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     if (response.isSuccessful()) {
-                        showToastFromThread("Successfully added into favorites");
-
                         try {
+                        JSONObject jsonOrder = new JSONObject(response.body().string());
+                        String orderId = jsonOrder.getString("idCode");
+                        String[][] dataTicket = {
+                                {"aIsPaymentConfirmed", "false"},
+                                {"aPaymentAmount", listingPrice.toString()},
+                                {"aOrder", orderId},
+                                {"aCustomer", userId},
+                                {"aArtist", listingArtist}
+                         };
+
+
 
                         } catch (Exception e) {
 
@@ -84,7 +98,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         }
     }
-    public void getPurchaseListingInfo(View view) {
+    public void getPurchaseListingInfo() {
         try {
             HttpUtils.get("artlisting/get/" + listingId, new Callback() {
                 @Override
@@ -101,6 +115,7 @@ public class CheckoutActivity extends AppCompatActivity {
                             JSONObject json = new JSONObject(response.body().string());
                             ArtListing listing = ArtListing.parseJSON(json);
                             artPieceId = listing.getArtPieceId();
+                            listingPrice = (String.valueOf(listing.getPrice()));
 
                         } catch (Exception e) {
                             System.out.println("Error creating JSON object: " + e.getMessage());
