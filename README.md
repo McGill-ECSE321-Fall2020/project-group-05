@@ -8,6 +8,7 @@
 VisArt is a project made for art galleries facilitating Art Piece transactions from local Artists to art enthusiasts. VisArt will provide a website where customers can browse various Art Listings from local Artists as well as some straight from the gallery, if interested, customers can purchase straight from the website. Verified local artists can post their Art Listings which will be stored in our back-end database system.
 
 ### [Website Hosted at https://vis-art-web-app.herokuapp.com/](https://vis-art-web-app.herokuapp.com/)
+Note** Heroku hosting plans have changed, the website UI can be seen here: https://github.com/McGill-ECSE321-Fall2020/project-group-05/wiki/User-Documentation
 
 ### [Project Report Wiki](https://github.com/McGill-ECSE321-Fall2020/project-group-05/wiki)
 
